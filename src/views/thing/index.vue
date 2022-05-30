@@ -259,11 +259,9 @@ export default {
       this.$refs.carousel.setActiveItem(index);
     },
     showModel() {
-      console.log("view model");
       this.viewModel = true;
     },
     closeModel() {
-      console.log("close model");
       this.viewModel = false;
     },
     handleClick(tab, event) {

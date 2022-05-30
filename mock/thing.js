@@ -1,31 +1,28 @@
-import mock from "mockjs";
-
-export const thingDetail = mock.mock("/thing/detail", "get", (options) => {
-  let { thingId } = JSON.parse(options.body);
-  console.log("mock thingDetail thingId", thingId);
-  let data = mock.mock({
-    id: "@id",
-    "content|1-8": ["@word"],
-    "tags|1-8": ["@word"],
-    summary: "@paragraph",
-    "topics|1-10000": 100,
-    "things|1-10000": 100,
-    "members|1-10000": 100,
+var mock = require("mockjs");
+const thingMock = function (app) {
+  app.get("/thing/detail", function (req, res) {
+    let { thingId } = req.query;
+    console.log("/thing/detail", thingId);
+    let data = mock.mock({
+      id: "@id",
+      "content|1-8": ["@word"],
+      "tags|1-8": ["@word"],
+      summary: "@paragraph",
+      "topics|1-10000": 100,
+      "things|1-10000": 100,
+      "members|1-10000": 100,
+    });
+    res.json({
+      status: 200,
+      message: "ok",
+      data: data,
+      length: data.length,
+    });
   });
-  return {
-    status: 200,
-    message: "ok",
-    data: data,
-    length: data.length,
-  };
-});
 
-export const thingDownloadInfo = mock.mock(
-  "/thing/downloadInfo",
-  "get",
-  (options) => {
-    let { thingId } = JSON.parse(options.body);
-    console.log("mock thingDownloadInfo thingId", thingId);
+  app.get("/thing/downloadInfo", function (req, res) {
+    let { thingId } = req.query;
+    console.log("/thing/downloadInfo", thingId);
     let data = mock.mock({
       "data|10": [
         {
@@ -38,21 +35,17 @@ export const thingDownloadInfo = mock.mock(
         },
       ],
     });
-    return {
+    res.json({
       status: 200,
       message: "ok",
       data: data.data,
       length: data.length,
-    };
-  }
-);
+    });
+  });
 
-export const thingGetUserInfoByThingId = mock.mock(
-  "/thing/getUserInfo",
-  "get",
-  (options) => {
-    let { thingId } = JSON.parse(options.body);
-    console.log("mock thingGetUserInfoByThingId thingId", thingId);
+  app.get("/thing/getUserInfo", function (req, res) {
+    let { thingId } = req.query;
+    console.log("/thing/getUserInfo:", thingId);
     let data = mock.mock({
       id: "@id",
       avatar: "@image('300x200','@color', '#FFF', '@word')",
@@ -66,52 +59,51 @@ export const thingGetUserInfoByThingId = mock.mock(
         },
       ],
     });
-    return {
+    res.json({
       status: 200,
       message: "ok",
       data: data,
       length: data.length,
-    };
-  }
-);
+    });
+  });
 
-export const getUserMakesByThingId = mock.mock(
-  "/thing/getUserMakes",
-  "get",
-  (options) => {
-    let { thingId } = JSON.parse(options.body);
-    console.log("mock getUserMakesByThingId thingId", thingId);
-    let data = mock.mock({
-      "makes|1-13": [
+  app.get("/thing/getThingList", function (req, res) {
+    let { currentPage, pageSize } = req.query;
+    currentPage = parseInt(currentPage);
+    pageSize = parseInt(pageSize);
+    let data = [];
+    let start = (currentPage - 1) * pageSize;
+    let end = start + pageSize;
+    let mockData = mock.mock({
+      "things|100-200": [
         {
           id: "@id",
-          uid: "@id",
+          thingId: "@id",
+          userId: "@id",
           avatar: "@image('300x200','@color', '#FFF', '@word')",
-          name: "@word",
+          userName: "@word",
           thingName: "@word",
           publicTime: "@datetime(yyyy MM dd)",
           url: "@image('300x200','@color', '#FFF', '@word')",
           likes: "@integer(60, 1000)",
-          comments: "@integer(60, 1000)",
           isLike: "@boolean",
         },
       ],
     });
-    return {
+    for (let i = start; i < end; i++) {
+      data.push(mockData.things[i]);
+    }
+    res.json({
       status: 200,
       message: "ok",
       data: data,
-      length: data.length,
-    };
-  }
-);
+      length: mockData.things.length,
+    });
+  });
 
-export const getUserCommentsByThingId = mock.mock(
-  "/thing/getUserComments",
-  "get",
-  (options) => {
-    let { thingId } = JSON.parse(options.body);
-    console.log("mock getUserMakesByThingId thingId", thingId);
+  app.get("/thing/getUserComments", function (req, res) {
+    let { thingId } = req.query;
+    console.log("/thing/getUserComments:", thingId);
     let comments = [
       {
         id: "1",
@@ -184,47 +176,40 @@ export const getUserCommentsByThingId = mock.mock(
         comment: mock.mock("@sentence()"),
       },
     ];
-
-    return {
+    res.json({
       status: 200,
       message: "ok",
       data: comments,
       length: comments.length,
-    };
-  }
-);
+    });
+  });
 
-export const getThingList = mock.mock(
-  "/thing/getThingList",
-  "get",
-  (options) => {
-    let { currentPage, pageSize } = JSON.parse(options.body);
-    let start = (currentPage - 1) * pageSize;
-    let end = start + pageSize;
-    let mockData = mock.mock({
-      "things|100-200": [
+  app.get("/thing/getUserMakes", function (req, res) {
+    let { thingId } = req.query;
+    console.log("/thing/getUserMakes", thingId);
+    let data = mock.mock({
+      "makes|1-13": [
         {
-          thingId: "@id",
-          userId: "@id",
+          id: "@id",
+          uid: "@id",
           avatar: "@image('300x200','@color', '#FFF', '@word')",
-          userName: "@word",
+          name: "@word",
           thingName: "@word",
           publicTime: "@datetime(yyyy MM dd)",
           url: "@image('300x200','@color', '#FFF', '@word')",
           likes: "@integer(60, 1000)",
+          comments: "@integer(60, 1000)",
           isLike: "@boolean",
         },
       ],
     });
-    let data = [];
-    for (let i = start; i < end; i++) {
-      data.push(mockData.things[i]);
-    }
-    return {
+
+    res.json({
       status: 200,
       message: "ok",
       data: data,
-      length: mockData.things.length,
-    };
-  }
-);
+      length: data.length,
+    });
+  });
+};
+module.exports = thingMock;

@@ -21,7 +21,7 @@
     <el-row class="row">
       <el-col
         v-for="item in things"
-        :key="item.id"
+        :key="item.thingId"
         :xs="24"
         :sm="12"
         :md="8"

@@ -62,6 +62,7 @@ const actions = {
     });
   },
   getInfo({ commit, state }) {
+    console.log("target!");
     return new Promise((resolve, reject) => {
       getInfo(state.token)
         .then((response) => {

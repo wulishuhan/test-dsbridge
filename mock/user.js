@@ -1,4 +1,4 @@
-import mock from "mockjs";
+var mock = require("mockjs");
 let user = mock.mock({
   "data|1000": [
     {
@@ -35,89 +35,90 @@ let user = mock.mock({
 });
 
 let data = user.data;
-export const getUserList = mock.mock("/user/list", "get", (options) => {
-  const { currentPage, pageSize, subject, grade } = JSON.parse(options.body);
-  let t1 = [];
-  if (subject && grade) {
-    for (const val of data) {
-      if (val.grade == grade && val.subject == subject) {
-        t1.push(val);
+const userMock = function (app) {
+  app.get("/user/list", function (req, res) {
+    console.log(req);
+    const { currentPage, pageSize, subject, grade } = req.query;
+    let t1 = [];
+    if (subject && grade) {
+      for (const val of data) {
+        if (val.grade == grade && val.subject == subject) {
+          t1.push(val);
+        }
       }
+    } else {
+      t1 = data;
     }
-  } else {
-    t1 = data;
-  }
-  let start = pageSize * (currentPage - 1);
-  let end = start + pageSize;
-  let temp = [];
-  for (let i = start; i < end && i < t1.length; i++) {
-    temp.push(t1[i]);
-  }
-  return {
-    status: 200,
-    message: "ok",
-    data: temp,
-    length: t1.length,
-  };
-});
+    let start = pageSize * (currentPage - 1);
+    let end = start + pageSize;
+    let temp = [];
+    for (let i = start; i < end && i < t1.length; i++) {
+      temp.push(t1[i]);
+    }
+    res.json({
+      status: 200,
+      message: "ok",
+      data: temp,
+      length: t1.length,
+    });
+  });
 
-export const login = mock.mock("/user/login", "post", (options) => {
-  const { username, password } = JSON.parse(options.body);
-  console.log(username, password);
-  return {
-    status: 200,
-    data: mock.mock({
+  app.post("/user/login", function (req, res) {
+    const { username, password } = req.query;
+    console.log(username, password);
+    let data = mock.mock({
       name: "@name",
       avatar: mock.mock("@image('300x200','@color', '#FFF', '@word')"),
       token: /(\w\W\d){10,15}/,
       roles: ["user"],
       userId: "@id",
-    }),
-  };
-});
+    });
+    res.json({
+      status: 200,
+      data: data,
+    });
+  });
 
-export const getInfo = mock.mock("/user/getInfo", "post", (options) => {
-  const { username, password } = JSON.parse(options.body);
-  console.log(username, password);
-  return {
-    status: 200,
-    data: mock.mock({
+  app.get("/user/getInfo", function (req, res) {
+    const { username, password } = req.query;
+    console.log(username, password);
+    let data = mock.mock({
       name: "@name",
       avatar: "@image('300x200','@color', '#FFF', '@word')",
       token: /(\w\W\d){10,15}/,
       roles: ["user"],
       id: "@id",
-    }),
-  };
-});
+    });
+    res.json({
+      status: 200,
+      data: data,
+    });
+  });
 
-export const resetToken = mock.mock("/user/resetToken", "post", (options) => {
-  const { username, password } = JSON.parse(options.body);
-  console.log(username, password);
-  return {
-    status: 200,
-    data: mock.mock({
+  app.post("/user/resetToken", function (req, res) {
+    const { username, password } = req.query;
+    console.log(username, password);
+    let data = mock.mock({
       name: "@name",
       avatar: "@image('300x200','@color', '#FFF', '@word')",
       token: /(\w\W\d){10,15}/,
       roles: ["user"],
-    }),
-  };
-});
+    });
+    res.json({
+      status: 200,
+      data: data,
+    });
+  });
 
-export const logout = mock.mock("/user/logout", "post", () => {
-  return {
-    code: 200,
-    data: "success",
-  };
-});
+  app.post("/user/logout", function (req, res) {
+    res.json({
+      code: 200,
+      data: "success",
+    });
+  });
 
-export const getUserInfoByUserId = mock.mock(
-  "/user/getUserInfoByUserId",
-  "get",
-  (options) => {
-    let { id } = JSON.parse(options.body);
-    console.log("mock getUserInfoByUserId id", id);
+  app.get("/user/getUserInfoByUserId", function (req, res) {
+    const { id } = req.query;
     let data = mock.mock({
       id: "@id",
       avatar: "@image('300x200','@color', '#FFF', '@word')",
@@ -139,11 +140,13 @@ export const getUserInfoByUserId = mock.mock(
         },
       ],
     });
-    return {
+    res.json({
       status: 200,
       message: "ok",
       data: data,
       length: data.length,
-    };
-  }
-);
+    });
+  });
+};
+
+module.exports = userMock;

@@ -1,47 +1,48 @@
 import request from "@/utils/request";
-export function getThingDetails(data) {
+
+export function getThingDetails(params) {
   return request({
     url: "/thing/detail",
     method: "get",
-    data,
+    params,
   });
 }
-export function getThingDownloadInfo(data) {
+export function getThingDownloadInfo(params) {
   return request({
     url: "/thing/downloadInfo",
     method: "get",
-    data,
+    params,
   });
 }
 
-export function getUserInfoByThingId(data) {
+export function getUserInfoByThingId(params) {
   return request({
     url: "/thing/getUserInfo",
     method: "get",
-    data,
+    params,
   });
 }
 
-export function getUserMakesByThingId(data) {
+export function getUserMakesByThingId(params) {
   return request({
     url: "/thing/getUserMakes",
     method: "get",
-    data,
+    params,
   });
 }
 
-export function getUserCommentsByThingId(data) {
+export function getUserCommentsByThingId(params) {
   return request({
     url: "/thing/getUserComments",
     method: "get",
-    data,
+    params,
   });
 }
 
-export function getThingList(data) {
+export function getThingList(params) {
   return request({
-    url: "/thing/getThingList",
+    url: `/thing/getThingList`,
     method: "get",
-    data,
+    params,
   });
 }

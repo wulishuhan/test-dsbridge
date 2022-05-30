@@ -1,14 +1,8 @@
-import mock from "mockjs";
-/* eslint-disable  */
-import  "./group/group";
-import  "./user/user";
-import  "./thing/thing";
+var mock = require("mockjs");
 
-mock.mock("/select/type", "get", () => {
-  return {
-    status: 200,
-    message: "ok",
-    data: mock.mock({
+const filterMock = function (app) {
+  app.get("/select/type", function (req, res) {
+    let data = mock.mock({
       "list|20": [
         {
           value: "@name",
@@ -27,6 +21,13 @@ mock.mock("/select/type", "get", () => {
           ],
         },
       ],
-    }),
-  };
-});
+    });
+    res.json({
+      status: 200,
+      message: "ok",
+      data: data,
+    });
+  });
+};
+
+module.exports = filterMock;
