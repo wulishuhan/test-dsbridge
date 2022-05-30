@@ -17,10 +17,10 @@ module.exports = defineConfig({
     // },
     setupMiddlewares: (middlewares, devServer) => {
       if (!devServer) {
-        throw new Error('webpack-dev-server is not defined');
+        throw new Error("webpack-dev-server is not defined");
       }
       Mock(devServer.app);
       return middlewares;
-    }
+    },
   },
 });

@@ -1,9 +1,9 @@
 import request from "@/utils/request";
-export function getUserList(data) {
+export function getUserList(params) {
   return request({
     url: "/user/list",
     method: "get",
-    data,
+    params,
   });
 }
 export function Login(data) {

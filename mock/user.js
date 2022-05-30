@@ -37,8 +37,9 @@ let user = mock.mock({
 let data = user.data;
 const userMock = function (app) {
   app.get("/user/list", function (req, res) {
-    console.log(req);
-    const { currentPage, pageSize, subject, grade } = req.query;
+    let { currentPage, pageSize, subject, grade } = req.query;
+    currentPage = Number(currentPage);
+    pageSize = Number(pageSize);
     let t1 = [];
     if (subject && grade) {
       for (const val of data) {
@@ -55,6 +56,7 @@ const userMock = function (app) {
     for (let i = start; i < end && i < t1.length; i++) {
       temp.push(t1[i]);
     }
+    console.log(start, end);
     res.json({
       status: 200,
       message: "ok",

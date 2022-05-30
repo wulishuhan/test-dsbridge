@@ -46,7 +46,6 @@ export default {
       return this.filter == this.$store.getters.selectProfile;
     },
     url() {
-      console.log("chec", this.filter);
       return `/mainProfile/` + this.filter;
     },
   },

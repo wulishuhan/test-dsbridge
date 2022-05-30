@@ -28,7 +28,7 @@
     <el-row>
       <div v-for="item in user" :key="item.id">
         <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4">
-          <designer-card :user="item"></designer-card>
+          <designer-card :designer="item"></designer-card>
         </el-col>
       </div>
     </el-row>
@@ -45,7 +45,7 @@
   </div>
 </template>
 <script>
-import { getUserList } from "@/api/user";
+import { getDesignerList } from "@/api/designer";
 import DesignerCard from "./components/DesignerCard";
 export default {
   // eslint-disable-next-line
@@ -77,21 +77,22 @@ export default {
     };
   },
   mounted() {
-    getUserList(this.pagination).then((res) => {
+    getDesignerList(this.pagination).then((res) => {
+      console.log("getUserList:", res);
       this.user = res.data.data;
     });
   },
   methods: {
     handleSizeChange(val) {
       this.pagination.pageSize = val;
-      this.getUserList();
+      this.getUserLists();
     },
     handleCurrentChange(val) {
       this.pagination.currentPage = val;
-      this.getDesignerList();
+      this.getDesignerLists();
     },
-    getDesignerList() {
-      getUserList(this.pagination).then((res) => {
+    getDesignerLists() {
+      getDesignerList(this.pagination).then((res) => {
         console.log(res);
         this.pagination.total = res.data.length;
         this.user = res.data.data;

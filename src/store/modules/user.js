@@ -62,7 +62,6 @@ const actions = {
     });
   },
   getInfo({ commit, state }) {
-    console.log("target!");
     return new Promise((resolve, reject) => {
       getInfo(state.token)
         .then((response) => {
@@ -70,7 +69,6 @@ const actions = {
           if (!data) {
             return reject("Verification failed, please Login again.");
           }
-          console.log("data", data);
           const { name, avatar, roles, id } = data;
           commit("SET_ROLES", roles);
           commit("SET_NAME", name);

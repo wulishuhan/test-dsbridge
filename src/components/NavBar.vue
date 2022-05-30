@@ -196,7 +196,6 @@ export default {
     };
     if (this.$store.getters.userId) {
       this.profilePath = "/mainProfile/" + this.$store.getters.userId;
-      console.log("path", this.profilePath);
     }
   },
   computed: {

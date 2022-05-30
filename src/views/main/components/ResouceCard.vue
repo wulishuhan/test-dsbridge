@@ -12,9 +12,15 @@
 
       <img :src="thing.url" alt="" @click="toDetail(thing.thingId)" />
       <div class="card-footer">
-        <div class="collect-thing">
-          <i class="el-icon-plus"></i>
-          Collect Thing
+        <div class="collect-thing" @click="switchCollect">
+          <span v-if="isCollected">
+            <i class="el-icon-plus"></i>
+            Collect Thing
+          </span>
+          <span v-else>
+            <i class="el-icon-check"></i>
+            Collected
+          </span>
         </div>
         <div class="icon-number-show">
           <div @click="like">
@@ -45,6 +51,7 @@
   </div>
 </template>
 <script>
+import { changeCollect, changeLike } from "@/api/thing";
 export default {
   name: "ResourceCard",
   props: {
@@ -66,15 +73,16 @@ export default {
     return {
       likes: 0,
       isLike: false,
+      isCollected: false,
     };
   },
   mounted() {
     this.likes = this.thing.likes;
     this.isLike = this.thing.isLike;
+    this.isCollected = this.thing.isCollected;
   },
   methods: {
     toDetail(id) {
-      console.log(id);
       this.$router.push("/thing/" + id);
     },
     like() {
@@ -84,9 +92,26 @@ export default {
       } else {
         this.likes = 1 + Number(this.likes);
       }
+      changeLike({
+        isLike: this.isLike,
+        userId: this.$store.getters.userId,
+        thingId: this.thing.thingId,
+      }).then((res) => {
+        console.log("changelike", res);
+      });
     },
     viewAuthorInfo(userId) {
       this.$router.push("/design/" + userId);
+    },
+    switchCollect() {
+      this.isCollected = !this.isCollected;
+      changeCollect({
+        thingId: this.thing.thingId,
+        isCollected: this.isCollected,
+        userId: this.$store.getters.userId,
+      }).then((res) => {
+        console.log("switchCollect", res);
+      });
     },
   },
 };
@@ -97,6 +122,10 @@ export default {
   height: 340px;
   margin: 5px auto;
   background-color: white;
+  .el-icon-check {
+    color: #248bfb;
+    font-size: 20px;
+  }
   img {
     width: 300px;
     height: 225px;
@@ -125,6 +154,7 @@ export default {
     height: 77px;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
   }
   .icon-number-show {
     width: 30%;

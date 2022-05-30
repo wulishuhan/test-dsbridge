@@ -46,3 +46,19 @@ export function getThingList(params) {
     params,
   });
 }
+
+export function changeCollect(params) {
+  return request({
+    url: `/thing/changeCollect`,
+    method: "post",
+    params,
+  });
+}
+
+export function changeLike(params) {
+  return request({
+    url: `/thing/changeLike`,
+    method: "post",
+    params,
+  });
+}

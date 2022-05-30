@@ -87,6 +87,7 @@ const thingMock = function (app) {
           url: "@image('300x200','@color', '#FFF', '@word')",
           likes: "@integer(60, 1000)",
           isLike: "@boolean",
+          isCollected: "@boolean",
         },
       ],
     });
@@ -211,5 +212,24 @@ const thingMock = function (app) {
       length: data.length,
     });
   });
+
+  app.post("/thing/changeCollect", function (req, res) {
+    let { thingId, isCollected, userId } = req.query;
+    console.log("/thing/changeCollect", thingId, isCollected, userId);
+    res.json({
+      status: 200,
+      message: "success",
+    });
+  });
+
+  app.post("/thing/changeLike", function (req, res) {
+    let { thingId, isLike, userId } = req.query;
+    console.log("/thing/changeCollect", thingId, isLike, userId);
+    res.json({
+      status: 200,
+      message: "success",
+    });
+  });
+  
 };
 module.exports = thingMock;

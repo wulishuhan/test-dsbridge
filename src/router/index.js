@@ -88,7 +88,7 @@ const routes = [
             component: () => import("@/views/mainProfile/components/Makes"),
           },
           {
-            path: "/mainProfile/Designs",
+            path: "/mainProfile/Designs/:userId",
             component: () => import("@/views/mainProfile/components/Designs"),
           },
         ],
