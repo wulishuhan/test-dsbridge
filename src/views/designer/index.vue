@@ -1,0 +1,108 @@
+<template>
+  <div class="designer-container">
+    <el-row class="designer-filter-container">
+      <el-col :span="8" class="designer-filter-item">
+        <el-select v-model="value" placeholder="Number of Followers">
+          <el-option
+            v-for="item in filters"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          >
+          </el-option>
+        </el-select>
+      </el-col>
+      <el-col :span="8"></el-col>
+      <el-col :span="8">
+        <el-select v-model="value" placeholder="Filter By">
+          <el-option
+            v-for="item in filters"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          >
+          </el-option>
+        </el-select>
+      </el-col>
+    </el-row>
+    <el-row>
+      <div v-for="item in user" :key="item.id">
+        <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4">
+          <designer-card :user="item"></designer-card>
+        </el-col>
+      </div>
+    </el-row>
+    <el-pagination
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page="pagination.currentPage"
+      :page-sizes="[10, 20, 30, 40]"
+      :page-size="pagination.pageSize"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="pagination.total"
+    >
+    </el-pagination>
+  </div>
+</template>
+<script>
+import { getUserList } from "@/api/user";
+import DesignerCard from "./components/DesignerCard";
+export default {
+  // eslint-disable-next-line
+    name: "Designer",
+  components: { DesignerCard },
+  data() {
+    return {
+      pagination: {
+        total: 100,
+        pageSize: 10,
+        currentPage: 1,
+      },
+      filters: [
+        {
+          value: "followers",
+          label: "Number of Followers",
+        },
+        {
+          value: "designs",
+          label: "Number of Designs",
+        },
+        {
+          value: "makes",
+          label: "Number of Makes",
+        },
+      ],
+      value: "",
+      user: {},
+    };
+  },
+  mounted() {
+    getUserList(this.pagination).then((res) => {
+      this.user = res.data.data;
+    });
+  },
+  methods: {
+    handleSizeChange(val) {
+      this.pagination.pageSize = val;
+      this.getUserList();
+    },
+    handleCurrentChange(val) {
+      this.pagination.currentPage = val;
+      this.getDesignerList();
+    },
+    getDesignerList() {
+      getUserList(this.pagination).then((res) => {
+        console.log(res);
+        this.pagination.total = res.data.length;
+        this.user = res.data.data;
+      });
+    },
+  },
+};
+</script>
+<style scoped>
+.designer-container {
+  background-color: #f2f2f2;
+  text-align: center;
+}
+</style>
