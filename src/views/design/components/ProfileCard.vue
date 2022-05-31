@@ -15,10 +15,18 @@
             <el-button type="primary" size="small">View Analytics</el-button>
           </router-link>
         </div>
-        <div v-else>
-          <el-button type="primary" size="small">{{ followText }}</el-button>
-          <el-button type="primary" size="small">Tip Designer</el-button>
-          <el-button type="primary" size="small">Message</el-button>
+        <div class="design-profile" v-else>
+          <div @mouseover="enterFollowing" @mouseleave="leaveFollowing">
+            <el-button type="primary" size="small" @click="changeFollowState">
+              {{ followText }}
+            </el-button>
+          </div>
+          <div>
+            <el-button type="primary" size="small">Tip Designer</el-button>
+          </div>
+          <div>
+            <el-button type="primary" size="small">Message</el-button>
+          </div>
         </div>
       </div>
     </div>
@@ -47,27 +55,40 @@
 <script>
 export default {
   name: "ProfileCard",
-  props: {
-    user: {
-      type: Object,
-      default: () => {
-        return {
-          name: "shuhan",
-          followers: 123,
-          following: 1234,
-          designs: 13,
-        };
-      },
-    },
-  },
+  props: ["user"],
   data() {
     return {
-      followText: "Follow",
+      isEnterFollowingBox: false,
+      isFollow: false,
+      followStyle: {},
     };
+  },
+  mounted() {
+    this.isFollow = this.user.isFollow;
   },
   computed: {
     isProfile() {
       return this.$store.getters.userId === this.$route.params.userId;
+    },
+    followText: {
+      get() {
+        return this.isFollow
+          ? this.isEnterFollowingBox
+            ? "Unfollow"
+            : "Following"
+          : "Follow";
+      },
+    },
+  },
+  methods: {
+    changeFollowState() {
+      this.isFollow = !this.isFollow;
+    },
+    enterFollowing() {
+      if (this.isFollow) this.isEnterFollowingBox = true;
+    },
+    leaveFollowing() {
+      if (this.isFollow) this.isEnterFollowingBox = false;
     },
   },
 };
@@ -129,6 +150,10 @@ export default {
   }
   .el-button {
     margin-top: 20px;
+  }
+  .design-profile {
+    display: flex;
+    justify-content: space-evenly;
   }
 }
 </style>

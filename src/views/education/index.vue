@@ -134,7 +134,7 @@
         :lg="6"
         :xl="4"
       >
-        <resource-card :user="item"></resource-card>
+        <resource-card :thing="item"></resource-card>
       </el-col>
     </el-row>
     <pagination
@@ -145,7 +145,7 @@
   </div>
 </template>
 <script>
-import ResourceCard from "./components/ResourceCard";
+import ResourceCard from "@/components/ResourceCard";
 import FilterGrade from "./components/FilterGrade";
 import FilterSubject from "./components/FilterSubject";
 import Pagination from "./components/Pagination";
@@ -194,6 +194,7 @@ export default {
           grade: "K-6"
         }).then(res => {
             this.user = res.data.data
+            console.log("this.user = ", this.user);
             this.total = res.data.length
         });
     },

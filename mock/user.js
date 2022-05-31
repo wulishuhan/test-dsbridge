@@ -10,7 +10,9 @@ let user = mock.mock({
       isShow: "@boolean", // 随机获取boolean值
       avatar: "@image('30x20','@color', '@color', '@word')", //
       uploadImg: "@image('300x200','@color', '@color', '@word')", //
-      like: /\d{1,4}/,
+      url: "@image('300x200','@color', '@color', '@word')",
+      thingName: "@word",
+      likes: /\d{1,4}/,
       date: "@date",
       "subject|1": [
         "Art",
@@ -65,50 +67,51 @@ const userMock = function (app) {
     });
   });
 
+  let loginData = mock.mock({
+    name: "@name",
+    avatar: mock.mock("@image('300x200','@color', '#FFF', '@word')"),
+    token: /(\w\W\d){10,15}/,
+    roles: ["user"],
+    userId: "@id",
+  });
   app.post("/user/login", function (req, res) {
     const { username, password } = req.query;
     console.log(username, password);
-    let data = mock.mock({
-      name: "@name",
-      avatar: mock.mock("@image('300x200','@color', '#FFF', '@word')"),
-      token: /(\w\W\d){10,15}/,
-      roles: ["user"],
-      userId: "@id",
-    });
     res.json({
       status: 200,
-      data: data,
+      data: loginData,
     });
   });
 
+  let getInfo = mock.mock({
+    name: "@name",
+    avatar: "@image('300x200','@color', '#FFF', '@word')",
+    token: /(\w\W\d){10,15}/,
+    roles: ["user"],
+    id: "@id",
+  });
   app.get("/user/getInfo", function (req, res) {
     const { username, password } = req.query;
+    console.log(req.query);
     console.log(username, password);
-    let data = mock.mock({
-      name: "@name",
-      avatar: "@image('300x200','@color', '#FFF', '@word')",
-      token: /(\w\W\d){10,15}/,
-      roles: ["user"],
-      id: "1",
-    });
     res.json({
       status: 200,
-      data: data,
+      data: getInfo,
     });
   });
 
+  let resetTokenData = mock.mock({
+    name: "@name",
+    avatar: "@image('300x200','@color', '#FFF', '@word')",
+    token: /(\w\W\d){10,15}/,
+    roles: ["user"],
+  });
   app.post("/user/resetToken", function (req, res) {
     const { username, password } = req.query;
     console.log(username, password);
-    let data = mock.mock({
-      name: "@name",
-      avatar: "@image('300x200','@color', '#FFF', '@word')",
-      token: /(\w\W\d){10,15}/,
-      roles: ["user"],
-    });
     res.json({
       status: 200,
-      data: data,
+      data: resetTokenData,
     });
   });
 
@@ -119,34 +122,37 @@ const userMock = function (app) {
     });
   });
 
+  let userInfoByUserId = mock.mock({
+    id: "@id",
+    avatar: "@image('300x200','@color', '#FFF', '@word')",
+    name: "@word",
+    background: "@image('300x200','@color', '#FFF', '@word')",
+    publicTime: "@datetime(yyyy MM dd)",
+    followers: "@integer(60, 1000)",
+    following: "@integer(60, 1000)",
+    designs: "@integer(1, 30)",
+    isFollow: "@boolean",
+    "design|1-7": [
+      {
+        id: "@id",
+        thingName: "@word",
+        publicTime: "@datetime(yyyy MM dd)",
+        isLike: "@boolean",
+        likes: "@integer(1, 1000)",
+        comments: "@integer(1, 1000)",
+        url: "@image('300x200','@color', '#FFF', '@word')",
+        isCollected: "@boolean",
+      },
+    ],
+  });
   app.get("/user/getUserInfoByUserId", function (req, res) {
-    const { id } = req.query;
-    let data = mock.mock({
-      id: "@id",
-      avatar: "@image('300x200','@color', '#FFF', '@word')",
-      name: "@word",
-      background: "@image('300x200','@color', '#FFF', '@word')",
-      publicTime: "@datetime(yyyy MM dd)",
-      followers: "@integer(60, 1000)",
-      following: "@integer(60, 1000)",
-      designs: "@integer(1, 30)",
-      "design|1-7": [
-        {
-          id: "@id",
-          thingName: "@word",
-          publicTime: "@datetime(yyyy MM dd)",
-          isLike: "@boolean",
-          likes: "@integer(1, 1000)",
-          comments: "@integer(1, 1000)",
-          uploadImg: "@image('300x200','@color', '#FFF', '@word')",
-        },
-      ],
-    });
+    const { id, userId } = req.query;
+    console.log(id, userId);
     res.json({
       status: 200,
       message: "ok",
-      data: data,
-      length: data.length,
+      data: userInfoByUserId,
+      length: userInfoByUserId.length,
     });
   });
 };

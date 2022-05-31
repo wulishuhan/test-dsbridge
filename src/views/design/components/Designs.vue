@@ -9,13 +9,13 @@
         v-for="item in users"
         :key="item.thingName"
       >
-        <resource-card :user="item" :avatar="avatar"></resource-card>
+        <resource-card :thing="item" :avatar="avatar"></resource-card>
       </el-col>
     </el-row>
   </div>
 </template>
 <script>
-import ResourceCard from "./ResouceCard";
+import ResourceCard from "@/components/ResourceCard";
 import { getUserInfoByUserId } from "@/api/user";
 export default {
   // eslint-disable-next-line
@@ -28,9 +28,11 @@ export default {
     };
   },
   mounted() {
-    getUserInfoByUserId({ id: 1 }).then((res) => {
+    getUserInfoByUserId({ id: this.$route.params.userId }).then((res) => {
+      console.log("res:", res);
       this.users = res.data.data.design;
-      this.avatar = res.data.data.avatar;
+      for (let i = 0; i < this.users.length; i++)
+        this.users[i].avatar = res.data.data.avatar;
     });
   },
 };

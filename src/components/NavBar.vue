@@ -59,18 +59,18 @@
               </el-menu-item>
               <el-menu-item index="5-2"> Messages </el-menu-item>
               <el-menu-item index="5-3">
-                <router-link to="/mainProfile/Designs">My Designs</router-link>
+                <router-link to="/design/Designs">My Designs</router-link>
               </el-menu-item>
               <el-menu-item index="5-4">
-                <router-link to="/mainProfile/Collections">
+                <router-link to="/design/Collections">
                   My Collections
                 </router-link>
               </el-menu-item>
               <el-menu-item index="5-5">
-                <router-link to="/mainProfile/Likes">My Likes</router-link>
+                <router-link to="/design/Likes">My Likes</router-link>
               </el-menu-item>
               <el-menu-item index="5-6">
-                <router-link to="/mainProfile/Groups">My Groups</router-link>
+                <router-link to="/design/Groups">My Groups</router-link>
               </el-menu-item>
               <el-menu-item index="5-7">
                 <router-link to="/editProfile"> Account Settings </router-link>
@@ -116,22 +116,18 @@
                   </el-menu-item>
                   <el-menu-item index="4-2"> Messages </el-menu-item>
                   <el-menu-item index="4-3">
-                    <router-link to="/mainProfile/Designs">
-                      My Designs
-                    </router-link>
+                    <router-link to="/design/Designs"> My Designs </router-link>
                   </el-menu-item>
                   <el-menu-item index="4-4">
-                    <router-link to="/mainProfile/Collections">
+                    <router-link to="/design/Collections">
                       My Collections
                     </router-link>
                   </el-menu-item>
                   <el-menu-item index="4-5">
-                    <router-link to="/mainProfile/Likes">My Likes</router-link>
+                    <router-link to="/design/Likes">My Likes</router-link>
                   </el-menu-item>
                   <el-menu-item index="4-6">
-                    <router-link to="/mainProfile/Groups">
-                      My Groups
-                    </router-link>
+                    <router-link to="/design/Groups"> My Groups </router-link>
                   </el-menu-item>
                   <el-menu-item index="4-7">
                     <router-link to="/editProfile">
@@ -195,7 +191,8 @@ export default {
       }
     };
     if (this.$store.getters.userId) {
-      this.profilePath = "/mainProfile/" + this.$store.getters.userId;
+      this.profilePath = "/design/" + this.$store.getters.userId;
+      console.log(this.profilePath);
     }
   },
   computed: {

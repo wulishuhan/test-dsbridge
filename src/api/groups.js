@@ -1,8 +1,8 @@
 import request from "@/utils/request";
-export function getGroupsList(data) {
+export function getGroupsList(params) {
   return request({
     url: "/groups/list",
     method: "get",
-    data,
+    params,
   });
 }

@@ -4,7 +4,7 @@
   </div>
 </template>
 <script>
-import ResourceCard from "./ResouceCard";
+import ResourceCard from "@/components/ResourceCard.vue";
 import { getUserList } from "@/api/user";
 export default {
   // eslint-disable-next-line

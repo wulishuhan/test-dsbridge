@@ -3,7 +3,9 @@
     <el-row>
       <el-col :xs="24" :sm="24" :md="8" :lg="6" :xl="6">
         <profile-card :user="user"></profile-card>
-        <about-author></about-author>
+        <div v-if="!isViewProfile">
+          <about-author></about-author>
+        </div>
       </el-col>
       <el-col :xs="24" :sm="24" :md="16" :lg="18" :xl="18">
         <el-row>
@@ -12,7 +14,9 @@
               <filter-profile :filter="item"></filter-profile>
             </el-col>
           </div>
-          <el-col :span="24"> <router-view /> </el-col>
+          <el-col :span="24">
+            <router-view />
+          </el-col>
         </el-row>
       </el-col>
     </el-row>
@@ -29,19 +33,21 @@ export default {
   components: { ProfileCard, FilterProfile, AboutAuthor },
   data() {
     return {
-      user: {
-        name: "profile",
-        address: "profile",
-        followers: 1234,
-        following: 1234,
-        designs: 1234,
-      },
+      user: {},
       filterByType: ["Favorites", "Designs", "Collections", "Makes", "Likes"],
-      temp: {},
     };
   },
+  computed: {
+    isViewProfile() {
+      return this.$route.params.userId === this.$store.getters.userId;
+    },
+  },
   mounted() {
-    getUserInfoByUserId({ id: 1 }).then((res) => {
+    getUserInfoByUserId({
+      id: this.$route.params.userId,
+      userId: this.$store.getters.userId,
+    }).then((res) => {
+      console.log(res.data.data);
       this.user = res.data.data;
     });
   },

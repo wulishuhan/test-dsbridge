@@ -46,7 +46,7 @@ export default {
       return this.filter == this.$store.getters.selectProfile;
     },
     url() {
-      return `/design/` + this.filter;
+      return `/design/${this.filter}/${this.$route.params.userId}`;
     },
   },
 };

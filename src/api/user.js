@@ -39,10 +39,10 @@ export function refresh() {
   });
 }
 
-export function getUserInfoByUserId(data) {
+export function getUserInfoByUserId(params) {
   return request({
     url: "/user/getUserInfoByUserId",
     method: "get",
-    data,
+    params,
   });
 }

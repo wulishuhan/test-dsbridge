@@ -62,40 +62,6 @@ const routes = [
     ],
   },
   {
-    path: "/mainProfile/:userId",
-    name: "mainProfile",
-    component: Layout,
-    children: [
-      {
-        path: "/mainProfile/:userId",
-        component: () => import("@/views/mainProfile/index"),
-        children: [
-          {
-            path: "/mainProfile/Likes",
-            component: () => import("@/views/mainProfile/components/Likes"),
-          },
-          {
-            path: "/mainProfile/Collections",
-            component: () =>
-              import("@/views/mainProfile/components/Collections"),
-          },
-          {
-            path: "/mainProfile/Favorites",
-            component: () => import("@/views/mainProfile/components/Favorites"),
-          },
-          {
-            path: "/mainProfile/Makes",
-            component: () => import("@/views/mainProfile/components/Makes"),
-          },
-          {
-            path: "/mainProfile/Designs/:userId",
-            component: () => import("@/views/mainProfile/components/Designs"),
-          },
-        ],
-      },
-    ],
-  },
-  {
     path: "/editProfile",
     name: "editProfile",
     component: Layout,
@@ -164,25 +130,24 @@ const routes = [
         component: () => import("@/views/design/index"),
         children: [
           {
-            path: "/design/Likes",
-            component: () => import("@/views/mainProfile/components/Likes"),
+            path: "/design/Likes/:userId",
+            component: () => import("@/views/design/components/Likes"),
           },
           {
-            path: "/design/Collections",
-            component: () =>
-              import("@/views/mainProfile/components/Collections"),
+            path: "/design/Collections/:userId",
+            component: () => import("@/views/design/components/Collections"),
           },
           {
-            path: "/design/Favorites",
-            component: () => import("@/views/mainProfile/components/Favorites"),
+            path: "/design/Favorites/:userId",
+            component: () => import("@/views/design/components/Favorites"),
           },
           {
-            path: "/design/Makes",
-            component: () => import("@/views/mainProfile/components/Makes"),
+            path: "/design/Makes/:userId",
+            component: () => import("@/views/design/components/Makes"),
           },
           {
-            path: "/design/Designs",
-            component: () => import("@/views/mainProfile/components/Designs"),
+            path: "/design/Designs/:userId",
+            component: () => import("@/views/design/components/Designs"),
           },
         ],
       },

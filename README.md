@@ -53,3 +53,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 **comments**
 |thing-id|user-id|reply-id|
 |-|-|-|-|-|-|-|
+
+**follows**
+|id|followed-id|user-id|
+|-|-|-|-|-|-|-|
