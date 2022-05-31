@@ -25,8 +25,8 @@ let user = mock.mock({
         "Reset",
       ],
       "grade|1": ["K-6", "7-12", "University", "Reset"],
-      "followers|1-10000": 100,
-      "following|1-10000": 100,
+      "followers|1-100": 100,
+      "following|1-100": 100,
       "designs|1-100": 100,
       address: "@word()",
       isLike: "@boolean",
@@ -89,7 +89,7 @@ const userMock = function (app) {
       avatar: "@image('300x200','@color', '#FFF', '@word')",
       token: /(\w\W\d){10,15}/,
       roles: ["user"],
-      id: "@id",
+      id: "1",
     });
     res.json({
       status: 200,

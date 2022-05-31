@@ -7,13 +7,18 @@
       <div class="profile-card-info">
         <el-avatar :size="95" :src="user.avatar"></el-avatar>
         <div class="profile-card-info-name">{{ user.name }}</div>
-        <div>
+        <div v-if="isProfile">
           <a href="/editProfile" style="margin: 10px">
             <el-button type="primary" size="small">Edit Profile</el-button>
           </a>
           <router-link to="/analytics" style="margin: 10px">
             <el-button type="primary" size="small">View Analytics</el-button>
           </router-link>
+        </div>
+        <div v-else>
+          <el-button type="primary" size="small">{{ followText }}</el-button>
+          <el-button type="primary" size="small">Tip Designer</el-button>
+          <el-button type="primary" size="small">Message</el-button>
         </div>
       </div>
     </div>
@@ -56,7 +61,14 @@ export default {
     },
   },
   data() {
-    return {};
+    return {
+      followText: "Follow",
+    };
+  },
+  computed: {
+    isProfile() {
+      return this.$store.getters.userId === this.$route.params.userId;
+    },
   },
 };
 </script>
