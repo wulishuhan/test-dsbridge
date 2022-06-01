@@ -39,6 +39,14 @@ export function getUserCommentsByThingId(params) {
   });
 }
 
+export function addUserComments(params) {
+  return request({
+    url: "/thing/addUserComments",
+    method: "post",
+    params,
+  });
+}
+
 export function getThingList(params) {
   return request({
     url: `/thing/getThingList`,

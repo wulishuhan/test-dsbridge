@@ -17,9 +17,10 @@
       </div>
       <div class="image-block" v-if="showImageBlock">
         <block :name="'Image Block'" @closeBlock="closeBlock">
+          <!-- action可以修改 -->
           <el-upload
             class="upload-demo"
-            action="https://jsonplaceholder.typicode.com/posts/"
+            action="http://localhost:8080/user/receiveImg"
             :on-preview="handlePreview"
             :on-remove="handleRemove"
             :file-list="fileList"

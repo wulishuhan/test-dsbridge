@@ -3,18 +3,18 @@
     <el-row class="center-content">
       <el-col :span="10">
         <h1>ABOUT YOU</h1>
-        <el-form>
+        <el-form ref="form" :model="form">
           <el-form-item label="First Name">
-            <el-input></el-input>
+            <el-input v-model="form.firstName"></el-input>
           </el-form-item>
           <el-form-item label="Last Name">
-            <el-input></el-input>
+            <el-input v-model="form.lastName"></el-input>
           </el-form-item>
           <el-form-item label="Email">
-            <el-input></el-input>
+            <el-input v-model="form.email"></el-input>
           </el-form-item>
           <el-form-item label="Username">
-            <el-input></el-input>
+            <el-input v-model="form.username"></el-input>
           </el-form-item>
         </el-form>
       </el-col>
@@ -32,9 +32,20 @@ export default {
   components: { ProfileCard },
   props: {},
   data() {
-    return {};
+    return {
+      form: {
+        firstName: "",
+        lastName: "",
+        email: "",
+        username: "",
+      },
+    };
   },
-  methods: {},
+  methods: {
+    submit() {
+      console.log("orturAccount:", this.form);
+    },
+  },
 };
 </script>
 <style scope>

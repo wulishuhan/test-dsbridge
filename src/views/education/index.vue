@@ -209,7 +209,7 @@ export default {
                 subject: this.subject,
                 grade: this.grade
             }).then(res => {
-                console.log(res)
+                console.log("education", res)
                 this.user = res.data.data;
                 this.total = res.data.length
             })

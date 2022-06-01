@@ -2,13 +2,13 @@
   <div>
     <el-row>
       <el-col v-for="item in makes" :key="item.id" :span="8">
-        <resource-card :info="item"></resource-card>
+        <resource-card :thing="item"></resource-card>
       </el-col>
     </el-row>
   </div>
 </template>
 <script>
-import ResourceCard from "./components/ResouceCard.vue";
+import ResourceCard from "@/components/ResourceCard.vue";
 import { getUserMakesByThingId } from "@/api/thing";
 export default {
   // eslint-disable-next-line
@@ -25,6 +25,7 @@ export default {
       thingId: this.$route.params.thingId,
     }).then((res) => {
       this.makes = res.data.data.makes;
+      console.log("this.makes:", this.makes);
     });
   },
 };

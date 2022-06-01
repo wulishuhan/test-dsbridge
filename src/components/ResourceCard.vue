@@ -82,7 +82,13 @@ export default {
   },
   methods: {
     toDetail(id) {
-      this.$router.push("/thing/" + id);
+      if (this.$route.meta.name === "thing") {
+        this.$router.push("/thingMake/" + id);
+      } else if (this.$route.meta.name === "thingMake") {
+        this.$router.push("/thing/" + id);
+      } else {
+        this.$router.push("/thing/" + id);
+      }
     },
     like() {
       if (this.isLike) {
@@ -91,7 +97,7 @@ export default {
         this.likes = 1 + Number(this.likes);
       }
       changeLike({
-        isLike: this.isLike,
+        isLike: !this.isLike,
         userId: this.$store.getters.userId,
         thingId: this.thing.thingId,
       }).then((res) => {

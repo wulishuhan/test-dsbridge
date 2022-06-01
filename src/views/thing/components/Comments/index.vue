@@ -17,6 +17,7 @@
   </div>
 </template>
 <script>
+import { addUserComments } from "@/api/thing";
 import CommentCard from "./components/CommentCard";
 import { getUserCommentsByThingId } from "@/api/thing";
 export default {
@@ -45,14 +46,21 @@ export default {
   },
   methods: {
     postComment() {
-      this.comments.push({
+      console.log("postComment");
+      let data = {
         id: Math.random(),
+        pid: 0,
+        uid: this.$store.getters.userId,
         name: this.$store.getters.name,
         publicTime: new Date(),
         comment: this.text,
         avatar: this.$store.getters.avatar,
+      };
+      addUserComments(data).then((res) => {
+        console.log(res);
+        this.comments.push(data);
+        this.text = "";
       });
-      this.text = "";
     },
     generateTree(pid, parent) {
       for (let i = 0; i < this.commentList.length; i++) {

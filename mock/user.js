@@ -32,6 +32,7 @@ let user = mock.mock({
       "designs|1-100": 100,
       address: "@word()",
       isLike: "@boolean",
+      isCollected: "@boolean",
     },
   ],
 });
@@ -153,6 +154,13 @@ const userMock = function (app) {
       message: "ok",
       data: userInfoByUserId,
       length: userInfoByUserId.length,
+    });
+  });
+  app.post("/user/receiveImg", function (req, res) {
+    console.log(req.query);
+    res.json({
+      status: 200,
+      message: "ok",
     });
   });
 };

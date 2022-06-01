@@ -4,12 +4,12 @@
       <div class="nav-center-content">
         <div class="nav">
           <span
-            @click="switchView('THINGIVERSE SETTINGS')"
+            @click="switchView('ORTUR SETTINGS')"
             :class="{
-              'select-span-color': isThingiverseSettingsView,
+              'select-span-color': isOrturSettingsView,
             }"
           >
-            THINGIVERSE SETTINGS
+            ORTUR SETTINGS
           </span>
           <span
             @click="switchView('ORTUR ACCOUNT')"
@@ -28,32 +28,32 @@
         </div>
         <div class="buttom-group">
           <el-button type="danger">CANCEL</el-button>
-          <el-button type="primary">SAVE</el-button>
+          <el-button type="primary" @click="save">SAVE</el-button>
         </div>
       </div>
     </header>
-    <div v-if="isThingiverseSettingsView">
-      <thingiverse-settings></thingiverse-settings>
+    <div v-show="isOrturSettingsView">
+      <ortur-settings ref="orturSettings"></ortur-settings>
     </div>
-    <div v-if="isOrturAccountView">
-      <ortur-account></ortur-account>
+    <div v-show="isOrturAccountView">
+      <ortur-account ref="orturAccount"></ortur-account>
     </div>
-    <div v-if="isAppSettingsView">
+    <div v-show="isAppSettingsView">
       <app-settings></app-settings>
     </div>
   </div>
 </template>
 <script>
 import OrturAccount from "./components/OrturAccount";
-import ThingiverseSettings from "./components/ThingiverseSettings";
+import OrturSettings from "./components/OrturSettings";
 import AppSettings from "./components/AppSettings";
 export default {
   name: "EditProfile",
-  components: { OrturAccount, ThingiverseSettings, AppSettings },
+  components: { OrturSettings, OrturAccount, AppSettings },
   data() {
     return {
       activeName: "first",
-      activeNavName: "THINGIVERSE SETTINGS",
+      activeNavName: "ORTUR SETTINGS",
     };
   },
   methods: {
@@ -61,7 +61,8 @@ export default {
       console.log(tab, event);
     },
     save() {
-      console.log("save");
+      console.log("orturSettings:form:", this.$refs.orturSettings.form);
+      console.log("orturAccount:form:", this.$refs.orturAccount.form);
     },
     cancel() {
       console.log("cancel");
@@ -72,8 +73,8 @@ export default {
     },
   },
   computed: {
-    isThingiverseSettingsView() {
-      return this.activeNavName === "THINGIVERSE SETTINGS";
+    isOrturSettingsView() {
+      return this.activeNavName === "ORTUR SETTINGS";
     },
     isOrturAccountView() {
       return this.activeNavName === "ORTUR ACCOUNT";

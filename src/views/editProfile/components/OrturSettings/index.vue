@@ -7,7 +7,7 @@
           <el-row>
             <el-col :span="11">
               <el-form-item label="Location">
-                <el-input></el-input>
+                <el-input v-model="form.location"></el-input>
               </el-form-item>
               <el-form-item label="Design skill level">
                 <el-select
@@ -26,6 +26,7 @@
                 <el-select
                   placeholder="What 3D printer are you using?"
                   v-model="form.using3DPrinter"
+                  multiple
                 >
                   <el-option
                     v-for="item in using3DPrinter"
@@ -41,6 +42,7 @@
                 <el-select
                   placeholder="--- Select up to 3 ---"
                   v-model="form.who"
+                  multiple
                 >
                   <el-option
                     v-for="item in who"
@@ -54,6 +56,7 @@
                 <el-select
                   placeholder="Select Programs"
                   v-model="form.designToolsUsed"
+                  multiple
                 >
                   <el-option
                     v-for="item in designToolsUsed"
@@ -113,10 +116,13 @@
             <h1>WEBSITE & SOCIAL MEDIA</h1>
             <el-form>
               <el-form-item label="Website:">
-                <el-input></el-input>
+                <el-input v-model="form.website"></el-input>
               </el-form-item>
               <el-form-item label="PayPal.me username:">
-                <el-input placeholder="https://paypal.me/"></el-input>
+                <el-input
+                  placeholder="https://paypal.me/"
+                  v-model="form.paypal"
+                ></el-input>
               </el-form-item>
               <el-form-item label="Twitter:">
                 <el-button>
@@ -211,12 +217,15 @@ export default {
       value: true,
       form: {
         designLevel: "",
-        using3DPrinter: "",
-        who: "",
-        designToolsUsed: "",
+        using3DPrinter: [],
+        who: [],
+        designToolsUsed: [],
         industry: "",
         subindustry: "",
         bio: "",
+        location: "",
+        website: "",
+        paypal: "https://paypal.me/",
       },
       emailMeSwitchList: [
         "Someone posts a new comment on something you designed.",
@@ -378,7 +387,9 @@ export default {
     },
     changeBio(text) {
       this.form.bio = text;
-      console.log(this.form.bio);
+    },
+    submitForm() {
+      console.log(this.form);
     },
   },
 };

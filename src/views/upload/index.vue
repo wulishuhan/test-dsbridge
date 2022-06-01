@@ -3,7 +3,7 @@
     <header class="upload-header">
       <div class="header">
         <h1 class="header-title">CREATING A NEW THING</h1>
-        <router-link to="cancel" class="cancel">CANCEL</router-link>
+        <router-link :to="'/'" class="cancel">CANCEL</router-link>
         <div>
           <el-button>SAVE & VIEW</el-button>
           <el-button type="primary">PUBLISH THING</el-button>
@@ -13,7 +13,13 @@
     <br />
     <div class="upload-content">
       <div class="upload-box">
-        <el-upload class="elupload" drag action="./" multiple>
+        <el-upload
+          class="elupload"
+          :on-success="onFileSuccess"
+          drag
+          action="http://localhost:8080/user/receiveImg"
+          multiple
+        >
           <i class="el-icon-upload"></i>
           <div class="el-upload__text">
             <p>DRAG YOUR FILES & PHOTOS HERE or CHOOSE FROM</p>
@@ -200,7 +206,7 @@ export default {
     return {
       form: {
         name: "",
-        type: "",
+        type: [],
         region: "",
         tag: "",
       },
@@ -398,6 +404,9 @@ export default {
     },
     dropboxUpload() {
       console.log("dropboxUpload");
+    },
+    onFileSuccess(res, file) {
+      console.log("onFileSuccess", file);
     },
   },
 };

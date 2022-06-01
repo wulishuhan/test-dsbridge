@@ -34,9 +34,9 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 |id|name|avatar|address|username|password|
 |-|-|-|-|-|-|
 
-**about**
-|id|user-id|about|who-i-am|skill-level|tools-use|
-|-|-|-|-|-|-|
+**user-settings**
+|id|user-id|introduction|who-i-am|skill-level|tools-use|website|
+|-|-|-|-|-|-|-|
 
 **thing**
 |id|user-id|show-image-url|thing-name|public-time|
@@ -51,7 +51,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 |-|-|
 
 **comments**
-|thing-id|user-id|reply-id|
+|thing-id|uid|pid|
 |-|-|-|
 
 **follows**

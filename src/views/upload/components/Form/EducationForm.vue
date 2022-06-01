@@ -24,7 +24,16 @@
         the Thing Page.
       </span>
       <br />
-      <el-button type="primary">BROWSE</el-button>
+      <!-- 这个action地址需要修改 -->
+      <el-upload
+        class="upload-demo"
+        action="http://localhost:8080/user/receiveImg"
+        multiple
+        :on-success="handelSuccess"
+        style="text-align: center"
+      >
+        <el-button type="primary">BROWSE</el-button>
+      </el-upload>
     </div>
   </div>
 </template>
@@ -51,6 +60,11 @@ export default {
       this.showList = this.standardsList;
       this.placeholder = "Choose a Requirement this lesson meets";
     }
+  },
+  methods: {
+    handelSuccess(res, file) {
+      console.log(res, file);
+    },
   },
   data() {
     return {

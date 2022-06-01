@@ -3,9 +3,7 @@
     <el-row>
       <el-col :xs="24" :sm="24" :md="8" :lg="6" :xl="6">
         <profile-card :user="user"></profile-card>
-        <div v-if="!isViewProfile">
-          <about-author></about-author>
-        </div>
+        <about-author></about-author>
       </el-col>
       <el-col :xs="24" :sm="24" :md="16" :lg="18" :xl="18">
         <el-row>
@@ -36,11 +34,6 @@ export default {
       user: {},
       filterByType: ["Favorites", "Designs", "Collections", "Makes", "Likes"],
     };
-  },
-  computed: {
-    isViewProfile() {
-      return this.$route.params.userId === this.$store.getters.userId;
-    },
   },
   mounted() {
     getUserInfoByUserId({

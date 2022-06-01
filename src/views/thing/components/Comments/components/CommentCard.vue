@@ -24,7 +24,7 @@
         <el-button :size="'small'" @click="cancelComment">
           Cancel Comment
         </el-button>
-        <el-button type="primary" :size="'small'" @click="postComment">
+        <el-button type="primary" :size="'small'" @click="postComment(comment)">
           Post Comment
         </el-button>
       </div>
@@ -64,6 +64,7 @@
   </div>
 </template>
 <script>
+import { addUserComments } from "@/api/thing";
 export default {
   name: "CommentCard",
   props: ["comment"],
@@ -81,6 +82,7 @@ export default {
   },
   mounted() {
     this.generateSubComments(this.comment);
+    console.log("this.comment", this.comment);
   },
   methods: {
     viewComment() {
@@ -108,20 +110,28 @@ export default {
       this.isReply = false;
       this.text = "";
     },
-    postComment() {
-      this.currentReply = -1;
-      this.subComments = this.bufferSubComments;
-      this.subComments.push({
+    postComment(comment) {
+      // data传递数据需要修改，应该传 uid、pid、thingId
+      let data = {
         id: Math.random(),
         name: this.$store.getters.name,
         replyName: this.comment.name,
         publicTime: new Date(),
         comment: this.text,
         avatar: this.$store.getters.avatar,
-      });
+        uid: this.$store.getters.userId,
+        pid: comment.id,
+        thingId: this.$route.params.thingId,
+      };
+      this.currentReply = -1;
+      this.subComments = this.bufferSubComments;
+      this.subComments.push(data);
       this.text = "";
       this.isShowSubComment = true;
       this.isReply = false;
+      addUserComments(data).then((res) => {
+        console.log("ok!", res);
+      });
     },
     subReply(info) {
       this.isSubReply = true;

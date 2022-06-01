@@ -174,6 +174,17 @@ const thingMock = function (app) {
       comment: mock.mock("@sentence()"),
     },
   ];
+
+  app.post("/thing/addUserComments", function (req, res) {
+    comments.push(req.query);
+    res.json({
+      status: 200,
+      message: "ok",
+      data: comments,
+      length: comments.length,
+    });
+  });
+
   app.get("/thing/getUserComments", function (req, res) {
     let { thingId } = req.query;
     console.log("/thing/getUserComments:", thingId);
@@ -188,7 +199,7 @@ const thingMock = function (app) {
   let userMakesData = mock.mock({
     "makes|1-13": [
       {
-        id: "@id",
+        thingId: "@id",
         uid: "@id",
         avatar: "@image('300x200','@color', '#FFF', '@word')",
         name: "@word",
