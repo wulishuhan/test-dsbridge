@@ -98,7 +98,6 @@ export default {
     onEditorChange() {
       let markdown = this.$refs.toastuiEditor.invoke("getMarkdown");
       this.contentMARKDOWN = markdown;
-      console.log(markdown);
     },
     handleRemove(file, fileList) {
       console.log(file, fileList);

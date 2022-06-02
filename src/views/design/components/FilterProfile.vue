@@ -29,7 +29,7 @@ export default {
     },
     count: {
       type: Number,
-      default: 5,
+      default: 0,
     },
   },
   data() {

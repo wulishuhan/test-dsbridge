@@ -9,7 +9,7 @@
         v-for="item in users"
         :key="item.thingName"
       >
-        <resource-card :thing="item" :avatar="avatar"></resource-card>
+        <resource-card :thing="item"></resource-card>
       </el-col>
     </el-row>
   </div>
@@ -24,12 +24,10 @@ export default {
   data() {
     return {
       users: [],
-      avatar: "",
     };
   },
   mounted() {
     getUserInfoByUserId({ id: this.$route.params.userId }).then((res) => {
-      console.log("res:", res);
       this.users = res.data.data.design;
       for (let i = 0; i < this.users.length; i++)
         this.users[i].avatar = res.data.data.avatar;

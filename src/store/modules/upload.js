@@ -1,5 +1,6 @@
 const state = {
   selectorModules: new Set(),
+  uploadForm: {},
 };
 
 const mutations = {
@@ -12,6 +13,10 @@ const mutations = {
     let data = new Set([...state.selectorModules]);
     data.delete(selectorModules);
     state.selectorModules = data;
+  },
+  SET_UPLOADFORM: (state, form) => {
+    console.log("SET_UPLOADFORM", form);
+    state.uploadForm = form;
   },
 };
 

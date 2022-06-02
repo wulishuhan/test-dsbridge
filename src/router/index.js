@@ -155,6 +155,17 @@ const routes = [
       },
     ],
   },
+  {
+    path: "/message",
+    name: "message",
+    component: Layout,
+    children: [
+      {
+        path: "/message",
+        component: () => import("@/views/message/index"),
+      },
+    ],
+  },
 ];
 
 const router = new VueRouter({

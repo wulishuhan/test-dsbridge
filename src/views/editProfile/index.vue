@@ -47,6 +47,7 @@
 import OrturAccount from "./components/OrturAccount";
 import OrturSettings from "./components/OrturSettings";
 import AppSettings from "./components/AppSettings";
+import { updateUserProfile } from "@/api/user";
 export default {
   name: "EditProfile",
   components: { OrturSettings, OrturAccount, AppSettings },
@@ -61,8 +62,14 @@ export default {
       console.log(tab, event);
     },
     save() {
-      console.log("orturSettings:form:", this.$refs.orturSettings.form);
-      console.log("orturAccount:form:", this.$refs.orturAccount.form);
+      let data = {
+        ...this.$refs.orturSettings.form,
+        ...this.$refs.orturAccount.form,
+        userId: this.$store.getters.userId,
+      };
+      updateUserProfile(data).then((res) => {
+        console.log("updated user profile", res);
+      });
     },
     cancel() {
       console.log("cancel");

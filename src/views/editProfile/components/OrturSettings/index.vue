@@ -222,7 +222,7 @@ export default {
         designToolsUsed: [],
         industry: "",
         subindustry: "",
-        bio: "",
+        introduction: "",
         location: "",
         website: "",
         paypal: "https://paypal.me/",
@@ -386,7 +386,7 @@ export default {
       }
     },
     changeBio(text) {
-      this.form.bio = text;
+      this.form.introduction = text;
     },
     submitForm() {
       console.log(this.form);

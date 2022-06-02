@@ -41,6 +41,7 @@
           v-for="item in [...infomationModules, ...educationInstructions]"
           :key="item.key"
           :name="item.value"
+          ref="informationCard"
         >
         </information-card>
         <information-card
@@ -150,7 +151,6 @@ export default {
         key: Math.random(),
         id: Math.random(),
       });
-      console.log("Custom Sections:", this.customSections);
     },
     closeCustomSection(id) {
       this.customSections = this.customSections.filter((k) => {

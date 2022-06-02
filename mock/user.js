@@ -145,6 +145,70 @@ const userMock = function (app) {
         isCollected: "@boolean",
       },
     ],
+    "favorites|1-7": [
+      {
+        id: "@id",
+        thingName: "@word",
+        publicTime: "@datetime(yyyy MM dd)",
+        isLike: "@boolean",
+        likes: "@integer(1, 1000)",
+        comments: "@integer(1, 1000)",
+        url: "@image('300x200','@color', '#FFF', '@word')",
+        isCollected: "@boolean",
+      },
+    ],
+    "collections|1-7": [
+      {
+        id: "@id",
+        thingName: "@word",
+        publicTime: "@datetime(yyyy MM dd)",
+        isLike: "@boolean",
+        likes: "@integer(1, 1000)",
+        comments: "@integer(1, 1000)",
+        url: "@image('300x200','@color', '#FFF', '@word')",
+        isCollected: true,
+      },
+    ],
+    "makes|1-7": [
+      {
+        id: "@id",
+        thingName: "@word",
+        publicTime: "@datetime(yyyy MM dd)",
+        isLike: "@boolean",
+        likes: "@integer(1, 1000)",
+        comments: "@integer(1, 1000)",
+        url: "@image('300x200','@color', '#FFF', '@word')",
+        isCollected: "@boolean",
+      },
+    ],
+    "likes|1-7": [
+      {
+        id: "@id",
+        thingName: "@word",
+        publicTime: "@datetime(yyyy MM dd)",
+        isLike: true,
+        likes: "@integer(1, 1000)",
+        comments: "@integer(1, 1000)",
+        url: "@image('300x200','@color', '#FFF', '@word')",
+        isCollected: "@boolean",
+      },
+    ],
+    userProfile: {
+      designLevel: "Novice",
+      using3DPrinter: ["B9Creations", "Afinia", " Airwolf 3D", "CEL"],
+      who: ["Designer", "Engineer", "Maker"],
+      designToolsUsed: ["123D Design", "Blender", "3D Tin"],
+      industry: "",
+      subindustry: "",
+      introduction: "@word",
+      location: "@word",
+      website: "@url",
+      paypal: "https://paypal.me/",
+      firstName: "",
+      lastName: "",
+      email: "",
+      username: "",
+    },
   });
   app.get("/user/getUserInfoByUserId", function (req, res) {
     const { id, userId } = req.query;
@@ -158,6 +222,15 @@ const userMock = function (app) {
   });
   app.post("/user/receiveImg", function (req, res) {
     console.log(req.query);
+    res.json({
+      status: 200,
+      message: "ok",
+    });
+  });
+
+  app.post("/user/updateProfile", function (req, res) {
+    console.log(req.query);
+    userInfoByUserId.userProfile = req.query;
     res.json({
       status: 200,
       message: "ok",

@@ -6,7 +6,9 @@
         <router-link :to="'/'" class="cancel">CANCEL</router-link>
         <div>
           <el-button>SAVE & VIEW</el-button>
-          <el-button type="primary">PUBLISH THING</el-button>
+          <el-button type="primary" @click="publicThing"
+            >PUBLISH THING</el-button
+          >
         </div>
       </div>
     </header>
@@ -56,7 +58,10 @@
               </el-col>
               <el-col :span="12">
                 <el-form-item label="Category">
-                  <el-select v-model="form.region" placeholder="Please Choose">
+                  <el-select
+                    v-model="form.category"
+                    placeholder="Please Choose"
+                  >
                     <el-option-group
                       v-for="group in categorys"
                       :key="group.label"
@@ -79,7 +84,7 @@
             <el-form-item>
               <el-col :span="12">
                 <el-form-item label="License">
-                  <el-select v-model="form.region" placeholder="Please Choose">
+                  <el-select v-model="form.license" placeholder="Please Choose">
                     <el-option
                       v-for="item in licenses"
                       :label="item"
@@ -119,7 +124,7 @@
         <p class="section-p">
           Share more information and instructions for your Thing
         </p>
-        <information-content></information-content>
+        <information-content ref="informationContent"></information-content>
       </div>
     </div>
     <div class="tell-us-more">
@@ -207,7 +212,8 @@ export default {
       form: {
         name: "",
         type: [],
-        region: "",
+        license: "",
+        category: "",
         tag: "",
       },
       categorys: [
@@ -407,6 +413,10 @@ export default {
     },
     onFileSuccess(res, file) {
       console.log("onFileSuccess", file);
+    },
+    publicThing() {
+      console.log("public", this.form);
+      console.log("public refs", this.$refs.informationContent);
     },
   },
 };

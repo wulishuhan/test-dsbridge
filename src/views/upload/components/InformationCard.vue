@@ -11,7 +11,7 @@
             : ""
         }}
       </div>
-      <div v-if="name === 'Custom Section'">
+      <div v-else>
         <input type="text" v-model="customSectionName" />
       </div>
       <div>
@@ -27,7 +27,7 @@
       <div v-if="isSummary" class="summary-editor">
         <editor ref="toastuiEditor" @change="onEditorChange"></editor>
       </div>
-      <print-settings :name="name"></print-settings>
+      <print-settings ref="printSettings" :name="name"></print-settings>
       <fold-block-form :name="name"></fold-block-form>
       <education-form :name="name"></education-form>
     </div>
@@ -75,7 +75,6 @@ export default {
       this.isShow = !this.isShow;
     },
     controlClose() {
-      console.log("contents closed!");
       if (this.name === "Custom Section") {
         this.$emit("closeCustomSection", this.id);
       } else {
@@ -85,7 +84,6 @@ export default {
     onEditorChange() {
       let markdown = this.$refs.toastuiEditor.invoke("getMarkdown");
       this.contentMARKDOWN = markdown;
-      console.log(markdown);
     },
   },
   computed: {
@@ -141,6 +139,9 @@ export default {
     border: none;
     color: #fff;
     font-size: 16px;
+  }
+  i {
+    cursor: pointer;
   }
 }
 </style>

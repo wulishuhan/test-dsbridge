@@ -106,7 +106,7 @@ export default {
       });
     },
     viewAuthorInfo(userId) {
-      this.$router.push("/design/" + userId);
+      this.$router.push(`/design/Designs/${userId}`);
     },
     switchCollect() {
       this.isCollected = !this.isCollected;

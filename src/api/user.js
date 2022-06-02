@@ -46,3 +46,11 @@ export function getUserInfoByUserId(params) {
     params,
   });
 }
+
+export function updateUserProfile(params) {
+  return request({
+    url: "/user/updateProfile",
+    method: "post",
+    params,
+  });
+}

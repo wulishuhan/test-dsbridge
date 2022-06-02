@@ -15,7 +15,6 @@ export default {
     },
   },
   mounted() {
-    console.log("includes: ", this.nameList.includes(this.name));
     if (this.nameList.includes(this.name)) this.isShow = true;
   },
   data() {

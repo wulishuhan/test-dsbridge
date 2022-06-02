@@ -158,7 +158,6 @@ export default {
       isHideNavBar: false,
       isCollapse: true,
       hasTokend: false,
-      profilePath: "",
     };
   },
   methods: {
@@ -177,7 +176,9 @@ export default {
       console.log(key, keyPath);
     },
     logout() {
-      this.$store.dispatch("user/logout", this.user).then(() => {});
+      this.$store.dispatch("user/logout", this.user).then(() => {
+        this.$router.push("/");
+      });
     },
   },
   mounted() {
@@ -190,14 +191,13 @@ export default {
         }, 400);
       }
     };
-    if (this.$store.getters.userId) {
-      this.profilePath = "/design/" + this.$store.getters.userId;
-      console.log(this.profilePath);
-    }
   },
   computed: {
     hasToken() {
       return this.$store.getters.token ? true : false;
+    },
+    profilePath() {
+      return `/design/${this.$store.getters.userId}`;
     },
   },
 };
