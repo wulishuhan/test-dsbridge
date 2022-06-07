@@ -54,3 +54,11 @@ export function updateUserProfile(params) {
     params,
   });
 }
+
+export function postUserMessage(params) {
+  return request({
+    url: "/user/getMessage",
+    method: "post",
+    params,
+  });
+}

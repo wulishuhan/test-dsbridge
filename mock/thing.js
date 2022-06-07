@@ -5,6 +5,7 @@ const thingMock = function (app) {
     "content|1-8": ["@word"],
     "tags|1-8": ["@word"],
     summary: "@paragraph",
+    license: ["@word"],
     "topics|1-10000": 100,
     "things|1-10000": 100,
     "members|1-10000": 100,
@@ -49,6 +50,8 @@ const thingMock = function (app) {
     thingName: "@word",
     publicTime: "@datetime(yyyy MM dd)",
     name: "@word",
+    isLike: "@boolean",
+    isCollected: "@boolean",
     "image|3-10": [
       {
         id: "@id",

@@ -17,10 +17,9 @@
             {{ thingName }}
             <span>
               is licensed under the
-              <a href="#"
-                >Creative Commons - Attribution - Non-Commercial - No
-                Derivatives</a
-              >
+              <a href="#" v-for="item in details.license" :key="item">
+                {{ item }}
+              </a>
               license.
             </span>
           </p>

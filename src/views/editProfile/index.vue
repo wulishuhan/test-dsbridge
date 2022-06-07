@@ -55,6 +55,7 @@ export default {
     return {
       activeName: "first",
       activeNavName: "ORTUR SETTINGS",
+      componentName: OrturSettings,
     };
   },
   methods: {

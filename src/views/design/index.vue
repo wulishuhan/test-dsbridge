@@ -11,11 +11,11 @@
             <a :href="profile.website">{{ profile.website }}</a>
           </span>
           <p>I AM A...</p>
-          <span>{{ profile.who }}</span>
+          <span>{{ profile.who.join(",") }}</span>
           <p>3D Design Skill Level</p>
           <span>{{ profile.designLevel }}</span>
           <p>Tools I Use</p>
-          <span>{{ profile.designToolsUsed }}</span>
+          <span>{{ profile.designToolsUsed.join(",") }}</span>
         </div>
       </el-col>
       <el-col :xs="24" :sm="24" :md="16" :lg="18" :xl="18">

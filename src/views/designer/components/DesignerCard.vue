@@ -38,7 +38,7 @@
       </el-col>
       <el-col :span="8">
         <div class="follower-item">
-          <div class="follower-data">{{ designer.following }}</div>
+          <div class="follower-data">{{ following }}</div>
           <div class="follower-name">Following</div>
         </div>
       </el-col>
@@ -66,10 +66,12 @@ export default {
       isFollow: false,
       isEnterFollowingBox: false,
       followText: "Following",
+      following: 0,
     };
   },
   mounted() {
     this.isFollow = this.designer.isFollow;
+    this.following = this.designer.following;
   },
   methods: {
     follow() {
@@ -82,10 +84,12 @@ export default {
         unfollowDesigner(data).then((res) => {
           console.log(res);
           this.isFollow = !this.isFollow;
+          this.following = Number(this.following) - 1;
         });
       } else {
         followDesigner(data).then((res) => {
           console.log(res);
+          this.following = Number(this.following) + 1;
           this.isFollow = !this.isFollow;
         });
       }

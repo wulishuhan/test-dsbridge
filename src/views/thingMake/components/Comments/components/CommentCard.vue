@@ -31,7 +31,7 @@
     </div>
     <div class="subComments" v-for="item in subComments" :key="item.id">
       <div class="sub-comment-header">
-        <el-avatar :src="comment.avatar" :size="50"></el-avatar>
+        <el-avatar :src="item.avatar" :size="50"></el-avatar>
         <div class="">
           <a>{{ item.name }} to {{ item.replyName }}</a>
           <p>{{ item.publicTime }}</p>
@@ -130,6 +130,10 @@ export default {
       this.isShowSubComment = true;
       this.isReply = false;
       addUserComments(data).then((res) => {
+        this.$message({
+          message: "comment successfully!",
+          type: "success",
+        });
         console.log("ok!", res);
       });
     },

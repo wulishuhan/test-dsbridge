@@ -156,13 +156,24 @@ const routes = [
     ],
   },
   {
-    path: "/message",
+    path: "/message/:userName/:userId",
     name: "message",
     component: Layout,
     children: [
       {
-        path: "/message",
+        path: "/message/:userName/:userId",
         component: () => import("@/views/message/index"),
+      },
+    ],
+  },
+  {
+    path: "/following",
+    name: "following",
+    component: Layout,
+    children: [
+      {
+        path: "/following",
+        component: () => import("@/views/following/index"),
       },
     ],
   },

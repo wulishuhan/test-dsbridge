@@ -5,6 +5,7 @@ let user = mock.mock({
       id: "@id", // 数字从当前数开始依次 +1
       "age|18-40": 20, // 年龄为18-40之间的随机数字
       "sex|1": ["男", "女"], // 性别是数组中随机的一个
+      thingId: "@id",
       name: "@name()", // 名字为随机中文名字
       email: "@email", // 随机邮箱
       isShow: "@boolean", // 随机获取boolean值
@@ -135,7 +136,7 @@ const userMock = function (app) {
     isFollow: "@boolean",
     "design|1-7": [
       {
-        id: "@id",
+        thingId: "@id",
         thingName: "@word",
         publicTime: "@datetime(yyyy MM dd)",
         isLike: "@boolean",
@@ -147,7 +148,7 @@ const userMock = function (app) {
     ],
     "favorites|1-7": [
       {
-        id: "@id",
+        thingId: "@id",
         thingName: "@word",
         publicTime: "@datetime(yyyy MM dd)",
         isLike: "@boolean",
@@ -159,7 +160,7 @@ const userMock = function (app) {
     ],
     "collections|1-7": [
       {
-        id: "@id",
+        thingId: "@id",
         thingName: "@word",
         publicTime: "@datetime(yyyy MM dd)",
         isLike: "@boolean",
@@ -171,7 +172,7 @@ const userMock = function (app) {
     ],
     "makes|1-7": [
       {
-        id: "@id",
+        thingId: "@id",
         thingName: "@word",
         publicTime: "@datetime(yyyy MM dd)",
         isLike: "@boolean",
@@ -183,7 +184,7 @@ const userMock = function (app) {
     ],
     "likes|1-7": [
       {
-        id: "@id",
+        thingId: "@id",
         thingName: "@word",
         publicTime: "@datetime(yyyy MM dd)",
         isLike: true,
@@ -231,6 +232,14 @@ const userMock = function (app) {
   app.post("/user/updateProfile", function (req, res) {
     console.log(req.query);
     userInfoByUserId.userProfile = req.query;
+    res.json({
+      status: 200,
+      message: "ok",
+    });
+  });
+
+  app.post("/user/getMessage", function (req, res) {
+    console.log(req.query);
     res.json({
       status: 200,
       message: "ok",

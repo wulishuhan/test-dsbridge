@@ -2,7 +2,6 @@
   <div class="settings-container">
     <h1>Summary</h1>
     <span>{{ summary }}</span>
-
     <h1>Print Settings</h1>
     <div>
       <p>Printer brand:</p>

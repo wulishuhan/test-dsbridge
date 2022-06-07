@@ -46,7 +46,6 @@ export default {
   },
   methods: {
     postComment() {
-      console.log("postComment");
       let data = {
         id: Math.random(),
         pid: 0,
@@ -58,6 +57,10 @@ export default {
       };
       addUserComments(data).then((res) => {
         console.log(res);
+        this.$message({
+          message: "comment successfully!",
+          type: "success",
+        });
         this.comments.push(data);
         this.text = "";
       });

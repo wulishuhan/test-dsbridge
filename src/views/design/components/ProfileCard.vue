@@ -25,7 +25,9 @@
             <el-button type="primary" size="small">Tip Designer</el-button>
           </div>
           <div>
-            <el-button type="primary" size="small">Message</el-button>
+            <el-button @click="toMessage" type="primary" size="small"
+              >Message</el-button
+            >
           </div>
         </div>
       </div>
@@ -89,6 +91,11 @@ export default {
     },
     leaveFollowing() {
       if (this.isFollow) this.isEnterFollowingBox = false;
+    },
+    toMessage() {
+      this.$router.push(
+        `/message/${this.user.name}/${this.$route.params.userId}`
+      );
     },
   },
 };

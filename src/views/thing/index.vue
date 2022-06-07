@@ -86,10 +86,20 @@
                   Download All Files
                 </el-button>
               </div>
-              <div class="active-box">
-                <span><i class="el-icon-plus"></i>Collect Thing</span>
+              <div class="active-box" @click="collect">
+                <span>
+                  <!-- <i class="el-icon-plus"></i> -->
+                  <i
+                    :class="{
+                      'el-icon-check': isCollected,
+                      'el-icon-plus': !isCollected,
+                    }"
+                  >
+                  </i>
+                  Collect Thing
+                </span>
               </div>
-              <div class="active-box">
+              <div class="active-box" @click="like">
                 <span>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -98,6 +108,7 @@
                     fill="currentColor"
                     class="bi bi-heart"
                     viewBox="0 -1 16 16"
+                    :class="{ 'like-red': isLike }"
                   >
                     <path
                       d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"
@@ -252,6 +263,8 @@ export default {
       showImg: [],
       waitImg: [],
       viewModel: false,
+      isLike: false,
+      isCollected: false,
     };
   },
   methods: {
@@ -281,12 +294,24 @@ export default {
       this.waitImg.push(currentShowImgFirst);
       this.showImg.push(this.waitImg.shift());
     },
+    like() {
+      this.isLike = !this.isLike;
+      console.log("like!", this.isLike);
+    },
+    collect() {
+      this.isCollected = !this.isCollected;
+      console.log("collect", this.isCollected);
+    },
   },
   created() {
     getUserInfoByThingId({
       thingId: this.$route.params.thingId,
+      userId: this.$store.getters.userId,
     }).then((res) => {
       this.user = res.data.data;
+      this.isLike = this.user.isLike;
+      this.isCollected = this.user.isCollected;
+      console.log("this.user", this.user);
       this.imageList = this.user.image;
       for (let i = 0; i < this.imageList.length; i++) {
         let obj = {
@@ -474,5 +499,11 @@ export default {
     width: 100%;
     height: 100%;
   }
+}
+.like-red {
+  color: red;
+}
+.el-icon-check {
+  color: #248bfb;
 }
 </style>
