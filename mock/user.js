@@ -134,6 +134,8 @@ const userMock = function (app) {
     following: "@integer(60, 1000)",
     designs: "@integer(1, 30)",
     isFollow: "@boolean",
+    address: "@word",
+    username: "@word",
     "design|1-7": [
       {
         thingId: "@id",
@@ -243,6 +245,29 @@ const userMock = function (app) {
     res.json({
       status: 200,
       message: "ok",
+    });
+  });
+
+  let followData = mock.mock({
+    "data|1-100": [
+      {
+        name: "@name",
+        avatar: "@image('300x200','@color', '#FFF', '@word')",
+        background: "@image('300x200','@color', '#FFF', '@word')",
+        address: "@word",
+        userId: "@id",
+        designs: "@integer(1, 100)",
+        makes: "@integer(1, 100)",
+        collections: "@integer(1, 100)",
+      },
+    ],
+  });
+  app.get("/user/getFollowsByUserId", function (req, res) {
+    console.log(req.query);
+    res.json({
+      status: 200,
+      message: "ok",
+      data: followData,
     });
   });
 };

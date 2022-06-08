@@ -197,7 +197,7 @@ export default {
       return this.$store.getters.token ? true : false;
     },
     profilePath() {
-      return `/design/${this.$store.getters.userId}`;
+      return `/design/Favorites/${this.$store.getters.userId}`;
     },
   },
 };

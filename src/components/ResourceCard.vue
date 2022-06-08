@@ -102,6 +102,10 @@ export default {
         thingId: this.thing.thingId,
       }).then((res) => {
         console.log("changelike", res);
+        this.$message({
+          message: "恭喜你，这是一条成功消息",
+          type: "success",
+        });
         this.isLike = !this.isLike;
       });
     },
@@ -116,6 +120,10 @@ export default {
         userId: this.$store.getters.userId,
       }).then((res) => {
         console.log("switchCollect", res);
+        this.$message({
+          message: "恭喜你，这是一条成功消息",
+          type: "success",
+        });
       });
     },
   },

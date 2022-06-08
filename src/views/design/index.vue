@@ -11,11 +11,11 @@
             <a :href="profile.website">{{ profile.website }}</a>
           </span>
           <p>I AM A...</p>
-          <span>{{ profile.who.join(",") }}</span>
+          <span>{{ who }}</span>
           <p>3D Design Skill Level</p>
           <span>{{ profile.designLevel }}</span>
           <p>Tools I Use</p>
-          <span>{{ profile.designToolsUsed.join(",") }}</span>
+          <span>{{ designToolsUsed }}</span>
         </div>
       </el-col>
       <el-col :xs="24" :sm="24" :md="16" :lg="18" :xl="18">
@@ -56,6 +56,8 @@ export default {
         { name: "Makes", count: 0 },
         { name: "Likes", count: 0 },
       ],
+      who: "",
+      designToolsUsed: "",
     };
   },
   mounted() {
@@ -66,6 +68,8 @@ export default {
       console.log(res.data.data);
       this.user = res.data.data;
       this.profile = res.data.data.userProfile;
+      this.who = this.profile.who.join(",") ?? "";
+      this.designToolsUsed = this.profile.designToolsUsed.join(",") ?? "";
       this.filterByTypes[0].count = res.data.data.favorites.length;
       this.filterByTypes[1].count = res.data.data.design.length;
       this.filterByTypes[2].count = res.data.data.collections.length;

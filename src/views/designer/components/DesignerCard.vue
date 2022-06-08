@@ -31,13 +31,13 @@
     </div>
     <el-row class="card-action-item">
       <el-col :span="8">
-        <div class="follower-item">
+        <div class="follower-item" @click="toFollowing(designer)">
           <div class="follower-data">{{ designer.followers }}</div>
           <div class="follower-name">Followers</div>
         </div>
       </el-col>
       <el-col :span="8">
-        <div class="follower-item">
+        <div class="follower-item" @click="toFollowing(designer)">
           <div class="follower-data">{{ following }}</div>
           <div class="follower-name">Following</div>
         </div>
@@ -79,7 +79,6 @@ export default {
         designerId: this.designer.id,
         userId: this.$store.getters.userId,
       };
-      console.log("this.isFollow", this.isFollow);
       if (this.isFollow) {
         unfollowDesigner(data).then((res) => {
           console.log(res);
@@ -105,6 +104,10 @@ export default {
     viewDesignerDetails(id) {
       console.log("viewDesignerDetails!");
       this.$router.push(`design/${id}`);
+    },
+    toFollowing(designer) {
+      console.log("toFollowing!", designer);
+      this.$router.push(`/following/${designer.id}`);
     },
   },
 };
@@ -155,6 +158,7 @@ export default {
     border-left: 1px solid #eee;
     align-content: center;
     flex-wrap: wrap;
+    cursor: pointer;
     .follower-data {
       color: #555;
       width: 100%;

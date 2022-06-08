@@ -167,12 +167,12 @@ const routes = [
     ],
   },
   {
-    path: "/following",
+    path: "/following/:userId",
     name: "following",
     component: Layout,
     children: [
       {
-        path: "/following",
+        path: "/following/:userId",
         component: () => import("@/views/following/index"),
       },
     ],

@@ -62,3 +62,11 @@ export function postUserMessage(params) {
     params,
   });
 }
+
+export function findFollowsByUserId(params) {
+  return request({
+    url: "/user/getFollowsByUserId",
+    method: "get",
+    params,
+  });
+}
