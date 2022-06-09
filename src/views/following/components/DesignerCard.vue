@@ -5,7 +5,8 @@
     </div>
     <div class="card-info">
       <div class="follow-button">
-        <el-button size="small">FOLLOW</el-button>
+        <!-- <el-button size="small">FOLLOW</el-button> -->
+        <follow-button :follow="isFollow"></follow-button>
       </div>
       <div class="text-info">
         <span>{{ follow.name }}</span>
@@ -14,15 +15,15 @@
       </div>
     </div>
     <div class="card-content-bottom">
-      <div class="card-bottom-number-show">
+      <div class="card-bottom-number-show" @click="to('Designs')">
         <span>{{ follow.designs }}</span>
         <span>Designs</span>
       </div>
-      <div class="card-bottom-number-show">
+      <div class="card-bottom-number-show" @click="to('Makes')">
         <span>{{ follow.makes }}</span>
         <span>Makes</span>
       </div>
-      <div class="card-bottom-number-show">
+      <div class="card-bottom-number-show" @click="to('Collections')">
         <span>{{ follow.collections }}</span>
         <span>Collections</span>
       </div>
@@ -30,8 +31,10 @@
   </div>
 </template>
 <script>
+import FollowButton from "@/components/FollowButton";
 export default {
   name: "DesignerCard",
+  components: { FollowButton },
   props: ["follow"],
   data() {
     return {
@@ -42,15 +45,25 @@ export default {
         backgroundSize: `100% 100%`,
         backgroundRepeat: `no-repeat`,
       },
+      isFollow: false,
     };
   },
-  mounted() {},
+  mounted() {
+    this.isFollow = this.follow.isFollow;
+    console.log("mounted", this.isFollow);
+  },
+  methods: {
+    to(name) {
+      this.$store.commit("filterCard/SET_SELECTPROFILE", name);
+      this.$router.push(`/design/${name}/${this.follow.userId}`);
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>
 .designer-card {
   width: 296px;
-  height: 265px;
+  height: 270px;
   background: #fff;
   border: 2px solid #ececec;
   margin-top: 10px;
@@ -64,12 +77,9 @@ export default {
   .follow-button {
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
+    justify-content: center;
     height: 89px;
-    .el-button {
-      margin-left: 10px;
-      margin-bottom: 10px;
-    }
+    margin-top: 10px;
   }
   .text-info {
     font-size: 14px;
@@ -85,10 +95,8 @@ export default {
     left: 25px;
   }
   .el-button {
-    background-color: #666;
     width: 100px;
     height: 35px;
-    color: #fff;
   }
   .card-content-bottom {
     display: flex;
@@ -101,6 +109,7 @@ export default {
       align-items: center;
       width: 100%;
       padding: 4px;
+      cursor: pointer;
     }
   }
 }

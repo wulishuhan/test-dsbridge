@@ -112,13 +112,7 @@ const routes = [
     children: [
       {
         path: "/thing/:thingId",
-        meta: { name: "thing" },
         component: () => import("@/views/thing/index"),
-      },
-      {
-        path: "/thingMake/:thingId",
-        meta: { name: "thingMake" },
-        component: () => import("@/views/thingMake/index"),
       },
     ],
   },

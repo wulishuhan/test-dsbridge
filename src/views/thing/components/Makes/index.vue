@@ -25,7 +25,6 @@ export default {
       thingId: this.$route.params.thingId,
     }).then((res) => {
       this.makes = res.data.data.makes;
-      console.log("this.makes:", this.makes);
     });
   },
 };

@@ -203,7 +203,7 @@ const thingMock = function (app) {
     "makes|1-13": [
       {
         thingId: "@id",
-        uid: "@id",
+        userId: "@id",
         avatar: "@image('300x200','@color', '#FFF', '@word')",
         name: "@word",
         thingName: "@word",

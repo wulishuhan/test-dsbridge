@@ -62,7 +62,6 @@ export default {
     return {
       isEnterFollowingBox: false,
       isFollow: false,
-      followStyle: {},
     };
   },
   mounted() {

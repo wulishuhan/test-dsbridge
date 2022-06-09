@@ -1,7 +1,7 @@
 <template>
   <div>
     <nav-bar></nav-bar>
-    <router-view />
+    <router-view :key="$route.fullPath" />
   </div>
 </template>
 <script>
@@ -11,10 +11,8 @@ export default {
   name: "Layout",
   components: { NavBar },
   data() {
-    return {
-    };
+    return {};
   },
-  methods: {
-  },
+  methods: {},
 };
 </script>

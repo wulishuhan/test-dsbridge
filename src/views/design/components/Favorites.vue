@@ -31,6 +31,7 @@ export default {
       this.users = res.data.data.favorites;
       for (let i = 0; i < this.users.length; i++)
         this.users[i].avatar = res.data.data.avatar;
+      console.log("favorites:", this.users);
     });
   },
 };

@@ -10,7 +10,7 @@
             ></el-image>
             <el-image class="avatar" :src="userInfo.avatar"></el-image>
             <div class="info-content">
-              <h3>Arian Croft</h3>
+              <h3>{{ userInfo.name }}</h3>
               <div class="justify-info">
                 <span>
                   <i class="el-icon-user-solid"></i>
@@ -22,9 +22,8 @@
                 </span>
               </div>
               <div class="button-content">
-                <el-button>FOLLOW</el-button>
-                <br />
-                <el-button>TIP DESIGNER</el-button>
+                <follow-button :followStatus="false"></follow-button>
+                <el-button type="primary">TIP DESIGNER</el-button>
               </div>
               <div class="bottom-content">
                 <div class="bottom-content-justify">
@@ -46,24 +45,24 @@
                 <span>DESIGNS</span>
               </div>
               <div class="box" @click="to('Makes')">
-                <span>{{ userInfo.makes.length }}</span>
+                <span>{{ makesLength }}</span>
                 <span>MAKES</span>
               </div>
             </div>
             <div class="box-outer-justify">
               <div class="box" @click="to('Collections')">
-                <span>{{ userInfo.collections.length }}</span>
+                <span>{{ collectionsLength }}</span>
                 <span>COLLECTIONS</span>
               </div>
               <div class="box" @click="to('Likes')">
-                <span>{{ userInfo.likes.length }}</span>
+                <span>{{ likesLength }}</span>
                 <span>LIKES</span>
               </div>
             </div>
           </div>
 
           <div class="message-content">
-            <el-button type="primary">MESSAGE ME</el-button>
+            <el-button type="primary" @click="toMessage">MESSAGE ME</el-button>
           </div>
         </el-col>
         <el-col :span="16">
@@ -90,50 +89,46 @@
 </template>
 <script>
 import DesignerCard from "./components/DesignerCard";
+import FollowButton from "@/components/FollowButton";
 import { findFollowsByUserId, getUserInfoByUserId } from "@/api/user";
 export default {
   // eslint-disable-next-line
   name: "Following",
-  components: { DesignerCard },
+  components: { DesignerCard, FollowButton },
   data() {
     return {
       followers: [],
       userInfo: {},
+      makesLength: 0,
+      collectionsLength: 0,
+      likesLength: 0,
     };
   },
-  computed: {
-    designsPath() {
-      return `/design/designs/${this.$route.params.userId}`;
-    },
-    makesPath() {
-      return `/design/makes/${this.$route.params.userId}`;
-    },
-    collectionsPath() {
-      return `/design/collections/${this.$route.params.userId}`;
-    },
-    likesPath() {
-      return `/design/likes/${this.$route.params.userId}`;
-    },
-  },
   mounted() {
-    console.log("mounted", this.$route.params.userId);
     findFollowsByUserId({
       userId: this.$route.params.userId,
     }).then((res) => {
-      console.log("findFollowsByUserId res:", res);
       this.followers = res.data.data.data;
+      console.log("this.followers", this.followers);
     });
     getUserInfoByUserId({
       userId: this.$route.params.userId,
     }).then((res) => {
-      console.log("getUserInfoByUserId res:", res);
       this.userInfo = res.data.data;
+      this.makesLength = this.userInfo.makes.length;
+      this.collectionsLength = this.userInfo.collections.length;
+      this.likesLength = this.userInfo.likes.length;
     });
   },
   methods: {
     to(name) {
       this.$store.commit("filterCard/SET_SELECTPROFILE", name);
       this.$router.push(`/design/${name}/${this.$route.params.userId}`);
+    },
+    toMessage() {
+      this.$router.push(
+        `/message/${this.userInfo.name}/${this.$route.params.userId}`
+      );
     },
   },
 };
@@ -153,9 +148,7 @@ export default {
     text-align: center;
     box-sizing: border-box;
     .el-button {
-      background-color: #666;
       width: 150px;
-      color: #fff;
     }
   }
   .background-image {

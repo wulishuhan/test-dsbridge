@@ -82,13 +82,7 @@ export default {
   },
   methods: {
     toDetail(id) {
-      if (this.$route.meta.name === "thing") {
-        this.$router.push("/thingMake/" + id);
-      } else if (this.$route.meta.name === "thingMake") {
-        this.$router.push("/thing/" + id);
-      } else {
-        this.$router.push("/thing/" + id);
-      }
+      this.$router.push(`/thing/${id}`);
     },
     like() {
       if (this.isLike) {
@@ -110,6 +104,7 @@ export default {
       });
     },
     viewAuthorInfo(userId) {
+      this.$store.commit("filterCard/SET_SELECTPROFILE", "Designs");
       this.$router.push(`/design/Designs/${userId}`);
     },
     switchCollect() {

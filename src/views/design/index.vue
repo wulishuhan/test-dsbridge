@@ -29,7 +29,7 @@
             </el-col>
           </div>
           <el-col :span="24">
-            <router-view />
+            <router-view :key="$route.fullPath" />
           </el-col>
         </el-row>
       </el-col>
@@ -65,7 +65,7 @@ export default {
       id: this.$route.params.userId,
       userId: this.$store.getters.userId,
     }).then((res) => {
-      console.log(res.data.data);
+      console.log("mounted!");
       this.user = res.data.data;
       this.profile = res.data.data.userProfile;
       this.who = this.profile.who.join(",") ?? "";
