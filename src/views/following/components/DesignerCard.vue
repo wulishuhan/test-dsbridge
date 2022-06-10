@@ -1,11 +1,10 @@
 <template>
   <div class="designer-card">
-    <div :style="cardBackground">
+    <div :style="cardBackground" @click="to('Designs')">
       <el-image :src="follow.avatar"> </el-image>
     </div>
     <div class="card-info">
       <div class="follow-button">
-        <!-- <el-button size="small">FOLLOW</el-button> -->
         <follow-button :follow="isFollow"></follow-button>
       </div>
       <div class="text-info">
@@ -44,13 +43,13 @@ export default {
         height: `122px`,
         backgroundSize: `100% 100%`,
         backgroundRepeat: `no-repeat`,
+        cursor: "pointer",
       },
       isFollow: false,
     };
   },
   mounted() {
     this.isFollow = this.follow.isFollow;
-    console.log("mounted", this.isFollow);
   },
   methods: {
     to(name) {

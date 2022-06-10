@@ -43,7 +43,7 @@
         </div>
       </el-col>
       <el-col :span="8">
-        <div class="follower-item">
+        <div class="follower-item" @click="viewDesignerDetails(designer.id)">
           <div class="follower-data">{{ designer.designs }}</div>
           <div class="follower-name">Designs</div>
         </div>
@@ -80,14 +80,20 @@ export default {
         userId: this.$store.getters.userId,
       };
       if (this.isFollow) {
-        unfollowDesigner(data).then((res) => {
-          console.log(res);
+        unfollowDesigner(data).then(() => {
+          this.$message({
+            message: "unfollow successfully!",
+            type: "success",
+          });
           this.isFollow = !this.isFollow;
           this.following = Number(this.following) - 1;
         });
       } else {
-        followDesigner(data).then((res) => {
-          console.log(res);
+        followDesigner(data).then(() => {
+          this.$message({
+            message: "follow successfully",
+            type: "success",
+          });
           this.following = Number(this.following) + 1;
           this.isFollow = !this.isFollow;
         });
@@ -102,11 +108,9 @@ export default {
       this.isEnterFollowingBox = false;
     },
     viewDesignerDetails(id) {
-      console.log("viewDesignerDetails!");
-      this.$router.push(`design/${id}`);
+      this.$router.push(`design/Designs/${id}`);
     },
     toFollowing(designer) {
-      console.log("toFollowing!", designer);
       this.$router.push(`/following/${designer.id}`);
     },
   },

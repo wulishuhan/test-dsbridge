@@ -20,7 +20,7 @@ export default {
       isFollow: false,
     };
   },
-  mounted() {
+  created() {
     this.isFollow = this.follow;
   },
   computed: {

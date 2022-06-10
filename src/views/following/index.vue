@@ -22,7 +22,7 @@
                 </span>
               </div>
               <div class="button-content">
-                <follow-button :followStatus="false"></follow-button>
+                <follow-button :follow="userInfo.isFollow"></follow-button>
                 <el-button type="primary">TIP DESIGNER</el-button>
               </div>
               <div class="bottom-content">
@@ -68,15 +68,48 @@
         <el-col :span="16">
           <div>
             <div class="router-container">
-              <router-link class="router-link" to="/like">ABOUT</router-link>
-              <router-link class="router-link" to="/like">DESIGNS</router-link>
-              <router-link class="router-link" to="/like">
+              <el-button
+                @click="to('Designs')"
+                class="router-link"
+                size="medium"
+                type="text"
+              >
+                ABOUT
+              </el-button>
+              <el-button
+                @click="to('Designs')"
+                class="router-link"
+                size="medium"
+                type="text"
+              >
+                DESIGNS
+              </el-button>
+              <el-button
+                @click="to('Collections')"
+                class="router-link"
+                size="medium"
+                type="text"
+              >
                 COLLECTIONS
-              </router-link>
-              <router-link class="router-link" to="/like">MAKES</router-link>
-              <router-link class="router-link" to="/like">LIKES</router-link>
+              </el-button>
+              <el-button
+                @click="to('Makes')"
+                class="router-link"
+                size="medium"
+                type="text"
+              >
+                MAKES
+              </el-button>
+              <el-button
+                @click="to('Likes')"
+                class="router-link"
+                size="medium"
+                type="text"
+              >
+                LIKES
+              </el-button>
             </div>
-            <el-row>
+            <el-row v-infinite-scroll="loadFollowers" style="overflow: auto">
               <el-col :span="12" v-for="item in followers" :key="item.userId">
                 <designer-card :follow="item"></designer-card>
               </el-col>
@@ -109,7 +142,6 @@ export default {
       userId: this.$route.params.userId,
     }).then((res) => {
       this.followers = res.data.data.data;
-      console.log("this.followers", this.followers);
     });
     getUserInfoByUserId({
       userId: this.$route.params.userId,
@@ -129,6 +161,13 @@ export default {
       this.$router.push(
         `/message/${this.userInfo.name}/${this.$route.params.userId}`
       );
+    },
+    loadFollowers() {
+      findFollowsByUserId({
+        userId: this.$route.params.userId,
+      }).then((res) => {
+        this.followers.push(res.data.data.data);
+      });
     },
   },
 };

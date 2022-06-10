@@ -252,23 +252,23 @@ const userMock = function (app) {
     });
   });
 
-  let followData = mock.mock({
-    "data|1-100": [
-      {
-        name: "@name",
-        avatar: "@image('300x200','@color', '#FFF', '@word')",
-        background: "@image('300x200','@color', '#FFF', '@word')",
-        address: "@word",
-        userId: "@id",
-        designs: "@integer(1, 100)",
-        makes: "@integer(1, 100)",
-        collections: "@integer(1, 100)",
-        isFollow: "@boolean",
-      },
-    ],
-  });
   app.get("/user/getFollowsByUserId", function (req, res) {
     console.log(req.query);
+    let followData = mock.mock({
+      "data|1-10": [
+        {
+          name: "@name",
+          avatar: "@image('300x200','@color', '#FFF', '@word')",
+          background: "@image('300x200','@color', '#FFF', '@word')",
+          address: "@word",
+          userId: "@id",
+          designs: "@integer(1, 100)",
+          makes: "@integer(1, 100)",
+          collections: "@integer(1, 100)",
+          isFollow: "@boolean",
+        },
+      ],
+    });
     res.json({
       status: 200,
       message: "ok",
