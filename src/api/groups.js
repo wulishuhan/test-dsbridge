@@ -6,3 +6,11 @@ export function getGroupsList(params) {
     params,
   });
 }
+
+export function getGroupsMembers(params) {
+  return request({
+    url: "/groups/members",
+    method: "get",
+    params,
+  });
+}

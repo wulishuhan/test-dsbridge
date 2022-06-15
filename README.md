@@ -57,3 +57,11 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 **follows**
 |id|followed-id|user-id|
 |-|-|-|
+
+**groups**
+|id|name|
+|-|-|
+
+**groups-number**
+|id|groups-id|user-id|
+|-|-|-|

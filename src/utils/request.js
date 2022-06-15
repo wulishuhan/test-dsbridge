@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const service = axios.create({
-  timeout: 1000,
+  // timeout: 1000,
 });
 
 // request interceptor

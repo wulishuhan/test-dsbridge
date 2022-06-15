@@ -57,25 +57,20 @@
       :key="item.id"
       :group="item"
     ></group-card>
-    <el-pagination
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-      :current-page="pagination.currentPage"
-      :page-sizes="[10, 20, 30, 40]"
-      :page-size="pagination.pageSize"
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="pagination.total"
-    >
-    </el-pagination>
+    <pagination ref="groupsPagination" @getData="getGroups"></pagination>
   </div>
 </template>
 <script>
 import GroupCard from "./components/GroupCard";
+import pagination from "@/components/pagination";
 import { getGroupsList } from "@/api/groups";
 export default {
   // eslint-disable-next-line
-    name: "groups",
-  components: { GroupCard },
+  name: "groups",
+  components: { GroupCard, pagination },
+  mounted() {
+    this.getGroups();
+  },
   data() {
     return {
       groupsFilter: [
@@ -111,37 +106,33 @@ export default {
       keywords: "",
       groups: [],
       pagination: {
-        total: 100,
         pageSize: 10,
         currentPage: 1,
       },
     };
   },
-  mounted() {
-    this.getGroups();
-  },
   methods: {
-    handleSizeChange(val) {
-      this.pagination.pageSize = val;
-      this.getGroups();
-    },
-    handleCurrentChange(val) {
-      this.pagination.currentPage = val;
-      this.getGroups();
-    },
-    getGroups(typeSelector) {
-      console.log({ ...this.pagination, typeSelector });
-      getGroupsList({ ...this.pagination, typeSelector }).then((res) => {
-        this.groups = res.data.data;
-        console.log("this.groups", this.groups);
-      });
+    getGroups(pagination) {
+      if (pagination) {
+        this.pagination = pagination;
+      }
+      getGroupsList({ ...this.pagination })
+        .then((res) => {
+          this.groups = res.data.data;
+          this.$refs.groupsPagination.total = res.data.length;
+        })
+        .catch((err) => {
+          console.error("err:", err);
+        });
     },
     typeChange(val) {
       this.typeSelector = val;
-      this.getGroups(val);
+      console.log("typeChange", val);
+      this.getGroups();
     },
     groupChange(val) {
-      this.getGroups(val);
+      console.log("groupChange", val);
+      this.getGroups();
     },
   },
 };

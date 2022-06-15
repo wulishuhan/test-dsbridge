@@ -171,6 +171,27 @@ const routes = [
       },
     ],
   },
+  {
+    path: "/groupDetail",
+    name: "groupDetail",
+    component: Layout,
+    children: [
+      {
+        path: "/groupDetail",
+        component: () => import("@/views/groupDetail/index"),
+        children: [
+          {
+            path: "/groupDetail/things",
+            component: () => import("@/views/groupDetail/components/Things"),
+          },
+          {
+            path: "/groupDetail/members",
+            component: () => import("@/views/groupDetail/components/Members"),
+          },
+        ],
+      },
+    ],
+  },
 ];
 
 const router = new VueRouter({

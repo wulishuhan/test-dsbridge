@@ -10,13 +10,13 @@
       </div>
     </header>
     <el-row :gutter="20" class="filter">
-      <el-col :span="8">
+      <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4">
         <popular-filter></popular-filter>
       </el-col>
-      <el-col :span="8">
+      <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4">
         <type-filter></type-filter>
       </el-col>
-      <el-col :span="8"> </el-col>
+      <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4"> </el-col>
     </el-row>
     <el-row class="row">
       <el-col
@@ -31,14 +31,18 @@
         <resource-card :thing="item"></resource-card>
       </el-col>
     </el-row>
-    <pagination @getThingLists="getThingLists" :total="total"></pagination>
+    <pagination
+      ref="mainPagination"
+      @getData="getThings"
+      :total="total"
+    ></pagination>
   </div>
 </template>
 <script>
 import ResourceCard from "@/components/ResourceCard.vue";
 import TypeFilter from "./components/Filter/TypeFilter.vue";
 import PopularFilter from "./components/Filter/PopularFilter.vue";
-import pagination from "./components/Pagination.vue";
+import pagination from "@/components/pagination.vue";
 import { getThingList } from "@/api/thing";
 export default {
   // eslint-disable-next-line
@@ -53,12 +57,10 @@ export default {
   },
   mounted() {},
   methods: {
-    getThingLists(pageSize, currentPage) {
-      getThingList({
-        currentPage: currentPage,
-        pageSize: pageSize,
-      }).then((res) => {
+    getThings(pagination) {
+      getThingList(pagination).then((res) => {
         this.things = res.data.data;
+        this.$refs.mainPagination.total = res.data.length;
         this.total = res.data.length;
       });
     },

@@ -44,6 +44,7 @@ const userMock = function (app) {
     let { currentPage, pageSize, subject, grade } = req.query;
     currentPage = Number(currentPage);
     pageSize = Number(pageSize);
+    console.log(pageSize, currentPage, subject, grade);
     let t1 = [];
     if (subject && grade) {
       for (const val of data) {

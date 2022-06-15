@@ -30,8 +30,43 @@ const groupMock = function (app) {
       status: 200,
       message: "ok",
       data: temp,
-      length: data.length,
+      length: data.data.length,
     });
+  });
+  let members = mock.mock({
+    "data|100": [
+      {
+        id: "@id",
+        username: "@word",
+        name: "@word",
+        avatar: "@image('300x200','@color', '#FFF', '@word')",
+      },
+    ],
+  });
+  app.get("/groups/members", function (req, res) {
+    let { currentPage, pageSize } = req.query;
+    console.log(req.query);
+    currentPage = parseInt(currentPage);
+    pageSize = parseInt(pageSize);
+    let start = (currentPage - 1) * pageSize;
+    let end = start + pageSize;
+    if (end > members.data.length) {
+      end = members.data.length;
+    }
+    let temp = [];
+    for (let i = start; i < end; i++) {
+      temp.push(members.data[i]);
+    }
+    if (start > members.data.length) {
+      res.status(500).send("Bad Pagination");
+    } else {
+      res.json({
+        status: 200,
+        message: "ok",
+        data: temp,
+        length: members.data.length,
+      });
+    }
   });
 };
 

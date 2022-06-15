@@ -44,22 +44,6 @@ export default {
   // eslint-disable-next-line
   name: "Design",
   components: { ProfileCard, FilterProfile },
-  data() {
-    return {
-      user: {},
-      profile: {},
-      filterByType: ["Favorites", "Designs", "Collections", "Makes", "Likes"],
-      filterByTypes: [
-        { name: "Favorites", count: 0 },
-        { name: "Designs", count: 0 },
-        { name: "Collections", count: 0 },
-        { name: "Makes", count: 0 },
-        { name: "Likes", count: 0 },
-      ],
-      who: "",
-      designToolsUsed: "",
-    };
-  },
   mounted() {
     getUserInfoByUserId({
       id: this.$route.params.userId,
@@ -76,6 +60,22 @@ export default {
       this.filterByTypes[3].count = res.data.data.makes.length;
       this.filterByTypes[4].count = res.data.data.likes.length;
     });
+  },
+  data() {
+    return {
+      user: {},
+      profile: {},
+      filterByType: ["Favorites", "Designs", "Collections", "Makes", "Likes"],
+      filterByTypes: [
+        { name: "Favorites", count: 0 },
+        { name: "Designs", count: 0 },
+        { name: "Collections", count: 0 },
+        { name: "Makes", count: 0 },
+        { name: "Likes", count: 0 },
+      ],
+      who: "",
+      designToolsUsed: "",
+    };
   },
 };
 </script>

@@ -61,6 +61,10 @@ export default {
       default: () => {},
     },
   },
+  mounted() {
+    this.isFollow = this.designer.isFollow;
+    this.following = this.designer.following;
+  },
   data() {
     return {
       isFollow: false,
@@ -68,10 +72,6 @@ export default {
       followText: "Following",
       following: 0,
     };
-  },
-  mounted() {
-    this.isFollow = this.designer.isFollow;
-    this.following = this.designer.following;
   },
   methods: {
     follow() {

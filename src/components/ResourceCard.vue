@@ -41,10 +41,18 @@
               {{ likes }}
             </span>
           </div>
-          <div v-if="!thing.comments">
-            <i class="el-icon-upload2"></i>
-            <span> Share </span>
-          </div>
+          <el-popover
+            v-if="!thing.comments"
+            placement="right"
+            width="296"
+            trigger="click"
+          >
+            <share-social-media></share-social-media>
+            <div slot="reference" @click="share" v-if="!thing.comments">
+              <i class="el-icon-upload2"></i>
+              <span> Share </span>
+            </div>
+          </el-popover>
           <div v-else class="comments">
             <i class="el-icon-chat-square"></i>
             <span>
@@ -58,8 +66,10 @@
 </template>
 <script>
 import { changeCollect, changeLike } from "@/api/thing";
+import ShareSocialMedia from "./ShareSocialMedia";
 export default {
   name: "ResourceCard",
+  components: { ShareSocialMedia },
   props: {
     thing: {
       type: Object,
@@ -102,6 +112,9 @@ export default {
         });
         this.isLike = !this.isLike;
       });
+    },
+    share() {
+      console.log("share!");
     },
     viewAuthorInfo(userId) {
       this.$store.commit("filterCard/SET_SELECTPROFILE", "Designs");

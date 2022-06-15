@@ -32,25 +32,17 @@
         </el-col>
       </div>
     </el-row>
-    <el-pagination
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-      :current-page="pagination.currentPage"
-      :page-sizes="[10, 20, 30, 40]"
-      :page-size="pagination.pageSize"
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="pagination.total"
-    >
-    </el-pagination>
+    <pagination ref="designerPagination" @getData="getDesigners"></pagination>
   </div>
 </template>
 <script>
 import { getDesignerList } from "@/api/designer";
 import DesignerCard from "./components/DesignerCard";
+import Pagination from "@/components/pagination";
 export default {
   // eslint-disable-next-line
-    name: "Designer",
-  components: { DesignerCard },
+  name: "Designer",
+  components: { DesignerCard, Pagination },
   data() {
     return {
       pagination: {
@@ -78,8 +70,8 @@ export default {
   },
   mounted() {
     getDesignerList(this.pagination).then((res) => {
-      console.log("getUserList:", res);
       this.user = res.data.data;
+      this.$refs.designerPagination.total = res.data.length;
     });
   },
   methods: {
@@ -91,10 +83,10 @@ export default {
       this.pagination.currentPage = val;
       this.getDesignerLists();
     },
-    getDesignerLists() {
-      getDesignerList(this.pagination).then((res) => {
-        console.log(res);
+    getDesigners(pagination) {
+      getDesignerList(pagination).then((res) => {
         this.pagination.total = res.data.length;
+        this.$refs.designerPagination.total = res.data.length;
         this.user = res.data.data;
       });
     },

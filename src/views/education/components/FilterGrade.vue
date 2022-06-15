@@ -30,7 +30,6 @@ export default {
         this.$store.commit("filterCard/SET_SELECTGRADE", name);
         this.$emit("setGrade", name);
       }
-      console.log("check grade");
       this.$emit("getUserLists");
     },
   },

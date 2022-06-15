@@ -9,7 +9,7 @@
       <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
         <el-input
           placeholder="请输入搜索关键词"
-          suffix-icon="el-icon-search"
+          prefix-icon="el-icon-search"
           v-model="keywords"
         ></el-input>
       </el-col>
@@ -91,20 +91,28 @@
               <el-menu :default-active="activeIndex" class="el-menu-width-sm">
                 <el-submenu index="1">
                   <template slot="title">Explore</template>
-                  <el-menu-item index="2-1">Things</el-menu-item>
-                  <el-menu-item index="2-2">Designers</el-menu-item>
-                  <a href="/groups">
+                  <router-link to="/">
+                    <el-menu-item index="2-1">Things</el-menu-item>
+                  </router-link>
+                  <router-link to="/designer">
+                    <el-menu-item index="2-2">Designers</el-menu-item>
+                  </router-link>
+                  <router-link to="/groups">
                     <el-menu-item index="2-3">Groups</el-menu-item>
-                  </a>
+                  </router-link>
                   <el-menu-item index="2-4">Customizable Things</el-menu-item>
                 </el-submenu>
-                <a href="/education">
+                <router-link to="/education">
                   <el-menu-item index="2">Education</el-menu-item>
-                </a>
+                </router-link>
                 <el-submenu index="3">
                   <template slot="title">Create</template>
-                  <el-menu-item index="3-1">upload</el-menu-item>
-                  <el-menu-item index="3-2">Customize</el-menu-item>
+                  <router-link to="/upload">
+                    <el-menu-item index="3-1">upload</el-menu-item>
+                  </router-link>
+                  <router-link to="/customizer">
+                    <el-menu-item index="3-2">Customize</el-menu-item>
+                  </router-link>
                 </el-submenu>
                 <router-link to="/login" v-if="!hasToken">
                   <el-menu-item index="4">Sign Up</el-menu-item>
@@ -148,7 +156,15 @@
 </template>
 
 <script>
+import { throttle } from "@/utils/cache.js";
 export default {
+  mounted() {
+    this.formatWidth();
+    window.addEventListener("resize", this.formatWidth);
+  },
+  beforeDestroy() {
+    window.removeEventListener("resize", this.formatWidth);
+  },
   data() {
     return {
       menuview: "hidden-sm-and-down",
@@ -162,12 +178,16 @@ export default {
   },
   methods: {
     formatWidth() {
-      let w = window.innerWidth;
-      if (w <= 768) {
-        this.isHideNavBar = false;
-      } else {
-        this.isHideNavBar = true;
-      }
+      throttle(() => {
+        // let innerWidth = window.innerWidth;
+        let clientWidth = document.body.clientWidth;
+        console.log("navbar:", clientWidth);
+        if (clientWidth <= 768) {
+          this.isHideNavBar = false;
+        } else {
+          this.isHideNavBar = true;
+        }
+      }, 1000)();
     },
     handleOpen(key, keyPath) {
       console.log(key, keyPath);
@@ -180,17 +200,6 @@ export default {
         this.$router.push("/");
       });
     },
-  },
-  mounted() {
-    this.formatWidth();
-    window.onresize = () => {
-      if (!this.timer) {
-        setTimeout(() => {
-          this.formatWidth();
-          this.timer = false;
-        }, 400);
-      }
-    };
   },
   computed: {
     hasToken() {
