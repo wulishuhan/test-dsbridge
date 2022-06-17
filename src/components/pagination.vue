@@ -20,6 +20,10 @@ export default {
   name: "pagination",
   props: {},
   created() {
+    this.changePagination();
+    this.formatWidth = throttle(() => {
+      this.changePagination();
+    }, 400);
     window.addEventListener("resize", this.formatWidth);
     this.getData();
   },
@@ -33,22 +37,20 @@ export default {
       layout: "total, sizes, prev, pager, next, jumper",
       isSmall: false,
       total: 50,
+      formatWidth: () => {},
     };
   },
   methods: {
-    formatWidth() {
-      throttle(() => {
-        //let innerWidth = window.innerWidth;
-        let clientWidth = document.body.clientWidth;
-        console.log("pagination:", clientWidth);
-        if (clientWidth <= 768) {
-          this.layout = "prev, pager, next";
-          this.isSmall = true;
-        } else {
-          this.layout = "total, sizes, prev, pager, next, jumper";
-          this.isSmall = false;
-        }
-      }, 1000)();
+    changePagination() {
+      let clientWidth = document.body.clientWidth;
+      console.log("pagination:", clientWidth);
+      if (clientWidth <= 768) {
+        this.layout = "prev, pager, next";
+        this.isSmall = true;
+      } else {
+        this.layout = "total, sizes, prev, pager, next, jumper";
+        this.isSmall = false;
+      }
     },
     handleSizeChange(val) {
       this.pageSize = val;

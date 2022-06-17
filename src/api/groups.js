@@ -14,3 +14,35 @@ export function getGroupsMembers(params) {
     params,
   });
 }
+
+export function getGroupsInfo(params) {
+  return request({
+    url: "/groups/info",
+    method: "get",
+    params,
+  });
+}
+
+export function getGroupThings(params) {
+  return request({
+    url: "/groups/thingsInfo",
+    method: "get",
+    params,
+  });
+}
+
+export function getGroupAboutInfo(params) {
+  return request({
+    url: "/groups/groupAboutInfo",
+    method: "get",
+    params,
+  });
+}
+
+export function changeUserGroupStatus(params) {
+  return request({
+    url: "/groups/changeUserGroup",
+    method: "post",
+    params,
+  });
+}

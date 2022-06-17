@@ -236,8 +236,7 @@ const thingMock = function (app) {
   });
 
   app.post("/thing/changeLike", function (req, res) {
-    let { thingId, isLike, userId } = req.query;
-    console.log("/thing/changeCollect", thingId, isLike, userId);
+    console.log(req.query);
     res.json({
       status: 200,
       message: "success",

@@ -181,12 +181,20 @@ const routes = [
         component: () => import("@/views/groupDetail/index"),
         children: [
           {
-            path: "/groupDetail/things",
+            path: "/groupDetail/things/:groupId",
             component: () => import("@/views/groupDetail/components/Things"),
           },
           {
-            path: "/groupDetail/members",
+            path: "/groupDetail/members/:groupId",
             component: () => import("@/views/groupDetail/components/Members"),
+          },
+          {
+            path: "/groupDetail/forums/:groupId",
+            component: () => import("@/views/groupDetail/components/Forums"),
+          },
+          {
+            path: "/groupDetail/about/:groupId",
+            component: () => import("@/views/groupDetail/components/About"),
           },
         ],
       },

@@ -83,7 +83,7 @@
 
       <div class="menuview" v-if="!isHideNavBar">
         <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="17">
-          <el-dropdown trigger="click">
+          <el-dropdown trigger="hover">
             <span class="el-dropdown-link">
               <i class="el-icon-more"></i>
             </span>
@@ -159,7 +159,10 @@
 import { throttle } from "@/utils/cache.js";
 export default {
   mounted() {
-    this.formatWidth();
+    this.hideNavBar();
+    this.formatWidth = throttle(() => {
+      this.hideNavBar();
+    }, 400);
     window.addEventListener("resize", this.formatWidth);
   },
   beforeDestroy() {
@@ -174,20 +177,18 @@ export default {
       isHideNavBar: false,
       isCollapse: true,
       hasTokend: false,
+      formatWidth: () => {},
     };
   },
   methods: {
-    formatWidth() {
-      throttle(() => {
-        // let innerWidth = window.innerWidth;
-        let clientWidth = document.body.clientWidth;
-        console.log("navbar:", clientWidth);
-        if (clientWidth <= 768) {
-          this.isHideNavBar = false;
-        } else {
-          this.isHideNavBar = true;
-        }
-      }, 1000)();
+    hideNavBar() {
+      let clientWidth = document.body.clientWidth;
+      console.log("navbar:", clientWidth);
+      if (clientWidth <= 768) {
+        this.isHideNavBar = false;
+      } else {
+        this.isHideNavBar = true;
+      }
     },
     handleOpen(key, keyPath) {
       console.log(key, keyPath);

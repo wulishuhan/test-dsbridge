@@ -1,10 +1,10 @@
 <template>
   <div class="group-card">
     <div class="group-logo">
-      <el-avatar :size="95" :src="group.logo"></el-avatar>
+      <el-avatar :size="95" :src="group.groupLogo"></el-avatar>
     </div>
     <div class="group-info">
-      <div class="group-title">{{ group.name }}</div>
+      <div class="group-title">{{ group.groupName }}</div>
       <el-row
         style="
           display: flex;
@@ -16,7 +16,7 @@
         "
       >
         <el-col :span="6"
-          ><el-button type="primary">VIEW GROUP</el-button></el-col
+          ><el-button type="primary" @click="to">VIEW GROUP</el-button></el-col
         >
         <el-col :span="5" :offset="1"
           >{{ group.topics }} <br />
@@ -53,6 +53,11 @@ export default {
   },
   data() {
     return {};
+  },
+  methods: {
+    to() {
+      this.$router.push(`/groupDetail/Forums/${this.group.groupId}`);
+    },
   },
 };
 </script>

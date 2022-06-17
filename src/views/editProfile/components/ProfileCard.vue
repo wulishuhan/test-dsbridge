@@ -20,8 +20,6 @@
         >
           Upload a File
         </el-upload>
-        <!-- <p>--or--</p>
-        <p>Choose a Pre-Made One</p> -->
       </div>
     </el-popover>
     <el-popover placement="bottom-start" width="270" trigger="click">
