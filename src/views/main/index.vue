@@ -68,7 +68,7 @@ export default {
 };
 </script>
 
-<style scope>
+<style scoped>
 .main {
   text-align: center;
   background-color: #f2f2f2;

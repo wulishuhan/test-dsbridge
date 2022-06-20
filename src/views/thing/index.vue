@@ -25,7 +25,6 @@
               <view-model></view-model>
             </div>
             <div v-if="!viewModel" class="show-thing">
-              <!-- <concise-slider :imageList="imgList"></concise-slider> -->
               <div>
                 <div>
                   <div class="carousel">
@@ -432,5 +431,15 @@ export default {
 }
 .el-icon-check {
   color: #248bfb;
+}
+@media screen and (max-width: 768px) {
+  .carousel {
+    width: 100%;
+    height: 524px;
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
 }
 </style>

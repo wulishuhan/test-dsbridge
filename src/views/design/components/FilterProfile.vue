@@ -59,10 +59,10 @@ export default {
 }
 .card {
   background-color: white;
-  margin: 10px 20px 10px 0;
   padding: 10px;
-  width: 117.75px;
-  height: 38px;
+  margin-top: 5px;
+  margin-left: 5px;
+  box-sizing: border-box;
 }
 .card-border-blue {
   border: 1px solid #248bfb;

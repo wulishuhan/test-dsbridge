@@ -11,7 +11,7 @@
     </header>
     <br />
     <el-row style="text-align: center">
-      <el-col :span="6">
+      <el-col :xs="24" :sm="12" :md="6" :lg="6" :xl="6">
         <el-select
           v-model="groupsSelector"
           placeholder="My Groups"
@@ -26,7 +26,7 @@
           </el-option>
         </el-select>
       </el-col>
-      <el-col :span="6">
+      <el-col :xs="24" :sm="12" :md="6" :lg="6" :xl="6">
         <el-select
           v-model="typeSelector"
           placeholder="Most Members"
@@ -41,14 +41,14 @@
           </el-option>
         </el-select>
       </el-col>
-      <el-col :span="6">
+      <el-col :xs="24" :sm="12" :md="6" :lg="6" :xl="6">
         <el-input
           placeholder="请输入搜索关键词"
           suffix-icon="el-icon-search"
           v-model="keywords"
         ></el-input>
       </el-col>
-      <el-col :span="6">
+      <el-col :xs="24" :sm="12" :md="6" :lg="6" :xl="6">
         <el-button>CREATE A GROUP</el-button>
       </el-col>
     </el-row>

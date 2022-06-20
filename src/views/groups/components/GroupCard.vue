@@ -5,37 +5,35 @@
     </div>
     <div class="group-info">
       <div class="group-title">{{ group.groupName }}</div>
-      <el-row
-        style="
-          display: flex;
-          justify-content: center;
-          align-content: center;
-          align-items: center;
-          text-align: center;
-          height: 60%;
-        "
-      >
-        <el-col :span="6"
-          ><el-button type="primary" @click="to">VIEW GROUP</el-button></el-col
-        >
-        <el-col :span="5" :offset="1"
-          >{{ group.topics }} <br />
-          Topics</el-col
-        >
-        <el-col :span="5" :offset="1"
-          >{{ group.things }} <br />
-          Things</el-col
-        >
-        <el-col :span="5" :offset="1"
-          >{{ group.members }} <br />
-          Members</el-col
-        >
+      <el-row class="group-to">
+        <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
+          <el-button type="primary" @click="to('Forums')">VIEW GROUP</el-button>
+        </el-col>
+        <el-col :span="5" :offset="1">
+          <div @click="to('Forums')">
+            {{ group.topics }} <br />
+            Topics
+          </div>
+        </el-col>
+        <el-col :span="5" :offset="1">
+          <div @click="to('Things')">
+            {{ group.things }} <br />
+            Things
+          </div>
+        </el-col>
+        <el-col :span="5" :offset="1">
+          <div @click="to('Members')">
+            {{ group.members }} <br />
+            Members
+          </div>
+        </el-col>
       </el-row>
     </div>
     <div class="group-picture">
       <el-row>
         <el-col v-for="item in group.gourpImages" :key="item.id" :span="8">
-          <el-image :src="item.url"> </el-image>
+          <el-image :fit="'contain'" :src="item.url" @click="to('Things')">
+          </el-image>
         </el-col>
       </el-row>
     </div>
@@ -55,8 +53,9 @@ export default {
     return {};
   },
   methods: {
-    to() {
-      this.$router.push(`/groupDetail/Forums/${this.group.groupId}`);
+    to(name) {
+      console.log(name);
+      this.$router.push(`/groupDetail/${name}/${this.group.groupId}`);
     },
   },
 };
@@ -73,7 +72,6 @@ export default {
   padding: 10px;
   margin: 10px auto;
   .group-logo {
-    width: 95px;
     height: 95px;
   }
   .group-info {
@@ -91,12 +89,48 @@ export default {
     }
   }
   .group-picture {
-    width: 380px;
+    width: 300px;
     height: 95px;
+    box-sizing: border-box;
     float: left;
+    cursor: pointer;
     .el-col {
       height: 95px;
     }
+  }
+}
+.group-to {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  text-align: center;
+  flex-wrap: wrap;
+  height: 60%;
+  cursor: pointer;
+}
+@media screen and (max-width: 768px) {
+  .group-card {
+    height: 300px;
+    width: 100%;
+    background-color: #fff;
+    display: block;
+    padding: 10px;
+    margin: 10px auto;
+    box-sizing: border-box;
+    .group-info {
+      display: block;
+      height: 98px;
+      width: 100%;
+    }
+  }
+  .group-logo {
+    width: 100%;
+    text-align: center;
+  }
+  .group-picture {
+    width: 100%;
+    margin-top: 20px;
   }
 }
 </style>
