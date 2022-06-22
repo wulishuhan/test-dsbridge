@@ -67,4 +67,9 @@ export default {
   align-items: center;
   justify-content: flex-start;
 }
+@media screen and (max-width: 425px) {
+  .filter-box {
+    margin: 0 auto;
+  }
+}
 </style>

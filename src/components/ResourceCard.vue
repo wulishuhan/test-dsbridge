@@ -129,7 +129,7 @@ export default {
       }).then((res) => {
         console.log("switchCollect", res);
         this.$message({
-          message: "恭喜你，这是一条成功消息",
+          message: res.data.message,
           type: "success",
         });
       });
@@ -202,6 +202,14 @@ export default {
     font-size: 16px;
     i {
       margin-top: 3px;
+    }
+  }
+}
+@media screen and (max-width: 375px) {
+  .resource_card {
+    width: 90vw;
+    img {
+      width: 90vw;
     }
   }
 }

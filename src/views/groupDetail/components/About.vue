@@ -6,7 +6,15 @@
     </div>
     <h2>Featrued Things</h2>
     <el-row>
-      <el-col v-for="item in featuredThings" :key="item.thingsId" :span="8">
+      <el-col
+        v-for="item in featuredThings"
+        :key="item.thingsId"
+        :xs="24"
+        :sm="12"
+        :md="8"
+        :lg="8"
+        :xl="8"
+      >
         <things-card :things="item"></things-card>
       </el-col>
     </el-row>

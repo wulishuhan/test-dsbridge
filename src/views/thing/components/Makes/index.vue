@@ -1,7 +1,15 @@
 <template>
   <div>
     <el-row>
-      <el-col v-for="item in makes" :key="item.id" :span="8">
+      <el-col
+        v-for="item in makes"
+        :key="item.id"
+        :xs="24"
+        :sm="24"
+        :md="8"
+        :lg="8"
+        :xl="8"
+      >
         <resource-card :thing="item"></resource-card>
       </el-col>
     </el-row>

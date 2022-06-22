@@ -115,7 +115,8 @@ export default {
 .things-card {
   width: 296px;
   height: 265px;
-  margin-top: 15px;
+  margin: 5px auto;
+  box-sizing: border-box;
   .things-card-image {
     width: 100%;
     height: 219px;
@@ -166,6 +167,11 @@ export default {
   }
   .green-icon {
     color: #61b63d;
+  }
+}
+@media screen and (max-width: 768px) {
+  .things-card {
+    width: 80vw;
   }
 }
 </style>

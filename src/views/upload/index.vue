@@ -135,13 +135,13 @@
         </p>
         <el-form :label-position="'top'">
           <el-row>
-            <el-col :span="12">
+            <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
               <el-form-item class="checkbox">
                 <input type="checkbox" id="cbox1" value="first_checkbox" />
                 <label for="cbox1">This Thing is a Work-In-Progress</label>
               </el-form-item>
             </el-col>
-            <el-col :span="12">
+            <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
               <el-form-item
                 label="Share in My Groups (Requires Thing to be published)"
               >
@@ -443,21 +443,21 @@ export default {
   padding: 5px;
   border-bottom: solid 1px #ccc;
 }
+.header {
+  width: 970px;
+  height: 91px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  align-content: center;
+}
 .upload-container {
   background-color: #f5f5f5;
   .upload-header {
     width: 100%;
-    .header {
-      width: 970px;
-      height: 91px;
-      margin: 0 auto;
-      display: flex;
-      flex-wrap: wrap;
-      flex-direction: row;
-      justify-content: space-between;
-      align-items: center;
-      align-content: center;
-    }
     .cancel {
       color: #409eff;
       text-decoration: none;
@@ -469,23 +469,6 @@ export default {
       flex-direction: row;
       justify-content: center;
       align-content: center;
-      .el-upload-dragger {
-        width: 970px;
-        height: 400px;
-        display: flex;
-        flex-direction: column;
-        align-content: center;
-        justify-content: center;
-        flex-wrap: wrap;
-        align-items: center;
-      }
-      .el-upload__tip {
-        border-top: 1px solid #ccc;
-        padding-top: 15px;
-        margin-top: 20px;
-        font-weight: 200;
-        font-size: 13px;
-      }
     }
   }
   .basic-information-content {
@@ -530,6 +513,23 @@ export default {
     }
   }
 }
+.el-upload-dragger {
+  width: 970px;
+  height: 400px;
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.el-upload__tip {
+  border-top: 1px solid #ccc;
+  padding-top: 15px;
+  margin-top: 20px;
+  font-weight: 200;
+  font-size: 13px;
+}
 .checkbox {
   color: #666;
   margin-top: 25px;
@@ -538,6 +538,20 @@ export default {
     height: 32px;
     position: relative;
     top: 10px;
+  }
+}
+@media screen and (max-width: 768px) {
+  .header {
+    width: 100%;
+  }
+  .header-title {
+    font-size: 18px;
+  }
+  .el-upload-dragger {
+    width: 100%;
+  }
+  .box {
+    width: 100%;
   }
 }
 </style>

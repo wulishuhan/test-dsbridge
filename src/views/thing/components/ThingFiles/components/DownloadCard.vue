@@ -61,6 +61,7 @@ export default {
   img {
     width: 55px;
     height: 44px;
+    margin-right: 10px;
   }
   span {
     font-size: 12px;

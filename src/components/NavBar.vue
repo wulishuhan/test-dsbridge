@@ -11,147 +11,228 @@
           placeholder="请输入搜索关键词"
           prefix-icon="el-icon-search"
           v-model="keywords"
+          @keyup.enter.native="search"
         ></el-input>
       </el-col>
-      <div class="menuview">
-        <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8" v-if="isHideNavBar">
-          <el-menu
-            :default-active="activeIndex"
-            class="el-menu-width-md"
-            mode="horizontal"
-          >
-            <el-submenu index="1">
-              <template slot="title">Explore</template>
-              <el-menu-item index="2-1">
-                <router-link to="/">Things</router-link>
-              </el-menu-item>
-              <el-menu-item index="2-2">
-                <router-link to="/designer">Designers</router-link>
-              </el-menu-item>
-              <el-menu-item index="2-3">
-                <router-link to="/groups">Groups</router-link>
-              </el-menu-item>
-              <el-menu-item index="2-4">
-                <router-link to="/">Customizable Things</router-link>
-              </el-menu-item>
-            </el-submenu>
-            <el-menu-item index="2">
-              <router-link to="/education">Education</router-link>
+      <el-col
+        class="menuview"
+        v-if="isHideNavBar"
+        :xs="8"
+        :sm="8"
+        :md="8"
+        :lg="8"
+        :xl="8"
+      >
+        <el-menu
+          :default-active="activeIndex"
+          class="el-menu-width-md"
+          mode="horizontal"
+        >
+          <el-submenu index="1">
+            <template slot="title">Explore</template>
+            <el-menu-item index="2-1">
+              <router-link to="/">Things</router-link>
             </el-menu-item>
-            <el-submenu index="3">
-              <template slot="title">Create</template>
-              <el-menu-item index="3-1">
-                <router-link to="/upload">Upload a Thing</router-link>
-              </el-menu-item>
-              <el-menu-item index="3-2">
-                <router-link to="/customizer">Customize a Thing</router-link>
-              </el-menu-item>
-            </el-submenu>
-            <el-menu-item index="4" v-if="!hasToken">
-              <router-link to="/login">Sign Up</router-link>
+            <el-menu-item index="2-2">
+              <router-link to="/designer">Designers</router-link>
             </el-menu-item>
-            <el-submenu index="5" v-if="hasToken">
-              <template slot="title">
-                <i class="el-icon-user-solid"></i>
-              </template>
-              <el-menu-item index="5-1">
-                <router-link :to="profilePath">View Profile</router-link>
-              </el-menu-item>
-              <el-menu-item index="5-2"> Messages </el-menu-item>
-              <el-menu-item index="5-3">
-                <router-link to="/design/Designs">My Designs</router-link>
-              </el-menu-item>
-              <el-menu-item index="5-4">
-                <router-link to="/design/Collections">
-                  My Collections
-                </router-link>
-              </el-menu-item>
-              <el-menu-item index="5-5">
-                <router-link to="/design/Likes">My Likes</router-link>
-              </el-menu-item>
-              <el-menu-item index="5-6">
-                <router-link to="/design/Groups">My Groups</router-link>
-              </el-menu-item>
-              <el-menu-item index="5-7">
-                <router-link to="/editProfile"> Account Settings </router-link>
-              </el-menu-item>
-              <el-menu-item index="5-8" @click="logout">Log Out</el-menu-item>
-            </el-submenu>
-          </el-menu>
-        </el-col>
-      </div>
+            <el-menu-item index="2-3">
+              <router-link to="/groups">Groups</router-link>
+            </el-menu-item>
+            <el-menu-item index="2-4">
+              <router-link to="/">Customizable Things</router-link>
+            </el-menu-item>
+          </el-submenu>
+          <el-menu-item index="2">
+            <router-link to="/education">Education</router-link>
+          </el-menu-item>
+          <el-submenu index="3">
+            <template slot="title">Create</template>
+            <el-menu-item index="3-1">
+              <router-link to="/upload">Upload a Thing</router-link>
+            </el-menu-item>
+            <el-menu-item index="3-2">
+              <router-link to="/customizer">Customize a Thing</router-link>
+            </el-menu-item>
+          </el-submenu>
+          <el-menu-item index="4" v-if="!hasToken">
+            <router-link to="/login">Sign Up</router-link>
+          </el-menu-item>
+          <el-submenu index="5" v-if="hasToken">
+            <template slot="title">
+              <i class="el-icon-user-solid"></i>
+            </template>
+            <el-menu-item index="5-1">
+              <router-link :to="profilePath">View Profile</router-link>
+            </el-menu-item>
+            <el-menu-item index="5-2"> Messages </el-menu-item>
+            <el-menu-item index="5-3">
+              <router-link to="/design/Designs">My Designs</router-link>
+            </el-menu-item>
+            <el-menu-item index="5-4">
+              <router-link to="/design/Collections">
+                My Collections
+              </router-link>
+            </el-menu-item>
+            <el-menu-item index="5-5">
+              <router-link to="/design/Likes">My Likes</router-link>
+            </el-menu-item>
+            <el-menu-item index="5-6">
+              <router-link to="/design/Groups">My Groups</router-link>
+            </el-menu-item>
+            <el-menu-item index="5-7">
+              <router-link to="/editProfile"> Account Settings </router-link>
+            </el-menu-item>
+            <el-menu-item index="5-8" @click="logout">Log Out</el-menu-item>
+          </el-submenu>
+        </el-menu>
+      </el-col>
+      <el-col
+        class="menuview"
+        v-if="!isHideNavBar"
+        :xs="8"
+        :sm="8"
+        :md="8"
+        :lg="8"
+        :xl="17"
+      >
+        <!-- <el-dropdown trigger="hover">
 
-      <div class="menuview" v-if="!isHideNavBar">
-        <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="17">
-          <el-dropdown trigger="hover">
-            <span class="el-dropdown-link">
-              <i class="el-icon-more"></i>
-            </span>
-            <el-dropdown-menu slot="dropdown" class="el-dropdown-menu-width">
-              <el-menu :default-active="activeIndex" class="el-menu-width-sm">
-                <el-submenu index="1">
-                  <template slot="title">Explore</template>
-                  <router-link to="/">
-                    <el-menu-item index="2-1">Things</el-menu-item>
-                  </router-link>
-                  <router-link to="/designer">
-                    <el-menu-item index="2-2">Designers</el-menu-item>
-                  </router-link>
-                  <router-link to="/groups">
-                    <el-menu-item index="2-3">Groups</el-menu-item>
-                  </router-link>
-                  <el-menu-item index="2-4">Customizable Things</el-menu-item>
-                </el-submenu>
-                <router-link to="/education">
-                  <el-menu-item index="2">Education</el-menu-item>
+          <span class="el-dropdown-link">
+            <i class="el-icon-more"></i>
+          </span>
+          <el-dropdown-menu slot="dropdown" class="el-dropdown-menu-width">
+            <el-menu :default-active="activeIndex" class="el-menu-width-sm">
+              <el-submenu index="1">
+                <template slot="title">Explore</template>
+                <router-link to="/">
+                  <el-menu-item index="2-1">Things</el-menu-item>
                 </router-link>
-                <el-submenu index="3">
-                  <template slot="title">Create</template>
-                  <router-link to="/upload">
-                    <el-menu-item index="3-1">upload</el-menu-item>
-                  </router-link>
-                  <router-link to="/customizer">
-                    <el-menu-item index="3-2">Customize</el-menu-item>
-                  </router-link>
-                </el-submenu>
-                <router-link to="/login" v-if="!hasToken">
-                  <el-menu-item index="4">Sign Up</el-menu-item>
+                <router-link to="/designer">
+                  <el-menu-item index="2-2">Designers</el-menu-item>
                 </router-link>
-                <el-submenu index="4" v-if="hasToken">
-                  <template slot="title">profile</template>
-                  <el-menu-item index="4-1">
-                    <router-link :to="profilePath"> View Profile </router-link>
-                  </el-menu-item>
-                  <el-menu-item index="4-2"> Messages </el-menu-item>
-                  <el-menu-item index="4-3">
-                    <router-link to="/design/Designs"> My Designs </router-link>
-                  </el-menu-item>
-                  <el-menu-item index="4-4">
-                    <router-link to="/design/Collections">
-                      My Collections
-                    </router-link>
-                  </el-menu-item>
-                  <el-menu-item index="4-5">
-                    <router-link to="/design/Likes">My Likes</router-link>
-                  </el-menu-item>
-                  <el-menu-item index="4-6">
-                    <router-link to="/design/Groups"> My Groups </router-link>
-                  </el-menu-item>
-                  <el-menu-item index="4-7">
-                    <router-link to="/editProfile">
-                      Account Settings
-                    </router-link>
-                  </el-menu-item>
-                  <el-menu-item index="4-8" @click="logout">
-                    Log Out
-                  </el-menu-item>
-                </el-submenu>
-              </el-menu>
-            </el-dropdown-menu>
-          </el-dropdown>
-        </el-col>
-      </div>
+                <router-link to="/groups">
+                  <el-menu-item index="2-3">Groups</el-menu-item>
+                </router-link>
+                <el-menu-item index="2-4">Customizable Things</el-menu-item>
+              </el-submenu>
+              <router-link to="/education">
+                <el-menu-item index="2">Education</el-menu-item>
+              </router-link>
+              <el-submenu index="3">
+                <template slot="title">Create</template>
+                <router-link to="/upload">
+                  <el-menu-item index="3-1">upload</el-menu-item>
+                </router-link>
+                <router-link to="/customizer">
+                  <el-menu-item index="3-2">Customize</el-menu-item>
+                </router-link>
+              </el-submenu>
+              <router-link to="/login" v-if="!hasToken">
+                <el-menu-item index="4">Sign Up</el-menu-item>
+              </router-link>
+              <el-submenu index="4" v-if="hasToken">
+                <template slot="title">profile</template>
+                <el-menu-item index="4-1">
+                  <router-link :to="profilePath"> View Profile </router-link>
+                </el-menu-item>
+                <el-menu-item index="4-2"> Messages </el-menu-item>
+                <el-menu-item index="4-3">
+                  <router-link to="/design/Designs"> My Designs </router-link>
+                </el-menu-item>
+                <el-menu-item index="4-4">
+                  <router-link to="/design/Collections">
+                    My Collections
+                  </router-link>
+                </el-menu-item>
+                <el-menu-item index="4-5">
+                  <router-link to="/design/Likes">My Likes</router-link>
+                </el-menu-item>
+                <el-menu-item index="4-6">
+                  <router-link to="/design/Groups"> My Groups </router-link>
+                </el-menu-item>
+                <el-menu-item index="4-7">
+                  <router-link to="/editProfile">
+                    Account Settings
+                  </router-link>
+                </el-menu-item>
+                <el-menu-item index="4-8" @click="logout">
+                  Log Out
+                </el-menu-item>
+              </el-submenu>
+            </el-menu>
+          </el-dropdown-menu>
+        </el-dropdown> -->
+        <span class="el-dropdown-link" @click="drawer = true">
+          <i class="el-icon-more"></i>
+        </span>
+      </el-col>
     </el-row>
+    <el-drawer
+      title="Menu"
+      :visible.sync="drawer"
+      :direction="direction"
+      :before-close="handleClose"
+      :size="'50%'"
+    >
+      <el-menu default-active="2">
+        <el-submenu index="1">
+          <template slot="title">Explore</template>
+          <el-menu-item index="2-1">
+            <router-link to="/">Things</router-link>
+          </el-menu-item>
+          <el-menu-item index="2-2">
+            <router-link to="/designer">Designers</router-link>
+          </el-menu-item>
+          <el-menu-item index="2-3">
+            <router-link to="/groups">Groups</router-link>
+          </el-menu-item>
+          <el-menu-item index="2-4">
+            <router-link to="/">Customizable Things</router-link>
+          </el-menu-item>
+        </el-submenu>
+        <el-menu-item index="2">
+          <router-link to="/education">Education</router-link>
+        </el-menu-item>
+        <el-submenu index="3">
+          <template slot="title">Create</template>
+          <el-menu-item index="3-1">
+            <router-link to="/upload">Upload a Thing</router-link>
+          </el-menu-item>
+          <el-menu-item index="3-2">
+            <router-link to="/customizer">Customize a Thing</router-link>
+          </el-menu-item>
+        </el-submenu>
+        <el-menu-item index="4" v-if="!hasToken">
+          <router-link to="/login">Sign Up</router-link>
+        </el-menu-item>
+        <el-submenu index="5" v-if="hasToken">
+          <template slot="title">
+            <i class="el-icon-user-solid"></i>
+          </template>
+          <el-menu-item index="5-1">
+            <router-link :to="profilePath">View Profile</router-link>
+          </el-menu-item>
+          <el-menu-item index="5-2"> Messages </el-menu-item>
+          <el-menu-item index="5-3">
+            <router-link to="/design/Designs">My Designs</router-link>
+          </el-menu-item>
+          <el-menu-item index="5-4">
+            <router-link to="/design/Collections"> My Collections </router-link>
+          </el-menu-item>
+          <el-menu-item index="5-5">
+            <router-link to="/design/Likes">My Likes</router-link>
+          </el-menu-item>
+          <el-menu-item index="5-6">
+            <router-link to="/design/Groups">My Groups</router-link>
+          </el-menu-item>
+          <el-menu-item index="5-7">
+            <router-link to="/editProfile"> Account Settings </router-link>
+          </el-menu-item>
+          <el-menu-item index="5-8" @click="logout">Log Out</el-menu-item>
+        </el-submenu>
+      </el-menu>
+    </el-drawer>
   </div>
 </template>
 
@@ -178,6 +259,8 @@ export default {
       isCollapse: true,
       hasTokend: false,
       formatWidth: () => {},
+      drawer: false,
+      direction: "rtl",
     };
   },
   methods: {
@@ -190,16 +273,17 @@ export default {
         this.isHideNavBar = true;
       }
     },
-    handleOpen(key, keyPath) {
-      console.log(key, keyPath);
-    },
-    handleClose(key, keyPath) {
-      console.log(key, keyPath);
-    },
     logout() {
       this.$store.dispatch("user/logout", this.user).then(() => {
         this.$router.push("/");
       });
+    },
+    handleClose(done) {
+      done();
+    },
+    search() {
+      console.log("search", this.keywords);
+      this.$store.commit("search/SET_SEARCH_KEYWORDS", this.keywords);
     },
   },
   computed: {
@@ -236,6 +320,7 @@ a {
 }
 .el-input {
   margin: 10px 0px;
+  width: 70%;
 }
 .el-dropdown-menu-width {
   width: 100%;
@@ -251,6 +336,9 @@ a {
   .el-menu {
     background: none;
     float: none;
+  }
+  .el-input {
+    width: 100%;
   }
 }
 

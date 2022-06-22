@@ -1,6 +1,10 @@
 <template>
   <div>
-    <el-select v-model="selectPopular" placeholder="select popular">
+    <el-select
+      v-model="selectPopular"
+      placeholder="select popular"
+      @change="handleChange"
+    >
       <el-option
         v-for="item in popularFilter"
         :key="item.value"
@@ -30,7 +34,7 @@ export default {
           label: "Popular This Year",
         },
         {
-          value: "200",
+          value: "1",
           label: "Popular ALL Time",
         },
         {
@@ -44,6 +48,12 @@ export default {
       ],
       selectPopular: "",
     };
+  },
+  methods: {
+    handleChange(val) {
+      console.log(val);
+      this.$emit("setFilter", val);
+    },
   },
 };
 </script>

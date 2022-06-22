@@ -468,10 +468,10 @@ export default {
   padding: 10px;
 }
 .el-input {
-  width: 270px;
+  width: 100%;
 }
 .el-select {
-  width: 270px;
+  width: 100%;
 }
 .el-form {
   padding-top: 10px;

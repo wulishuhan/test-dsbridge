@@ -88,6 +88,7 @@ const thingMock = function (app) {
     ],
   });
   app.get("/thing/getThingList", function (req, res) {
+    console.log("thing list query:", req.query);
     let { currentPage, pageSize } = req.query;
     currentPage = parseInt(currentPage);
     pageSize = parseInt(pageSize);
@@ -229,9 +230,15 @@ const thingMock = function (app) {
   app.post("/thing/changeCollect", function (req, res) {
     let { thingId, isCollected, userId } = req.query;
     console.log("/thing/changeCollect", thingId, isCollected, userId);
+    console.log("isCollected", isCollected);
+    if (isCollected) {
+      message = "Uncollected successfully";
+    } else {
+      message = "Collected successfully";
+    }
     res.json({
       status: 200,
-      message: "success",
+      message: message,
     });
   });
 

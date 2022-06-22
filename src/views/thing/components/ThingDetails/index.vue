@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-row>
-      <el-col :span="8">
+      <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8">
         <widget-container :title="'Contents'">
           <div>
             <a href="#" v-for="item in details.content" :key="item">
@@ -25,7 +25,13 @@
           </p>
         </widget-container>
       </el-col>
-      <el-col :span="15" :offset="1">
+      <el-col
+        :xs="24"
+        :sm="24"
+        :md="{ span: 15, offset: 1 }"
+        :lg="{ span: 15, offset: 1 }"
+        :xl="{ span: 15, offset: 1 }"
+      >
         <Summary :summary="details.summary"></Summary>
       </el-col>
     </el-row>

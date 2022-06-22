@@ -1,12 +1,26 @@
 <template>
   <div>
-    <header>
-      <div>
+    <el-row class="header" type="flex" justify="space-between">
+      <el-col
+        :xs="24"
+        :sm="12"
+        :md="12"
+        :lg="12"
+        :xl="12"
+        class="post-thing-button"
+      >
         <el-button type="primary" class="el-icon-plus">
           <b>JOIN</b> TO POST A THING
         </el-button>
-      </div>
-      <div class="button-position-box">
+      </el-col>
+      <el-col
+        :xs="24"
+        :sm="12"
+        :md="12"
+        :lg="12"
+        :xl="12"
+        class="button-position-box"
+      >
         <el-button type="text">NEWEST</el-button>
         <el-button type="text">POPULAR</el-button>
         <el-input
@@ -15,10 +29,18 @@
           v-model="keywords"
           class="search-input"
         ></el-input>
-      </div>
-    </header>
+      </el-col>
+    </el-row>
     <el-row>
-      <el-col :span="8" v-for="item in things" :key="item.groupId">
+      <el-col
+        :xs="24"
+        :sm="12"
+        :md="8"
+        :lg="8"
+        :xl="8"
+        v-for="item in things"
+        :key="item.groupId"
+      >
         <things-card :things="item"></things-card>
       </el-col>
     </el-row>
@@ -87,9 +109,8 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-header {
-  display: flex;
-  justify-content: space-between;
+.header {
+  flex-wrap: wrap;
   margin-top: 15px;
   padding-top: 15px;
 }
@@ -104,5 +125,20 @@ header {
 }
 .el-row {
   margin-top: 20px;
+}
+@media screen and (max-width: 768px) {
+  .search-input {
+    margin-left: 20px;
+    width: 100%;
+    margin-left: 0px;
+  }
+  .button-position-box {
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: space-around;
+  }
+  .post-thing-button {
+    text-align: center;
+  }
 }
 </style>

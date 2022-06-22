@@ -67,9 +67,6 @@ export default {
       });
     },
   },
-  mounted() {
-    this.$emit("getThingLists", this.pageSize, this.currentPage);
-  },
 };
 </script>
 

@@ -1,7 +1,14 @@
 <template>
   <div>
     <el-row>
-      <el-col :span="17" class="download-container">
+      <el-col
+        :xs="24"
+        :sm="24"
+        :md="17"
+        :lg="17"
+        :xl="17"
+        class="download-container"
+      >
         <h1>{{ thingName }}</h1>
         <download-card
           v-for="item in fileList"
@@ -9,7 +16,13 @@
           :key="item.id"
         ></download-card>
       </el-col>
-      <el-col :span="6" :offset="1">
+      <el-col
+        :xs="24"
+        :sm="24"
+        :md="{ span: 6, offset: 1 }"
+        :lg="{ span: 6, offset: 1 }"
+        :xl="{ span: 6, offset: 1 }"
+      >
         <widget-container :title="'License'">
           <p>
             {{ thingName }}

@@ -3,14 +3,14 @@
     <div class="center-container">
       <div class="show">
         <el-row>
-          <el-col :span="18">
+          <el-col :xs="24" :sm="24" :md="18" :lg="18" :xl="18">
             <div class="author">
               <el-avatar :size="50" :src="user.avatar"></el-avatar>
               <div>
                 <span class="thing-name">{{ user.thingName }}</span>
                 <span>
                   by
-                  <a href="#">
+                  <a @click="toUserProfileView">
                     {{ user.name }}
                   </a>
                   {{ user.publicTime }}
@@ -29,7 +29,7 @@
                 <div>
                   <div class="carousel">
                     <el-carousel
-                      height="526px"
+                      height="500px"
                       :interval="3000"
                       arrow="never"
                       ref="carousel"
@@ -78,7 +78,13 @@
               </div>
             </div>
           </el-col>
-          <el-col :span="5" :offset="1">
+          <el-col
+            :xs="24"
+            :sm="24"
+            :md="{ span: 5, offset: 1 }"
+            :lg="{ span: 5, offset: 1 }"
+            :xl="{ span: 5, offset: 1 }"
+          >
             <div class="user-active">
               <div class="active-box">
                 <el-button type="primary" icon="el-icon-download">
@@ -222,11 +228,12 @@ export default {
     },
     like() {
       this.isLike = !this.isLike;
-      console.log("like!", this.isLike);
     },
     collect() {
       this.isCollected = !this.isCollected;
-      console.log("collect", this.isCollected);
+    },
+    toUserProfileView() {
+      this.$router.push(`/design/Favorites/${this.user.id}`);
     },
   },
   created() {
@@ -234,6 +241,7 @@ export default {
       thingId: this.$route.params.thingId,
       userId: this.$store.getters.userId,
     }).then((res) => {
+      console.log("userinfo:", res);
       this.user = res.data.data;
       this.isLike = this.user.isLike;
       this.isCollected = this.user.isCollected;
@@ -256,7 +264,7 @@ export default {
   height: 100%;
   .model-button-group {
     background-color: #fff;
-    width: 700px;
+    /* width: 700px; */
   }
   .show {
     margin-top: 20px;
@@ -271,7 +279,7 @@ export default {
   }
   .author {
     margin-top: 10px;
-    width: 700px;
+    /* width: 700px; */
     height: 63px;
     background-color: #fff;
     display: flex;
@@ -292,7 +300,7 @@ export default {
     }
   }
   .show-thing {
-    width: 700px;
+    /* width: 700px; */
     background-color: #fff;
     .switchImage {
       width: 700px;
@@ -400,7 +408,7 @@ export default {
 }
 .bottom-carousel {
   display: flex;
-  width: 700px;
+  /* width: 700px; */
   align-items: center;
   justify-content: space-around;
 }
@@ -440,6 +448,17 @@ export default {
       width: 100%;
       height: 100%;
     }
+  }
+  .center-container {
+    margin: 0 auto;
+    width: 100%;
+  }
+  .show-thing {
+    width: 100%;
+  }
+  .author {
+    width: 100%;
+    box-sizing: border-box;
   }
 }
 </style>

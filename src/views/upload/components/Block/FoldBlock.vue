@@ -110,23 +110,23 @@ export default {
 </script>
 <style lang="scss">
 .addBox-container {
-  width: 640px;
+  width: 100%;
   height: 50px;
   background: #fff;
-  .addBox-card {
-    height: 20px;
-    padding: 15px 20px 15px 14px;
-    border-right: 1px solid #dcdcdc;
-    float: left;
-    display: flex;
-    flex-direction: row;
-    align-content: center;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: nowrap;
-    .el-link {
-      margin-left: 10px;
-    }
+  display: flex;
+  justify-content: space-between;
+}
+.addBox-card {
+  width: 100%;
+  height: 20px;
+  padding: 15px 20px 15px 14px;
+  border-right: 1px solid #dcdcdc;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  align-items: center;
+  .el-link {
+    margin-left: 10px;
   }
 }
 .text-block {
@@ -149,6 +149,11 @@ export default {
     .el-button {
       margin: 10px;
     }
+  }
+}
+@media screen and (max-width: 768px) {
+  .addBox-container {
+    width: 100%;
   }
 }
 </style>

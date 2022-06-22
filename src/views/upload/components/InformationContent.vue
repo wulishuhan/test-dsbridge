@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-row>
-      <el-col :span="8">
+      <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8">
         <div>
           <h5>Add Basic Information Modules</h5>
           <filter-box
@@ -34,7 +34,7 @@
           ></filter-box>
         </div>
       </el-col>
-      <el-col :span="16" id="right-container">
+      <el-col :xs="24" :sm="24" :md="16" :lg="16" :xl="16" id="right-container">
         <information-card :name="'Summary'" :isSummary="true">
         </information-card>
         <information-card
@@ -170,5 +170,10 @@ export default {
   flex-direction: row;
   align-items: center;
   justify-content: center;
+}
+@media screen and (max-width: 425px) {
+  .edu-title {
+    margin: 0 auto;
+  }
 }
 </style>

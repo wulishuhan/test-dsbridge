@@ -11,10 +11,10 @@
     </header>
     <el-row :gutter="20" class="filter">
       <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4">
-        <popular-filter></popular-filter>
+        <popular-filter @setFilter="setFilterPopular"></popular-filter>
       </el-col>
       <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4">
-        <type-filter></type-filter>
+        <type-filter @setFilter="setFilterType"></type-filter>
       </el-col>
       <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4"> </el-col>
     </el-row>
@@ -53,16 +53,42 @@ export default {
       screenWidth: document.body.clientWidth,
       things: [],
       total: 0,
+      filterPopular: "",
+      filterType: "",
+      pagination: {
+        pageSize: 10,
+        currentPage: 1,
+      },
     };
   },
-  mounted() {},
+  mounted() {
+    this.getThings(this.pagination);
+  },
   methods: {
     getThings(pagination) {
-      getThingList(pagination).then((res) => {
+      if (pagination) {
+        this.currentPage = pagination.currentPage;
+        this.pageSize = pagination.pageSize;
+      }
+      getThingList({
+        currentPage: this.currentPage,
+        pageSize: this.pageSize,
+        filterPopular: this.filterPopular,
+        filterType: this.filterType,
+      }).then((res) => {
         this.things = res.data.data;
         this.$refs.mainPagination.total = res.data.length;
         this.total = res.data.length;
+        console.log("things", this.things);
       });
+    },
+    setFilterPopular(value) {
+      this.filterPopular = value;
+      this.getThings();
+    },
+    setFilterType(value) {
+      this.filterType = value;
+      this.getThings();
     },
   },
 };

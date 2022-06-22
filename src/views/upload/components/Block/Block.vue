@@ -41,7 +41,8 @@ export default {
 </script>
 <style lang="scss" scoped>
 .block {
-  width: 600px;
+  width: 100%;
+  box-sizing: border-box;
   padding: 20px;
   background: #fff;
   margin: 5px 0;

@@ -9,5 +9,6 @@ const getters = {
   avatar: (state) => state.user.avatar,
   userId: (state) => state.user.userId,
   selectorModules: (state) => state.upload.selectorModules,
+  searchKeywords: (state) => state.search.userId,
 };
 export default getters;

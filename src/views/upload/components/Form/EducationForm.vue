@@ -196,11 +196,15 @@ export default {
 </script>
 <style lang="scss">
 .education-form-container {
+  box-sizing: border-box;
   padding: 20px;
-  width: 600px;
+  width: 100%;
   background-color: #fff;
-  .el-input {
-    width: 100%;
-  }
+}
+.el-input {
+  width: 100%;
+}
+.el-select {
+  width: 100%;
 }
 </style>

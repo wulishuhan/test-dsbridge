@@ -112,17 +112,20 @@ export default {
 </script>
 <style lang="scss" scoped>
 .information-card {
-  .information-card-content {
-    width: 640px;
-    margin-bottom: 15px;
-    .summary-editor {
-      background: #fff;
-    }
-  }
+}
+.information-card-content {
+  width: 100%;
+  margin-bottom: 15px;
+  margin: 0 auto;
+}
+.summary-editor {
+  background: #fff;
+  width: 100%;
 }
 .information-card-title {
-  margin-top: 15px;
-  width: 600px;
+  box-sizing: border-box;
+  margin: 20px auto 0px;
+  width: 100%;
   height: 20.4px;
   text-align: justify;
   color: #fff;
@@ -142,6 +145,14 @@ export default {
   }
   i {
     cursor: pointer;
+  }
+}
+@media screen and (max-width: 768px) {
+  .information-card-title {
+    width: 80%;
+  }
+  .information-card-content {
+    width: 80%;
   }
 }
 </style>
