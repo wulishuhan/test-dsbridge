@@ -156,4 +156,12 @@ export default {
 .el-pagination {
   text-align: center;
 }
+@media screen and (max-width: 768px) {
+  .el-select {
+    width: 100%;
+  }
+  .el-button {
+    width: 100%;
+  }
+}
 </style>

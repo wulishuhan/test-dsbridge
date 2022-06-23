@@ -2,70 +2,75 @@
   <div class="container">
     <div class="content">
       <el-row>
-        <el-col :span="8">
-          <div class="profile-card">
-            <el-image
-              class="background-image"
-              :src="userInfo.background"
-            ></el-image>
-            <el-image class="avatar" :src="userInfo.avatar"></el-image>
-            <div class="info-content">
-              <h3>{{ userInfo.name }}</h3>
-              <div class="justify-info">
-                <span>
-                  <i class="el-icon-user-solid"></i>
-                  <span>{{ userInfo.username }}</span>
-                </span>
-                <span>
-                  <i class="el-icon-location"></i>
-                  <span>{{ userInfo.address }}</span>
-                </span>
-              </div>
-              <div class="button-content">
-                <follow-button :follow="userInfo.isFollow"></follow-button>
-                <el-button type="primary">TIP DESIGNER</el-button>
-              </div>
-              <div class="bottom-content">
-                <div class="bottom-content-justify">
-                  <span>{{ userInfo.followers }}</span>
-                  <span>FOLLOWERS</span>
+        <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8">
+          <el-row>
+            <el-col :xs="24" :sm="12" :md="24" :lg="24" :xl="24">
+              <div class="profile-card">
+                <el-image
+                  class="background-image"
+                  :src="userInfo.background"
+                ></el-image>
+                <el-image class="avatar" :src="userInfo.avatar"></el-image>
+                <div class="info-content">
+                  <h3>{{ userInfo.name }}</h3>
+                  <div class="justify-info">
+                    <span>
+                      <i class="el-icon-user-solid"></i>
+                      <span>{{ userInfo.username }}</span>
+                    </span>
+                    <span>
+                      <i class="el-icon-location"></i>
+                      <span>{{ userInfo.address }}</span>
+                    </span>
+                  </div>
+                  <div class="button-content">
+                    <follow-button :follow="userInfo.isFollow"></follow-button>
+                    <el-button type="primary">TIP DESIGNER</el-button>
+                  </div>
+                  <div class="bottom-content">
+                    <div class="bottom-content-justify">
+                      <span>{{ userInfo.followers }}</span>
+                      <span>FOLLOWERS</span>
+                    </div>
+                    <div class="bottom-content-justify">
+                      <span>{{ userInfo.following }}</span>
+                      <span>FOLLOWING</span>
+                    </div>
+                  </div>
                 </div>
-                <div class="bottom-content-justify">
-                  <span>{{ userInfo.following }}</span>
-                  <span>FOLLOWING</span>
+              </div>
+            </el-col>
+            <el-col :xs="24" :sm="12" :md="24" :lg="24" :xl="24">
+              <div class="box-container">
+                <div class="box-outer-justify">
+                  <div class="box" @click="to('Designs')">
+                    <span>{{ userInfo.designs }}</span>
+                    <span>DESIGNS</span>
+                  </div>
+                  <div class="box" @click="to('Makes')">
+                    <span>{{ makesLength }}</span>
+                    <span>MAKES</span>
+                  </div>
+                </div>
+                <div class="box-outer-justify">
+                  <div class="box" @click="to('Collections')">
+                    <span>{{ collectionsLength }}</span>
+                    <span>COLLECTIONS</span>
+                  </div>
+                  <div class="box" @click="to('Likes')">
+                    <span>{{ likesLength }}</span>
+                    <span>LIKES</span>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
-
-          <div class="box-container">
-            <div class="box-outer-justify">
-              <div class="box" @click="to('Designs')">
-                <span>{{ userInfo.designs }}</span>
-                <span>DESIGNS</span>
-              </div>
-              <div class="box" @click="to('Makes')">
-                <span>{{ makesLength }}</span>
-                <span>MAKES</span>
-              </div>
-            </div>
-            <div class="box-outer-justify">
-              <div class="box" @click="to('Collections')">
-                <span>{{ collectionsLength }}</span>
-                <span>COLLECTIONS</span>
-              </div>
-              <div class="box" @click="to('Likes')">
-                <span>{{ likesLength }}</span>
-                <span>LIKES</span>
-              </div>
-            </div>
-          </div>
+            </el-col>
+          </el-row>
 
           <div class="message-content">
             <el-button type="primary" @click="toMessage">MESSAGE ME</el-button>
           </div>
         </el-col>
-        <el-col :span="16">
+        <el-col :xs="24" :sm="24" :md="16" :lg="16" :xl="16">
           <div>
             <div class="router-container">
               <el-button
@@ -110,7 +115,15 @@
               </el-button>
             </div>
             <el-row>
-              <el-col :span="12" v-for="item in followers" :key="item.userId">
+              <el-col
+                :xs="24"
+                :sm="12"
+                :md="12"
+                :lg="12"
+                :xl="12"
+                v-for="item in followers"
+                :key="item.userId"
+              >
                 <designer-card :follow="item"></designer-card>
               </el-col>
               <p v-if="loading">加载中...</p>
@@ -208,12 +221,6 @@ export default {
 <style lang="scss" scoped>
 .container {
   background-color: #ececec;
-  .content {
-    width: 970px;
-    margin: 0 auto;
-    position: relative;
-    top: 15px;
-  }
   .profile-card {
     width: 296px;
     background-color: #fff;
@@ -271,6 +278,12 @@ export default {
     margin: 10px 0;
   }
 }
+.content {
+  width: 970px;
+  margin: 0 auto;
+  position: relative;
+  top: 15px;
+}
 .box-container {
   width: 296px;
   height: 260px;
@@ -306,6 +319,11 @@ export default {
   .el-button {
     width: 296px;
     height: 50px;
+  }
+}
+@media screen and (max-width: 768px) {
+  .content {
+    width: 100%;
   }
 }
 </style>
