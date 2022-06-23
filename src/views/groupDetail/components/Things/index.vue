@@ -140,5 +140,12 @@ export default {
   .post-thing-button {
     text-align: center;
   }
+  .el-button {
+    width: 100%;
+    margin-left: 0px;
+  }
+  .el-row {
+    margin-top: 30px;
+  }
 }
 </style>

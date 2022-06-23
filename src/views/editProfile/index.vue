@@ -94,11 +94,6 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.center-content {
-  margin: 0 auto;
-  box-sizing: border-box;
-  width: 970px;
-}
 .header {
   width: 100%;
   height: 100px;
@@ -106,34 +101,46 @@ export default {
   border-bottom: 2px solid #ccc;
   display: flex;
   box-sizing: border-box;
-  .nav-center-content {
-    margin: 0 auto;
-    box-sizing: border-box;
-    width: 970px;
+}
+.nav-center-content {
+  margin: 0 auto;
+  box-sizing: border-box;
+  width: 970px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-content: center;
+  align-items: center;
+}
+.nav {
+  span {
+    margin-right: 50px;
+    color: #666;
+    font-family: "Antenna", Helvetica, Arial, sans-serif;
+    font-weight: normal;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+  .select-span-color {
+    color: #248bfb;
+  }
+  span:hover {
+    color: #248bfb;
+  }
+}
+@media screen and (max-width: 768px) {
+  .nav {
     display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    justify-content: space-between;
-    align-content: center;
-    align-items: center;
-    .nav {
-      span {
-        margin-right: 50px;
-        color: #666;
-        font-family: "Antenna", Helvetica, Arial, sans-serif;
-        font-weight: normal;
-        text-transform: uppercase;
-        cursor: pointer;
-      }
-      .select-span-color {
-        color: #248bfb;
-      }
-      span:hover {
-        color: #248bfb;
-      }
+    span {
+      margin-right: 0px;
     }
-    .buttom-group {
-    }
+  }
+  .nav-center-content {
+    flex-wrap: wrap;
+  }
+  .buttom-group {
+    margin: 10px auto;
   }
 }
 </style>

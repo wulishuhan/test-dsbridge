@@ -1,7 +1,7 @@
 <template>
   <div class="edit-section">
     <el-row class="center-content">
-      <el-col :span="10">
+      <el-col :xs="24" :sm="24" :md="10" :lg="10" :xl="10">
         <h1>ABOUT YOU</h1>
         <el-form ref="form" :model="form">
           <el-form-item label="First Name">
@@ -18,7 +18,13 @@
           </el-form-item>
         </el-form>
       </el-col>
-      <el-col :span="10" :offset="4">
+      <el-col
+        :xs="24"
+        :sm="24"
+        :md="{ span: 10, offset: 4 }"
+        :lg="{ span: 10, offset: 4 }"
+        :xl="{ span: 10, offset: 4 }"
+      >
         <h1>COVER PHOTO & AVATAR</h1>
         <profile-card></profile-card>
       </el-col>
@@ -48,7 +54,7 @@ export default {
   },
 };
 </script>
-<style scope>
+<style lang="scss" scoped>
 .center-content {
   margin: 0 auto;
   box-sizing: border-box;
@@ -67,5 +73,13 @@ h1 {
   color: #666;
   text-transform: uppercase;
   margin: 0 0 20px;
+}
+@media screen and (max-width: 768px) {
+  .center-content {
+    width: 100%;
+  }
+  h1 {
+    font-size: 16px;
+  }
 }
 </style>

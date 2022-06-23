@@ -72,18 +72,26 @@ export default {
   width: 100%;
   height: 844px;
   background-color: #f5f5f5;
+}
+.message-form {
+  background-color: #fff;
+  width: 970px;
+  margin: 0 auto;
+  position: relative;
+  top: 15px;
+}
+.el-form {
+  width: 500px;
+  margin: 0 auto;
+  padding: 20px;
+  box-sizing: border-box;
+}
+@media screen and (max-width: 768px) {
   .message-form {
-    background-color: #fff;
-    width: 970px;
-    margin: 0 auto;
-    position: relative;
-    top: 15px;
+    width: 100%;
   }
   .el-form {
-    width: 500px;
-    margin: 0 auto;
-    padding: 20px;
-    box-sizing: border-box;
+    width: 100%;
   }
 }
 </style>

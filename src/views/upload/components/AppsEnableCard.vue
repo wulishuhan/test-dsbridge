@@ -37,6 +37,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .container {
+  box-sizing: border-box;
   padding: 10px;
   border-top: 1px solid #ccc;
   height: 62px;
@@ -56,6 +57,12 @@ export default {
   }
   i:hover {
     cursor: pointer;
+  }
+}
+@media screen and (max-width: 768px) {
+  .container {
+    width: 100%;
+    font-size: 12px;
   }
 }
 </style>

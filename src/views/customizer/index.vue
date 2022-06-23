@@ -2,7 +2,7 @@
   <div>
     <header>
       <div class="header-center-content">
-        <div style="width: 612px">
+        <div>
           <el-row>
             <el-col :span="2">
               <p>
@@ -30,15 +30,14 @@
     <section class="customizer-featured">
       <div class="center-content featured-content">
         <el-row>
-          <el-col :span="18">
+          <el-col :xs="24" :sm="24" :md="18" :lg="18" :xl="18">
             <h2>Featured Customizer</h2>
             <el-image
-              style="width: 727px; height: 368.5px"
               :fit="'fill'"
               :src="'https://s3.amazonaws.com/thingiverse-resources/Cuztomizable-Prosthetic.jpg'"
             ></el-image>
           </el-col>
-          <el-col :span="6">
+          <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
             <h2>Customizer Versions</h2>
             <el-image
               :src="'https://cdn.thingiverse.com/renders/8c/14/d6/7c/7f/220d7405c1d88652226a850ab055783b_display_medium.jpg'"
@@ -51,7 +50,7 @@
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="16">
+          <el-col :xs="24" :sm="24" :md="16" :lg="16" :xl="16">
             <p>
               <a href="#" class="featured-name"
                 >THE UNLIMBITED ARM V2.1 - ALFIE EDITION</a
@@ -68,7 +67,7 @@
               fire up Customizer to see the magic happen.
             </p>
           </el-col>
-          <el-col :span="6" :offset="2">
+          <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
             <el-button type="primary" class="img-btn"
               >Open in Customizer</el-button
             >
@@ -85,23 +84,29 @@
           <a href="" class="read-more">See more</a>
         </div>
         <el-row>
-          <el-col :span="8"><popular-card></popular-card></el-col>
-          <el-col :span="8"><popular-card></popular-card></el-col>
-          <el-col :span="8"><popular-card></popular-card></el-col>
+          <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8"
+            ><popular-card></popular-card
+          ></el-col>
+          <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8"
+            ><popular-card></popular-card
+          ></el-col>
+          <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8"
+            ><popular-card></popular-card
+          ></el-col>
         </el-row>
         <el-row>
-          <el-col :span="12">
+          <el-col :xs="24" :sm="24" :md="18" :lg="18" :xl="18">
             <show-card></show-card>
           </el-col>
-          <el-col :span="12">
+          <el-col :xs="24" :sm="24" :md="18" :lg="18" :xl="18">
             <show-card></show-card>
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="12">
+          <el-col :xs="24" :sm="24" :md="18" :lg="18" :xl="18">
             <show-card></show-card>
           </el-col>
-          <el-col :span="12">
+          <el-col :xs="24" :sm="24" :md="18" :lg="18" :xl="18">
             <show-card></show-card>
           </el-col>
         </el-row>
@@ -119,11 +124,7 @@
           class="mac"
           src="https://cdn.thingiverse.com/site/img/customizer/mac.jpg"
         />
-        <el-carousel
-          style="position: relative; top: -440px; left: 35px; width: 486px"
-          height="275px"
-          indicator-position="outside"
-        >
+        <el-carousel height="275px" indicator-position="outside">
           <el-carousel-item v-for="(item, index) in slideImg" :key="index">
             <el-image :src="item.url" :alt="item.alt"></el-image>
           </el-carousel-item>
@@ -138,7 +139,14 @@
           community to customize them.
         </p>
         <el-row>
-          <el-col :span="8" class="justify-circles">
+          <el-col
+            :xs="24"
+            :sm="24"
+            :md="8"
+            :lg="8"
+            :xl="8"
+            class="justify-circles"
+          >
             <img
               class="circles"
               src="https://cdn.thingiverse.com/site/img/customizer/step1.png"
@@ -146,7 +154,14 @@
             <p>step1</p>
             <p>Make an OpenSCAD file for Customizer</p></el-col
           >
-          <el-col :span="8" class="justify-circles">
+          <el-col
+            :xs="24"
+            :sm="24"
+            :md="8"
+            :lg="8"
+            :xl="8"
+            class="justify-circles"
+          >
             <img
               class="circles"
               src="https://cdn.thingiverse.com/site/img/customizer/step2.png"
@@ -154,7 +169,14 @@
             <p>step2</p>
             <p>Upload to Thingiverse</p></el-col
           >
-          <el-col :span="8" class="justify-circles">
+          <el-col
+            :xs="24"
+            :sm="24"
+            :md="8"
+            :lg="8"
+            :xl="8"
+            class="justify-circles"
+          >
             <img
               class="circles"
               src="https://cdn.thingiverse.com/site/img/customizer/step3.png"
@@ -328,43 +350,74 @@ section {
     justify-content: center;
     align-items: center;
   }
+}
+.justify-cta {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-content: center;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 50px;
+}
+.cta {
+  box-sizing: border-box;
+  width: 460px;
+  height: 140px;
+  padding: 10px;
+  background-color: #fff;
+  border: #ccc solid 2px;
+  color: #666;
+  font-size: 14px;
+  h4 {
+    margin: 4px 0 10px 0;
+    font-size: 18px;
+    font-weight: 600;
+  }
+  a {
+    color: #248bfb;
+  }
+  .create-cta {
+    margin: 0 auto 20px auto;
+  }
+  .join-cta-icon {
+    background: url(https://cdn.thingiverse.com/site/img/customizer/chat_icon.png);
+    width: 26px;
+    height: 26px;
+  }
+  .justify-join-cta-icon {
+    display: inline-flex;
+  }
+}
+.el-carousel {
+  position: relative;
+  top: -440px;
+  left: 35px;
+  width: 486px;
+}
+@media screen and (max-width: 768px) {
+  .header-center-content {
+    width: 100%;
+  }
+  .center-content {
+    width: 100%;
+  }
+  .mac {
+    width: 100%;
+  }
+  .el-carousel {
+    width: 100%;
+    top: 0px;
+    left: 0px;
+  }
   .justify-cta {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    align-content: center;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 50px;
-    .cta {
-      box-sizing: border-box;
-      width: 460px;
-      height: 140px;
-      padding: 10px;
-      background-color: #fff;
-      border: #ccc solid 2px;
-      color: #666;
-      font-size: 14px;
-      h4 {
-        margin: 4px 0 10px 0;
-        font-size: 18px;
-        font-weight: 600;
-      }
-      a {
-        color: #248bfb;
-      }
-      .create-cta {
-        margin: 0 auto 20px auto;
-      }
-      .join-cta-icon {
-        background: url(https://cdn.thingiverse.com/site/img/customizer/chat_icon.png);
-        width: 26px;
-        height: 26px;
-      }
-      .justify-join-cta-icon {
-        display: inline-flex;
-      }
-    }
+    flex-wrap: wrap;
+  }
+  .cta {
+    width: 100%;
+  }
+  .el-image {
+    width: 100%;
   }
 }
 </style>

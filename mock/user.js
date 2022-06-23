@@ -220,7 +220,7 @@ const userMock = function (app) {
       },
     });
     const { id, userId } = req.query;
-    console.log(id, userId);
+    console.log("/user/getUserInfoByUserId", id, userId);
     res.json({
       status: 200,
       message: "ok",
@@ -254,9 +254,9 @@ const userMock = function (app) {
   });
 
   app.get("/user/getFollowsByUserId", function (req, res) {
-    console.log(req.query);
+    console.log("/user/getFollowsByUserId", req.query);
     let followData = mock.mock({
-      "data|1-10": [
+      "data|10": [
         {
           name: "@name",
           avatar: "@image('300x200','@color', '#FFF', '@word')",

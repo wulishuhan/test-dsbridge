@@ -2,21 +2,27 @@
   <div class="container-profile">
     <el-row>
       <el-col :xs="24" :sm="24" :md="8" :lg="6" :xl="6">
-        <profile-card :user="user"></profile-card>
-        <div class="about">
-          <p>About</p>
-          <span>{{ profile.introduction }}}</span>
-          <br />
-          <span>
-            <a :href="profile.website">{{ profile.website }}</a>
-          </span>
-          <p>I AM A...</p>
-          <span>{{ who }}</span>
-          <p>3D Design Skill Level</p>
-          <span>{{ profile.designLevel }}</span>
-          <p>Tools I Use</p>
-          <span>{{ designToolsUsed }}</span>
-        </div>
+        <el-row>
+          <el-col :xs="24" :sm="12" :md="24" :lg="24" :xl="24">
+            <profile-card :user="user"></profile-card>
+          </el-col>
+          <el-col :xs="24" :sm="12" :md="24" :lg="24" :xl="24">
+            <div class="about">
+              <p>About</p>
+              <span>{{ profile.introduction }}}</span>
+              <br />
+              <span>
+                <a :href="profile.website">{{ profile.website }}</a>
+              </span>
+              <p>I AM A...</p>
+              <span>{{ who }}</span>
+              <p>3D Design Skill Level</p>
+              <span>{{ profile.designLevel }}</span>
+              <p>Tools I Use</p>
+              <span>{{ designToolsUsed }}</span>
+            </div>
+          </el-col>
+        </el-row>
       </el-col>
       <el-col :xs="24" :sm="24" :md="16" :lg="18" :xl="18">
         <el-row>
@@ -82,22 +88,27 @@ export default {
 <style lang="scss" scoped>
 .container-profile {
   background: #f2f2f2;
+}
+.about {
+  margin-top: 20px;
+  width: 300px;
+  height: 361px;
+  background-color: #fff;
+  padding: 20px;
+  box-sizing: border-box;
+  p {
+    font-size: 18px;
+    font-weight: 400;
+    margin-top: 15px;
+  }
+  span {
+    color: #555;
+    font-size: 12px;
+  }
+}
+@media screen and (max-width: 768px) {
   .about {
-    margin-top: 20px;
-    width: 300px;
-    height: 361px;
-    background-color: #fff;
-    padding: 20px;
-    box-sizing: border-box;
-    p {
-      font-size: 18px;
-      font-weight: 400;
-      margin-top: 15px;
-    }
-    span {
-      color: #555;
-      font-size: 12px;
-    }
+    margin: 20px auto;
   }
 }
 </style>

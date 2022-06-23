@@ -33,13 +33,29 @@ export default {
     text-decoration: none;
     color: #666;
   }
-  .image-container {
-    width: 465px;
-  }
+}
+.image-container {
+  width: 465px;
 }
 .el-image {
   width: 140px;
   height: 105px;
   margin: 0 5px;
+}
+@media screen and (max-width: 425px) {
+  .el-image {
+    width: 100%;
+    margin: 0 5px;
+  }
+  .image-container {
+    width: 100%;
+    display: flex;
+  }
+}
+@media screen and (max-width: 768px) {
+  .image-container {
+    width: 100%;
+    display: flex;
+  }
 }
 </style>

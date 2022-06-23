@@ -13,7 +13,9 @@
     </div>
     <el-dialog :visible.sync="dialogVisible" width="65%" @closed="closeDialog">
       <el-tabs v-model="activeName" @tab-click="handleClick">
-        <el-tab-pane label="THINGS" name="first">things</el-tab-pane>
+        <el-tab-pane label="THINGS" name="first"
+          ><inner-card></inner-card
+        ></el-tab-pane>
         <el-tab-pane label="COLLECTIONS" name="second">collections</el-tab-pane>
         <el-tab-pane label="MAKES" name="third">makes</el-tab-pane>
       </el-tabs>
@@ -21,8 +23,10 @@
   </div>
 </template>
 <script>
+import InnerCard from "./components/InnerCard";
 export default {
   name: "FavoriteDesignsCard",
+  components: { InnerCard },
   props: {
     name: {
       type: String,
@@ -39,7 +43,7 @@ export default {
   },
   data() {
     return {
-      activeName: "second",
+      activeName: "first",
       text: "",
       dialogVisible: false,
       form: {
@@ -85,7 +89,6 @@ export default {
 .favorite-card {
   background: #e4e4e4;
   color: #666;
-  width: 296px;
   height: 265px;
   display: flex;
   flex-direction: row;

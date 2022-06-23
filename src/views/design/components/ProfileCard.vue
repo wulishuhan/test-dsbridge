@@ -162,4 +162,9 @@ export default {
     justify-content: space-evenly;
   }
 }
+@media screen and (max-width: 768px) {
+  .profile-card {
+    margin: 20px auto;
+  }
+}
 </style>

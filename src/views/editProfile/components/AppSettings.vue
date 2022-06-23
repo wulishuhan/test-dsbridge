@@ -71,7 +71,7 @@ export default {
   methods: {},
 };
 </script>
-<style lang="scss" scope>
+<style lang="scss" scoped>
 .center-content {
   margin: 0 auto;
   box-sizing: border-box;
@@ -97,8 +97,16 @@ export default {
   a {
     color: #248bfb;
   }
+}
+.radio-group {
+  margin-left: 30px;
+}
+@media screen and (max-width: 768px) {
   .radio-group {
-    margin-left: 30px;
+    margin-left: 0px;
+  }
+  .center-content {
+    width: 100%;
   }
 }
 </style>

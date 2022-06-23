@@ -553,5 +553,8 @@ export default {
   .box {
     width: 100%;
   }
+  h1 {
+    font-size: 16px;
+  }
 }
 </style>

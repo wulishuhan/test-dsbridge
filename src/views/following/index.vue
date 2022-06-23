@@ -109,10 +109,12 @@
                 LIKES
               </el-button>
             </div>
-            <el-row v-infinite-scroll="loadFollowers" style="overflow: auto">
+            <el-row>
               <el-col :span="12" v-for="item in followers" :key="item.userId">
                 <designer-card :follow="item"></designer-card>
               </el-col>
+              <p v-if="loading">加载中...</p>
+              <p v-if="noMore">没有更多了</p>
             </el-row>
           </div>
         </el-col>
@@ -121,6 +123,7 @@
   </div>
 </template>
 <script>
+import { throttle } from "@/utils/cache.js";
 import DesignerCard from "./components/DesignerCard";
 import FollowButton from "@/components/FollowButton";
 import { findFollowsByUserId, getUserInfoByUserId } from "@/api/user";
@@ -128,18 +131,10 @@ export default {
   // eslint-disable-next-line
   name: "Following",
   components: { DesignerCard, FollowButton },
-  data() {
-    return {
-      followers: [],
-      userInfo: {},
-      makesLength: 0,
-      collectionsLength: 0,
-      likesLength: 0,
-    };
-  },
   mounted() {
     findFollowsByUserId({
       userId: this.$route.params.userId,
+      ...this.pagination,
     }).then((res) => {
       this.followers = res.data.data.data;
     });
@@ -151,6 +146,51 @@ export default {
       this.collectionsLength = this.userInfo.collections.length;
       this.likesLength = this.userInfo.likes.length;
     });
+    this.load = throttle(() => {
+      // 距离底部200px时加载一次
+      let bottomOfWindow =
+        document.documentElement.offsetHeight -
+          document.documentElement.scrollTop -
+          window.innerHeight <=
+        200;
+      if (bottomOfWindow && !this.loading && !this.noMore) {
+        this.pagination.currentPage++;
+        findFollowsByUserId({
+          userId: this.$route.params.userId,
+          ...this.pagination,
+        })
+          .then((res) => {
+            console.log(res);
+            this.followers.push(res.data.data.data);
+            this.loading = false;
+          })
+          .catch((err) => {
+            console.error(err);
+            this.loading = false;
+            this.noMore = true;
+          });
+      }
+    }, 1500);
+    window.addEventListener("scroll", this.load);
+  },
+  beforeDestroy() {
+    window.removeEventListener("scroll", this.load);
+  },
+  data() {
+    return {
+      followers: [],
+      userInfo: {},
+      makesLength: 0,
+      collectionsLength: 0,
+      pagination: {
+        currentPage: 1,
+        pageSize: 10,
+      },
+      likesLength: 0,
+      loading: false,
+      noMore: false,
+      load: () => {},
+    };
   },
   methods: {
     to(name) {
@@ -161,13 +201,6 @@ export default {
       this.$router.push(
         `/message/${this.userInfo.name}/${this.$route.params.userId}`
       );
-    },
-    loadFollowers() {
-      findFollowsByUserId({
-        userId: this.$route.params.userId,
-      }).then((res) => {
-        this.followers.push(res.data.data.data);
-      });
     },
   },
 };

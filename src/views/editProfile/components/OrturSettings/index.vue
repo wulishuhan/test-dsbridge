@@ -5,7 +5,7 @@
         <h1>ABOUT YOU</h1>
         <el-form :label-position="'top'">
           <el-row>
-            <el-col :span="11">
+            <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
               <el-form-item label="Location">
                 <el-input v-model="form.location"></el-input>
               </el-form-item>
@@ -37,7 +37,7 @@
                 </el-select>
               </el-form-item>
             </el-col>
-            <el-col :span="11" :offset="2">
+            <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
               <el-form-item label="Who are you?">
                 <el-select
                   placeholder="--- Select up to 3 ---"
@@ -67,7 +67,7 @@
                 </el-select>
               </el-form-item>
               <el-row>
-                <el-col :span="12">
+                <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
                   <el-form-item label="Industry">
                     <el-select
                       placeholder="Maker/Consumer"
@@ -83,7 +83,7 @@
                     </el-select>
                   </el-form-item>
                 </el-col>
-                <el-col :span="12">
+                <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
                   <el-form-item label="Subindustry">
                     <el-select
                       placeholder="Personal Use/Consum"
@@ -108,11 +108,11 @@
     <section class="edit-section profile-section">
       <div class="center-content">
         <el-row>
-          <el-col :span="12">
+          <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
             <h1>COVER PHOTO & AVATAR</h1>
             <profile-card></profile-card>
           </el-col>
-          <el-col :span="12">
+          <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
             <h1>WEBSITE & SOCIAL MEDIA</h1>
             <el-form>
               <el-form-item label="Website:">
@@ -394,7 +394,12 @@ export default {
   },
 };
 </script>
-<style lang="scss" scope>
+<style lang="scss" scoped>
+.center-content {
+  width: 970px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
 .container {
   background-color: #f5f5f5;
 }
@@ -412,11 +417,6 @@ export default {
 }
 .profile-section {
   background-color: #ececec;
-}
-.center-content {
-  margin: 0 auto;
-  box-sizing: border-box;
-  width: 970px;
 }
 .favorites-content {
   h2 {
@@ -460,6 +460,14 @@ export default {
     margin-top: -15px;
     padding-bottom: 15px;
     border-bottom: solid 2px #ccc;
+  }
+}
+@media screen and (max-width: 768px) {
+  .center-content {
+    width: 100%;
+  }
+  h1 {
+    font-size: 16px;
   }
 }
 </style>
