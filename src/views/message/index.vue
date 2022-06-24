@@ -3,7 +3,7 @@
     <div class="message-form">
       <el-form
         :model="form"
-        ref="form"
+        ref="messageForm"
         :rules="rules"
         label-width="80px"
         :label-position="'top'"
@@ -52,12 +52,19 @@ export default {
   },
   methods: {
     sendMessage() {
-      postUserMessage(this.form).then(() => {
-        this.$message({
-          message: "message sent successfully!",
-          type: "success",
-        });
-        this.$router.push(`/design/Designs/${this.$route.params.userId}`);
+      this.$refs.messageForm.validate((valid) => {
+        if (valid) {
+          postUserMessage(this.form).then(() => {
+            this.$message({
+              message: "message sent successfully!",
+              type: "success",
+            });
+            this.$router.push(`/design/Designs/${this.$route.params.userId}`);
+          });
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
       });
     },
     cancelMessage() {

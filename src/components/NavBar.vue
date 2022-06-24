@@ -78,7 +78,7 @@
             </el-menu-item>
             <el-menu-item index="5-5">
               <!-- <router-link to="/design/Likes">My Likes</router-link> -->
-              <a @click="to('Collections')">My Likes</a>
+              <a @click="to('Likes')">My Likes</a>
             </el-menu-item>
             <el-menu-item index="5-6">
               <router-link to="/groups">My Groups</router-link>
