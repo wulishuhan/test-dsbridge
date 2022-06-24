@@ -21,7 +21,7 @@
             </el-col>
           </el-row>
         </div>
-        <div>
+        <div class="header-content-right-text">
           <p>Make Your Designs</p>
           <h3>CUSTOMIZABLE<i class="el-icon-caret-bottom"></i></h3>
         </div>
@@ -398,6 +398,11 @@ section {
 @media screen and (max-width: 768px) {
   .header-center-content {
     width: 100%;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+  .header-content-right-text {
+    margin-left: 60px;
   }
   .center-content {
     width: 100%;

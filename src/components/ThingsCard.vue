@@ -169,7 +169,7 @@ export default {
     color: #61b63d;
   }
 }
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 425px) {
   .things-card {
     width: 80vw;
   }

@@ -62,7 +62,6 @@ export default {
   padding: 10px;
   margin-top: 5px;
   margin-left: 5px;
-  box-sizing: border-box;
 }
 .card-border-blue {
   border: 1px solid #248bfb;
