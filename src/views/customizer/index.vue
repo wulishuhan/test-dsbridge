@@ -23,7 +23,9 @@
         </div>
         <div class="header-content-right-text">
           <p>Make Your Designs</p>
-          <h3>CUSTOMIZABLE<i class="el-icon-caret-bottom"></i></h3>
+          <a href="#CUSTOMIZABLE"
+            ><h3>CUSTOMIZABLE<i class="el-icon-caret-bottom"></i></h3
+          ></a>
         </div>
       </div>
     </header>
@@ -95,18 +97,18 @@
           ></el-col>
         </el-row>
         <el-row>
-          <el-col :xs="24" :sm="24" :md="18" :lg="18" :xl="18">
+          <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
             <show-card></show-card>
           </el-col>
-          <el-col :xs="24" :sm="24" :md="18" :lg="18" :xl="18">
+          <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
             <show-card></show-card>
           </el-col>
         </el-row>
         <el-row>
-          <el-col :xs="24" :sm="24" :md="18" :lg="18" :xl="18">
+          <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
             <show-card></show-card>
           </el-col>
-          <el-col :xs="24" :sm="24" :md="18" :lg="18" :xl="18">
+          <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
             <show-card></show-card>
           </el-col>
         </el-row>
@@ -132,7 +134,7 @@
       </div>
     </section>
     <section class="customizer-contribute">
-      <div class="center-content">
+      <div id="CUSTOMIZABLE" class="center-content">
         <h3>CONTRIBUTE</h3>
         <p>
           Make your OpenSCAD designs infinitely more valuable by empowering the
@@ -394,6 +396,12 @@ section {
   top: -440px;
   left: 35px;
   width: 486px;
+}
+.header-content-right-text {
+  a {
+    text-decoration: none;
+    color: #fff;
+  }
 }
 @media screen and (max-width: 768px) {
   .header-center-content {

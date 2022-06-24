@@ -1,148 +1,151 @@
 <template>
   <div style="background-color: #f2f2f2">
-    <el-row style="padding: 15px">
-      <el-col :xs="24" :sm="24" :md="14" :lg="14" :xl="14">
-        <img
-          src="https://cdn.thingiverse.com/site/assets/edu-page-header.png"
-          alt=""
-          srcset=""
-          style="object-fit: contain; width: 100%"
-        />
-      </el-col>
-      <el-col
-        :xs="24"
-        :sm="24"
-        :md="{ span: 8, offset: 2 }"
-        :lg="{ span: 8, offset: 2 }"
-        :xl="{ span: 8, offset: 2 }"
-      >
-        <section style="padding: 15px; background-color: white">
-          <p>
-            Discover how to elevate STEM learning in the classroom with MakerBot
-            Education.
-          </p>
-          <el-form
-            ref="form"
-            :model="form"
-            label-width="80px"
-            :label-position="'top'"
-          >
-            <el-form-item label="Email Address:">
-              <el-input v-model="form.email"></el-input>
-            </el-form-item>
-            <el-row>
-              <el-col :span="11">
-                <el-form-item label="Grade:">
-                  <el-select v-model="form.region" placeholder="select...">
-                    <el-option value="University/College">
-                      University/College
-                    </el-option>
-                    <el-option value="High School"> High School </el-option>
-                    <el-option value="Middle School"> Middle School </el-option>
-                    <el-option value="Elementary School">
-                      Elementary School
-                    </el-option>
-                    <el-option value="Library/Makerspace">
-                      Library/Makerspace
-                    </el-option>
-                    <el-option value="STEM Enrichment Organization">
-                      STEM Enrichment Organization
-                    </el-option>
-                    <el-option value="Trade School/Vocational">
-                      Trade School/Vocational
-                    </el-option>
-                    <el-option value="Non-profit Organization">
-                      Non-profit Organization
-                    </el-option>
-                    <el-option value="District"> District </el-option>
-                    <el-option value="For profit business">
-                      For profit business
-                    </el-option>
-                    <el-option value="Other Education">
-                      Other Education
-                    </el-option>
-                  </el-select>
-                </el-form-item>
-              </el-col>
-              <el-col :span="11" :offset="2">
-                <el-form-item label="Country:">
-                  <el-select v-model="form.region" placeholder="select...">
-                    <el-option
-                      v-for="item in country"
-                      :key="item"
-                      :value="item"
-                      :label="item"
-                    ></el-option>
-                  </el-select>
-                </el-form-item>
-              </el-col>
-            </el-row>
+    <div class="content">
+      <el-row class="content-img-form">
+        <el-col :xs="24" :sm="24" :md="14" :lg="14" :xl="14">
+          <img
+            src="https://cdn.thingiverse.com/site/assets/edu-page-header.png"
+            alt="loding"
+            class="education-img"
+          />
+        </el-col>
+        <el-col
+          :xs="24"
+          :sm="24"
+          :md="{ span: 8, offset: 2 }"
+          :lg="{ span: 8, offset: 2 }"
+          :xl="{ span: 8, offset: 2 }"
+        >
+          <section class="education-form">
+            <p>
+              Discover how to elevate STEM learning in the classroom with
+              MakerBot Education.
+            </p>
+            <el-form
+              ref="form"
+              :model="form"
+              label-width="80px"
+              :label-position="'top'"
+            >
+              <el-form-item label="Email Address:">
+                <el-input v-model="form.email"></el-input>
+              </el-form-item>
+              <el-row>
+                <el-col :span="11">
+                  <el-form-item label="Grade:">
+                    <el-select v-model="form.region" placeholder="select...">
+                      <el-option value="University/College">
+                        University/College
+                      </el-option>
+                      <el-option value="High School"> High School </el-option>
+                      <el-option value="Middle School">
+                        Middle School
+                      </el-option>
+                      <el-option value="Elementary School">
+                        Elementary School
+                      </el-option>
+                      <el-option value="Library/Makerspace">
+                        Library/Makerspace
+                      </el-option>
+                      <el-option value="STEM Enrichment Organization">
+                        STEM Enrichment Organization
+                      </el-option>
+                      <el-option value="Trade School/Vocational">
+                        Trade School/Vocational
+                      </el-option>
+                      <el-option value="Non-profit Organization">
+                        Non-profit Organization
+                      </el-option>
+                      <el-option value="District"> District </el-option>
+                      <el-option value="For profit business">
+                        For profit business
+                      </el-option>
+                      <el-option value="Other Education">
+                        Other Education
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="11" :offset="2">
+                  <el-form-item label="Country:">
+                    <el-select v-model="form.region" placeholder="select...">
+                      <el-option
+                        v-for="item in country"
+                        :key="item"
+                        :value="item"
+                        :label="item"
+                      ></el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+              </el-row>
 
-            <el-form-item>
-              <el-button type="primary" @click="onSubmit">
-                Sign Up For More Info
-              </el-button>
-            </el-form-item>
-          </el-form>
-          <p>
-            The information submitted above will be used to send you
-            communications from MakerBot (or MakerBot content providers) about
-            MakerBot products, services, and sales. You can unsubscribe from
-            these communications at any time. For more details, please read our
-            Privacy Policy
-          </p>
-        </section>
-      </el-col>
-    </el-row>
-    <el-row>
-      <el-col :xs="24" :sm="24" :md="14" :lg="14" :xl="14">
-        <p>Filter Lessons by Subject</p>
-        <el-row>
-          <!-- eslint-disable-next-line -->
-          <div v-for="item in filterBySubject">
-            <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="6">
-              <filter-subject
-                :subject="item"
-                @setSubject="setSubject"
+              <el-form-item>
+                <el-button type="primary" @click="onSubmit">
+                  Sign Up For More Info
+                </el-button>
+              </el-form-item>
+            </el-form>
+            <p>
+              The information submitted above will be used to send you
+              communications from MakerBot (or MakerBot content providers) about
+              MakerBot products, services, and sales. You can unsubscribe from
+              these communications at any time. For more details, please read
+              our Privacy Policy
+            </p>
+          </section>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :xs="24" :sm="24" :md="14" :lg="14" :xl="14">
+          <p>Filter Lessons by Subject</p>
+          <el-row>
+            <!-- eslint-disable-next-line -->
+            <div v-for="item in filterBySubject">
+              <el-col :xs="12" :sm="8" :md="6" :lg="6" :xl="6">
+                <filter-subject
+                  :subject="item"
+                  @setSubject="setSubject"
+                  @getUserLists="getUsers"
+                ></filter-subject>
+              </el-col>
+            </div>
+          </el-row>
+        </el-col>
+        <el-col
+          :xs="24"
+          :sm="24"
+          :md="{ span: 8, offset: 2 }"
+          :lg="{ span: 8, offset: 2 }"
+          :xl="{ span: 8, offset: 2 }"
+        >
+          <p>Filter Lessons by Grade</p>
+          <div v-for="item in filterByGrade" :key="item">
+            <el-col :xs="12" :sm="8" :md="12" :lg="12" :xl="12">
+              <filter-grade
+                :grade="item"
+                @setGrade="setGrade"
                 @getUserLists="getUsers"
-              ></filter-subject>
+              ></filter-grade>
             </el-col>
           </div>
-        </el-row>
-      </el-col>
-      <el-col
-        :xs="24"
-        :sm="24"
-        :md="{ span: 8, offset: 2 }"
-        :lg="{ span: 8, offset: 2 }"
-        :xl="{ span: 8, offset: 2 }"
-      >
-        <p>Filter Lessons by Grade</p>
-        <div v-for="item in filterByGrade" :key="item">
-          <el-col :xs="12" :sm="8" :md="12" :lg="12" :xl="12">
-            <filter-grade
-              :grade="item"
-              @setGrade="setGrade"
-              @getUserLists="getUsers"
-            ></filter-grade>
-          </el-col>
-        </div>
-      </el-col>
-    </el-row>
-    <el-row class="row">
-      <el-col
-        v-for="item in user"
-        :key="item.id"
-        :xs="24"
-        :sm="12"
-        :md="8"
-        :lg="6"
-        :xl="4"
-      >
-        <resource-card :thing="item"></resource-card>
-      </el-col>
-    </el-row>
-    <pagination ref="educationPagination" @getData="getUsers"></pagination>
+        </el-col>
+      </el-row>
+      <el-row class="row">
+        <el-col
+          v-for="item in user"
+          :key="item.id"
+          :xs="24"
+          :sm="12"
+          :md="8"
+          :lg="6"
+          :xl="4"
+        >
+          <resource-card :thing="item"></resource-card>
+        </el-col>
+      </el-row>
+      <pagination ref="educationPagination" @getData="getUsers"></pagination>
+    </div>
   </div>
 </template>
 <script>
@@ -475,4 +478,25 @@ export default {
 };
 </script>
 
-<style scope></style>
+<style lang="scss" scoped>
+.content {
+  width: 90%;
+  margin: 0 auto;
+}
+.content-img-form {
+  padding: 15px;
+}
+.education-form {
+  padding: 15px;
+  background-color: white;
+}
+.education-img {
+  object-fit: contain;
+  width: 100%;
+}
+@media screen and (max-width: 768px) {
+  .content {
+    width: 100%;
+  }
+}
+</style>

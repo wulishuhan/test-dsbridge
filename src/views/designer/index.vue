@@ -1,38 +1,40 @@
 <template>
   <div class="designer-container">
-    <el-row class="designer-filter-container">
-      <el-col :span="8" class="designer-filter-item">
-        <el-select v-model="value" placeholder="Number of Followers">
-          <el-option
-            v-for="item in filters"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          >
-          </el-option>
-        </el-select>
-      </el-col>
-      <el-col :span="8"></el-col>
-      <el-col :span="8">
-        <el-select v-model="value" placeholder="Filter By">
-          <el-option
-            v-for="item in filters"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          >
-          </el-option>
-        </el-select>
-      </el-col>
-    </el-row>
-    <el-row>
-      <div v-for="item in user" :key="item.id">
-        <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4">
-          <designer-card :designer="item"></designer-card>
+    <div class="content">
+      <el-row class="designer-filter-container">
+        <el-col :span="8" class="designer-filter-item">
+          <el-select v-model="value" placeholder="Number of Followers">
+            <el-option
+              v-for="item in filters"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
         </el-col>
-      </div>
-    </el-row>
-    <pagination ref="designerPagination" @getData="getDesigners"></pagination>
+        <el-col :span="8"></el-col>
+        <el-col :span="8">
+          <!-- <el-select v-model="value" placeholder="Filter By">
+            <el-option
+              v-for="item in filters"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select> -->
+        </el-col>
+      </el-row>
+      <el-row>
+        <div v-for="item in user" :key="item.id">
+          <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4">
+            <designer-card :designer="item"></designer-card>
+          </el-col>
+        </div>
+      </el-row>
+      <pagination ref="designerPagination" @getData="getDesigners"></pagination>
+    </div>
   </div>
 </template>
 <script>
@@ -97,5 +99,14 @@ export default {
 .designer-container {
   background-color: #f2f2f2;
   text-align: center;
+}
+.content {
+  width: 90%;
+  margin: 0 auto;
+}
+@media screen and (max-width: 768px) {
+  .content {
+    width: 100%;
+  }
 }
 </style>

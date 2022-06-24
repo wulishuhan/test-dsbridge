@@ -67,18 +67,22 @@
             </el-menu-item>
             <el-menu-item index="5-2"> Messages </el-menu-item>
             <el-menu-item index="5-3">
-              <router-link to="/design/Designs">My Designs</router-link>
+              <!-- <router-link to="" @click="test">My Designs</router-link> -->
+              <a @click="to('Designs')">My Designs</a>
             </el-menu-item>
             <el-menu-item index="5-4">
-              <router-link to="/design/Collections">
+              <!-- <router-link to="/design/Collections">
                 My Collections
-              </router-link>
+              </router-link> -->
+              <a @click="to('Collections')">My Collections</a>
             </el-menu-item>
             <el-menu-item index="5-5">
-              <router-link to="/design/Likes">My Likes</router-link>
+              <!-- <router-link to="/design/Likes">My Likes</router-link> -->
+              <a @click="to('Collections')">My Likes</a>
             </el-menu-item>
             <el-menu-item index="5-6">
-              <router-link to="/design/Groups">My Groups</router-link>
+              <!-- <router-link to="/design/Groups">My Groups</router-link> -->
+              <a @click="to('Groups')">My Groups</a>
             </el-menu-item>
             <el-menu-item index="5-7">
               <router-link to="/editProfile"> Account Settings </router-link>
@@ -284,6 +288,12 @@ export default {
     search() {
       console.log("search", this.keywords);
       this.$store.commit("search/SET_SEARCH_KEYWORDS", this.keywords);
+    },
+    to(name) {
+      let path = this.$route.path.toString();
+      if (path.search(name) === -1) {
+        this.$router.push(`/design/${name}/${this.$store.getters.userId}`);
+      }
     },
   },
   computed: {

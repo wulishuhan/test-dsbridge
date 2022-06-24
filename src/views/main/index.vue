@@ -9,33 +9,35 @@
         </p>
       </div>
     </header>
-    <el-row :gutter="20" class="filter">
-      <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4">
-        <popular-filter @setFilter="setFilterPopular"></popular-filter>
-      </el-col>
-      <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4">
-        <type-filter @setFilter="setFilterType"></type-filter>
-      </el-col>
-      <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4"> </el-col>
-    </el-row>
-    <el-row class="row">
-      <el-col
-        v-for="item in things"
-        :key="item.thingId"
-        :xs="24"
-        :sm="12"
-        :md="8"
-        :lg="6"
-        :xl="4"
-      >
-        <resource-card :thing="item"></resource-card>
-      </el-col>
-    </el-row>
-    <pagination
-      ref="mainPagination"
-      @getData="getThings"
-      :total="total"
-    ></pagination>
+    <div class="content">
+      <el-row :gutter="20" class="filter">
+        <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4">
+          <popular-filter @setFilter="setFilterPopular"></popular-filter>
+        </el-col>
+        <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4">
+          <type-filter @setFilter="setFilterType"></type-filter>
+        </el-col>
+        <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4"> </el-col>
+      </el-row>
+      <el-row class="row">
+        <el-col
+          v-for="item in things"
+          :key="item.thingId"
+          :xs="24"
+          :sm="12"
+          :md="8"
+          :lg="6"
+          :xl="4"
+        >
+          <resource-card :thing="item"></resource-card>
+        </el-col>
+      </el-row>
+      <pagination
+        ref="mainPagination"
+        @getData="getThings"
+        :total="total"
+      ></pagination>
+    </div>
   </div>
 </template>
 <script>
@@ -99,6 +101,10 @@ export default {
   text-align: center;
   background-color: #f2f2f2;
 }
+.content {
+  width: 90%;
+  margin: 0 auto;
+}
 .filter {
   padding: 10px;
 }
@@ -117,5 +123,10 @@ a {
   justify-content: center;
   align-content: center;
   flex-wrap: wrap;
+}
+@media screen and (max-width: 768px) {
+  .content {
+    width: 100%;
+  }
 }
 </style>
