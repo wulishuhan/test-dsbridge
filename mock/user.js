@@ -245,7 +245,7 @@ const userMock = function (app) {
     });
   });
 
-  app.post("/user/getMessage", function (req, res) {
+  app.post("/user/postUserMessage", function (req, res) {
     console.log(req.query);
     res.json({
       status: 200,
