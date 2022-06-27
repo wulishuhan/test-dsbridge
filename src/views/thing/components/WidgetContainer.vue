@@ -1,7 +1,9 @@
 <template>
   <div class="widget-container">
     <h1>{{ title }}</h1>
-    <slot></slot>
+    <p>
+      <slot></slot>
+    </p>
   </div>
 </template>
 <script>
@@ -23,6 +25,10 @@ export default {
   box-sizing: border-box;
   margin-top: 10px;
   width: 100%;
+  p {
+    display: flex;
+    flex-wrap: wrap;
+  }
   a {
     text-decoration: none;
     color: #248bfb;
@@ -31,7 +37,6 @@ export default {
   }
   h1 {
     color: #555;
-    font-family: SFUIText-Light;
     font-size: 18px;
     font-weight: 400;
     line-height: 22px;

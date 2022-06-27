@@ -4,7 +4,12 @@
       <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8">
         <widget-container :title="'Contents'">
           <div>
-            <a href="#" v-for="item in details.content" :key="item">
+            <a
+              href="#"
+              v-for="item in details.content"
+              :key="item"
+              style="float: left"
+            >
               {{ item }}
             </a>
           </div>
