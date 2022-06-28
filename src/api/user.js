@@ -57,7 +57,7 @@ export function updateUserProfile(params) {
 
 export function postUserMessage(params) {
   return request({
-    url: "/user/getMessage",
+    url: "/user/postUserMessage",
     method: "post",
     params,
   });
