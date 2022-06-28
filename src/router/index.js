@@ -337,7 +337,7 @@ const routes = [
     },
     children: [
       {
-        path: "/dashboard",
+        path: "dashboard",
         meta: {
           title: "dashboard",
         },

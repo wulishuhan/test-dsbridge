@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="background-color: #fff">
     <el-row>
       <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
         <div class="ortur-resource">
@@ -55,6 +55,11 @@
               <router-link to="/customizer">Customize a Thing</router-link>
             </el-menu-item>
           </el-submenu>
+          <el-menu-item index="7" v-if="hasToken">
+            <router-link style="width: 100%" to="/dashboard/dashboard"
+              ><div style="width: 100%">!图片</div></router-link
+            >
+          </el-menu-item>
           <el-menu-item index="4" v-if="!hasToken">
             <router-link to="/login">Sign Up</router-link>
           </el-menu-item>

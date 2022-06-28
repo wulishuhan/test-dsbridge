@@ -3,4 +3,8 @@
     <router-view />
   </div>
 </template>
-<style scoped></style>
+<style scoped>
+#app {
+  height: 100%;
+}
+</style>

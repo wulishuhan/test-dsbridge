@@ -6,6 +6,7 @@ import ElementUI from "element-ui";
 import "element-ui/lib/theme-chalk/index.css";
 import mock from "mockjs";
 import "@/permission";
+import "@/style/index.scss";
 Vue.config.productionTip = false;
 Vue.use(ElementUI);
 Vue.use(mock);
