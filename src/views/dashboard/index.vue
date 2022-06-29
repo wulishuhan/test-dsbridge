@@ -42,52 +42,47 @@ import ResourceCard from "@/components/ResourceCard.vue";
 import { getActivityList } from "@/api/dashboard";
 
 export default {
-  /* eslint-disable */
-  components:{
+  components: {
     dashBoardPanel,
-    ResourceCard
+    ResourceCard,
   },
   name: "Dashboard",
   data() {
     return {
-      activity:[],
-      activeName: 'first'
+      activity: [],
+      activeName: "first",
     };
   },
-  mounted () {
-    
+  mounted() {
     this.getActivity(this.pagination);
-    ;
   },
   methods: {
-      getActivity(pagination) {
-    
-      getActivityList({
-      }).then((res) => {
+    getActivity() {
+      getActivityList({}).then((res) => {
         this.activity = res.data.data;
-      //  debugger
+        //  debugger
       });
     },
-    handleClick(e) {
-      debugger
-    }
+    handleClick() {
+      debugger;
+    },
   },
 };
 </script>
 <style scoped>
-  /deep/ .resource_card {
-    margin: 10px 0 0px 10px;
-  }
+.activityItem /deep/ .resource_card {
+  margin: 10px 0 0px 10px;
+}
 </style>
 <style lang="scss" scoped>
 .container {
-    background-color: #f5f5f5;
-    height: 100%;
-    color: #666;
-.content {
-  width: 970px;
-  margin: 0 auto;
-}
+  background-color: #f5f5f5;
+  height: 100%;
+  color: #666;
+  .content {
+    width: 970px;
+    margin: 0 auto;
+  }
 }
 .activityItem {
   width: 100%;
@@ -95,17 +90,16 @@ export default {
   background-color: #fff;
   margin-top: 10px;
   .top {
-  display: flex;
-  justify-content: space-between;
-  padding: 15px;
-  .img {
-    width: 40px;
-    height: 40px;
-    border-radius:50%;
-    vertical-align: middle;
-    margin-right: 20px;
+    display: flex;
+    justify-content: space-between;
+    padding: 15px;
+    .img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      vertical-align: middle;
+      margin-right: 20px;
+    }
   }
-  }
- 
 }
 </style>
