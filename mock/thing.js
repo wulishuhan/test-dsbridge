@@ -250,7 +250,7 @@ module.exports = [
   },
   {
     url: "/thing/changeCollect",
-    type: "get",
+    type: "post",
     response: (req) => {
       let { thingId, isCollected, userId } = req.query;
       let message = ""
