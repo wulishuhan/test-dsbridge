@@ -10,16 +10,16 @@
       </div>
     </div>
     <div class="right">
-      <navigateItem
+      <NavigateItem
         title="Your Profile"
         iconName="el-icon-user-solid"
         path="/design/Designs"
-      ></navigateItem>
-      <navigateItem
+      ></NavigateItem>
+      <NavigateItem
         title="Find People to Follow"
         iconName="el-icon-user-solid"
         path="/dashboard/recommend"
-      ></navigateItem>
+      ></NavigateItem>
       <div class="ExtItem" @click="onExtShowChange">
         <div>
           <i class="el-icon-data-line"></i>
@@ -31,26 +31,26 @@
         Activity from the last 30 Days: Views: 0 Downloads: 0 Likes: 0 Collects:
         0 Mades: 0
       </div>
-      <navigateItem
+      <NavigateItem
         title="Edit Dashboard Feed"
         iconName="el-icon-edit"
         path="/dashboard/edit"
-      ></navigateItem>
+      ></NavigateItem>
     </div>
   </div>
 </template>
 
 <script>
-import navigateItem from "./navigateItem.vue";
+import NavigateItem from "./DashBoardPanelNavigateItem.vue";
 export default {
-  name: "dashBoardPanel",
+  name: "IndexDashBoardPanel",
   data() {
     return {
       extShow: false,
     };
   },
   components: {
-    navigateItem,
+    NavigateItem,
   },
   methods: {
     onExtShowChange() {

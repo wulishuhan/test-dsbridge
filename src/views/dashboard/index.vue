@@ -3,7 +3,7 @@
     <div class="content">
       <el-tabs v-model="activeName" @tab-click="handleClick(activeName)">
         <el-tab-pane label="ALL ACTIVITY" name="first">
-          <dashBoardPanel></dashBoardPanel>
+          <DashBoardPanel></DashBoardPanel>
           <div
             v-for="item in activity"
             :key="item.thingId"
@@ -37,16 +37,16 @@
   </div>
 </template>
 <script>
-import dashBoardPanel from "@/views/dashboard/components/dashBoardPanel";
+import DashBoardPanel from "@/views/dashboard/components/IndexDashBoardPanel.vue";
 import ResourceCard from "@/components/ResourceCard.vue";
 import { getActivityList } from "@/api/dashboard";
 
 export default {
   components: {
-    dashBoardPanel,
+    DashBoardPanel,
     ResourceCard,
   },
-  name: "Dashboard",
+  name: "DashBoard",
   data() {
     return {
       activity: [],
