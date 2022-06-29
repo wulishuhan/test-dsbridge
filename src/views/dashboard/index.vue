@@ -27,11 +27,40 @@
             <resource-card :thing="item"></resource-card>
           </div>
         </el-tab-pane>
-        <el-tab-pane label="MY ACTIVITY" name="second">MY ACTIVITY</el-tab-pane>
-        <el-tab-pane label="FRIENDS ACTIVITY" name="third"
-          >FRIENDS ACTIVITY</el-tab-pane
-        >
-        <el-tab-pane label="WATCHLIST" name="fourth">WATCHLIST</el-tab-pane>
+        <el-tab-pane label="MY ACTIVITY" name="second">
+          <DashBoardPanel></DashBoardPanel>
+          <IndexDesignerList :designerList="designerList"></IndexDesignerList>
+        </el-tab-pane>
+        <el-tab-pane label="FRIENDS ACTIVITY" name="third">
+          <DashBoardPanel></DashBoardPanel>
+          <IndexDesignerList :designerList="designerList"></IndexDesignerList>
+        </el-tab-pane>
+        <el-tab-pane label="WATCHLIST" name="fourth">
+          <DashBoardPanel></DashBoardPanel>
+          <div
+            v-for="item in watchList"
+            :key="item.thingId"
+            class="activityItem"
+          >
+            <!-- <div class="closeIcon" @click="onCloseClick(item.id)">x</div> -->
+            <div class="top">
+              <div>
+                <router-link :to="'/thing/' + item.thingId">
+                  <img class="img" :src="item.avatar" alt="" />
+                </router-link>
+                <router-link :to="'/thing/' + item.thingId">
+                  {{ item.userName }}
+                </router-link>
+                published
+                <router-link :to="'/thing/' + item.thingId"
+                  >{{ item.thingName }}
+                </router-link>
+              </div>
+              <div>{{ item.publicTime }}</div>
+            </div>
+            <resource-card :thing="item"></resource-card>
+          </div>
+        </el-tab-pane>
       </el-tabs>
     </div>
   </div>
@@ -39,32 +68,57 @@
 <script>
 import DashBoardPanel from "@/views/dashboard/components/IndexDashBoardPanel.vue";
 import ResourceCard from "@/components/ResourceCard.vue";
-import { getActivityList } from "@/api/dashboard";
-
+import {
+  getActivityList,
+  getDesignerList,
+  getWatchList,
+} from "@/api/dashboard";
+import IndexDesignerList from "./components/IndexDesignerList.vue";
 export default {
   components: {
     DashBoardPanel,
+    IndexDesignerList,
     ResourceCard,
   },
   name: "DashBoard",
   data() {
     return {
       activity: [],
+      watchList: [],
       activeName: "first",
+      designerList: [],
     };
   },
   mounted() {
     this.getActivity(this.pagination);
   },
   methods: {
+    getWatchList() {
+      getWatchList({}).then((res) => {
+        this.watchList = res.data.data;
+        //  debugger
+      });
+    },
     getActivity() {
       getActivityList({}).then((res) => {
         this.activity = res.data.data;
         //  debugger
       });
     },
-    handleClick() {
-      debugger;
+    getDesignerList() {
+      getDesignerList({}).then((res) => {
+        this.designerList = res.data.data;
+        debugger;
+      });
+    },
+    handleClick(index) {
+      if (index == "first") {
+        this.getActivity();
+      } else if (index == "second" || index == "third") {
+        this.getDesignerList();
+      } else if (index == "fourth") {
+        this.getWatchList();
+      }
     },
   },
 };
@@ -85,6 +139,14 @@ export default {
   }
 }
 .activityItem {
+  position: relative;
+  .closeIcon {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 20px;
+    font-size: 20px;
+  }
   width: 100%;
   text-align: left;
   background-color: #fff;
@@ -101,5 +163,8 @@ export default {
       margin-right: 20px;
     }
   }
+}
+.activityItem:hover .closeIcon {
+  display: inline;
 }
 </style>

@@ -7,3 +7,17 @@ export function getActivityList(params) {
     params,
   });
 }
+export function getWatchList(params) {
+  return request({
+    url: `/dashboard/getWatchList`,
+    method: "get",
+    params,
+  });
+}
+export function getDesignerList(params) {
+  return request({
+    url: `/dashboard/getDesignerList`,
+    method: "get",
+    params,
+  });
+}
