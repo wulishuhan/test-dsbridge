@@ -1,4 +1,4 @@
-var mock = require("mockjs");
+const mock = require("mockjs");
 let designer = mock.mock({
   "data|1000": [
     {
@@ -22,52 +22,61 @@ let designer = mock.mock({
 });
 
 let data = designer.data;
-const designerMock = function (app) {
-  app.get("/designer/list", function (req, res) {
-    let { currentPage, pageSize, subject, grade } = req.query;
-    currentPage = Number(currentPage);
-    pageSize = Number(pageSize);
-    let t1 = [];
-    if (subject && grade) {
-      for (const val of data) {
-        if (val.grade == grade && val.subject == subject) {
-          t1.push(val);
+module.exports = [
+  {
+    url: "/designer/list",
+    type: "get",
+    response: (req) => {
+      let { currentPage, pageSize, subject, grade } = req.query;
+      currentPage = Number(currentPage);
+      pageSize = Number(pageSize);
+      let t1 = [];
+      if (subject && grade) {
+        for (const val of data) {
+          if (val.grade == grade && val.subject == subject) {
+            t1.push(val);
+          }
         }
+      } else {
+        t1 = data;
       }
-    } else {
-      t1 = data;
-    }
-    let start = pageSize * (currentPage - 1);
-    let end = start + pageSize;
-    let temp = [];
-    for (let i = start; i < end && i < t1.length; i++) {
-      temp.push(t1[i]);
-    }
-    console.log(start, end);
-    res.json({
-      status: 200,
-      message: "ok",
-      data: temp,
-      length: t1.length,
-    });
-  });
-  app.get("/designer/unfollowDesigner", function (req, res) {
-    let { designerId, userId } = req.query;
-    console.log("/designer/unfollowDesigner", designerId, userId);
-    res.json({
-      status: 200,
-      message: "success",
-    });
-  });
-
-  app.get("/designer/followDesigner", function (req, res) {
-    let { designerId, userId } = req.query;
-    console.log("/designer/followDesigner", designerId, userId);
-    res.json({
-      status: 200,
-      message: "success",
-    });
-  });
-};
-
-module.exports = designerMock;
+      let start = pageSize * (currentPage - 1);
+      let end = start + pageSize;
+      let temp = [];
+      for (let i = start; i < end && i < t1.length; i++) {
+        temp.push(t1[i]);
+      }
+      console.log(start, end);
+      return {
+        status: 200,
+        message: "ok",
+        data: temp,
+        length: t1.length,
+      };
+    },
+  },
+  {
+    url: "/designer/unfollowDesigner",
+    type: "get",
+    response: (req) => {
+      let { designerId, userId } = req.query;
+      console.log("/designer/unfollowDesigner", designerId, userId);
+      return {
+        status: 200,
+        message: "success",
+      };
+    },
+  },
+  {
+    url: "/designer/followDesigner",
+    type: "get",
+    response: (req) => {
+      let { designerId, userId } = req.query;
+      console.log("/designer/followDesigner", designerId, userId);
+      return {
+        status: 200,
+        message: "success",
+      };
+    },
+  },
+];

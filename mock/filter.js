@@ -1,5 +1,4 @@
-var mock = require("mockjs");
-
+const mock = require("mockjs");
 let data = mock.mock({
   "list|20": [
     {
@@ -20,14 +19,17 @@ let data = mock.mock({
     },
   ],
 });
-const filterMock = function (app) {
-  app.get("/select/type", function (req, res) {
-    res.json({
-      status: 200,
-      message: "ok",
-      data: data,
-    });
-  });
-};
-
-module.exports = filterMock;
+module.exports = [
+  {
+    url: "/select/type",
+    type: "get",
+    response: (req) => {
+      console.log(req.query);
+      return {
+        status: 200,
+        message: "ok",
+        data: data,
+      };
+    },
+  },
+];

@@ -1,4 +1,4 @@
-var mock = require("mockjs");
+const mock = require("mockjs");
 let user = mock.mock({
   "data|1000": [
     {
@@ -37,245 +37,274 @@ let user = mock.mock({
     },
   ],
 });
-
-let data = user.data;
-const userMock = function (app) {
-  app.get("/user/list", function (req, res) {
-    let { currentPage, pageSize, subject, grade } = req.query;
-    currentPage = Number(currentPage);
-    pageSize = Number(pageSize);
-    console.log(pageSize, currentPage, subject, grade);
-    let t1 = [];
-    if (subject && grade) {
-      for (const val of data) {
-        if (val.grade == grade && val.subject == subject) {
-          t1.push(val);
-        }
-      }
-    } else {
-      t1 = data;
-    }
-    let start = pageSize * (currentPage - 1);
-    let end = start + pageSize;
-    let temp = [];
-    for (let i = start; i < end && i < t1.length; i++) {
-      temp.push(t1[i]);
-    }
-    console.log(start, end);
-    res.json({
-      status: 200,
-      message: "ok",
-      data: temp,
-      length: t1.length,
-    });
-  });
-
-  let loginData = mock.mock({
-    name: "@name",
-    avatar: mock.mock("@image('300x200','@color', '#FFF', '@word')"),
-    token: /(\w\W\d){10,15}/,
-    roles: ["user"],
-    userId: "@id",
-  });
-  app.post("/user/login", function (req, res) {
-    const { username, password } = req.query;
-    console.log(username, password);
-    res.json({
-      status: 200,
-      data: loginData,
-    });
-  });
-
-  let getInfo = mock.mock({
-    name: "@name",
-    avatar: "@image('300x200','@color', '#FFF', '@word')",
-    token: /(\w\W\d){10,15}/,
-    roles: ["user"],
-    id: "@id",
-  });
-  app.get("/user/getInfo", function (req, res) {
-    const { username, password } = req.query;
-    console.log(req.query);
-    console.log(username, password);
-    res.json({
-      status: 200,
-      data: getInfo,
-    });
-  });
-
-  let resetTokenData = mock.mock({
-    name: "@name",
-    avatar: "@image('300x200','@color', '#FFF', '@word')",
-    token: /(\w\W\d){10,15}/,
-    roles: ["user"],
-  });
-  app.post("/user/resetToken", function (req, res) {
-    const { username, password } = req.query;
-    console.log(username, password);
-    res.json({
-      status: 200,
-      data: resetTokenData,
-    });
-  });
-
-  app.post("/user/logout", function (req, res) {
-    res.json({
-      code: 200,
-      data: "success",
-    });
-  });
-
-  let userInfoByUserId = mock.mock({
-    userId: "@id",
-    avatar: "@image('300x200','@color', '#FFF', '@word')",
-    name: "@word",
-    background: "@image('300x200','@color', '#FFF', '@word')",
-    publicTime: "@datetime(yyyy MM dd)",
-    followers: "@integer(60, 1000)",
-    following: "@integer(60, 1000)",
-    designs: "@integer(1, 30)",
-    isFollow: "@boolean",
-    address: "@word",
-    username: "@word",
-    "design|1-7": [
-      {
-        userId: "@id",
-        thingId: "@id",
-        thingName: "@word",
-        publicTime: "@datetime(yyyy MM dd)",
-        isLike: "@boolean",
-        likes: "@integer(1, 1000)",
-        comments: "@integer(1, 1000)",
-        url: "@image('300x200','@color', '#FFF', '@word')",
-        isCollected: "@boolean",
-      },
-    ],
-    "favorites|1-7": [
-      {
-        userId: "@id",
-        thingId: "@id",
-        thingName: "@word",
-        publicTime: "@datetime(yyyy MM dd)",
-        isLike: "@boolean",
-        likes: "@integer(1, 1000)",
-        comments: "@integer(1, 1000)",
-        url: "@image('300x200','@color', '#FFF', '@word')",
-        isCollected: "@boolean",
-      },
-    ],
-    "collections|1-7": [
-      {
-        userId: "@id",
-        thingId: "@id",
-        thingName: "@word",
-        publicTime: "@datetime(yyyy MM dd)",
-        isLike: "@boolean",
-        likes: "@integer(1, 1000)",
-        comments: "@integer(1, 1000)",
-        url: "@image('300x200','@color', '#FFF', '@word')",
-        isCollected: true,
-      },
-    ],
-    "makes|1-7": [
-      {
-        userId: "@id",
-        thingId: "@id",
-        thingName: "@word",
-        publicTime: "@datetime(yyyy MM dd)",
-        isLike: "@boolean",
-        likes: "@integer(1, 1000)",
-        comments: "@integer(1, 1000)",
-        url: "@image('300x200','@color', '#FFF', '@word')",
-        isCollected: "@boolean",
-      },
-    ],
-    "likes|1-7": [
-      {
-        thingId: "@id",
-        thingName: "@word",
-        publicTime: "@datetime(yyyy MM dd)",
-        isLike: true,
-        likes: "@integer(1, 1000)",
-        comments: "@integer(1, 1000)",
-        url: "@image('300x200','@color', '#FFF', '@word')",
-        isCollected: "@boolean",
-      },
-    ],
-    userProfile: {
-      designLevel: "Novice",
-      using3DPrinter: ["B9Creations", "Afinia", " Airwolf 3D", "CEL"],
-      who: ["Designer", "Engineer", "Maker"],
-      designToolsUsed: ["123D Design", "Blender", "3D Tin"],
-      industry: "",
-      subindustry: "",
-      introduction: "@word",
-      location: "@word",
-      website: "@url",
-      paypal: "https://paypal.me/",
-      firstName: "",
-      lastName: "",
-      email: "",
-      username: "",
+let loginData = mock.mock({
+  name: "@name",
+  avatar: mock.mock("@image('300x200','@color', '#FFF', '@word')"),
+  token: /(\w\W\d){10,15}/,
+  roles: ["user"],
+  userId: "@id",
+});
+let getInfo = mock.mock({
+  name: "@name",
+  avatar: "@image('300x200','@color', '#FFF', '@word')",
+  token: /(\w\W\d){10,15}/,
+  roles: ["user"],
+  id: "@id",
+});
+let resetTokenData = mock.mock({
+  name: "@name",
+  avatar: "@image('300x200','@color', '#FFF', '@word')",
+  token: /(\w\W\d){10,15}/,
+  roles: ["user"],
+});
+let userInfoByUserId = mock.mock({
+  userId: "@id",
+  avatar: "@image('300x200','@color', '#FFF', '@word')",
+  name: "@word",
+  background: "@image('300x200','@color', '#FFF', '@word')",
+  publicTime: "@datetime(yyyy MM dd)",
+  followers: "@integer(60, 1000)",
+  following: "@integer(60, 1000)",
+  designs: "@integer(1, 30)",
+  isFollow: "@boolean",
+  address: "@word",
+  username: "@word",
+  "design|1-7": [
+    {
+      userId: "@id",
+      thingId: "@id",
+      thingName: "@word",
+      publicTime: "@datetime(yyyy MM dd)",
+      isLike: "@boolean",
+      likes: "@integer(1, 1000)",
+      comments: "@integer(1, 1000)",
+      url: "@image('300x200','@color', '#FFF', '@word')",
+      isCollected: "@boolean",
     },
-  });
-  app.get("/user/getUserInfoByUserId", function (req, res) {
-    const { id, userId } = req.query;
-    console.log("/user/getUserInfoByUserId", id, userId);
-    res.json({
-      status: 200,
-      message: "ok",
-      data: userInfoByUserId,
-      length: userInfoByUserId.length,
-    });
-  });
-  app.post("/user/receiveImg", function (req, res) {
-    console.log(req.query);
-    res.json({
-      status: 200,
-      message: "ok",
-    });
-  });
+  ],
+  "favorites|1-7": [
+    {
+      userId: "@id",
+      thingId: "@id",
+      thingName: "@word",
+      publicTime: "@datetime(yyyy MM dd)",
+      isLike: "@boolean",
+      likes: "@integer(1, 1000)",
+      comments: "@integer(1, 1000)",
+      url: "@image('300x200','@color', '#FFF', '@word')",
+      isCollected: "@boolean",
+    },
+  ],
+  "collections|1-7": [
+    {
+      userId: "@id",
+      thingId: "@id",
+      thingName: "@word",
+      publicTime: "@datetime(yyyy MM dd)",
+      isLike: "@boolean",
+      likes: "@integer(1, 1000)",
+      comments: "@integer(1, 1000)",
+      url: "@image('300x200','@color', '#FFF', '@word')",
+      isCollected: true,
+    },
+  ],
+  "makes|1-7": [
+    {
+      userId: "@id",
+      thingId: "@id",
+      thingName: "@word",
+      publicTime: "@datetime(yyyy MM dd)",
+      isLike: "@boolean",
+      likes: "@integer(1, 1000)",
+      comments: "@integer(1, 1000)",
+      url: "@image('300x200','@color', '#FFF', '@word')",
+      isCollected: "@boolean",
+    },
+  ],
+  "likes|1-7": [
+    {
+      thingId: "@id",
+      thingName: "@word",
+      publicTime: "@datetime(yyyy MM dd)",
+      isLike: true,
+      likes: "@integer(1, 1000)",
+      comments: "@integer(1, 1000)",
+      url: "@image('300x200','@color', '#FFF', '@word')",
+      isCollected: "@boolean",
+    },
+  ],
+  userProfile: {
+    designLevel: "Novice",
+    using3DPrinter: ["B9Creations", "Afinia", " Airwolf 3D", "CEL"],
+    who: ["Designer", "Engineer", "Maker"],
+    designToolsUsed: ["123D Design", "Blender", "3D Tin"],
+    industry: "",
+    subindustry: "",
+    introduction: "@word",
+    location: "@word",
+    website: "@url",
+    paypal: "https://paypal.me/",
+    firstName: "",
+    lastName: "",
+    email: "",
+    username: "",
+  },
+});
+let data = user.data;
 
-  app.post("/user/updateProfile", function (req, res) {
-    console.log(req.query);
-    userInfoByUserId.userProfile = req.query;
-    res.json({
-      status: 200,
-      message: "ok",
-    });
-  });
-
-  app.post("/user/postUserMessage", function (req, res) {
-    console.log(req.query);
-    res.json({
-      status: 200,
-      message: "ok",
-    });
-  });
-
-  app.get("/user/getFollowsByUserId", function (req, res) {
-    console.log("/user/getFollowsByUserId", req.query);
-    let followData = mock.mock({
-      "data|10": [
-        {
-          name: "@name",
-          avatar: "@image('300x200','@color', '#FFF', '@word')",
-          background: "@image('300x200','@color', '#FFF', '@word')",
-          address: "@word",
-          userId: "@id",
-          designs: "@integer(1, 100)",
-          makes: "@integer(1, 100)",
-          collections: "@integer(1, 100)",
-          isFollow: "@boolean",
-        },
-      ],
-    });
-    res.json({
-      status: 200,
-      message: "ok",
-      data: followData,
-    });
-  });
-};
-
-module.exports = userMock;
+module.exports = [
+  {
+    url: "/user/list",
+    type: "get",
+    response: (req) => {
+      let { currentPage, pageSize, subject, grade } = req.query;
+      currentPage = Number(currentPage);
+      pageSize = Number(pageSize);
+      console.log(pageSize, currentPage, subject, grade);
+      let t1 = [];
+      if (subject && grade) {
+        for (const val of data) {
+          if (val.grade == grade && val.subject == subject) {
+            t1.push(val);
+          }
+        }
+      } else {
+        t1 = data;
+      }
+      let start = pageSize * (currentPage - 1);
+      let end = start + pageSize;
+      let temp = [];
+      for (let i = start; i < end && i < t1.length; i++) {
+        temp.push(t1[i]);
+      }
+      console.log(start, end);
+      return {
+        status: 200,
+        message: "ok",
+        data: temp,
+        length: t1.length,
+      };
+    },
+  },
+  {
+    url: "/user/login",
+    type: "post",
+    response: (req) => {
+      const { username, password } = req.query;
+      console.log(username, password);
+      return {
+        status: 200,
+        data: loginData,
+      };
+    },
+  },
+  {
+    url: "/user/getInfo",
+    type: "get",
+    response: (req) => {
+      const { username, password } = req.query;
+      console.log(username, password);
+      return {
+        status: 200,
+        data: loginData,
+      };
+    },
+  },
+  {
+    url: "/user/resetToken",
+    type: "post",
+    response: (req) => {
+      const { username, password } = req.query;
+      console.log(username, password);
+      return {
+        status: 200,
+        data: resetTokenData,
+      };
+    },
+  },
+  {
+    url: "/user/logout",
+    type: "post",
+    response: (req) => {
+      return {
+        code: 200,
+        data: "success",
+      };
+    },
+  },
+  {
+    url: "/user/getUserInfoByUserId",
+    type: "get",
+    response: (req) => {
+      const { id, userId } = req.query;
+      console.log("/user/getUserInfoByUserId", id, userId);
+      return {
+        status: 200,
+        message: "ok",
+        data: userInfoByUserId,
+        length: userInfoByUserId.length,
+      };
+    },
+  },
+  {
+    url: "/user/receiveImg",
+    type: "post",
+    response: (req) => {
+      console.log(req.query);
+      return {
+        status: 200,
+        message: "ok",
+      };
+    },
+  },
+  {
+    url: "/user/updateProfile",
+    type: "post",
+    response: (req) => {
+      console.log(req.query);
+      userInfoByUserId.userProfile = req.query;
+      return {
+        status: 200,
+        message: "ok",
+      };
+    },
+  },
+  {
+    url: "/user/postUserMessage",
+    type: "post",
+    response: (req) => {
+      console.log(req.query);
+      return {
+        status: 200,
+        message: "ok",
+      };
+    },
+  },
+  {
+    url: "/user/getFollowsByUserId",
+    type: "get",
+    response: (req) => {
+      console.log("/user/getFollowsByUserId", req.query);
+      let followData = mock.mock({
+        "data|10": [
+          {
+            name: "@name",
+            avatar: "@image('300x200','@color', '#FFF', '@word')",
+            background: "@image('300x200','@color', '#FFF', '@word')",
+            address: "@word",
+            userId: "@id",
+            designs: "@integer(1, 100)",
+            makes: "@integer(1, 100)",
+            collections: "@integer(1, 100)",
+            isFollow: "@boolean",
+          },
+        ],
+      });
+      return {
+        status: 200,
+        message: "ok",
+        data: followData,
+      };
+    },
+  },
+];

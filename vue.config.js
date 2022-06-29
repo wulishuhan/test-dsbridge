@@ -1,5 +1,5 @@
 const { defineConfig } = require("@vue/cli-service");
-const Mock = require("./mock/mock.js");
+const mockServer = require("./mock/mock-server.js");
 module.exports = defineConfig({
   transpileDependencies: true,
   // chainWebpack: (config) => {
@@ -23,7 +23,8 @@ module.exports = defineConfig({
       if (!devServer) {
         throw new Error("webpack-dev-server is not defined");
       }
-      Mock(devServer.app);
+      // Mock(devServer.app);
+      mockServer(devServer.app);
       return middlewares;
     },
   },
