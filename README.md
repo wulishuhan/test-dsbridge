@@ -39,28 +39,28 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 | --- | ------- | ------------ | -------- | ----------- | --------- | ------- |
 
 **thing**
-| id  | user-id | show-image-url | thing-name | public-time |
-| --- | ------- | -------------- | ---------- | ----------- |
+| id  | user-id | show-image-url | thing-name | public-time |tag |summary |license |
+| --- | ------- | -------------- | ---------- | ----------- |----------- |----------- |------- |
 
 **thing-resource-file**
 | id  | thing-id | file-url | file-name | public-time | downloads |
 | --- | -------- | -------- | --------- | ----------- | --------- |
 
 **likes**
-| thing-id | user-id |
-| -------- | ------- |
+|id| thing-id | user-id |
+|-| -------- | ------- |
 
 **comments**
-| thing-id | uid | pid |
-| -------- | --- | --- |
+|id| thing-id | uid | pid | comment |
+|-| -------- | --- | --- | --- |
 
 **follows**
 | id  | followed-id | user-id |
 | --- | ----------- | ------- |
 
 **groups**
-| id  | name |
-| --- | ---- |
+| id  | name |avatar|descrption|
+| --- | ---- |---|---|
 
 **groups-number**
 | id  | groups-id | user-id |
@@ -104,199 +104,3 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 | 4032 | 发送message，发送过程出现错误，请重新发送 |
 | 4033 | 上传videio url地址失效                    |
 | 4034 | 下拉选择中未出现该选项，请重新选择        |
-
-# Temporary Interface
-
-## user
-
-### login
-#### url
-```
-POST /user/login
-```
-#### Parameters
-* username - Required string
-* password - Required string
-#### Returns
- | token | islogin | roles | name | avatar | userid |
- | ----- | ------- | ----- | ---- | ------ | ------ |
-
- ------
-
-### logout
-#### url
-```
-POST /user/logout
-```
-#### Parameters
-* token - Required string
-#### Returns
- | message |
- | ------- |
-
- ------
- 
-### getInfo
-#### url
-```
-GET /user/getInfo
-```
-#### Parameters
-* token - Required string
-#### Returns
- | name | avatar | roles | id  |
- | ---- | ------ | ----- | --- |
- 
- ------
- 
-### refresh
-#### url
-```
-POST /user/refresh
-```
-#### Parameters
-* token - Required string
-#### Returns
- | message |
- | ------- |
-
- ------
- 
-### getUserInfoByUserId
-#### url
-```
-GET /user/getUserInfoByUserId
-```
-#### Parameters
-* userId - Required string
-* id - Required string
-#### Returns
-* userId :string
-* avatar :string
-* name :string
-* background :string
-* publicTime :date
-* followers :integer
-* following :integer
-* designs :integer
-* isFollow :boolean
-* address :string
-* username :string
-* design :array
-  * userId :string
-  * thingId :string
-  * thingName :string
-  * publicTime :date
-  * isLike :boolean
-  * likes :boolean
-  * comments :integer
-  * isCoolected: boolean
-* favorites :array
-  * userId :string
-  * thingId :string
-  * thingName :string
-  * publicTime :date
-  * isLike :boolean
-  * likes :boolean
-  * comments :integer
-  * url :string
-  * isCoolected: boolean
-* collections :array
-  * userId :string
-  * thingId :string
-  * thingName :string
-  * publicTime :date
-  * isLike :boolean
-  * likes :boolean
-  * comments :integer
-  * url :string
-  * isCoolected: boolean
-* makes :array
-  * userId :string
-  * thingId :string
-  * thingName :string
-  * publicTime :date
-  * isLike :boolean
-  * likes :boolean
-  * comments :integer
-  * url :string
-  * isCoolected: boolean
-* likes :array
-  * userId :string
-  * thingId :string
-  * thingName :string
-  * publicTime :date
-  * isLike :boolean
-  * likes :boolean
-  * comments :integer
-  * url :string
-  * isCoolected: boolean
-* userProfile :object
-  * designLevel :string
-  * using3Dprinter :string
-  * who :array
-  * designToolsUsed :array
-  * industry :string
-  * subindustry :string
-  * introduction :string
-  * location :string
-  * website: string
-  * paypal :string
-  * firstName :string
-  * lastName :string
-  * email :string
-  * username :string
- ------
- 
-### receiveImg
-#### url
-```
-POST /user/receiveImg
-```
-#### Parameters
-* file - Required object
-#### Returns
- | message |
- | ------- |
-
- ------
- 
-### updateUserProfile
-#### url
-```
-POST /user/updateProfile
-```
-#### Parameters
-* form - Required object
-#### Returns
- | message |
- | ------- |
-
- ------
- 
-### postUserMessage
-#### url
-```
-POST /user/postUserMessage
-```
-#### Parameters
-* form - Required object
-#### Returns
- | message |
- | ------- |
-
- ------
- 
-### findFollowsByUserId
-#### url
-```
-GET /user/getFollowsByUserId
-```
-#### Parameters
-* userId - Required object
-#### Returns
- | message |
- | ------- |
-
- ------
- 
