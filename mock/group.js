@@ -97,7 +97,6 @@ module.exports = [
     response: (req) => {
       console.log(req.query);
       let { currentPage, pageSize } = req.query;
-      console.log(req.query);
       currentPage = parseInt(currentPage);
       pageSize = parseInt(pageSize);
       let start = (currentPage - 1) * pageSize;
