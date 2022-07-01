@@ -72,6 +72,13 @@ const routes = [
         },
         component: () => import("@/views/groups/index"),
       },
+      {
+        path: "create",
+        meta: {
+          title: "create",
+        },
+        component: () => import("@/views/groups/create"),
+      },
     ],
   },
   {

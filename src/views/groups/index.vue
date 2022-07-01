@@ -49,7 +49,9 @@
         ></el-input>
       </el-col>
       <el-col :xs="24" :sm="12" :md="6" :lg="6" :xl="6">
-        <el-button>CREATE A GROUP</el-button>
+        <router-link to="/groups/create">
+          <el-button>CREATE A GROUP</el-button>
+        </router-link>
       </el-col>
     </el-row>
     <group-card

@@ -254,6 +254,7 @@ module.exports = [
       return {
         status: 200,
         message: "ok",
+        url: "@image('300x200','@color', '#FFF', '@word')",
       };
     },
   },

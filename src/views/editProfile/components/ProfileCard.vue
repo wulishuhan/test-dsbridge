@@ -30,7 +30,7 @@
         <p>File Types: jpeg, gif, png</p>
         <el-upload
           class="upload-demo"
-          action="http://localhost:8080/user/receiveImg"
+          action="http://localhost:8080/dev-api/user/receiveImg"
           multiple
           :on-success="avatarFileSuccess"
           :show-file-list="false"

@@ -185,4 +185,15 @@ module.exports = [
       };
     },
   },
+  {
+    url: "/groups/createGroup",
+    type: "post",
+    response: (req) => {
+      console.log(req.query);
+      return {
+        status: 200,
+        message: "ok",
+      };
+    },
+  },
 ];
