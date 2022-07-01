@@ -56,7 +56,7 @@
             </el-menu-item>
           </el-submenu>
           <el-menu-item index="7" v-if="hasToken">
-            <router-link style="width: 100%" to="/dashboard/dashboard"
+            <router-link style="width: 100%" to="/dashboard"
               ><div style="width: 100%">!图片</div></router-link
             >
           </el-menu-item>

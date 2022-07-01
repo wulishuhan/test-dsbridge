@@ -47,7 +47,7 @@ export default {
     },
   },
   mounted() {
-    console.log(this.designerList);
+    // console.log(this.designerList);
   },
   data() {
     return {};

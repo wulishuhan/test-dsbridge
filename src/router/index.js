@@ -343,6 +343,13 @@ const routes = [
         },
         component: () => import("@/views/dashboard/index"),
       },
+      {
+        path: "recommend",
+        meta: {
+          title: "recommend",
+        },
+        component: () => import("@/views/dashboard/RecommendDesinger"),
+      },
     ],
   },
 ];

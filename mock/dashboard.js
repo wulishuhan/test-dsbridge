@@ -1,19 +1,43 @@
 const mock = require("mockjs");
 let activityListData = mock.mock({
-  "things|100-200": [
+  "things|10-20": [
     {
       id: "@id",
       thingId: "@id",
       userId: "@id",
       avatar: "@image('300x200','@color', '#FFF', '@word')",
-      userName: "@word",
-      thingName: "@word",
+      author: "@word",
+      thingsName: "@word",
       publicTime: "@datetime(yyyy MM dd)",
-      url: "@image('300x200','@color', '#FFF', '@word')",
+      thingsImg: "@image('300x200','@color', '#FFF', '@word')",
       likes: "@integer(60, 1000)",
+      collections: "@integer(60, 1000)",
       isLike: "@boolean",
       isCollected: "@boolean",
-      comments: "@integer(60, 1000)",
+      messages: "@integer(60, 1000)",
+      type: "image",
+    },
+    {
+      id: "@id",
+      userId: "@id",
+      avatar: "@image('300x200','@color', '#FFF', '@word')",
+      author: "@word",
+      publicTime: "@datetime(yyyy MM dd)",
+      content: "@word(60, 1000)",
+      type: "text",
+    },
+    {
+      id: "@id",
+      userId: "@id",
+      subUserId: "@id",
+      avatar: "@image('300x200','@color', '#FFF', '@word')",
+      subAvatar: "@image('300x200','@color', '#FFF', '@word')",
+      author: "@word",
+      subAuthor: "@word",
+      topic: "@word",
+      publicTime: "@datetime(yyyy MM dd)",
+      content: "@word(60, 1000)",
+      type: "topic",
     },
   ],
 });
@@ -24,14 +48,16 @@ let watchListData = mock.mock({
       thingId: "@id",
       userId: "@id",
       avatar: "@image('300x200','@color', '#FFF', '@word')",
-      userName: "@word",
-      thingName: "@word",
+      author: "@word",
+      thingsName: "@word",
       publicTime: "@datetime(yyyy MM dd)",
-      url: "@image('300x200','@color', '#FFF', '@word')",
+      thingsImg: "@image('300x200','@color', '#FFF', '@word')",
       likes: "@integer(60, 1000)",
+      collections: "@integer(60, 1000)",
       isLike: "@boolean",
       isCollected: "@boolean",
-      comments: "@integer(60, 1000)",
+      messages: "@integer(60, 1000)",
+      type: "image",
     },
   ],
 });
@@ -64,6 +90,8 @@ module.exports = [
     url: "/dashboard/getActivityList",
     type: "get",
     response: (req) => {
+      let { type } = req.query;
+      console.log("type: ", type);
       return {
         status: 200,
         message: "ok",

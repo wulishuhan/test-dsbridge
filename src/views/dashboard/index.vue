@@ -4,36 +4,98 @@
       <el-tabs v-model="activeName" @tab-click="handleClick(activeName)">
         <el-tab-pane label="ALL ACTIVITY" name="first">
           <DashBoardPanel></DashBoardPanel>
-          <div
-            v-for="item in activity"
-            :key="item.thingId"
-            class="activityItem"
-          >
-            <div class="top">
-              <div>
-                <router-link :to="'/thing/' + item.thingId">
-                  <img class="img" :src="item.avatar" alt="" />
-                </router-link>
-                <router-link :to="'/thing/' + item.thingId">
-                  {{ item.userName }}
-                </router-link>
-                published
-                <router-link :to="'/thing/' + item.thingId"
-                  >{{ item.thingName }}
-                </router-link>
+          <div v-for="item in activity" :key="item.thingId">
+            <div class="activityItem" v-if="item.type == 'image'">
+              <div class="top">
+                <div>
+                  <router-link :to="'/thing/' + item.thingId">
+                    <img class="img" :src="item.avatar" alt="" />
+                  </router-link>
+                  <router-link :to="'/thing/' + item.thingId">
+                    {{ item.author }}
+                  </router-link>
+                  published
+                  <router-link :to="'/thing/' + item.thingId"
+                    >{{ item.thingsName }}
+                  </router-link>
+                </div>
+                <div>{{ item.publicTime }}</div>
               </div>
-              <div>{{ item.publicTime }}</div>
+              <ThingsCard :things="item"></ThingsCard>
             </div>
-            <resource-card :thing="item"></resource-card>
+            <div class="activityText" v-if="item.type == 'text'">
+              <IndexActivityText :activityTextItem="item"></IndexActivityText>
+            </div>
+            <div class="activityText" v-if="item.type == 'topic'">
+              <IndexActivityGroup :activityTextItem="item"></IndexActivityGroup>
+            </div>
           </div>
         </el-tab-pane>
         <el-tab-pane label="MY ACTIVITY" name="second">
           <DashBoardPanel></DashBoardPanel>
-          <IndexDesignerList :designerList="designerList"></IndexDesignerList>
+          <div v-for="item in activity" :key="item.thingId">
+            <div class="activityItem" v-if="item.type == 'image'">
+              <div class="top">
+                <div>
+                  <router-link :to="'/thing/' + item.thingId">
+                    <img class="img" :src="item.avatar" alt="" />
+                  </router-link>
+                  <router-link :to="'/thing/' + item.thingId">
+                    {{ item.author }}
+                  </router-link>
+                  published
+                  <router-link :to="'/thing/' + item.thingId"
+                    >{{ item.thingsName }}
+                  </router-link>
+                </div>
+                <div>{{ item.publicTime }}</div>
+              </div>
+              <ThingsCard :things="item"></ThingsCard>
+            </div>
+            <div class="activityText" v-if="item.type == 'text'">
+              <IndexActivityText :activityTextItem="item"></IndexActivityText>
+            </div>
+            <div class="activityText" v-if="item.type == 'topic'">
+              <IndexActivityGroup :activityTextItem="item"></IndexActivityGroup>
+            </div>
+          </div>
+          <IndexDesignerList
+            :designerList="designerList"
+            v-show="activity.length == 0"
+          ></IndexDesignerList>
         </el-tab-pane>
         <el-tab-pane label="FRIENDS ACTIVITY" name="third">
           <DashBoardPanel></DashBoardPanel>
-          <IndexDesignerList :designerList="designerList"></IndexDesignerList>
+          <div v-for="item in activity" :key="item.thingId">
+            <div class="activityItem" v-if="item.type == 'image'">
+              <div class="top">
+                <div>
+                  <router-link :to="'/thing/' + item.thingId">
+                    <img class="img" :src="item.avatar" alt="" />
+                  </router-link>
+                  <router-link :to="'/thing/' + item.thingId">
+                    {{ item.author }}
+                  </router-link>
+                  published
+                  <router-link :to="'/thing/' + item.thingId"
+                    >{{ item.thingsName }}
+                  </router-link>
+                </div>
+                <div>{{ item.publicTime }}</div>
+              </div>
+              <ThingsCard :things="item"></ThingsCard>
+            </div>
+            <div class="activityText" v-if="item.type == 'text'">
+              <IndexActivityText :activityTextItem="item"></IndexActivityText>
+            </div>
+            <div class="activityText" v-if="item.type == 'topic'">
+              <IndexActivityGroup :activityTextItem="item"></IndexActivityGroup>
+            </div>
+          </div>
+          <IndexDesignerList
+            :designerList="designerList"
+            v-show="activity.length == 0"
+          ></IndexDesignerList>
         </el-tab-pane>
         <el-tab-pane label="WATCHLIST" name="fourth">
           <DashBoardPanel></DashBoardPanel>
@@ -49,16 +111,16 @@
                   <img class="img" :src="item.avatar" alt="" />
                 </router-link>
                 <router-link :to="'/thing/' + item.thingId">
-                  {{ item.userName }}
+                  {{ item.author }}
                 </router-link>
                 published
                 <router-link :to="'/thing/' + item.thingId"
-                  >{{ item.thingName }}
+                  >{{ item.thingsName }}
                 </router-link>
               </div>
               <div>{{ item.publicTime }}</div>
             </div>
-            <resource-card :thing="item"></resource-card>
+            <ThingsCard :things="item"></ThingsCard>
           </div>
         </el-tab-pane>
       </el-tabs>
@@ -67,7 +129,9 @@
 </template>
 <script>
 import DashBoardPanel from "@/views/dashboard/components/IndexDashBoardPanel.vue";
-import ResourceCard from "@/components/ResourceCard.vue";
+import IndexActivityText from "@/views/dashboard/components/IndexActivityText.vue";
+import IndexActivityGroup from "@/views/dashboard/components/IndexActivityGroup.vue";
+import ThingsCard from "@/views/groupDetail/components/Things/components/ThingsCard.vue";
 import {
   getActivityList,
   getDesignerList,
@@ -78,7 +142,9 @@ export default {
   components: {
     DashBoardPanel,
     IndexDesignerList,
-    ResourceCard,
+    IndexActivityText,
+    IndexActivityGroup,
+    ThingsCard,
   },
   name: "DashBoard",
   data() {
@@ -90,7 +156,8 @@ export default {
     };
   },
   mounted() {
-    this.getActivity(this.pagination);
+    this.getActivity("all");
+    this.getDesignerList();
   },
   methods: {
     getWatchList() {
@@ -99,23 +166,25 @@ export default {
         //  debugger
       });
     },
-    getActivity() {
-      getActivityList({}).then((res) => {
+    getActivity(type) {
+      getActivityList({ type: type }).then((res) => {
         this.activity = res.data.data;
-        //  debugger
+        // debugger;
       });
     },
     getDesignerList() {
       getDesignerList({}).then((res) => {
         this.designerList = res.data.data;
-        debugger;
+        // debugger;
       });
     },
     handleClick(index) {
       if (index == "first") {
-        this.getActivity();
-      } else if (index == "second" || index == "third") {
-        this.getDesignerList();
+        this.getActivity("all");
+      } else if (index == "second") {
+        this.getActivity("my");
+      } else if (index == "third") {
+        this.getActivity("friend");
       } else if (index == "fourth") {
         this.getWatchList();
       }
@@ -134,9 +203,12 @@ export default {
   height: 100%;
   color: #666;
   .content {
-    width: 970px;
+    width: 60%;
     margin: 0 auto;
   }
+}
+.activityText {
+  width: 70%;
 }
 .activityItem {
   position: relative;
@@ -147,7 +219,7 @@ export default {
     top: 20px;
     font-size: 20px;
   }
-  width: 100%;
+  width: 70%;
   text-align: left;
   background-color: #fff;
   margin-top: 10px;
