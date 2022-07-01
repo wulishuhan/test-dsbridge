@@ -46,3 +46,11 @@ export function changeUserGroupStatus(params) {
     params,
   });
 }
+
+export function createGroup(params) {
+  return request({
+    url: "/groups/createGroup",
+    method: "post",
+    params,
+  });
+}

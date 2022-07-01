@@ -42,8 +42,8 @@
 </template>
 <script>
 import ResourceCard from "@/components/ResourceCard.vue";
-import TypeFilter from "./components/Filter/TypeFilter.vue";
-import PopularFilter from "./components/Filter/PopularFilter.vue";
+import TypeFilter from "./components/TypeFilter.vue";
+import PopularFilter from "./components/PopularFilter.vue";
 import pagination from "@/components/pagination.vue";
 import { getThingList } from "@/api/thing";
 export default {

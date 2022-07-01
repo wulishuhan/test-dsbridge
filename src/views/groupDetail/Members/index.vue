@@ -32,6 +32,7 @@ export default {
         200;
       if (bottomOfWindow && !this.loading && !this.noMore) {
         this.pagination.currentPage++;
+        console.log("addEventListener");
         getGroupsMembers(this.pagination)
           .then((res) => {
             console.log(res);

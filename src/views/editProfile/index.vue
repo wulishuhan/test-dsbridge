@@ -44,9 +44,9 @@
   </div>
 </template>
 <script>
-import OrturAccount from "./components/OrturAccount";
-import OrturSettings from "./components/OrturSettings";
-import AppSettings from "./components/AppSettings";
+import OrturAccount from "./OrturAccount";
+import OrturSettings from "./OrturSettings";
+import AppSettings from "./AppSettings";
 import { updateUserProfile } from "@/api/user";
 export default {
   name: "EditProfile",

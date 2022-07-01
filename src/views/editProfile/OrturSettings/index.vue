@@ -207,7 +207,7 @@
 import Bio from "./components/Bio";
 import SwitchCard from "./components/SwitchCard";
 import FavoriteDesignsCard from "./components/FavoriteDesignsCard";
-import ProfileCard from "../ProfileCard";
+import ProfileCard from "../components/ProfileCard";
 export default {
   name: "ThingiverseSettings",
   components: { Bio, FavoriteDesignsCard, SwitchCard, ProfileCard },

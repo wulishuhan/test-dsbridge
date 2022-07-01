@@ -43,7 +43,7 @@
   </div>
 </template>
 <script>
-import WidgetContainer from "../WidgetContainer.vue";
+import WidgetContainer from "../components/WidgetContainer";
 import Summary from "./components/Summary.vue";
 import { getThingDetails } from "@/api/thing";
 export default {

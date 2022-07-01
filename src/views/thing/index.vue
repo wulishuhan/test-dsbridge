@@ -169,10 +169,10 @@
 </template>
 <script>
 import ViewModel from "./components/ViewModel";
-import ThingDetails from "./components/ThingDetails";
-import ThingFiles from "./components/ThingFiles/index";
-import Comments from "./components/Comments/index";
-import Makes from "./components/Makes";
+import ThingDetails from "./ThingDetails";
+import ThingFiles from "./ThingFiles";
+import Comments from "./Comments";
+import Makes from "./Makes";
 import ShareSocialMedia from "@/components/ShareSocialMedia";
 import { getUserInfoByThingId } from "@/api/thing";
 export default {

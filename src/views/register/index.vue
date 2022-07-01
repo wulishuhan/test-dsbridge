@@ -2,7 +2,14 @@
   <div class="register-container">
     <header class="sso-header">Sign up for your Ortur account</header>
     <el-row>
-      <el-col :span="12">
+      <el-col
+        class="hidden-sm-and-down"
+        :xs="24"
+        :sm="24"
+        :md="12"
+        :lg="12"
+        :xl="12"
+      >
         <div class="inline width-1">
           <section class="values justify justify-left">
             <div class="value inline width-1">
@@ -35,7 +42,7 @@
           </section>
         </div>
       </el-col>
-      <el-col :span="12">
+      <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
         <el-form
           ref="form"
           :model="form"
@@ -141,8 +148,10 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .register-container {
+  width: 970px;
+  margin: 0 auto;
   .sso-header {
     font-family: "AntennaLight", Helvetica, Arial, sans-serif;
     font-weight: normal;
@@ -167,6 +176,11 @@ export default {
   .sign-in {
     text-decoration: none;
     color: #409eff;
+  }
+}
+@media screen and (max-width: 970px) {
+  .register-container {
+    width: 100%;
   }
 }
 </style>
