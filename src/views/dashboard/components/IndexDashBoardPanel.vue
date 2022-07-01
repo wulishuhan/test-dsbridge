@@ -34,7 +34,7 @@
       <NavigateItem
         title="Edit Dashboard Feed"
         iconName="el-icon-edit"
-        path="/dashboard/edit"
+        :path="'/following/' + userId"
       ></NavigateItem>
     </div>
   </div>
@@ -47,7 +47,11 @@ export default {
   data() {
     return {
       extShow: false,
+      userId: "",
     };
+  },
+  mounted() {
+    this.userId = this.$store.getters.userId;
   },
   components: {
     NavigateItem,

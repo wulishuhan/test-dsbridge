@@ -131,7 +131,7 @@
 import DashBoardPanel from "@/views/dashboard/components/IndexDashBoardPanel.vue";
 import IndexActivityText from "@/views/dashboard/components/IndexActivityText.vue";
 import IndexActivityGroup from "@/views/dashboard/components/IndexActivityGroup.vue";
-import ThingsCard from "@/views/groupDetail/components/Things/components/ThingsCard.vue";
+import ThingsCard from "@/components/ThingsCard.vue";
 import {
   getActivityList,
   getDesignerList,
