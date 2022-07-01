@@ -107,7 +107,7 @@ export default {
       }).then((res) => {
         console.log("changelike", res);
         this.$message({
-          message: "恭喜你，这是一条成功消息",
+          message: "success",
           type: "success",
         });
         this.isLike = !this.isLike;

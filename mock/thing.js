@@ -253,17 +253,10 @@ module.exports = [
     type: "post",
     response: (req) => {
       let { thingId, isCollected, userId } = req.query;
-      let message = ""
-      console.log("/thing/changeCollect", thingId, isCollected, userId);
       console.log("isCollected", isCollected);
-      if (isCollected) {
-        message = "Uncollected successfully";
-      } else {
-        message = "Collected successfully";
-      }
       return {
         status: 200,
-        message: message,
+        message: "operation successfully",
       };
     },
   },
@@ -277,5 +270,5 @@ module.exports = [
         message: "success",
       };
     },
-  }
+  },
 ];
