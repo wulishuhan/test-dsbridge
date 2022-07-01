@@ -117,6 +117,7 @@ export default {
   height: 265px;
   margin: 5px auto;
   box-sizing: border-box;
+  border: solid 1px #ccc;
   .things-card-image {
     width: 100%;
     height: 219px;
