@@ -19,7 +19,7 @@
           class="elupload"
           :on-success="onFileSuccess"
           drag
-          action="http://localhost:8080/user/receiveImg"
+          action="http://localhost:8080/dev-api/user/receiveImg"
           multiple
         >
           <i class="el-icon-upload"></i>

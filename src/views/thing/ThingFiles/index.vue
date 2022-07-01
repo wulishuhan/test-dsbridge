@@ -41,7 +41,7 @@
   </div>
 </template>
 <script>
-import WidgetContainer from "../WidgetContainer";
+import WidgetContainer from "../components/WidgetContainer";
 import DownloadCard from "./components/DownloadCard";
 import { getThingDownloadInfo } from "@/api/thing";
 export default {

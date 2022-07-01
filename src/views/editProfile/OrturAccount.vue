@@ -32,7 +32,7 @@
   </div>
 </template>
 <script>
-import ProfileCard from "./ProfileCard";
+import ProfileCard from "./components/ProfileCard";
 export default {
   name: "OrturAccount",
   components: { ProfileCard },

@@ -203,35 +203,35 @@ const routes = [
             meta: {
               title: "design-likes",
             },
-            component: () => import("@/views/design/components/Likes"),
+            component: () => import("@/views/design/Likes"),
           },
           {
             path: "/design/Collections/:userId",
             meta: {
               title: "design-collections",
             },
-            component: () => import("@/views/design/components/Collections"),
+            component: () => import("@/views/design/Collections"),
           },
           {
             path: "/design/Favorites/:userId",
             meta: {
               title: "design-favorites",
             },
-            component: () => import("@/views/design/components/Favorites"),
+            component: () => import("@/views/design/Favorites"),
           },
           {
             path: "/design/Makes/:userId",
             meta: {
               title: "design-makes",
             },
-            component: () => import("@/views/design/components/Makes"),
+            component: () => import("@/views/design/Makes"),
           },
           {
             path: "/design/Designs/:userId",
             meta: {
               title: "design-designs",
             },
-            component: () => import("@/views/design/components/Designs"),
+            component: () => import("@/views/design/Designs"),
           },
         ],
       },
@@ -291,28 +291,28 @@ const routes = [
             meta: {
               title: "groupDetail-things",
             },
-            component: () => import("@/views/groupDetail/components/Things"),
+            component: () => import("@/views/groupDetail/Things"),
           },
           {
             path: "/groupDetail/members/:groupId",
             meta: {
               title: "groupDetail-members",
             },
-            component: () => import("@/views/groupDetail/components/Members"),
+            component: () => import("@/views/groupDetail/Members"),
           },
           {
             path: "/groupDetail/forums/:groupId",
             meta: {
               title: "groupDetail-forums",
             },
-            component: () => import("@/views/groupDetail/components/Forums"),
+            component: () => import("@/views/groupDetail/Forums"),
           },
           {
             path: "/groupDetail/about/:groupId",
             meta: {
               title: "groupDetail-about",
             },
-            component: () => import("@/views/groupDetail/components/About"),
+            component: () => import("@/views/groupDetail/About"),
           },
         ],
       },
