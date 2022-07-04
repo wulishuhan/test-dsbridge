@@ -5,7 +5,7 @@
 commit_msg=`cat $1`
 
 msg_re="^(feat|fix|docs|style|refactor|perf|test|workflow|build|ci|chore|release|workflow)(\(.+\))?:.{1,100}"
-npm run eslint --fix
+npm run lint
 if [[ ! $commit_msg =~ $msg_re ]]
 then
 	echo "不合法的 commit 消息提交格式，请使用正确的格式:"
