@@ -34,7 +34,7 @@
     </div>
     <el-row class="card-action-item">
       <el-col :span="8">
-        <div class="follower-item">
+        <div class="follower-item" @click="routeTo">
           <div class="follower-data">{{ user.followers }}</div>
           <div class="follower-name">Followers</div>
         </div>
@@ -95,6 +95,10 @@ export default {
       this.$router.push(
         `/message/${this.user.name}/${this.$route.params.userId}`
       );
+    },
+    routeTo() {
+      console.log("test");
+      this.$router.push(`/following/${this.$route.params.userId}`);
     },
   },
 };

@@ -49,7 +49,7 @@
   </div>
 </template>
 <script>
-import ThingsCard from "./components/ThingsCard";
+import ThingsCard from "@/components/ThingsCard";
 import { getGroupThings } from "@/api/groups";
 import { throttle } from "@/utils/cache.js";
 export default {
