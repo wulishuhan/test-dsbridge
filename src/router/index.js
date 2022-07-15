@@ -359,6 +359,14 @@ const routes = [
       },
     ],
   },
+  {
+    path: "/preview/zwy",
+    name: "zwy",
+    component: () => import("@/views/preview/zwy"),
+    meta: {
+      title: "preview",
+    },
+  },
 ];
 
 const router = new VueRouter({
