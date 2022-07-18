@@ -89,6 +89,7 @@ export default {
     this.likes = this.thing.likes;
     this.isLike = this.thing.isLike;
     this.isCollected = this.thing.isCollected;
+    console.log("thing:", this.thing);
   },
   methods: {
     toDetail(id) {

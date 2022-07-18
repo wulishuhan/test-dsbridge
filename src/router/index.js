@@ -368,6 +368,14 @@ const routes = [
     },
   },
   {
+    path: "/preview/csh",
+    name: "csh",
+    component: () => import("@/views/preview/csh"),
+    meta: {
+      title: "preview",
+    },
+  },
+  {
     path: "/preview/hzy",
     name: "hzy",
     component: () => import("@/views/preview/hzy"),
