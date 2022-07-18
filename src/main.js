@@ -8,6 +8,7 @@ import "element-ui/lib/theme-chalk/display.css";
 // import mock from "mockjs";
 import "@/permission";
 import "@/style/index.scss";
+import "@/assets/css/icon.css";
 Vue.config.productionTip = false;
 Vue.use(ElementUI);
 // Vue.use(mock);

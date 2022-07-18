@@ -367,6 +367,14 @@ const routes = [
       title: "preview",
     },
   },
+  {
+    path: "/preview/csh",
+    name: "csh",
+    component: () => import("@/views/preview/csh"),
+    meta: {
+      title: "preview",
+    },
+  },
 ];
 
 const router = new VueRouter({
