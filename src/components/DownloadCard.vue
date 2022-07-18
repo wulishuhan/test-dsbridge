@@ -1,20 +1,20 @@
 <template>
   <div>
     <div class="download-card">
-      <img :src="file.url" alt="" />
-      <div>
-        <div>{{ file.name }}</div>
+      <div class="left">
+        <img :src="file.url" alt="" />
         <div>
-          <span>{{ file.size }}kb |</span>
-          <span>updated {{ file.updatedTime }} |</span>
-          <span>{{ file.downloadNumber }} Downloads</span>
+          <div class="name">{{ file.name }}</div>
+          <div>
+            <span>{{ file.size }}kb</span>
+          </div>
+          <div>
+            <span class="time">updated {{ file.updatedTime }} </span>
+          </div>
         </div>
       </div>
-      <el-button
-        @click.prevent="download"
-        type="primary"
-        icon="el-icon-download"
-        >Download</el-button
+      <el-button @click.prevent="download" type="primary"
+        >Download <span>{{ file.downloadNumber }} </span></el-button
       >
     </div>
   </div>
@@ -63,25 +63,33 @@ export default {
 .download-card {
   background-color: #fff;
   width: 100%;
-  padding: 10px 18px;
-  border-bottom: solid 1px #ccc;
+  padding: 10px 1px;
+  text-align: left;
+  // border-bottom: solid 1px #ccc;
   box-sizing: border-box;
   display: flex;
   justify-content: space-around;
   align-items: center;
-  div {
-    font-size: 18px;
-    font-weight: 400;
-    max-width: 280px;
-    box-sizing: border-box;
+  .left {
+    display: flex;
   }
+  .name {
+    font-size: 12px;
+    font-family: Source Han Sans CN;
+    font-weight: 400;
+    color: #1a1a1a;
+  }
+
   img {
-    width: 55px;
-    height: 44px;
+    width: 66px;
+    height: 42px;
     margin-right: 10px;
   }
   span {
-    font-size: 12px;
+    font-size: 11px;
+    font-family: Source Han Sans CN;
+    font-weight: 400;
+    color: #999999;
     margin-right: 5px;
   }
 }

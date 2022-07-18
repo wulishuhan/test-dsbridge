@@ -1,6 +1,6 @@
 <template>
   <span>
-    <el-button class="baseButton">
+    <el-button class="baseButton" @click="onBaseButtonClick">
       <slot></slot>
     </el-button>
   </span>
@@ -9,6 +9,11 @@
 <script>
 export default {
   props: {},
+  methods: {
+    onBaseButtonClick() {
+      this.$emit("onBaseButtonClick");
+    },
+  },
 };
 </script>
 
