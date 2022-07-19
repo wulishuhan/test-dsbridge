@@ -1,64 +1,49 @@
 <template>
   <div class="main">
     <header class="groups-header">
-      <div>
-        <h1 class="group-title">ORTUR GROUPS</h1>
-        <p>
-          Find, join, and create groups around specific topics to start
-          conversations and share Things.
-        </p>
-      </div>
+      <div class="learn-more">了解更多</div>
     </header>
     <div class="content">
-      <el-row :gutter="20" class="filter">
-        <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4">
-          <!-- <popular-filter @setFilter="setFilterPopular"></popular-filter> -->
-          <el-select v-model="value" placeholder="请选择">
-            <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            >
-            </el-option>
-          </el-select>
+      <el-row class="filter">
+        <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="8">
+          <div class="select-box">
+            <i class="ortur-icon-hourglass icon-hourglass"></i>
+            <el-select v-model="value" placeholder="The Popular" class="select">
+              <el-option
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+                style="font-size: 12px"
+                class="option"
+              >
+              </el-option>
+            </el-select>
+          </div>
         </el-col>
-        <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4">
-          <!-- <type-filter @setFilter="setFilterType"></type-filter> -->
-        </el-col>
+        <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4"> </el-col>
         <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4"> </el-col>
       </el-row>
       <el-row class="row">
-        <el-col
-          v-for="item in things"
-          :key="item.thingId"
-          :xs="24"
-          :sm="12"
-          :md="8"
-          :lg="6"
-          :xl="4"
-        >
-          <resource-card :thing="item"></resource-card>
-        </el-col>
+        <div v-for="item in resources" :key="item.thingId">
+          <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="6">
+            <resource-card :thing="item"></resource-card>
+          </el-col>
+        </div>
       </el-row>
-      <pagination
-        ref="mainPagination"
-        @getData="getThings"
-        :total="total"
-      ></pagination>
+      <p v-if="loading">loading...</p>
+      <p v-if="noMore">no more</p>
     </div>
   </div>
 </template>
 <script>
 import ResourceCard from "@/components/ResourceCard";
-// import TypeFilter from "./components/TypeFilter.vue";
-// import PopularFilter from "./components/PopularFilter.vue";
-import pagination from "@/components/Pagination.vue";
+import { throttle } from "@/utils/cache.js";
 import { getThingList } from "@/api/thing";
 export default {
   // eslint-disable-next-line
   name: "Main",
-  components: { ResourceCard, pagination },
+  components: { ResourceCard },
   data() {
     return {
       screenWidth: document.body.clientWidth,
@@ -72,90 +57,158 @@ export default {
       },
       options: [
         {
-          value: "选项1",
-          label: "黄金糕",
+          value: "popular",
+          label: "The popular",
         },
         {
-          value: "选项2",
-          label: "双皮奶",
+          value: "newest",
+          label: "The newest",
         },
         {
-          value: "选项3",
-          label: "蚵仔煎",
-        },
-        {
-          value: "选项4",
-          label: "龙须面",
-        },
-        {
-          value: "选项5",
-          label: "北京烤鸭",
+          value: "folowing",
+          label: "Only folowing",
         },
       ],
       value: "",
+      load: () => {},
+      resources: [],
+      loading: false,
+      resourcesTotal: 0,
+      noMore: false,
     };
   },
   mounted() {
-    this.getThings(this.pagination);
-  },
-  methods: {
-    getThings(pagination) {
-      if (pagination) {
-        this.currentPage = pagination.currentPage;
-        this.pageSize = pagination.pageSize;
+    getThingList(this.pagination).then((res) => {
+      this.resources.push(...res.data.data);
+    });
+    this.load = throttle(() => {
+      // 距离底部200px时加载一次
+      let bottomOfWindow =
+        document.documentElement.offsetHeight -
+          document.documentElement.scrollTop -
+          window.innerHeight <=
+        100;
+      if (bottomOfWindow && !this.loading && !this.noMore) {
+        this.pagination.currentPage++;
+        getThingList(this.pagination)
+          .then((res) => {
+            this.resources.push(...res.data.data);
+            this.loading = false;
+          })
+          .catch(() => {
+            this.loading = false;
+            this.noMore = true;
+          });
       }
-      getThingList({
-        currentPage: this.currentPage,
-        pageSize: this.pageSize,
-        filterPopular: this.filterPopular,
-        filterType: this.filterType,
-      }).then((res) => {
-        this.things = res.data.data;
-        this.$refs.mainPagination.total = res.data.length;
-        this.total = res.data.length;
-        console.log("things", this.things);
-      });
-    },
-    setFilterPopular(value) {
-      this.filterPopular = value;
-      this.getThings();
-    },
-    setFilterType(value) {
-      this.filterType = value;
-      this.getThings();
-    },
+    }, 1000);
+    window.addEventListener("scroll", this.load);
   },
+  beforeDestroy() {
+    window.removeEventListener("scroll", this.load);
+  },
+  methods: {},
 };
 </script>
 
 <style scoped>
 .main {
-  text-align: center;
+  /* text-align: center; */
   background-color: #fff;
 }
 .content {
-  width: 90%;
+  width: 1080px;
   margin: 0 auto;
 }
 .filter {
-  padding: 10px;
+  margin: 20px auto;
 }
 a {
   text-decoration-line: none;
   color: #303133;
 }
-.groups-header {
-  background: #000;
-  height: 220px;
-  width: 100%;
+p {
   text-align: center;
-  color: aliceblue;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-content: center;
-  flex-wrap: wrap;
 }
+.groups-header {
+  width: 1080px;
+  height: 294px;
+  margin: 0 auto;
+  color: aliceblue;
+  border: solid;
+  position: relative;
+}
+.learn-more {
+  position: absolute;
+  width: 84px;
+  height: 36px;
+  background: #1a1a1a;
+  opacity: 0.3;
+  border-radius: 5px;
+  bottom: 12px;
+  right: 12px;
+  font-size: 12px;
+  font-family: Source Han Sans CN;
+  font-weight: 400;
+  color: #ffffff;
+  line-height: 36px;
+  text-align: center;
+  cursor: pointer;
+}
+::v-deep .el-input__inner,
+.el-input,
+.el-select {
+  font-size: 12px;
+  height: 36px;
+}
+::v-deep .el-input__inner:hover {
+  border: none;
+}
+::v-deep .el-input__inner::placeholder {
+  text-align: right;
+  color: #1a1a1a;
+  font-size: 11px;
+}
+.select-box {
+  position: relative;
+  height: 36px;
+}
+.icon-hourglass {
+  position: absolute;
+  top: 12px;
+  left: 8px;
+  z-index: 2;
+  font-size: 15px;
+}
+.select {
+  width: 120px;
+  height: 36px;
+  border-radius: 5px;
+  font-size: 12px;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+}
+.select:hover {
+  border: 1px solid #c2c4cc;
+}
+.option {
+  width: 108px;
+  height: 42px;
+  margin: 0 auto;
+  border-radius: 6px;
+  font-size: 12px;
+  font-family: Source Han Sans CN;
+  font-weight: 400;
+  box-sizing: border-box;
+  text-align: center;
+  padding: 0px;
+  overflow: visible;
+}
+.option:hover {
+  background: #8ab5ef;
+  color: #ffffff;
+}
+
 @media screen and (max-width: 768px) {
   .content {
     width: 100%;
