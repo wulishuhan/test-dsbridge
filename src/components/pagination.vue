@@ -16,7 +16,6 @@
 <script>
 import { throttle } from "@/utils/cache.js";
 export default {
-  /* eslint-disable-next-line */
   name: "pagination",
   props: {},
   created() {
