@@ -1,58 +1,35 @@
 <template>
-  <div>
-    <div class="card-box" style="width: 340px; border-radius: 5%; padding: 5px">
-      <img
-        :src="thing.url"
-        alt=""
-        style="border-radius: 5%; width: 100%; height: 200px"
-      />
-
-      <div
-        style="display: flex; justify-content: space-between; margin-top: 10px"
-      >
-        <div
-          style="
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-          "
-        >
-          <el-avatar :size="40" :src="thing.avatar"></el-avatar>
-          <div style="margin-left: 5px">
-            <div style="font-size: 18px">{{ thing.thingName }}</div>
-            <div
-              class="author"
-              @click="viewAuthorInfo(thing.userId)"
-              style="font-size: 14px"
-            >
-              {{ thing.userName }}
-            </div>
-          </div>
+  <div class="card-box" style="width: 340px; border-radius: 5%; padding: 5px">
+    <img
+      :src="thing.url"
+      @click="toDetail(thing.thingId)"
+      alt="can't load this image"
+    />
+    <div class="card-box-bottom">
+      <div class="card-box-bottom-left">
+        <el-avatar :size="40" :src="thing.avatar"></el-avatar>
+        <div class="card-box-bottom-left-name">
+          <div style="font-size: 18px">{{ thing.thingName }}</div>
+          <span class="author" @click="viewAuthorInfo(thing.userId)">
+            {{ thing.userName }}
+          </span>
         </div>
-        <div
-          style="
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            color: #7d6c6c;
-            font-size: 14px;
-          "
-        >
-          <div style="margin-right: 10px">
-            <i class="el-icon-star-off" style="margin-right: 3px"></i>
-            {{ thing.likes }}
-          </div>
-          <el-popover placement="right" width="296" trigger="click">
-            <share-social-media></share-social-media>
-            <div slot="reference" @click="share">
-              <i class="el-icon-share" style="margin-right: 3px"></i>
-              1.2k
-            </div>
-          </el-popover>
+      </div>
+      <div class="card-box-bottom-right">
+        <div class="card-box-bottom-right-like-box" @click="like">
+          <i v-if="!isLike" class="el-icon-star-off icon-star"></i>
+          <i v-else class="ortur-icon-star-border"></i>
+          {{ thing.likes }}
+        </div>
+        <div slot="reference" @click="share" class="icon-share">
+          <i class="el-icon-share icon-share"></i>
+          1.2k
         </div>
       </div>
     </div>
-    <share-social-media></share-social-media>
+    <div class="share-container">
+      <share-social-media v-if="isShare"></share-social-media>
+    </div>
   </div>
 </template>
 <script>
@@ -86,6 +63,7 @@ export default {
       likes: 0,
       isLike: false,
       isCollected: false,
+      isShare: false,
     };
   },
   mounted() {
@@ -117,6 +95,7 @@ export default {
       });
     },
     share() {
+      this.isShare = !this.isShare;
       console.log("share!");
     },
     viewAuthorInfo(userId) {
@@ -143,16 +122,71 @@ export default {
 <style lang="scss" scoped>
 .author {
   color: #5c5959;
-  border-bottom: solid 1px #f5f5f5;
+  border-bottom: solid 1px #fff;
+  font-size: 14px;
 }
 .author:hover {
   border-bottom: solid 1px #000;
+  color: #000;
   cursor: pointer;
 }
 .card-box:hover {
-  border: 1px solid #ccc;
+  border: 1px solid #7d6c6c;
 }
 .card-box {
-  border: 1px solid #f5f5f5;
+  border: 1px solid #fff;
+  position: relative;
+}
+img {
+  width: 100%;
+  height: 200px;
+  border-radius: 5%;
+}
+.card-box-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-top: 10px;
+}
+.card-box-bottom-left {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.card-box-bottom-left-name {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  margin-left: 5px;
+}
+.card-box-bottom-right {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #7d6c6c;
+  font-size: 14px;
+}
+.card-box-bottom-right-like-box {
+  margin-right: 10px;
+}
+.icon-share .icon-star {
+  margin-right: 3px;
+}
+.icon-share:hover {
+  color: #000;
+  cursor: pointer;
+}
+.card-box-bottom-right-like-box:hover {
+  color: #000;
+  cursor: pointer;
+}
+img:hover {
+  cursor: pointer;
+}
+.share-container {
+  position: absolute;
+  top: 241px;
+  left: 100px;
+  z-index: 999;
 }
 </style>

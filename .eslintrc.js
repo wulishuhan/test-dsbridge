@@ -25,6 +25,7 @@ module.exports = {
         endOfLine: "auto",
       },
     ],
+    "vue/multi-word-component-names": 0, // 取消组件名称校验
   },
   overrides: [
     {

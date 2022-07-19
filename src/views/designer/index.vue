@@ -40,7 +40,7 @@
 <script>
 import { getDesignerList } from "@/api/designer";
 import DesignerCard from "./components/DesignerCard";
-import Pagination from "@/components/pagination";
+import Pagination from "@/components/Pagination";
 export default {
   // eslint-disable-next-line
   name: "Designer",

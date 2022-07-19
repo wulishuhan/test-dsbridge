@@ -12,10 +12,19 @@
     <div class="content">
       <el-row :gutter="20" class="filter">
         <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4">
-          <popular-filter @setFilter="setFilterPopular"></popular-filter>
+          <!-- <popular-filter @setFilter="setFilterPopular"></popular-filter> -->
+          <el-select v-model="value" placeholder="请选择">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
         </el-col>
         <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4">
-          <type-filter @setFilter="setFilterType"></type-filter>
+          <!-- <type-filter @setFilter="setFilterType"></type-filter> -->
         </el-col>
         <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4"> </el-col>
       </el-row>
@@ -41,15 +50,15 @@
   </div>
 </template>
 <script>
-import ResourceCard from "@/components/ResourceCard.vue";
-import TypeFilter from "./components/TypeFilter.vue";
-import PopularFilter from "./components/PopularFilter.vue";
-import pagination from "@/components/pagination.vue";
+import ResourceCard from "@/components/ResourceCard";
+// import TypeFilter from "./components/TypeFilter.vue";
+// import PopularFilter from "./components/PopularFilter.vue";
+import pagination from "@/components/Pagination.vue";
 import { getThingList } from "@/api/thing";
 export default {
   // eslint-disable-next-line
   name: "Main",
-  components: { ResourceCard, TypeFilter, PopularFilter, pagination },
+  components: { ResourceCard, pagination },
   data() {
     return {
       screenWidth: document.body.clientWidth,
@@ -61,6 +70,29 @@ export default {
         pageSize: 10,
         currentPage: 1,
       },
+      options: [
+        {
+          value: "选项1",
+          label: "黄金糕",
+        },
+        {
+          value: "选项2",
+          label: "双皮奶",
+        },
+        {
+          value: "选项3",
+          label: "蚵仔煎",
+        },
+        {
+          value: "选项4",
+          label: "龙须面",
+        },
+        {
+          value: "选项5",
+          label: "北京烤鸭",
+        },
+      ],
+      value: "",
     };
   },
   mounted() {
@@ -99,7 +131,7 @@ export default {
 <style scoped>
 .main {
   text-align: center;
-  background-color: #f2f2f2;
+  background-color: #fff;
 }
 .content {
   width: 90%;
