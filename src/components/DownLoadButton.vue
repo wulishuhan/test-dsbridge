@@ -54,17 +54,16 @@ export default {
             updatedTime: 2012,
             downloadNumber: 111,
             url: "https://cdn.thingiverse.com/assets/a0/23/4c/6f/68/medium_thumb_Headset_Holder_v1.png",
+            type: "png",
           },
-          { name: 111, size: "20kb", updatedTime: 2012, downloadNumber: 111 },
-          { name: 111, size: "20kb", updatedTime: 2012, downloadNumber: 111 },
-          { name: 111, size: "20kb", updatedTime: 2012, downloadNumber: 111 },
-          { name: 111, size: "20kb", updatedTime: 2012, downloadNumber: 111 },
-          { name: 111, size: "20kb", updatedTime: 2012, downloadNumber: 111 },
-          { name: 111, size: "20kb", updatedTime: 2012, downloadNumber: 111 },
-          { name: 111, size: "20kb", updatedTime: 2012, downloadNumber: 111 },
-          { name: 111, size: "20kb", updatedTime: 2012, downloadNumber: 111 },
-          { name: 111, size: "20kb", updatedTime: 2012, downloadNumber: 111 },
-          { name: 111, size: "20kb", updatedTime: 2012, downloadNumber: 111 },
+          {
+            name: 111,
+            size: "20kb",
+            updatedTime: 2012,
+            downloadNumber: 111,
+            url: "https://cdn.thingiverse.com/assets/a0/23/4c/6f/68/medium_thumb_Headset_Holder_v1.png",
+            type: "stl",
+          },
         ];
       },
     },
@@ -108,7 +107,7 @@ export default {
       }
       display: flex;
       justify-content: space-between;
-      padding: 15px;
+      padding: 15px 29px;
     }
   }
   .downPanel::-webkit-scrollbar {

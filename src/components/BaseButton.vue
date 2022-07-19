@@ -1,17 +1,15 @@
 <template>
-  <span>
-    <el-button class="baseButton" @click="onBaseButtonClick">
-      <slot></slot>
-    </el-button>
-  </span>
+  <el-button @click="click" class="baseButton">
+    <slot></slot>
+  </el-button>
 </template>
 
 <script>
 export default {
   props: {},
   methods: {
-    onBaseButtonClick() {
-      this.$emit("onBaseButtonClick");
+    click() {
+      this.$emit("click");
     },
   },
 };

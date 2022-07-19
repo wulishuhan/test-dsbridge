@@ -7,9 +7,15 @@
           <div class="name">{{ file.name }}</div>
           <div>
             <span>{{ file.size }}kb</span>
+            <span v-if="file.type == 'stl'" class="type">stl</span>
+            <span v-else-if="file.type == 'png'" class="type">png</span>
+            <span v-else-if="file.type == 'jpg'" class="type">jpg</span>
+            <span v-else-if="file.type == 'obj'" class="type">obj</span>
+            <span v-else-if="file.type == 'code'" class="type">code</span>
+            <span v-else class="type">other</span>
           </div>
-          <div>
-            <span class="time">updated {{ file.updatedTime }} </span>
+          <div class="time">
+            <span>updated {{ file.updatedTime }} </span>
           </div>
         </div>
       </div>
@@ -33,6 +39,7 @@ export default {
         size: "1 mb",
         updatedTime: "05-17-2022",
         downloadNumber: 511,
+        type: "stl",
       };
     },
   },
@@ -78,8 +85,20 @@ export default {
     font-family: Source Han Sans CN;
     font-weight: 400;
     color: #1a1a1a;
+    margin-bottom: 2px;
   }
-
+  .type {
+    width: 28px;
+    height: 12px;
+    background: #1a1a1a;
+    border-radius: 3px;
+    padding: 0 5px;
+    margin-left: 2px;
+    color: white;
+  }
+  .time {
+    margin-top: 2px;
+  }
   img {
     width: 66px;
     height: 42px;

@@ -1,9 +1,9 @@
 <template>
   <span>
     <el-button
-      :style="{ color: isCollect ? 'red' : 'black' }"
+      :style="{ color: isStar ? 'red' : 'black' }"
       class="baseButton button"
-      :icon="isCollect ? 'el-icon-star-on' : 'el-icon-star-off'"
+      :icon="isStar ? 'el-icon-star-on' : 'el-icon-star-off'"
     >
       <span class="num">{{ downLoadNum }}k</span>
     </el-button>
@@ -17,7 +17,7 @@ export default {
       type: Number,
       default: 0,
     },
-    isCollect: {
+    isStar: {
       type: Boolean,
       default: false,
     },
