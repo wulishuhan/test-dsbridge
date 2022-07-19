@@ -175,7 +175,7 @@ p {
 .icon-hourglass {
   position: absolute;
   top: 12px;
-  left: 8px;
+  left: 2px;
   z-index: 2;
   font-size: 15px;
 }
