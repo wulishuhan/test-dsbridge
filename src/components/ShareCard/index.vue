@@ -21,6 +21,7 @@ export default {
   data() {
     return {
       shareLink: {
+        // text文本后边可以传要分享的url，注意后期修改
         facebook:
           "https://www.facebook.com/sharer/sharer.php?u=test.leadiffer.com",
         twitter: "https://twitter.com/share?url=test.leadiffer.com",
@@ -32,18 +33,17 @@ export default {
 </script>
 <style lang="scss" scoped>
 .share-box {
-  border-radius: 10px;
-  width: 250px;
-  height: 70px;
-  border: solid 1px #ccc;
+  width: 180px;
+  height: 54px;
+  background: #ffffff;
+  box-shadow: 0px 2px 8px 0px rgba(18, 18, 18, 0.07);
+  border-radius: 8px;
   display: flex;
   justify-content: space-evenly;
   align-items: center;
-  box-shadow: 1px 1px 5px #ccc;
-  background-color: #fff;
 }
 i {
-  color: #000;
+  color: #686565;
   font-size: 30px;
 }
 a {

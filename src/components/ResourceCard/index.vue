@@ -1,15 +1,32 @@
 <template>
-  <div class="card-box" style="width: 340px; border-radius: 5%; padding: 5px">
-    <img
-      :src="thing.url"
-      @click="toDetail(thing.thingId)"
-      alt="can't load this image"
-    />
+  <div class="card-box" @mouseenter="enter" @mouseleave="leave">
+    <div style="position: relative">
+      <img
+        :src="thing.url"
+        @click="toDetail(thing.thingId)"
+        alt="can't load this image"
+      />
+      <div
+        v-show="isCollectIconShow"
+        @click="switchCollect"
+        class="icon-collect-box"
+      >
+        <i v-show="isCollected" class="ortur-icon-add-collect icon-collect"></i>
+        <span
+          v-show="!isCollected"
+          class="ortur-icon-cancel-collect-strokes icon-collect"
+        >
+          <span class="path1"> </span>
+          <span class="path2"> </span>
+          <span class="path3"> </span>
+        </span>
+      </div>
+    </div>
     <div class="card-box-bottom">
       <div class="card-box-bottom-left">
-        <el-avatar :size="40" :src="thing.avatar"></el-avatar>
+        <el-avatar :size="30" :src="thing.avatar"></el-avatar>
         <div class="card-box-bottom-left-name">
-          <div style="font-size: 18px">{{ thing.thingName }}</div>
+          <div class="thing-name">{{ thing.thingName }}</div>
           <span class="author" @click="viewAuthorInfo(thing.userId)">
             {{ thing.userName }}
           </span>
@@ -18,10 +35,10 @@
       <div class="card-box-bottom-right">
         <div class="card-box-bottom-right-like-box" @click="like">
           <i v-if="!isLike" class="el-icon-star-off icon-star"></i>
-          <i v-else class="ortur-icon-star-border"></i>
+          <i v-else class="ortur-icon-star-border icon-star"></i>
           {{ thing.likes }}
         </div>
-        <div slot="reference" @click="share" class="icon-share">
+        <div @click="share" class="share-box">
           <i class="el-icon-share icon-share"></i>
           1.2k
         </div>
@@ -64,6 +81,7 @@ export default {
       isLike: false,
       isCollected: false,
       isShare: false,
+      isCollectIconShow: false,
     };
   },
   mounted() {
@@ -86,9 +104,8 @@ export default {
         userId: this.$store.getters.userId,
         thingId: this.thing.thingId,
       }).then((res) => {
-        console.log("changelike", res);
         this.$message({
-          message: "success",
+          message: res.data.message,
           type: "success",
         });
         this.isLike = !this.isLike;
@@ -116,6 +133,12 @@ export default {
         });
       });
     },
+    enter() {
+      this.isCollectIconShow = true;
+    },
+    leave() {
+      this.isCollectIconShow = false;
+    },
   },
 };
 </script>
@@ -123,7 +146,10 @@ export default {
 .author {
   color: #5c5959;
   border-bottom: solid 1px #fff;
-  font-size: 14px;
+  font-size: 9px;
+  font-family: Source Han Sans CN;
+  font-weight: 400;
+  color: #999999;
 }
 .author:hover {
   border-bottom: solid 1px #000;
@@ -131,22 +157,25 @@ export default {
   cursor: pointer;
 }
 .card-box:hover {
-  border: 1px solid #7d6c6c;
+  border: 1px solid #c2c4cc;
 }
 .card-box {
   border: 1px solid #fff;
   position: relative;
+  width: 246px;
+  border-radius: 5%;
+  padding: 5px;
 }
 img {
-  width: 100%;
-  height: 200px;
-  border-radius: 5%;
+  width: 246px;
+  height: 150px;
+  border-radius: 8px;
 }
 .card-box-bottom {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-top: 10px;
+  margin-top: 12px;
 }
 .card-box-bottom-left {
   display: flex;
@@ -163,14 +192,16 @@ img {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  color: #7d6c6c;
-  font-size: 14px;
+  color: #999999;
+  font-size: 11px;
 }
 .card-box-bottom-right-like-box {
   margin-right: 10px;
 }
-.icon-share .icon-star {
-  margin-right: 3px;
+.icon-share,
+.icon-star {
+  margin-right: 7px;
+  font-size: 11px;
 }
 .icon-share:hover {
   color: #000;
@@ -185,8 +216,35 @@ img:hover {
 }
 .share-container {
   position: absolute;
-  top: 241px;
-  left: 100px;
+  top: 192px;
+  left: 76px;
   z-index: 999;
+}
+.thing-name {
+  font-size: 11px;
+  font-family: Source Han Sans CN;
+  font-weight: 400;
+  color: #1a1a1a;
+}
+.share-box:hover {
+  color: #000;
+  cursor: pointer;
+}
+.icon-collect-box {
+  width: 42px;
+  height: 30px;
+  background: rgba(30, 120, 240, 1);
+  border-radius: 3px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  cursor: pointer;
+}
+.icon-collect {
+  font-size: 15px;
+  color: #fff;
 }
 </style>

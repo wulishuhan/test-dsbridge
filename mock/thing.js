@@ -196,15 +196,22 @@ module.exports = [
       let data = [];
       let start = (currentPage - 1) * pageSize;
       let end = start + pageSize;
+      if (end > thingListData.things.length) {
+        end = thingListData.things.length;
+      }
       for (let i = start; i < end; i++) {
         data.push(thingListData.things[i]);
       }
-      return {
-        status: 200,
-        message: "ok",
-        data: data,
-        length: thingListData.things.length,
-      };
+      if (start > thingListData.things.length) {
+        console.error("Bad Pagination");
+      } else {
+        return {
+          status: 200,
+          message: "ok",
+          data: data,
+          length: thingListData.things.length,
+        };
+      }
     },
   },
   {
@@ -253,10 +260,16 @@ module.exports = [
     type: "post",
     response: (req) => {
       let { thingId, isCollected, userId } = req.query;
-      console.log("isCollected", isCollected);
+      let message = "";
+      let flag = isCollected === "true";
+      if (flag) {
+        message = "Favorite Successfully!";
+      } else {
+        message = "Unfavorite successful!";
+      }
       return {
         status: 200,
-        message: "operation successfully",
+        message,
       };
     },
   },
@@ -265,9 +278,17 @@ module.exports = [
     type: "post",
     response: (req) => {
       console.log(req.query);
+      let message = "";
+      let { isLike } = req.query;
+      let flag = isLike === "true";
+      if (flag) {
+        message = "Like Successfully!";
+      } else {
+        message = "Unlike successful!";
+      }
       return {
         status: 200,
-        message: "success",
+        message: message,
       };
     },
   },
