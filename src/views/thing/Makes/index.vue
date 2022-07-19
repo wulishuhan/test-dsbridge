@@ -16,7 +16,7 @@
   </div>
 </template>
 <script>
-import ResourceCard from "@/components/ResourceCard.vue";
+import ResourceCard from "@/components/ResourceCard";
 import { getUserMakesByThingId } from "@/api/thing";
 export default {
   // eslint-disable-next-line

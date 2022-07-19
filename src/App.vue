@@ -6,5 +6,6 @@
 <style scoped>
 #app {
   height: 100%;
+  background-color: #fff;
 }
 </style>

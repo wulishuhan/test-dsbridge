@@ -1,15 +1,17 @@
 <template>
-  <div>
+  <div style="background-color: #fff">
     <test-card :thing="test"></test-card>
+    <share></share>
   </div>
 </template>
 <script>
-import TestCard from "@/components/TestCard";
+import TestCard from "@/components/ResourceCard/index";
+import Share from "@/components/ShareCard/index";
 // 用来预览组件
 export default {
   // eslint-disable-next-line
   name: "csh",
-  components: { TestCard },
+  components: { TestCard, Share },
   data() {
     return {
       test: {
@@ -20,7 +22,7 @@ export default {
         likes: 737,
         publicTime: "1976 02 23",
         thingId: "620000197009121720",
-        thingName: "ccdfsctoh",
+        thingName: "ccdfsctohgg",
         url: "http://dummyimage.com/300x200/79a5f2/FFF&text=gxmorr",
         userId: "620000197009121720",
         userName: "gcxzxpbyne",
