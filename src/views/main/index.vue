@@ -53,7 +53,7 @@
 import ResourceCard from "@/components/ResourceCard";
 // import TypeFilter from "./components/TypeFilter.vue";
 // import PopularFilter from "./components/PopularFilter.vue";
-import pagination from "@/components/pagination.vue";
+import pagination from "@/components/Pagination.vue";
 import { getThingList } from "@/api/thing";
 export default {
   // eslint-disable-next-line

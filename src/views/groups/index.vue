@@ -64,7 +64,7 @@
 </template>
 <script>
 import GroupCard from "./components/GroupCard";
-import pagination from "@/components/pagination";
+import pagination from "@/components/Pagination";
 import { getGroupsList } from "@/api/groups";
 export default {
   // eslint-disable-next-line

@@ -16,7 +16,7 @@
 <script>
 import { throttle } from "@/utils/cache.js";
 export default {
-  name: "pagination",
+  name: "Pagination",
   props: {},
   created() {
     this.changePagination();

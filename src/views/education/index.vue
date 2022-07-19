@@ -152,7 +152,7 @@
 import ResourceCard from "@/components/ResourceCard";
 import FilterGrade from "./components/FilterGrade";
 import FilterSubject from "./components/FilterSubject";
-import Pagination from "@/components/pagination";
+import Pagination from "@/components/Pagination";
 import { getUserList } from "@/api/user";
 export default {
   /* eslint-disable */
