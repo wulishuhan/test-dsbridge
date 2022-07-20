@@ -1,199 +1,159 @@
 <template>
-  <div class="upload-container">
-    <header class="upload-header">
-      <div class="header">
-        <h1 class="header-title">CREATING A NEW THING</h1>
-        <router-link :to="'/'" class="cancel">CANCEL</router-link>
-        <div>
-          <el-button>SAVE & VIEW</el-button>
-          <el-button type="primary" @click="publicThing"
-            >PUBLISH THING</el-button
-          >
+  <div>
+    <h1 class="header-title">Create project</h1>
+    <div class="upload-wrapper">
+      <div class="select-area">
+        <i class="ortur-icon-file" style="font-size: 60px"></i>
+        <span>Drag your file & photo here (&lt;12MB)</span>
+        <span>Or</span>
+        <el-button>Select file</el-button>
+      </div>
+
+      <div class="list-area">
+        <el-divider></el-divider>
+        <div class="list-wrapper">
+          <h5 class="list-wrapper-title">文件列表</h5>
+          <ul>
+            <li>
+              <div class="fileinfo-wrapper">
+                <div class="fileicon">
+                  <i class="ortur-icon-file" style="font-size: 40px"></i>
+                </div>
+                <div class="fileinfo">
+                  <span class="filename">3D cyclesdfdfsdfsfsf</span>
+                  <div class="fileinfo-tag">
+                    <span class="filesize">128kb</span>
+                    <span class="filetype">PNG</span>
+                  </div>
+                </div>
+              </div>
+              <el-progress :percentage="40" :format="format"></el-progress>
+            </li>
+            <li>
+              <div class="fileinfo-wrapper">
+                <div class="fileicon">
+                  <i class="ortur-icon-file" style="font-size: 40px"></i>
+                </div>
+                <div class="fileinfo">
+                  <span class="filename">3D cycle</span>
+                  <div class="fileinfo-tag">
+                    <span class="filesize">128kb</span>
+                    <span class="filetype">PNG</span>
+                  </div>
+                </div>
+              </div>
+              <el-progress :percentage="40" :format="format"></el-progress>
+            </li>
+            <li>
+              <div class="fileinfo-wrapper">
+                <div class="fileicon">
+                  <i class="ortur-icon-file" style="font-size: 40px"></i>
+                </div>
+                <div class="fileinfo">
+                  <span class="filename">3D cycle</span>
+                  <div class="fileinfo-tag">
+                    <span class="filesize">128kb</span>
+                    <span class="filetype">PNG</span>
+                  </div>
+                </div>
+              </div>
+              <el-progress :percentage="40" :format="format"></el-progress>
+            </li>
+          </ul>
         </div>
       </div>
-    </header>
-    <br />
-    <div class="upload-content">
-      <div class="upload-box">
-        <el-upload
-          class="elupload"
-          :on-success="onFileSuccess"
-          drag
-          action="http://localhost:8080/dev-api/user/receiveImg"
-          multiple
-        >
-          <i class="el-icon-upload"></i>
-          <div class="el-upload__text">
-            <p>DRAG YOUR FILES & PHOTOS HERE or CHOOSE FROM</p>
-            <el-button type="primary" @click="computeUpload()"
-              >MY COMPUTER
-            </el-button>
-            <el-button type="primary" @click.stop="dropboxUpload()">
-              DROPBOX
-            </el-button>
-            <div class="el-upload__tip" slot="tip">
-              <p>Be sure to read the Community Guidelines before submitting.</p>
-              Supported 2D & 3D Files: STL, OBJ, THING, SCAD, JPG, TXT, and many
-              more.
-            </div>
+      <div class="list-area">
+        <el-divider></el-divider>
+        <div class="list-wrapper">
+          <h5 class="list-wrapper-title">封面</h5>
+          <!-- <draggable
+            draggable=".swiper-slide"
+            tag="swiper"
+            ref="mySwiper"
+            :component-data="getComponentData()"
+          >
+            <swiper-slide class="swiper-no-swiping">
+              <div style="height: 120px; width: 180px; text-align: center">
+                <img
+                  src="http://dummyimage.com/180x120/ef79f2/FFF&text=yqqmj1"
+                />
+              </div>
+            </swiper-slide>
+            <swiper-slide class="swiper-no-swiping">
+              <img src="http://dummyimage.com/180x120/ef79f2/FFF&text=yqqmj2" />
+            </swiper-slide>
+            <swiper-slide class="swiper-no-swiping">
+              <img src="http://dummyimage.com/180x120/ef79f2/FFF&text=yqqmj3" />
+            </swiper-slide>
+            <swiper-slide class="swiper-no-swiping">
+              <img src="http://dummyimage.com/180x120/ef79f2/FFF&text=yqqmj" />
+            </swiper-slide>
+            <swiper-slide class="swiper-no-swiping">
+              <img src="http://dummyimage.com/180x120/ef79f2/FFF&text=yqqmj" />
+            </swiper-slide>
+            <swiper-slide class="swiper-no-swiping">
+              <img src="http://dummyimage.com/180x120/ef79f2/FFF&text=yqqmj" />
+            </swiper-slide>
+            <swiper-slide class="swiper-no-swiping">
+              <img src="http://dummyimage.com/180x120/ef79f2/FFF&text=yqqmj" />
+            </swiper-slide>
+            <swiper-slide class="swiper-no-swiping">
+              <img src="http://dummyimage.com/180x120/ef79f2/FFF&text=yqqmj" />
+            </swiper-slide>
+            <swiper-slide class="swiper-no-swiping">
+              <img src="http://dummyimage.com/180x120/ef79f2/FFF&text=yqqmj" />
+            </swiper-slide>
+          </draggable> -->
+          <div v-swiper:mySwiper="swiperOptions" @someSwiperEvent="callback">
+            <draggable class="swiper-wrapper">
+              <div class="swiper-slide swiper-no-swiping">
+                <img
+                  src="http://dummyimage.com/150x90/ef79f2/FFF&text=yqqmj11"
+                />
+              </div>
+              <div class="swiper-slide swiper-no-swiping">
+                <img
+                  src="http://dummyimage.com/150x90/ef79f2/FFF&text=yqqm22"
+                />
+              </div>
+              <div class="swiper-slide swiper-no-swiping">
+                <img
+                  src="http://dummyimage.com/150x90/ef79f2/FFF&text=yqqmj33"
+                />
+              </div>
+              <div class="swiper-slide swiper-no-swiping">
+                <img
+                  src="http://dummyimage.com/150x90/ef79f2/FFF&text=yqqmj44"
+                />
+              </div>
+              <div class="swiper-slide swiper-no-swiping">
+                <img
+                  src="http://dummyimage.com/150x90/ef79f2/FFF&text=yqqmj55"
+                />
+              </div>
+              <div class="swiper-slide swiper-no-swiping">
+                <img
+                  src="http://dummyimage.com/150x90/ef79f2/FFF&text=yqqmj66"
+                />
+              </div>
+              <div class="swiper-slide swiper-no-swiping">
+                <img
+                  src="http://dummyimage.com/150x90/ef79f2/FFF&text=yqqmj77"
+                />
+              </div>
+            </draggable>
+            <div class="swiper-button-prev swiper-button-black"></div>
+            <!-- 白色 -->
+            <div class="swiper-button-next swiper-button-black"></div>
+            <!-- 黑色 -->
+            <div class="swiper-pagination"></div>
           </div>
-        </el-upload>
+        </div>
       </div>
-    </div>
-    <div class="basic-information-content">
-      <div class="basic-information-box box">
-        <h1>Basic Information</h1>
-        <el-form
-          ref="form"
-          :model="form"
-          label-width="80px"
-          :label-position="'top'"
-        >
-          <el-row>
-            <el-form-item>
-              <el-col :span="12">
-                <el-form-item label="Thing Name">
-                  <el-input v-model="form.name"> </el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="12">
-                <el-form-item label="Category">
-                  <el-select
-                    v-model="form.category"
-                    placeholder="Please Choose"
-                  >
-                    <el-option-group
-                      v-for="group in categorys"
-                      :key="group.label"
-                      :label="group.label"
-                    >
-                      <el-option
-                        v-for="item in group.options"
-                        :key="item"
-                        :label="item"
-                        :value="item"
-                      >
-                      </el-option>
-                    </el-option-group>
-                  </el-select>
-                </el-form-item>
-              </el-col>
-            </el-form-item>
-          </el-row>
-          <el-row>
-            <el-form-item>
-              <el-col :span="12">
-                <el-form-item label="License">
-                  <el-select v-model="form.license" placeholder="Please Choose">
-                    <el-option
-                      v-for="item in licenses"
-                      :label="item"
-                      :value="item"
-                      :key="item"
-                    >
-                    </el-option>
-                  </el-select>
-                </el-form-item>
-              </el-col>
-              <el-col :span="12">
-                <el-form-item label="Tags">
-                  <el-input v-model="form.tag"> </el-input>
-                </el-form-item>
-              </el-col>
-            </el-form-item>
-          </el-row>
-          <el-form-item>
-            <el-checkbox-group v-model="form.type">
-              <el-checkbox label="This is a Remix" name="type"></el-checkbox>
-              <el-checkbox
-                label="This is a Customizer"
-                name="type"
-              ></el-checkbox>
-              <el-checkbox
-                label="Submit to Thingiverse Education for Approval "
-                name="type"
-              ></el-checkbox>
-            </el-checkbox-group>
-          </el-form-item>
-        </el-form>
-      </div>
-    </div>
-    <div class="edit-section">
-      <div class="center-content box">
-        <h1 class="section-h1">THING INFORMATION</h1>
-        <p class="section-p">
-          Share more information and instructions for your Thing
-        </p>
-        <information-content ref="informationContent"></information-content>
-      </div>
-    </div>
-    <div class="tell-us-more">
-      <div class="tell-us-more-content box">
-        <h1 class="section-h1">TELL US MORE</h1>
-        <p class="section-p">
-          Increase discoverability by sharing more about your Thing
-        </p>
-        <el-form :label-position="'top'">
-          <el-row>
-            <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-              <el-form-item class="checkbox">
-                <input type="checkbox" id="cbox1" value="first_checkbox" />
-                <label for="cbox1">This Thing is a Work-In-Progress</label>
-              </el-form-item>
-            </el-col>
-            <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-              <el-form-item
-                label="Share in My Groups (Requires Thing to be published)"
-              >
-                <el-select v-model="value" placeholder="Select Groups">
-                  <el-option
-                    v-for="item in groups"
-                    :key="item"
-                    :label="item"
-                    :value="item"
-                  >
-                  </el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="Design Tools Used">
-                <el-select
-                  v-model="value"
-                  multiple
-                  placeholder="Select Programs"
-                >
-                  <el-option
-                    v-for="item in designTools"
-                    :key="item"
-                    :label="item"
-                    :value="item"
-                  >
-                  </el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
-          </el-row>
-        </el-form>
-      </div>
-    </div>
-    <div class="thing-app">
-      <div class="thing-app-content box">
-        <h1 class="section-h1">THING APPS</h1>
-        <p class="section-p">Manage App Permissions to Your Things</p>
-        <div class="thing-apps">
-          <h3>Thing Apps</h3>
-          <el-input placeholder="Search for Apps" class="input-with-select">
-            <el-button slot="prepend" icon="el-icon-search"></el-button>
-          </el-input>
-          <p>{{ appEnables.length }} Apps enabled for this Thing</p>
-          <apps-enable-card
-            v-for="item in appEnables"
-            :name="item.name"
-            :url="item.url"
-            :author="item.author"
-            :key="item.name"
-          ></apps-enable-card>
+      <div class="support-file-area">
+        <el-divider></el-divider>
+        <div class="support-file-area__text">
+          <span>Supported Files: jpg、png、svg、dxf、.gc、.nc</span>
         </div>
       </div>
     </div>
@@ -201,200 +161,35 @@
 </template>
 
 <script>
-import InformationContent from "./components/InformationContent";
-import AppsEnableCard from "./components/AppsEnableCard";
+import draggable from "vuedraggable";
 export default {
   // eslint-disable-next-line
   name: "upload",
-  components: { InformationContent, AppsEnableCard },
+  components: {
+    draggable,
+  },
   data() {
     return {
-      form: {
-        name: "",
-        type: [],
-        license: "",
-        category: "",
-        tag: "",
+      drag: false,
+      swiperOptions: {
+        slidesPerView: 5,
+        navigation: {
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev",
+        },
+        // Some Swiper option/callback...
       },
-      categorys: [
-        {
-          label: "3D Printing ",
-          options: [
-            "3D Printer Accessories    ",
-            "3D Printer Extruders     ",
-            "3D Printer Parts        ",
-            "3D Printers            ",
-            "3D Printing Tests      ",
-          ],
-        },
 
-        {
-          label: "Art             ",
-          options: [
-            "2D Art              ",
-            "Art Tools            ",
-            "Coins & Badges    ",
-            "Interactive Art        ",
-            "Math Art             ",
-            "Scans & Replicas   ",
-            "Sculptures             ",
-            "Signs & Logos     ",
-          ],
-        },
-        {
-          label: "Fashion              ",
-          options: [
-            "Accessories          ",
-            "Bracelets            ",
-            "Costume             ",
-            "Earrings            ",
-            "Glasses              ",
-            "Jewelry               ",
-            "Keychains           ",
-            "Rings    ",
-          ],
-        },
-        {
-          label: "Gadgets              ",
-          options: [
-            "Audio               ",
-            "Camera              ",
-            "Computer             ",
-            "Mobile Phone         ",
-            "Tablet               ",
-            "Video Games   ",
-          ],
-        },
-        {
-          label: "Hobby             ",
-          options: [
-            "Automotive            ",
-            "DIY               ",
-            "Electronics         ",
-            "Music              ",
-            "R/C Vehicles         ",
-            "Robotics              ",
-            "Sport & Outdoors  ",
-          ],
-        },
-        {
-          label: "Household              ",
-          options: [
-            "Bathroom             ",
-            "Containers            ",
-            "Decor                ",
-            "Household Supplies        ",
-            "Kitchen & Dining      ",
-            "Office               ",
-            "Organization           ",
-            "Outdoor & Garden     ",
-            "Pets                ",
-            "Replacement Parts   ",
-          ],
-        },
-        {
-          label: "Learning                ",
-          options: [
-            "Biology              ",
-            "Engineering          ",
-            "Math               ",
-            "Physics & Astronomy    ",
-          ],
-        },
-        {
-          label: "Models              ",
-          options: [
-            "Animals              ",
-            "Buildings & Structures     ",
-            "Creatures           ",
-            "Food & Drink        ",
-            "Model Furniture        ",
-            "Model Robots          ",
-            "People               ",
-            "Props                ",
-            "Vehicles   ",
-          ],
-        },
-        {
-          label: "Tools               ",
-          options: [
-            "Hand Tools             ",
-            "Parts               ",
-            "Machine Tools             ",
-            "Tool Holders & Boxes     ",
-          ],
-        },
-        {
-          label: "Toys & Games",
-          options: [
-            "Chess               ",
-            "Construction Toys         ",
-            "Dice                ",
-            "Games                ",
-            "Mechanical Toys            ",
-            "Playsets               ",
-            "Puzzles                ",
-            "Toy & Game Accessories   ",
-          ],
-        },
-
-        {
-          label: "Other",
-          options: ["Other"],
-        },
-      ],
-      licenses: [
-        "Creative Commons - Attribution",
-        "Creative Commons - Attribution - Share Alike",
-        "Creative Commons - Attribution - No Derivatives",
-        "Creative Commons - Attribution - Non-Commercial",
-        "Creative Commons - Attribution - Non-Commercial - Share Alike",
-        "Creative Commons - Attribution - Non-Commercial - No Derivatives",
-        "Creative Commons - Public Domain Dedication",
-        "GNU - GPL",
-        "GNU - LGPL",
-        "BSD License",
-      ],
-      designTools: [
-        "123D Catch",
-        "123D Design",
-        "3D Tin",
-        "Blender",
-        "Thingiverse Customizer",
-        "Illustrator",
-        "Inkscape",
-        "Inventor",
-        "Mathematica",
-        "Maya",
-        "MeshLab",
-        "MeshMixer",
-        "OpenSCAD",
-        "Photoshop",
-        "PrintShop",
-        "Rhino",
-        "Sculptris",
-        "Sketchup",
-        "Solidworks",
-        "Tinkercad",
-        "TopMod",
-        "ZBrush",
-        "FreeCAD",
-        "Fusion 360",
-        "Microsoft 3D Builder",
-        "CATIA",
-        "Autodesk 3ds Max",
-        "Shapr3d",
-        "Orchard",
-        "Other",
-      ],
       groups: [],
-      appEnables: [
+      myArray: [
         {
+          id: 1,
           url: "https://cdn.thingiverse.com/renders/ce/96/2a/78/ba/bc48f4232048053be71efddd58a1464e_thumb_tiny.jpg",
           name: "MakePrintable Thing App",
           author: "MixedDimensions",
         },
         {
+          id: 2,
           url: "https://cdn.thingiverse.com/renders/28/31/42/14/6c/2a4816a865281bdd135e770afd5c6507_thumb_tiny.jpg",
           name: "KiriMoto",
           author: "stewartallen",
@@ -404,15 +199,50 @@ export default {
       apps: 0,
     };
   },
+  computed: {
+    swiper() {
+      return this.$refs.mySwiper;
+    },
+  },
+  mounted() {
+    console.log("Current Swiper instance object", this.mySwiper);
+  },
   methods: {
-    computeUpload() {
-      console.log("computeUpload");
+    callback() {},
+    getComponentData() {
+      return {
+        attrs: {},
+        props: {
+          options: this.swiperOptions,
+        },
+      };
+    },
+    handleStart(event) {
+      event.preventDefault();
+      console.log(event);
+    },
+    format(percentage) {
+      return percentage === 100 ? "满" : `${percentage}%`;
+    },
+    handlePreview() {
+      console.log("preview");
+    },
+    handlechange() {
+      console.log(this.myArray);
+    },
+    handleExceed(files, fileList) {
+      console.log(files, fileList);
+      this.$message.warning(
+        `当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${
+          files.length + fileList.length
+        } 个文件`
+      );
     },
     dropboxUpload() {
       console.log("dropboxUpload");
     },
-    onFileSuccess(res, file) {
-      console.log("onFileSuccess", file);
+    handleSuccess(res, file) {
+      console.log("handleSuccess", file);
     },
     publicThing() {
       console.log("public", this.form);
@@ -423,138 +253,101 @@ export default {
 </script>
 
 <style lang="scss">
-.box {
-  width: 970px;
+.header-title {
+  margin: 50px auto 30px;
+  font-weight: 300;
+  text-align: center;
+}
+
+.swiper-slide {
+  cursor: move;
+}
+.upload-wrapper {
+  width: 1080px;
+  padding: 40px;
   margin: 0 auto;
-}
-.section-h1 {
-  font-family: "Antenna Bold", Helvetica, Arial, sans-serif;
-  font-weight: normal;
-  font-size: 24px;
-  line-height: 1.25em;
-  color: #666;
-  text-transform: uppercase;
-}
-.section-p {
-  font-family: "AntennaLight", Helvetica, Arial, sans-serif;
-  font-weight: normal;
-  color: #666;
-  font-size: 14px;
-  padding: 5px;
-  border-bottom: solid 1px #ccc;
-}
-.header {
-  width: 970px;
-  height: 91px;
-  margin: 0 auto;
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  align-content: center;
-}
-.upload-container {
-  background-color: #f5f5f5;
-  .upload-header {
-    width: 100%;
-    .cancel {
-      color: #409eff;
-      text-decoration: none;
+  min-height: 500px;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  .select-area {
+    height: 300px;
+    font-size: 24px;
+    color: #777;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    .el-button {
+      width: 160px;
+      font-size: 18px;
+      padding: 20px;
     }
   }
-  .upload-content {
-    .upload-box {
-      display: flex;
-      flex-direction: row;
-      justify-content: center;
-      align-content: center;
-    }
-  }
-  .basic-information-content {
-    .basic-information-box {
-      .el-input {
-        width: 80%;
+
+  .list-area {
+    .list-wrapper {
+      .list-wrapper-title {
+        color: #777;
+        margin-bottom: 30px;
+        font-weight: 300;
       }
-      .el-select {
-        width: 100%;
-      }
-      .el-form--label-top .el-form-item__label {
-        padding: 0;
-      }
-    }
-  }
-  .edit-section {
-    background-color: #ececec;
-    width: 100%;
-    .center-content {
-    }
-  }
-  .tell-us-more {
-    width: 100%;
-    .tell-us-more-content {
-      .el-checkbox__inner {
-        width: 32px;
-        height: 32px;
-      }
-    }
-  }
-  .thing-app {
-    .thing-app-content {
-      background-color: #ececec;
-      .input-with-select {
-        background: none;
+      ul {
+        li {
+          display: flex;
+          margin-bottom: 20px;
+          align-items: center;
+          flex-direction: row;
+          justify-content: space-between;
+          .fileinfo-wrapper {
+            width: 40%;
+            display: flex;
+            align-items: center;
+            .fileinfo {
+              margin-left: 10px;
+              display: flex;
+              flex-direction: column;
+              .filename {
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+              }
+
+              .fileinfo-tag {
+                width: 100%;
+                display: flex;
+                align-items: center;
+                .filesize {
+                  color: #777;
+                  width: 40px;
+                  display: inline-block;
+                  margin-right: 20px;
+                }
+                .filetype {
+                  display: inline-block;
+                  width: 40px;
+                  height: 20px;
+                  line-height: 20px;
+                  background: #000;
+                  color: #fff;
+                  font-size: 12px;
+                  text-align: center;
+                  border-radius: 4px;
+                }
+              }
+            }
+          }
+
+          .el-progress {
+            width: 60%;
+          }
+        }
       }
     }
   }
-  .thing-apps {
-    h3 {
-      border-bottom: solid 1px #ccc;
+  .support-file-area {
+    .support-file-area__text {
+      text-align: center;
+      color: #777;
     }
-  }
-}
-.el-upload-dragger {
-  width: 970px;
-  height: 400px;
-  display: flex;
-  flex-direction: column;
-  align-content: center;
-  justify-content: center;
-  flex-wrap: wrap;
-  align-items: center;
-}
-.el-upload__tip {
-  border-top: 1px solid #ccc;
-  padding-top: 15px;
-  margin-top: 20px;
-  font-weight: 200;
-  font-size: 13px;
-}
-.checkbox {
-  color: #666;
-  margin-top: 25px;
-  #cbox1 {
-    width: 32px;
-    height: 32px;
-    position: relative;
-    top: 10px;
-  }
-}
-@media screen and (max-width: 768px) {
-  .header {
-    width: 100%;
-  }
-  .header-title {
-    font-size: 18px;
-  }
-  .el-upload-dragger {
-    width: 100%;
-  }
-  .box {
-    width: 100%;
-  }
-  h1 {
-    font-size: 16px;
   }
 }
 </style>
