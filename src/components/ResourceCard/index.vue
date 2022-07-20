@@ -160,7 +160,7 @@ export default {
   border: 1px solid #c2c4cc;
 }
 .card-box {
-  border: 1px solid #fff;
+  border: 1px solid #f5f5f5;
   position: relative;
   width: 246px;
   border-radius: 5%;

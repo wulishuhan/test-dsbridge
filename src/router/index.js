@@ -11,13 +11,13 @@ const routes = [
     component: Layout,
     redirect: "/main",
     meta: {
-      title: "ortur resource",
+      title: "ortur library",
     },
     children: [
       {
         path: "/main",
         meta: {
-          title: "ortur resource",
+          title: "ortur library",
         },
         component: () => import("@/views/main/index"),
       },
