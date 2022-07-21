@@ -1,114 +1,160 @@
 <template>
   <div class="container-profile">
-    <el-row>
-      <el-col :xs="24" :sm="24" :md="8" :lg="6" :xl="6">
-        <el-row>
-          <el-col :xs="24" :sm="12" :md="24" :lg="24" :xl="24">
-            <profile-card :user="user"></profile-card>
-          </el-col>
-          <el-col :xs="24" :sm="12" :md="24" :lg="24" :xl="24">
-            <div class="about">
-              <p>About</p>
-              <span>{{ profile.introduction }}}</span>
-              <br />
-              <span>
-                <a :href="profile.website">{{ profile.website }}</a>
-              </span>
-              <p>I AM A...</p>
-              <span>{{ who }}</span>
-              <p>3D Design Skill Level</p>
-              <span>{{ profile.designLevel }}</span>
-              <p>Tools I Use</p>
-              <span>{{ designToolsUsed }}</span>
-            </div>
-          </el-col>
-        </el-row>
-      </el-col>
-      <el-col :xs="24" :sm="24" :md="16" :lg="18" :xl="18">
-        <el-row>
-          <div v-for="item in filterByTypes" :key="item.name">
-            <el-col :xs="8" :sm="6" :md="6" :lg="4" :xl="4">
-              <filter-profile
-                :filter="item.name"
-                :count="item.count"
-              ></filter-profile>
-            </el-col>
-          </div>
-          <el-col :span="24">
-            <router-view :key="$route.fullPath" />
-          </el-col>
-        </el-row>
-      </el-col>
-    </el-row>
+    <el-dialog :visible.sync="dialogFollowersVisible">
+      <el-tabs v-model="activeTab" @tab-click="handleClick" class="tabsContent">
+        <el-tab-pane label="followers" name="first"
+          ><IndexFollowPanel></IndexFollowPanel
+        ></el-tab-pane>
+        <el-tab-pane label="following" name="second">following</el-tab-pane>
+      </el-tabs>
+    </el-dialog>
+    <div class="bg">
+      <span class="ortur-icon-pen"></span>
+      <img class="img" :src="user.bgImg" alt="" />
+    </div>
+
+    <div class="content">
+      <div class="info">
+        <img class="img" src="" alt="" />
+        <div class="name">{{ user.name }}</div>
+        <div class="desc" @click="editDesc" v-if="!isDescEdit">
+          {{ user.desc }}
+        </div>
+        <el-input
+          @blur="descChange"
+          @change="descChange"
+          v-if="isDescEdit"
+          v-model="user.desc"
+          autofocus="true"
+          placeholder=""
+        ></el-input>
+        <div class="follow">
+          <span class="followers" @click="openFollowDialog('first')"
+            >{{ user.followers }} followers</span
+          >
+          <span class="following" @click="openFollowDialog('second')"
+            >{{ user.following }} following</span
+          >
+        </div>
+        <div class="twitter">5312</div>
+      </div>
+      <div class="tabs">
+        <span class="editTab">edit</span>
+        <el-tabs
+          v-model="activeName"
+          @tab-click="handleClick"
+          class="tabsContent"
+        >
+          <el-tab-pane label="Resource" name="first">Resource</el-tab-pane>
+          <el-tab-pane label="Likes" name="second">Likes</el-tab-pane>
+          <el-tab-pane label="Collections" name="third"
+            >Collections</el-tab-pane
+          >
+          <el-tab-pane label="History" name="fourth">History</el-tab-pane>
+        </el-tabs>
+      </div>
+    </div>
   </div>
 </template>
 <script>
-import ProfileCard from "./components/ProfileCard";
-import FilterProfile from "./components/FilterProfile";
+import IndexFollowPanel from "./IndexFollowPanel.vue";
 import { getUserInfoByUserId } from "@/api/user";
 export default {
   // eslint-disable-next-line
   name: "Design",
-  components: { ProfileCard, FilterProfile },
+  components: { IndexFollowPanel },
   mounted() {
     getUserInfoByUserId({
       id: this.$route.params.userId,
       userId: this.$store.getters.userId,
     }).then((res) => {
-      console.log("mounted!");
-      this.user = res.data.data;
-      this.profile = res.data.data.userProfile;
-      this.who = this.profile.who.join(",") ?? "";
-      this.designToolsUsed = this.profile.designToolsUsed.join(",") ?? "";
-      this.filterByTypes[0].count = res.data.data.favorites.length;
-      this.filterByTypes[1].count = res.data.data.design.length;
-      this.filterByTypes[2].count = res.data.data.collections.length;
-      this.filterByTypes[3].count = res.data.data.makes.length;
-      this.filterByTypes[4].count = res.data.data.likes.length;
+      console.log(res);
     });
+  },
+  methods: {
+    openFollowDialog(index) {
+      //console.log(e)
+      this.activeTab = index;
+      this.dialogFollowersVisible = true;
+    },
+    descChange() {
+      //console.log(e)
+      this.isDescEdit = false;
+    },
+    editDesc() {
+      //console.log(e)
+      this.isDescEdit = true;
+    },
+    handleClick(tab, event) {
+      console.log(tab, event);
+    },
   },
   data() {
     return {
-      user: {},
-      profile: {},
-      filterByType: ["Favorites", "Designs", "Collections", "Makes", "Likes"],
-      filterByTypes: [
-        { name: "Favorites", count: 0 },
-        { name: "Designs", count: 0 },
-        { name: "Collections", count: 0 },
-        { name: "Makes", count: 0 },
-        { name: "Likes", count: 0 },
-      ],
-      who: "",
-      designToolsUsed: "",
+      activeTab: "first",
+      activeName: "first",
+      isDescEdit: false,
+      dialogFollowersVisible: false,
+      user: {
+        bgImg: "",
+        name: "yang",
+        desc: "yang 654651",
+        following: "14",
+        followers: "13",
+      },
     };
   },
 };
 </script>
 <style lang="scss" scoped>
+.img {
+  background-color: black;
+  width: 100%;
+  height: 100%;
+}
 .container-profile {
-  background: #f2f2f2;
-}
-.about {
-  margin-top: 20px;
-  width: 300px;
-  height: 361px;
-  background-color: #fff;
-  padding: 20px;
   box-sizing: border-box;
-  p {
-    font-size: 18px;
-    font-weight: 400;
-    margin-top: 15px;
+  .tabs {
+    width: 600px;
+    position: relative;
+    .editTab {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+    }
   }
-  span {
-    color: #555;
-    font-size: 12px;
+  .bg {
+    margin: 0 auto;
+    width: 1080px;
+    height: 200px;
+    position: relative;
+    .ortur-icon-pen {
+      right: 12px;
+      top: 12px;
+      position: absolute;
+      color: white;
+    }
   }
-}
-@media screen and (max-width: 768px) {
-  .about {
-    margin: 20px auto;
+  background: #f2f2f2;
+  text-align: center;
+  .content {
+    display: flex;
+    width: 1080px;
+    margin: 0 auto;
+    .info {
+      position: relative;
+      top: -50px;
+    }
+    .img {
+      background-color: red;
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+    }
+    .desc:hover {
+      border: 1px solid #000;
+      cursor: pointer;
+    }
   }
 }
 </style>

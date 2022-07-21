@@ -197,43 +197,43 @@ const routes = [
         meta: {
           title: "design",
         },
-        children: [
-          {
-            path: "/design/Likes/:userId",
-            meta: {
-              title: "design-likes",
-            },
-            component: () => import("@/views/design/Likes"),
-          },
-          {
-            path: "/design/Collections/:userId",
-            meta: {
-              title: "design-collections",
-            },
-            component: () => import("@/views/design/Collections"),
-          },
-          {
-            path: "/design/Favorites/:userId",
-            meta: {
-              title: "design-favorites",
-            },
-            component: () => import("@/views/design/Favorites"),
-          },
-          {
-            path: "/design/Makes/:userId",
-            meta: {
-              title: "design-makes",
-            },
-            component: () => import("@/views/design/Makes"),
-          },
-          {
-            path: "/design/Designs/:userId",
-            meta: {
-              title: "design-designs",
-            },
-            component: () => import("@/views/design/Designs"),
-          },
-        ],
+        // children: [
+        //   {
+        //     path: "/design/Likes/:userId",
+        //     meta: {
+        //       title: "design-likes",
+        //     },
+        //     component: () => import("@/views/design/Likes"),
+        //   },
+        //   {
+        //     path: "/design/Collections/:userId",
+        //     meta: {
+        //       title: "design-collections",
+        //     },
+        //     component: () => import("@/views/design/Collections"),
+        //   },
+        //   {
+        //     path: "/design/Favorites/:userId",
+        //     meta: {
+        //       title: "design-favorites",
+        //     },
+        //     component: () => import("@/views/design/Favorites"),
+        //   },
+        //   {
+        //     path: "/design/Makes/:userId",
+        //     meta: {
+        //       title: "design-makes",
+        //     },
+        //     component: () => import("@/views/design/Makes"),
+        //   },
+        //   {
+        //     path: "/design/Designs/:userId",
+        //     meta: {
+        //       title: "design-designs",
+        //     },
+        //     component: () => import("@/views/design/Designs"),
+        //   },
+        // ],
       },
     ],
   },
@@ -371,6 +371,14 @@ const routes = [
     path: "/preview/csh",
     name: "csh",
     component: () => import("@/views/preview/csh"),
+    meta: {
+      title: "preview",
+    },
+  },
+  {
+    path: "/preview/hzy",
+    name: "hzy",
+    component: () => import("@/views/preview/hzy"),
     meta: {
       title: "preview",
     },
