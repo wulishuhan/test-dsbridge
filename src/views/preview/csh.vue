@@ -38,13 +38,16 @@
                 </div>
               </div>
               <div>
-                <el-button icon="ortur-icon-star">1.2K</el-button>
+                <!-- <el-button icon="ortur-icon-star">1.2K</el-button>
                 <el-button icon="ortur-icon-share">1.2K</el-button>
                 <el-button>
                   <i class="ortur-icon-file"></i>
                   1.5K
                   <i style="font-size: 7px" class="ortur-icon-arrow-down"></i>
-                </el-button>
+                </el-button> -->
+                <StarButton></StarButton>
+                <BaseButton @click="test">基础按钮</BaseButton>
+                <DownLoadButton></DownLoadButton>
               </div>
             </div>
             <div
@@ -119,17 +122,40 @@
         <login></login>
       </el-tab-pane>
     </el-tabs>
+    <div style="width: 486px; margin: 0 auto">
+      <el-tabs type="border-card" stretch="true">
+        <el-tab-pane label="描述" name="first"
+          >描述
+          <a
+            href=""
+            style="
+              font-size: 15px;
+              font-family: Source Han Sans CN;
+              font-weight: 400;
+              color: #1e78f0;
+            "
+            >查看全部</a
+          >
+        </el-tab-pane>
+        <el-tab-pane label="步骤" name="second">步骤</el-tab-pane>
+        <el-tab-pane label="制作" name="third">制作</el-tab-pane>
+      </el-tabs>
+    </div>
   </div>
 </template>
 <script>
 // import TestCard from "@/components/ResourceCard/index";
 // import Share from "@/components/ShareCard/index";
 import Login from "@/components/Login";
+import DownLoadButton from "@/components/DownLoadButton.vue";
+import BaseButton from "@/components/BaseButton.vue";
+import StarButton from "@/components/StarButton.vue";
 // 用来预览组件
 export default {
   name: "csh",
   // components: { TestCard, Share },
-  components: { Login },
+  // components: { Login },
+  components: { StarButton, BaseButton, DownLoadButton, Login },
   data() {
     return {
       test: {

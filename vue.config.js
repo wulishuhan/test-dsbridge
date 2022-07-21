@@ -27,5 +27,11 @@ module.exports = defineConfig({
       mockServer(devServer.app);
       return middlewares;
     },
+    // proxy: {
+    //   "/local-dev-api": {
+    //     target: "https://api.leadiffer.cn",
+    //     pathRewrite: { "^/local-dev-api": "" },
+    //   },
+    // },
   },
 });
