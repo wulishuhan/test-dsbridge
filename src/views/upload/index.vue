@@ -6,7 +6,11 @@
         <el-upload
           action="/dev-api/user/receiveImg"
           :show-file-list="showFile"
+          :file-list="sourceList"
           drag
+          multiple
+          :on-change="handleSourceChange"
+          :on-progress="handleSourceProgress"
         >
           <i class="ortur-icon-file" style="font-size: 60px"></i>
           <span>Drag your file & photo here (&lt;12MB)</span>
@@ -20,50 +24,27 @@
         <div class="list-wrapper">
           <h5 class="list-wrapper-title">文件列表</h5>
           <ul>
-            <li>
+            <li v-for="source in sourceList" :key="source.uid">
               <div class="fileinfo-wrapper">
                 <div class="fileicon">
                   <i class="ortur-icon-file" style="font-size: 40px"></i>
                 </div>
                 <div class="fileinfo">
-                  <span class="filename">3D cyclesdfdfsdfsfsf</span>
+                  <span class="filename">{{ source.name }}</span>
                   <div class="fileinfo-tag">
-                    <span class="filesize">128kb</span>
-                    <span class="filetype">PNG</span>
+                    <span class="filesize"
+                      >{{ (source.size / 1024).toFixed(2) }}kb</span
+                    >
+                    <span class="filetype">{{
+                      source.name.substring(source.name.lastIndexOf(".") + 1)
+                    }}</span>
                   </div>
                 </div>
               </div>
-              <el-progress :percentage="40" :format="format"></el-progress>
-            </li>
-            <li>
-              <div class="fileinfo-wrapper">
-                <div class="fileicon">
-                  <i class="ortur-icon-file" style="font-size: 40px"></i>
-                </div>
-                <div class="fileinfo">
-                  <span class="filename">3D cycle</span>
-                  <div class="fileinfo-tag">
-                    <span class="filesize">128kb</span>
-                    <span class="filetype">PNG</span>
-                  </div>
-                </div>
-              </div>
-              <el-progress :percentage="40" :format="format"></el-progress>
-            </li>
-            <li>
-              <div class="fileinfo-wrapper">
-                <div class="fileicon">
-                  <i class="ortur-icon-file" style="font-size: 40px"></i>
-                </div>
-                <div class="fileinfo">
-                  <span class="filename">3D cycle</span>
-                  <div class="fileinfo-tag">
-                    <span class="filesize">128kb</span>
-                    <span class="filetype">PNG</span>
-                  </div>
-                </div>
-              </div>
-              <el-progress :percentage="40" :format="format"></el-progress>
+              <el-progress
+                :percentage="source.percentage"
+                :format="format"
+              ></el-progress>
             </li>
           </ul>
         </div>
@@ -236,6 +217,7 @@ export default {
     return {
       showFile: false,
       dialogImageUrl: "",
+      sourceList: [],
       dialogVisible: false,
       baseinfoFormRules: {
         title: [{ required: true, message: "title不能为空" }],
@@ -372,6 +354,16 @@ export default {
     console.log("===========", handleEl);
   },
   methods: {
+    handleSourceChange(file) {
+      console.log("=========", file);
+    },
+    handleSourceProgress(event, file, fileList) {
+      console.log(event, file, fileList);
+      this.sourceList = fileList;
+    },
+    handleSourceSuccess(response, file, fileList) {
+      console.log(response, file, fileList);
+    },
     tutorialChange() {
       console.log(this.tutorialForm);
     },
@@ -525,13 +517,13 @@ export default {
                 align-items: center;
                 .filesize {
                   color: #777;
-                  width: 40px;
+                  width: 80px;
                   display: inline-block;
                   margin-right: 20px;
                 }
                 .filetype {
                   display: inline-block;
-                  width: 40px;
+                  width: 60px;
                   height: 20px;
                   line-height: 20px;
                   background: #000;
