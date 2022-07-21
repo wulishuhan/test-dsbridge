@@ -17,14 +17,7 @@
                 </span>
               </div>
             </div>
-            <div class="model-button-group">
-              <el-button @click="showModel">show model</el-button>
-              <el-button @click="closeModel">close model</el-button>
-            </div>
-            <div v-if="viewModel">
-              <view-model></view-model>
-            </div>
-            <div v-if="!viewModel" class="show-thing">
+            <div class="show-thing">
               <div class="carouselContainer">
                 <div>
                   <div class="carousel">
@@ -83,7 +76,6 @@
                       />
                     </li>
                   </ul>
-
                   <button
                     class="el-icon-arrow-down"
                     @click="trunImageRight()"
@@ -91,76 +83,6 @@
                 </div>
               </div>
             </div>
-          </el-col>
-          <el-col
-            :xs="24"
-            :sm="24"
-            :md="{ span: 5, offset: 1 }"
-            :lg="{ span: 5, offset: 1 }"
-            :xl="{ span: 5, offset: 1 }"
-          >
-            <div class="user-active">
-              <div class="active-box">
-                <el-button type="primary" icon="el-icon-download">
-                  Download All Files
-                </el-button>
-              </div>
-              <div class="active-box" @click="collect">
-                <span>
-                  <!-- <i class="el-icon-plus"></i> -->
-                  <i
-                    :class="{
-                      'el-icon-check': isCollected,
-                      'el-icon-plus': !isCollected,
-                    }"
-                  >
-                  </i>
-                  Collect Thing
-                </span>
-              </div>
-              <div class="active-box" @click="like">
-                <span>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="14"
-                    height="14"
-                    fill="currentColor"
-                    class="bi bi-heart"
-                    viewBox="0 -1 16 16"
-                    :class="{ 'like-red': isLike }"
-                  >
-                    <path
-                      d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"
-                    />
-                  </svg>
-                  Like
-                </span>
-                <i class="el-icon-right"></i>
-              </div>
-              <div class="active-box">
-                <span><i class="el-icon-chat-square"></i>Comment</span>
-              </div>
-              <div class="active-box">
-                <span><i class="el-icon-edit"></i>Post a Make</span>
-                <i class="el-icon-right"></i>
-              </div>
-              <div class="active-box">
-                <span><i class="el-icon-view"></i>Watch</span>
-              </div>
-              <div class="active-box">
-                <span><i class="el-icon-refresh"></i>Remix it</span>
-                <i class="el-icon-right"></i>
-              </div>
-              <div class="active-box">
-                <span><i class="el-icon-plus"></i>Copy Link</span>
-              </div>
-              <div class="active-box">
-                <el-button type="primary" icon="el-icon-upload2">
-                  Tip Designer
-                </el-button>
-              </div>
-            </div>
-            <share-social-media></share-social-media>
           </el-col>
         </el-row>
       </div>
@@ -192,23 +114,22 @@
 </template>
 <script>
 import ElImageViewer from "element-ui/packages/image/src/image-viewer";
-import ViewModel from "./components/ViewModel";
+// import ViewModel from "./components/ViewModel";
 import ThingDetails from "./ThingDetails";
 import ThingFiles from "./ThingFiles";
 import Comments from "./Comments";
 import Makes from "./Makes";
-import ShareSocialMedia from "@/components/ShareSocialMedia";
+// import ShareSocialMedia from "@/components/ShareSocialMedia";
 import { getUserInfoByThingId } from "@/api/thing";
 export default {
-  // eslint-disable-next-line
   name: "Thing",
   components: {
-    ViewModel,
+    // ViewModel,
     ThingDetails,
     ThingFiles,
     Comments,
     Makes,
-    ShareSocialMedia,
+    // ShareSocialMedia,
     ElImageViewer,
   },
   data() {

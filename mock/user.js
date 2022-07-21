@@ -38,11 +38,13 @@ let user = mock.mock({
   ],
 });
 let loginData = mock.mock({
-  name: "@name",
-  avatar: mock.mock("@image('300x200','@color', '#FFF', '@word')"),
-  token: /(\w\W\d){10,15}/,
-  roles: ["user"],
-  userId: "@id",
+  user_info: {
+    user_name: "@name",
+    nick_name: "@name",
+    avatar: "@image('300x200','@color', '#FFF', '@word')",
+    access_token: /(\w\W\d){10,15}/,
+    user_id: "@id",
+  },
 });
 let getInfo = mock.mock({
   name: "@name",
@@ -187,13 +189,16 @@ module.exports = [
     },
   },
   {
-    url: "/user/login",
+    url: "/auth/user/login",
     type: "post",
     response: (req) => {
       const { username, password } = req.query;
       console.log(username, password);
+      loginData.expires_in = 259200;
       return {
         status: 200,
+        code: 0,
+        msg: "",
         data: loginData,
       };
     },
@@ -305,6 +310,21 @@ module.exports = [
         status: 200,
         message: "ok",
         data: followData,
+      };
+    },
+  },
+  {
+    url: "/auth/user/register",
+    type: "post",
+    response: (req) => {
+      const { username, password } = req.query;
+      console.log(username, password);
+      loginData.expires_in = 259200;
+      return {
+        status: 200,
+        code: 0,
+        msg: "",
+        data: loginData,
       };
     },
   },
