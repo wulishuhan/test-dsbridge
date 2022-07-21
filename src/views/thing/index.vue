@@ -25,11 +25,24 @@
               <view-model></view-model>
             </div>
             <div v-if="!viewModel" class="show-thing">
-              <div>
+              <div class="carouselContainer">
                 <div>
                   <div class="carousel">
+                    <button
+                      class="ortur-icon-enlarge"
+                      @click="openImageView()"
+                    ></button>
+                    <button
+                      class="el-icon-arrow-up upCarousel"
+                      @click="arrowClick()"
+                    ></button>
+                    <button
+                      class="el-icon-arrow-down downCarousel"
+                      @click="arrowClick('down')"
+                    ></button>
                     <el-carousel
-                      height="500px"
+                      direction="vertical"
+                      height="372px"
                       :interval="3000"
                       arrow="never"
                       ref="carousel"
@@ -48,9 +61,9 @@
                     </el-carousel>
                   </div>
                 </div>
-                <div class="bottom-carousel">
+                <div class="right-carousel">
                   <button
-                    class="el-icon-arrow-left"
+                    class="el-icon-arrow-up"
                     @click="trunImageLeft()"
                   ></button>
                   <ul class="img-ul">
@@ -70,8 +83,9 @@
                       />
                     </li>
                   </ul>
+
                   <button
-                    class="el-icon-arrow-right"
+                    class="el-icon-arrow-down"
                     @click="trunImageRight()"
                   ></button>
                 </div>
@@ -165,9 +179,19 @@
         </el-tab-pane>
       </el-tabs>
     </div>
+    <div>
+      <ElImageViewer
+        class="imageViewer"
+        v-if="showViewer"
+        :on-close="closeViewer"
+        :url-list="urlList"
+        :initialIndex="imgActiveIndex"
+      ></ElImageViewer>
+    </div>
   </div>
 </template>
 <script>
+import ElImageViewer from "element-ui/packages/image/src/image-viewer";
 import ViewModel from "./components/ViewModel";
 import ThingDetails from "./ThingDetails";
 import ThingFiles from "./ThingFiles";
@@ -185,9 +209,12 @@ export default {
     Comments,
     Makes,
     ShareSocialMedia,
+    ElImageViewer,
   },
   data() {
     return {
+      showViewer: false, // 显示查看器
+      urlList: [], //大图列表
       activeName: "first",
       user: {},
       imgActiveIndex: 0, // 当前移动图片的索引值
@@ -200,6 +227,24 @@ export default {
     };
   },
   methods: {
+    openImageView() {
+      this.urlList = this.imageList.map((item) => {
+        return item.url;
+      });
+      this.showViewer = true;
+    },
+    // 关闭查看器
+    closeViewer() {
+      this.showViewer = false;
+    },
+
+    arrowClick(val) {
+      if (val === "down") {
+        this.$refs.carousel.next();
+      } else {
+        this.$refs.carousel.prev();
+      }
+    },
     setActiveItem(index) {
       this.$refs.carousel.setActiveItem(index);
     },
@@ -259,6 +304,58 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.imageViewer {
+  ::v-deep .el-image-viewer__prev {
+    background-color: black;
+  }
+  ::v-deep .el-image-viewer__btn {
+    border-radius: 6px;
+  }
+  ::v-deep .el-icon-close:before {
+    font-family: "icomoon";
+    content: "\e922";
+    color: #fff;
+  }
+  ::v-deep .el-icon-arrow-left:before {
+    content: "\e6e1";
+  }
+  ::v-deep .el-icon-arrow-right:before {
+    content: "\e6df";
+  }
+  ::v-deep .el-image-viewer__actions {
+    display: none;
+  }
+  ::v-deep .el-image-viewer__prev {
+    width: 324px;
+    height: 60px;
+    background: #1a1a1a;
+    opacity: 0.3;
+    border-radius: 6px;
+    transform: translateX(-50%);
+    left: 50%;
+    top: 12px;
+  }
+  ::v-deep .el-image-viewer__next {
+    width: 324px;
+    height: 60px;
+    background: #1a1a1a;
+    opacity: 0.3;
+    border-radius: 6px;
+    // transform: translateX(-50%);
+    // left: 50%;
+    transform: translateX(-50%);
+    left: 50%;
+    bottom: 12px;
+    top: auto;
+  }
+  ::v-deep .el-image-viewer__close {
+    width: 60px;
+    height: 60px;
+    background: #1a1a1a;
+    opacity: 0.3;
+    border-radius: 6px;
+  }
+}
 .container {
   background-color: #f2f2f2;
   height: 100%;
@@ -387,48 +484,118 @@ export default {
 }
 .img-ul {
   position: relative;
-  left: -20px;
   display: flex;
+  flex-direction: column;
   width: 100%;
-  height: 66px;
-  overflow: hidden;
+  height: 372px;
+  padding: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
   list-style: none;
+  margin: 0;
+}
+.img-ul::-webkit-scrollbar {
+  /*滚动条整体样式*/
+  width: 2px; /*高宽分别对应横竖滚动条的尺寸*/
+  height: 1px;
+}
+.img-ul::-webkit-scrollbar-thumb {
+  /*滚动条里面小方块*/
+  border-radius: 5px;
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+  background: #535353;
+}
+.img-ul::-webkit-scrollbar-track {
+  /*滚动条里面轨道*/
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  background: #ededed;
 }
 .img-li {
-  float: left;
-  margin: 0 8px;
   cursor: pointer;
   img {
-    width: 80px;
-    height: 62px;
+    width: 138px;
+    height: 84px;
   }
 }
 .img-activeBorder {
   border: 1px solid #248bfb;
 }
-.bottom-carousel {
+.right-carousel {
   display: flex;
-  /* width: 700px; */
-  align-items: center;
-  justify-content: space-around;
+  width: 138px;
+  text-align: center;
+  flex-direction: column;
+  position: relative;
+  margin-left: 24px;
 }
-.el-icon-arrow-left {
-  font-size: 30px;
+.el-icon-arrow-up {
   display: inline-block;
   cursor: pointer;
-  background: none;
   border: none;
+  padding: 0;
+  position: absolute;
+  width: 138px;
+  height: 18px;
+  background: #1a1a1a;
+  opacity: 0.3;
+  border-radius: 8px 8px 0px 0px;
+  z-index: 10;
+  color: white;
 }
-.el-icon-arrow-right {
-  font-size: 30px;
+.el-icon-arrow-down {
   display: inline-block;
   cursor: pointer;
-  background: none;
   border: none;
+  padding: 0;
+  position: absolute;
+  width: 138px;
+  height: 18px;
+  background: #1a1a1a;
+  opacity: 0.3;
+  border-radius: 8px 8px 0px 0px;
+  bottom: 0px;
+  z-index: 10;
+  color: white;
+}
+.downCarousel {
+  width: 138px;
+  height: 36px;
+  background: #1a1a1a;
+  opacity: 0.3;
+  border-radius: 6px;
+  left: 50%;
+  bottom: 12px;
+  margin-left: -64px;
+}
+.upCarousel {
+  width: 138px;
+  height: 36px;
+  background: #1a1a1a;
+  opacity: 0.3;
+  border-radius: 6px;
+  left: 50%;
+  top: 12px;
+  margin-left: -64px;
+}
+.ortur-icon-enlarge {
+  width: 60px;
+  height: 60px;
+  background: #1a1a1a;
+  opacity: 0.3;
+  border-radius: 6px;
+  position: absolute;
+  right: 12px;
+  top: 12px;
+  z-index: 10;
+}
+.carouselContainer {
+  display: flex;
 }
 .carousel {
-  width: 700px;
-  height: 524px;
+  position: relative;
+  width: 605px;
+  height: 372px;
   img {
     width: 100%;
     height: 100%;
