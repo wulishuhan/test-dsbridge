@@ -9,14 +9,50 @@
       </el-tabs>
     </el-dialog>
     <div class="bg">
-      <span class="ortur-icon-pen"></span>
+      <span v-if="isYourAccount" class="ortur-icon-pen">
+        <el-upload
+          v-if="isYourAccount"
+          class="upload-bg"
+          :on-success="handleImgUploadSuccess"
+          :on-error="handleImgUploadErr"
+          :before-upload="handleBeforeImgUpload"
+          ref="upload"
+          action="https://jsonplaceholder.typicode.com/posts/"
+          :auto-upload="true"
+          :show-file-list="false"
+        >
+          <button slot="trigger" size="small" type="primary"></button>
+        </el-upload>
+      </span>
+
       <img class="img" :src="user.bgImg" alt="" />
     </div>
 
     <div class="content">
       <div class="info">
-        <img class="img" src="" alt="" />
+        <div class="imgWrap">
+          <span v-if="isYourAccount" class="ortur-icon-pen imgEdit">
+            <el-upload
+              v-if="isYourAccount"
+              class="upload-demo"
+              :on-success="handleImgUploadSuccess"
+              :on-error="handleImgUploadErr"
+              :before-upload="handleBeforeImgUpload"
+              ref="upload"
+              action="https://jsonplaceholder.typicode.com/posts/"
+              :auto-upload="true"
+              :show-file-list="false"
+            >
+              <button slot="trigger" size="small" type="primary">
+                选取文件
+              </button>
+            </el-upload>
+          </span>
+
+          <img class="img" :src="user.avatar" alt="" />
+        </div>
         <div class="name">{{ user.name }}</div>
+        <FollowButton></FollowButton>
         <div class="desc" @click="editDesc" v-if="!isDescEdit">
           {{ user.desc }}
         </div>
@@ -57,12 +93,14 @@
   </div>
 </template>
 <script>
+import FollowButton from "@/components/FollowButton.vue";
+
 import IndexFollowPanel from "./IndexFollowPanel.vue";
 import { getUserInfoByUserId } from "@/api/user";
 export default {
   // eslint-disable-next-line
   name: "Design",
-  components: { IndexFollowPanel },
+  components: { IndexFollowPanel, FollowButton },
   mounted() {
     getUserInfoByUserId({
       id: this.$route.params.userId,
@@ -72,6 +110,28 @@ export default {
     });
   },
   methods: {
+    handleBeforeImgUpload(file) {
+      //console.log(e)
+      const isJPG = file.type === "image/jpeg";
+      const isLt2M = file.size / 1024 / 1024 < 2;
+
+      if (!isJPG) {
+        this.$message.error("上传头像图片只能是 JPG 格式!");
+      }
+      if (!isLt2M) {
+        this.$message.error("上传头像图片大小不能超过 2MB!");
+      }
+      debugger;
+      return isJPG && isLt2M;
+    },
+    handleImgUploadErr(err) {
+      //console.log(e)
+      this.$message.error("上传失败" + err);
+    },
+    handleImgUploadSuccess() {
+      //console.log(e)
+      this.$message.success("上传成功");
+    },
     openFollowDialog(index) {
       //console.log(e)
       this.activeTab = index;
@@ -82,6 +142,9 @@ export default {
       this.isDescEdit = false;
     },
     editDesc() {
+      if (!this.isYourAccount) {
+        return;
+      }
       //console.log(e)
       this.isDescEdit = true;
     },
@@ -93,14 +156,16 @@ export default {
     return {
       activeTab: "first",
       activeName: "first",
+      isYourAccount: true,
       isDescEdit: false,
       dialogFollowersVisible: false,
       user: {
-        bgImg: "",
+        bgImg: "https://scpic.chinaz.net/files/pic/pic9/202207/apic42262.jpg",
         name: "yang",
         desc: "yang 654651",
         following: "14",
         followers: "13",
+        avatar: "https://scpic.chinaz.net/files/pic/pic9/202207/apic42262.jpg",
       },
     };
   },
@@ -128,6 +193,21 @@ export default {
     width: 1080px;
     height: 200px;
     position: relative;
+    .upload-bg {
+      // right: 12px;
+      // top: 12px;
+      position: absolute;
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      ::v-deep .el-upload--text {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        cursor: pointer;
+      }
+    }
     .ortur-icon-pen {
       right: 12px;
       top: 12px;
@@ -139,17 +219,57 @@ export default {
   text-align: center;
   .content {
     display: flex;
+    justify-content: space-between;
     width: 1080px;
     margin: 0 auto;
     .info {
       position: relative;
       top: -50px;
     }
-    .img {
-      background-color: red;
-      width: 100px;
-      height: 100px;
-      border-radius: 50%;
+    .imgWrap {
+      position: relative;
+      display: inline-block;
+      .upload-demo {
+        position: absolute;
+        top: 0;
+        left: 0;
+        background-color: black;
+        line-height: 100px;
+        color: white;
+        opacity: 0;
+        display: inline-block;
+        width: 100%;
+        height: 100%;
+
+        ::v-deep .el-upload--text {
+          width: 100%;
+          height: 100%;
+          border-radius: 50%;
+          cursor: pointer;
+        }
+      }
+      .imgEdit {
+        position: absolute;
+        top: 0;
+        font-size: 40px;
+        background-color: black;
+        line-height: 100px;
+        color: white;
+        opacity: 0.5;
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        display: none;
+      }
+      .img {
+        background-color: red;
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+      }
+    }
+    .imgWrap:hover .imgEdit {
+      display: inline-block;
     }
     .desc:hover {
       border: 1px solid #000;
