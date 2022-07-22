@@ -3,7 +3,7 @@
     <div class="app-header header-shadow navbar">
       <div class="app-header__content">
         <div class="app-header-left">
-          <div class="app-header__logo" style="font-size: 24px">
+          <div class="app-header__logo">
             <router-link to="/main">
               <span class="ortur-icon-logo"
                 ><span class="path1"></span><span class="path2"></span
@@ -59,12 +59,9 @@
 
             <li>
               <el-dropdown class="el-dropdown-userinfo">
-                <el-button style="background: #f5f5f5; border: none">
-                  <span style="display: flex; align-items: center">
-                    <i
-                      class="ortur-icon-user-info"
-                      style="font-size: 22px; color: #409eff"
-                    ></i>
+                <el-button>
+                  <span>
+                    <img :src="userinfo.avatar" />
                     <i class="el-icon-arrow-down el-icon--right"></i>
                   </span>
                 </el-button>
@@ -74,19 +71,25 @@
                 >
                   <el-dropdown-item class="header-userinfo">
                     <div class="header-avatar">
-                      <img
-                        src="http://dummyimage.com/40x40/ef79f2/FFF&text=1"
-                      />
+                      <img :src="userinfo.avatar" />
                     </div>
                     <div class="username-and-email">
-                      <span class="username">xxxxxxxxxxxxxx</span>
-                      <span class="email">51222212111@qq.com</span>
+                      <span class="username">{{ userinfo.nickname }}</span>
+                      <span class="email">{{ userinfo.email }}</span>
                     </div>
                   </el-dropdown-item>
-                  <el-dropdown-item>概况</el-dropdown-item>
-                  <el-dropdown-item>历史</el-dropdown-item>
-                  <el-dropdown-item>设置</el-dropdown-item>
-                  <el-dropdown-item>退出登录</el-dropdown-item>
+                  <el-dropdown-item>
+                    <i class="el-icon-user-solid"></i>&nbsp; 概况
+                  </el-dropdown-item>
+                  <el-dropdown-item>
+                    <i class="el-icon-collection-tag"></i>&nbsp; 历史
+                  </el-dropdown-item>
+                  <el-dropdown-item>
+                    <i class="el-icon-fork-spoon"></i>&nbsp; 设置
+                  </el-dropdown-item>
+                  <el-dropdown-item>
+                    <i class="el-icon-back"></i>&nbsp; 退出
+                  </el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
             </li>
@@ -115,15 +118,27 @@
 </template>
 
 <script>
+import { getInfo } from "@/api/user";
 export default {
   data() {
     return {
       isLogin: true,
+      userinfo: {
+        email: "",
+        nickname: "",
+      },
       activeIndex: "1",
       activeIndex2: "1",
       keywords: "",
       select: "",
     };
+  },
+  mounted() {
+    var that = this;
+    getInfo().then(function (res) {
+      console.log("res.data", res.data);
+      that.userinfo = res.data.data;
+    });
   },
   methods: {
     handleSelect(key, keyPath) {
@@ -163,7 +178,9 @@ export default {
       justify-content: space-between;
       padding: 0 0 0 1.5rem;
       width: 700px;
-
+      .app-header__logo {
+        font-size: 24px;
+      }
       .app-header__search {
         display: flex;
         flex-direction: row;
@@ -204,7 +221,26 @@ export default {
         flex-direction: row;
         align-items: center;
         justify-content: space-between;
-
+        .el-dropdown {
+          .el-button {
+            background: #f5f5f5;
+            border: none;
+          }
+          span {
+            display: flex;
+            align-items: center;
+            img {
+              border-radius: 50%;
+              width: 40px;
+              height: 40px;
+            }
+            .el-icon-arrow-down {
+              font-size: 25px;
+              font-weight: 20px;
+              margin-right: 10px;
+            }
+          }
+        }
         .el-btn-upload {
           width: 100px;
           background: #1e78f0;
@@ -251,6 +287,8 @@ export default {
       border-radius: 50%;
       overflow: hidden;
       vertical-align: middle;
+      width: 40px;
+      height: 40px;
     }
     .username-and-email {
       margin-left: 10px;
@@ -271,7 +309,7 @@ export default {
       }
       .email {
         font-size: 12px;
-        line-height: 12px;
+        line-height: 14px;
         color: #aaa;
         text-overflow: ellipsis;
         overflow: hidden;

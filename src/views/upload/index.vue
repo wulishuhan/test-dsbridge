@@ -53,8 +53,12 @@
         <el-divider></el-divider>
         <div class="list-wrapper">
           <h5 class="list-wrapper-title">封面</h5>
-          <div v-swiper:mySwiper="swiperOptions" @someSwiperEvent="callback">
-            <draggable class="swiper-wrapper" handle=".handle">
+          <div v-swiper:coverSwiper="swiperOptions" @someSwiperEvent="callback">
+            <draggable
+              class="swiper-wrapper"
+              handle=".handle"
+              v-model="coverList"
+            >
               <div
                 class="swiper-slide swiper-no-swiping"
                 v-for="(coverItem, coverKey) in coverList"
@@ -93,7 +97,6 @@
             <!-- 白色 -->
             <div class="swiper-button-next swiper-button-black"></div>
             <!-- 黑色 -->
-            <div class="swiper-pagination"></div>
           </div>
         </div>
       </div>
@@ -149,30 +152,80 @@
             :key="tutorialKey"
           >
             <el-form :modal="tutorialItem">
-              <el-form-item prop="desc">
+              <el-form-item prop="desc" style="margin-bottom: 20px">
                 <el-input
-                  v-model="tutorialItem.desc"
-                  placeholder="标题1"
+                  v-model="tutorialItem.step_title"
+                  placeholder="添加步骤标题"
                 ></el-input>
               </el-form-item>
-              <el-form-item>
-                <el-upload
-                  action="/dev-api/user/receiveImg"
-                  list-type="picture-card"
-                  :file-list="tutorialItem.fileList"
-                  :on-preview="handlePictureCardPreview"
-                  :on-remove="handleRemove"
+              <el-form-item style="margin: 20px auto">
+                <div
+                  v-swiper:[tutorialSwiper+tutorialKey]="tutorialSwiperOptions"
+                  @someSwiperEvent="callback"
                 >
-                  <i class="el-icon-plus"></i>
-                </el-upload>
-                <el-dialog :visible.sync="dialogVisible">
-                  <img width="100%" :src="dialogImageUrl" alt="" />
-                </el-dialog>
+                  <draggable
+                    class="swiper-wrapper"
+                    handle=".handle"
+                    v-model="tutorialItem.fileList"
+                  >
+                    <div
+                      class="swiper-slide swiper-no-swiping"
+                      v-for="(
+                        tutorialImgItem, tutorialImgKey
+                      ) in tutorialItem.fileList"
+                      :key="tutorialImgKey"
+                    >
+                      <img :src="tutorialImgItem.url" />
+                      <i
+                        class="ortur-icon-minus"
+                        @click="removeTutorialImg(tutorialKey, tutorialImgKey)"
+                      >
+                        <span class="path1"></span>
+                        <span class="path2"></span>
+                      </i>
+                      <i class="handle el-icon-s-operation"></i>
+                      <el-upload
+                        class="cover-edit"
+                        action="/dev-api/user/receiveImg"
+                        :show-file-list="showFile"
+                        :on-success="handleTutorialEditSuccess"
+                      >
+                        <i
+                          class="el-icon-edit"
+                          @click="
+                            currentTutorialEditIndex(
+                              tutorialKey,
+                              tutorialImgKey
+                            )
+                          "
+                        ></i>
+                      </el-upload>
+                    </div>
+                    <div class="swiper-slide">
+                      <el-upload
+                        action="/dev-api/user/receiveImg"
+                        :show-file-list="showFile"
+                        class="cover-add"
+                        :on-success="handleTutorialAddSuccess"
+                      >
+                        <i
+                          class="el-icon-plus"
+                          @click="currentTutorialEditIndex(tutorialKey, -1)"
+                        ></i>
+                      </el-upload>
+                    </div>
+                  </draggable>
+                  <div class="swiper-button-prev swiper-button-black"></div>
+                  <!-- 白色 -->
+                  <div class="swiper-button-next swiper-button-black"></div>
+                  <!-- 黑色 -->
+                </div>
               </el-form-item>
               <el-form-item label="" prop="desc">
                 <el-input
                   type="textarea"
                   v-model="tutorialItem.desc"
+                  placeholder="添加步骤说明"
                 ></el-input>
               </el-form-item>
               <el-button class="drag-btn"
@@ -185,6 +238,7 @@
               <el-button
                 class="remove-btn"
                 @click="removeTutorialItem(tutorialKey)"
+                v-if="tutorialForm.length != 1"
                 ><i class="el-icon-minus"></i
               ></el-button>
             </el-form>
@@ -193,8 +247,9 @@
       </el-form-item>
       <el-form-item>
         <div class="action-btn">
-          <el-button type="primary">提交</el-button>
-          <el-button>重置</el-button>
+          <el-button type="primary" @click="handleSave()">Save</el-button>
+          <el-button>Preview</el-button>
+          <el-button>Reset</el-button>
         </div>
       </el-form-item>
     </el-form>
@@ -211,38 +266,12 @@ export default {
   },
   data() {
     return {
+      tutorialSwiper: "tutorialSwiper",
       showFile: false,
       dialogImageUrl: "",
       sourceList: [],
-      coverList: [
-        {
-          url: "http://dummyimage.com/150x90/ef79f2/FFF&text=1",
-        },
-        {
-          url: "http://dummyimage.com/150x90/ef79f2/FFF&text=2",
-        },
-        {
-          url: "http://dummyimage.com/150x90/ef79f2/FFF&text=3",
-        },
-        {
-          url: "http://dummyimage.com/150x90/ef79f2/FFF&text=4",
-        },
-        {
-          url: "http://dummyimage.com/150x90/ef79f2/FFF&text=5",
-        },
-        {
-          url: "http://dummyimage.com/150x90/ef79f2/FFF&text=6",
-        },
-        {
-          url: "http://dummyimage.com/150x90/ef79f2/FFF&text=7",
-        },
-        {
-          url: "http://dummyimage.com/150x90/ef79f2/FFF&text=8",
-        },
-        {
-          url: "http://dummyimage.com/150x90/ef79f2/FFF&text=9",
-        },
-      ],
+      coverList: [],
+      tutorialImgList: [],
       dialogVisible: false,
       baseinfoFormRules: {
         title: [{ required: true, message: "title不能为空" }],
@@ -308,33 +337,16 @@ export default {
       tutorialForm: [
         {
           id: 1,
-          desc: "test1",
+          step_title: "",
+          desc: "",
           fileList: [
             {
               name: "food.jpeg",
-              url: "https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100",
+              url: "http://dummyimage.com/150x90/ef79f2/FFF&text=1",
             },
             {
               name: "food2.jpeg",
-              url: "https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100",
-            },
-          ],
-        },
-        {
-          id: 2,
-          desc: "test2",
-          fileList: [
-            {
-              name: "food.jpeg",
-              url: "https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100",
-            },
-            {
-              name: "food2.jpeg",
-              url: "https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100",
-            },
-            {
-              name: "food2.jpeg",
-              url: "https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100",
+              url: "http://dummyimage.com/150x90/ef79f2/FFF&text=2",
             },
           ],
         },
@@ -346,7 +358,14 @@ export default {
           nextEl: ".swiper-button-next",
           prevEl: ".swiper-button-prev",
         },
-        // Some Swiper option/callback...
+      },
+      tutorialSwiperOptions: {
+        observer: true,
+        slidesPerView: 5,
+        navigation: {
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev",
+        },
       },
     };
   },
@@ -401,7 +420,35 @@ export default {
         url: "http://dummyimage.com/150x90/ef79f2/FFF&text=edit",
       });
     },
+    currentTutorialEditIndex(tutorialKey, tutorialImgKey) {
+      console.log(tutorialKey, tutorialImgKey);
+      this.currentTutorialKey = tutorialKey;
+      this.currentTutorialImgKey = tutorialImgKey;
+    },
+    removeTutorialImg(tutorialKey, tutorialImgKey) {
+      console.log(tutorialKey, tutorialImgKey);
+      this.tutorialForm[tutorialKey].fileList.splice(tutorialImgKey, 1);
+    },
+    handleTutorialAddSuccess() {
+      this.tutorialForm[this.currentTutorialKey].fileList.push({
+        name: "test",
+        url: "http://dummyimage.com/150x90/ef79f2/FFF&text=new",
+      });
+    },
+    handleTutorialEditSuccess(response, file, fileList) {
+      console.log(response, file, fileList);
+      this.tutorialForm[this.currentTutorialKey].fileList.splice(
+        this.currentTutorialImgKey,
+        1,
+        {
+          name: "test",
+          url: "http://dummyimage.com/150x90/ef79f2/FFF&text=edit",
+        }
+      );
+    },
+
     currentEditIndex(coverEditIndex) {
+      console.log(coverEditIndex);
       this.coverEditIndex = coverEditIndex;
     },
     tutorialChange() {
@@ -412,32 +459,15 @@ export default {
 
       this.tutorialForm.splice(tutorialKey + 1, 0, {
         id: Date.now(),
-        desc: "test3",
+        desc: "",
+        step_title: "",
+        fileList: [],
       });
     },
     removeTutorialItem(tutorialKey) {
       this.tutorialForm.splice(tutorialKey, 1);
     },
-    handleRemove(file, fileList) {
-      console.log(file, fileList);
-    },
-    handlePictureCardPreview(file) {
-      this.dialogImageUrl = file.url;
-      this.dialogVisible = true;
-    },
     callback() {},
-    getComponentData() {
-      return {
-        attrs: {},
-        props: {
-          options: this.swiperOptions,
-        },
-      };
-    },
-    handleStart(event) {
-      event.preventDefault();
-      console.log(event);
-    },
     format(percentage) {
       // return percentage === 100 ? "满" : `${percentage}%`;
 
@@ -446,26 +476,8 @@ export default {
     formatStatus(percentage) {
       return percentage === 100 ? "success" : "exception";
     },
-    handlePreview() {
-      console.log("preview");
-    },
-    handleExceed(files, fileList) {
-      console.log(files, fileList);
-      this.$message.warning(
-        `当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${
-          files.length + fileList.length
-        } 个文件`
-      );
-    },
-    dropboxUpload() {
-      console.log("dropboxUpload");
-    },
-    handleSuccess(res, file) {
-      console.log("handleSuccess", file);
-    },
-    publicThing() {
-      console.log("public", this.form);
-      console.log("public refs", this.$refs.informationContent);
+    handleSave() {
+      console.log(this.tutorialForm);
     },
   },
 };
@@ -509,6 +521,7 @@ export default {
       height: 100%;
       .el-icon-plus {
         line-height: 90px;
+        width: 100%;
       }
     }
   }
@@ -636,7 +649,11 @@ export default {
 .el-textarea {
   ::v-deep .el-textarea__inner {
     min-height: 300px !important;
+    height: 300px;
   }
+}
+.el-textarea textarea {
+  min-height: 300px !important;
 }
 .tutorial {
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
@@ -669,6 +686,13 @@ export default {
   .el-button {
     width: 120px;
     margin-left: 20px;
+  }
+}
+
+.el-form {
+  .el-form-item input,
+  .el-form-item textarea {
+    font-size: 12px;
   }
 }
 </style>

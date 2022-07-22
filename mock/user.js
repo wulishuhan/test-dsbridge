@@ -47,11 +47,13 @@ let loginData = mock.mock({
   },
 });
 let getInfo = mock.mock({
-  name: "@name",
+  user_id: "@id",
+  username: "@name",
+  email: "@email",
+  nickname: "@name",
   avatar: "@image('300x200','@color', '#FFF', '@word')",
   token: /(\w\W\d){10,15}/,
   roles: ["user"],
-  id: "@id",
 });
 let resetTokenData = mock.mock({
   name: "@name",
@@ -210,8 +212,8 @@ module.exports = [
       const { username, password } = req.query;
       console.log(username, password);
       return {
-        status: 200,
-        data: loginData,
+        code: 0,
+        data: getInfo,
       };
     },
   },
