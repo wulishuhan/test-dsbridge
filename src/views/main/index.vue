@@ -48,10 +48,7 @@ export default {
   components: { ResourceCard, SrollTopButton },
   data() {
     return {
-      things: [],
       total: 0,
-      filterPopular: "",
-      filterType: "",
       pagination: {
         pageSize: 10,
         currentPage: 1,

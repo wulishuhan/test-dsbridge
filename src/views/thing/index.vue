@@ -3,18 +3,26 @@
     <div class="center-container">
       <div class="show">
         <el-row>
-          <el-col :xs="24" :sm="24" :md="18" :lg="18" :xl="18">
-            <div class="author">
-              <el-avatar :size="50" :src="user.avatar"></el-avatar>
-              <div>
-                <span class="thing-name">{{ user.thingName }}</span>
-                <span>
-                  by
-                  <a @click="toUserProfileView">
-                    {{ user.name }}
-                  </a>
-                  {{ user.publicTime }}
-                </span>
+          <el-col>
+            <div class="show-header">
+              <div class="show-header-left">
+                <div class="show-header-left-thing-name">
+                  {{ user.thingName }}
+                </div>
+                <div class="flex align-center">
+                  <el-avatar :size="30" :src="user.avatar"></el-avatar>
+                  <span class="user-name">{{ user.name }}</span>
+                </div>
+              </div>
+              <div class="flex justify-between" style="width: 335px">
+                <StarButton></StarButton>
+                <BaseButton style="width: 90px">
+                  <div class="flex justify-around">
+                    <i class="ortur-icon-share"></i>
+                    <span>0k</span>
+                  </div>
+                </BaseButton>
+                <DownLoadButton></DownLoadButton>
               </div>
             </div>
             <div class="show-thing">
@@ -86,20 +94,107 @@
           </el-col>
         </el-row>
       </div>
-      <el-tabs type="card" v-model="activeName">
-        <el-tab-pane label="Thing Details" name="first">
-          <thing-details></thing-details>
-        </el-tab-pane>
-        <el-tab-pane label="Thing Files" name="second">
-          <thing-files></thing-files>
-        </el-tab-pane>
-        <el-tab-pane label="Comments" name="third">
-          <comments></comments>
-        </el-tab-pane>
-        <el-tab-pane label="Makes" name="fourth">
-          <makes></makes>
-        </el-tab-pane>
-      </el-tabs>
+      <div class="flex justify-between bottom-content">
+        <div class="bottom-content-left">
+          <el-tabs
+            class="description-tutorial-makes"
+            type="border-card"
+            v-model="activeName"
+          >
+            <el-tab-pane label="Description" name="description">
+              <show-more
+                :showHeight="showHeight"
+                v-if="activeName == 'description'"
+              >
+                xxxxxxxxxxxxxxx xxxxxxxx xxxxxxxxx xxxxxx xxxxxxxxx xxxxxxx
+                xxxxxxxxxxxxxx xxxxxxxxxxxxxx xxxxxxxxxxxx xxxxxxxxxx
+                xxxxxxxxxxx xxxxxxxxx xxxxxxxxxxxxxx xxxxxxxxxxx xxxxxxxxxxxxxxx
+                xxxxxxxx xxxxxxxxx xxxxxx xxxxxxxxx xxxxxxx xxxxxxxxxxxxxx
+                xxxxxxxxxxxxxx xxxxxxxxxxxx xxxxxxxxxx xxxxxxxxxxx xxxxxxxxx
+                xxxxxxxxxxxxxx xxxxxxxxxxx
+              </show-more>
+            </el-tab-pane>
+            <el-tab-pane label="Tutorial" name="step">
+              <show-more :showHeight="showHeight" v-if="activeName == 'step'">
+                xxxxxxxxxxxxxxx xxxxxxxx xxxxxxxxx xxxxxx xxxxxxxxx xxxxxxx
+                xxxxxxxxxxxxxx xxxxxxxxxxxxxx xxxxxxxxxxxx xxxxxxxxxx
+                xxxxxxxxxxx xxxxxxxxx xxxxxxxxxxxxxx xxxxxxxxxxx
+              </show-more>
+            </el-tab-pane>
+            <el-tab-pane label="Makes" name="third">makes</el-tab-pane>
+          </el-tabs>
+          <div>
+            <div style="display: flex; justify-content: space-between">
+              <h2 class="more-font">More by this creator</h2>
+              <a class="view-more" @click="dialogTabsVisible = true"
+                >View all</a
+              >
+            </div>
+            <div class="flex justify-between more-image-box">
+              <el-image
+                class="more-image"
+                src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
+              ></el-image>
+              <el-image
+                class="more-image"
+                src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
+              ></el-image>
+              <el-image
+                class="more-image"
+                src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
+              ></el-image>
+            </div>
+          </div>
+
+          <div>
+            <div class="flex justify-between" style="margin-top: 35px">
+              <h2 class="more-font">Similar with this</h2>
+              <a class="view-more" @click="dialogTabsVisible = true"
+                >View all</a
+              >
+            </div>
+            <div class="flex justify-between more-image-box">
+              <el-image
+                class="more-image"
+                src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
+              ></el-image>
+              <el-image
+                class="more-image"
+                src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
+              ></el-image>
+              <el-image
+                class="more-image"
+                src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
+              ></el-image>
+            </div>
+          </div>
+          <div class="split-line"></div>
+          <div class="comment-box">
+            <Reply></Reply>
+            <comment></comment>
+          </div>
+        </div>
+        <div class="bottom-content-right">
+          <label-card></label-card>
+          <div class="share-content">
+            <div class="bottom-content-right-box-title">Share</div>
+            <share-card></share-card>
+          </div>
+          <div style="margin-top: 32px">
+            <div class="bottom-content-right-box-title">License</div>
+            <div class="flex justify-between license-box">
+              <i class="ortur-icon-cc"></i>
+              <i class="ortur-icon-reload"></i>
+              <i class="ortur-icon-user-info"></i>
+            </div>
+            <div class="license-info">
+              OpenRC F1 car - 1:10 RC Car by barspin is licensed under the
+              <a href=""> xxxxxxxxx </a>
+              license
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
     <div>
       <ElImageViewer
@@ -110,33 +205,48 @@
         :initialIndex="imgActiveIndex"
       ></ElImageViewer>
     </div>
+    <el-dialog :visible.sync="dialogTabsVisible" width="852px">
+      <el-tabs v-model="activeName">
+        <el-tab-pane label="More by this creator" name="second">
+          <view-more></view-more>
+        </el-tab-pane>
+        <el-tab-pane label="Similar with this" name="third">2</el-tab-pane>
+        <el-tab-pane label="Makes from others" name="fourth">3</el-tab-pane>
+      </el-tabs>
+    </el-dialog>
   </div>
 </template>
 <script>
 import ElImageViewer from "element-ui/packages/image/src/image-viewer";
-// import ViewModel from "./components/ViewModel";
-import ThingDetails from "./ThingDetails";
-import ThingFiles from "./ThingFiles";
-import Comments from "./Comments";
-import Makes from "./Makes";
-// import ShareSocialMedia from "@/components/ShareSocialMedia";
 import { getUserInfoByThingId } from "@/api/thing";
+import DownLoadButton from "@/components/DownLoadButton.vue";
+import BaseButton from "@/components/BaseButton.vue";
+import StarButton from "@/components/StarButton.vue";
+import LabelCard from "@/components/LabelCard.vue";
+import ShareCard from "@/components/ShareCard";
+import Comment from "@/components/Comment/CommentWidget.vue";
+import ShowMore from "@/components/ShowMore.vue";
+import Reply from "@/components/Comment/ReplyWidget.vue";
+import ViewMore from "./ViewMore.vue";
 export default {
   name: "Thing",
   components: {
-    // ViewModel,
-    ThingDetails,
-    ThingFiles,
-    Comments,
-    Makes,
-    // ShareSocialMedia,
     ElImageViewer,
+    StarButton,
+    BaseButton,
+    DownLoadButton,
+    LabelCard,
+    ShareCard,
+    Comment,
+    ShowMore,
+    Reply,
+    ViewMore,
   },
   data() {
     return {
       showViewer: false, // 显示查看器
       urlList: [], //大图列表
-      activeName: "first",
+      activeName: "description",
       user: {},
       imgActiveIndex: 0, // 当前移动图片的索引值
       imageList: [],
@@ -145,6 +255,8 @@ export default {
       viewModel: false,
       isLike: false,
       isCollected: false,
+      showHeight: 50,
+      dialogTabsVisible: false,
     };
   },
   methods: {
@@ -207,11 +319,9 @@ export default {
       thingId: this.$route.params.thingId,
       userId: this.$store.getters.userId,
     }).then((res) => {
-      console.log("userinfo:", res);
       this.user = res.data.data;
       this.isLike = this.user.isLike;
       this.isCollected = this.user.isCollected;
-      console.log("this.user", this.user);
       this.imageList = this.user.image;
       for (let i = 0; i < this.imageList.length; i++) {
         let obj = {
@@ -225,6 +335,84 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+a {
+  color: #1e78f0;
+}
+.flex {
+  display: flex;
+}
+.justify-between {
+  justify-content: space-between;
+}
+.justify-around {
+  justify-content: space-around;
+}
+.align-center {
+  align-items: center;
+}
+.user-name {
+  font-size: 12px;
+  color: #999999;
+  margin-left: 7px;
+}
+.bottom-content {
+  width: 768px;
+  margin: 0 auto;
+  margin-top: 24px;
+}
+.bottom-content-left {
+  width: 478px;
+}
+.bottom-content-right {
+  width: 194px;
+}
+.view-more {
+  font-size: 15px;
+  cursor: pointer;
+}
+.more-font {
+  font-size: 18px;
+  color: #1a1a1a;
+  font-weight: 400;
+}
+.more-image-box {
+  margin-top: 31px;
+}
+.more-image {
+  width: 138px;
+  height: 84px;
+}
+.split-line {
+  border: solid #ccc 1px;
+  height: 1px;
+  margin-top: 30px;
+}
+.comment-box {
+  margin-top: 30px;
+}
+.share-content {
+  margin-top: 40px;
+}
+.bottom-content-right-box-title {
+  font-size: 18px;
+  color: #1a1a1a;
+}
+.license-box {
+  width: 145px;
+  margin-top: 17px;
+  font-size: 35px;
+}
+.license-info {
+  font-size: 15px;
+  color: #9e9e9e;
+  line-height: 23px;
+}
+.dialog-view-more {
+  width: 852px;
+  height: 738px;
+  background: #ffffff;
+  border-radius: 9px;
+}
 .imageViewer {
   ::v-deep .el-image-viewer__prev {
     background-color: black;
@@ -254,7 +442,7 @@ export default {
     border-radius: 6px;
     transform: translateX(-50%);
     left: 50%;
-    top: 12px;
+    top: 210px;
   }
   ::v-deep .el-image-viewer__next {
     width: 324px;
@@ -266,7 +454,7 @@ export default {
     // left: 50%;
     transform: translateX(-50%);
     left: 50%;
-    bottom: 12px;
+    bottom: 210px;
     top: auto;
   }
   ::v-deep .el-image-viewer__close {
@@ -275,14 +463,20 @@ export default {
     background: #1a1a1a;
     opacity: 0.3;
     border-radius: 6px;
+    top: 210px;
+  }
+  ::v-deep .el-image-viewer__img {
+    width: 1084px;
+    height: 660px;
   }
 }
 .container {
-  background-color: #f2f2f2;
+  background-color: #f5f5f5;
   height: 100%;
+  font-family: Source Han Sans CN;
+  font-weight: 400;
   .model-button-group {
     background-color: #fff;
-    /* width: 700px; */
   }
   .show {
     margin-top: 20px;
@@ -295,31 +489,8 @@ export default {
     font-size: 14px;
     line-height: 41px;
   }
-  .author {
-    margin-top: 10px;
-    /* width: 700px; */
-    height: 63px;
-    background-color: #fff;
-    display: flex;
-    align-items: center;
-    color: #555;
-    div {
-      display: flex;
-      font-size: 12px;
-      flex-direction: column;
-      margin-left: 16px;
-      a {
-        color: #248bfb;
-        text-decoration: none;
-      }
-      .thing-name {
-        font-size: 18px;
-      }
-    }
-  }
   .show-thing {
-    /* width: 700px; */
-    background-color: #fff;
+    margin-top: 30px;
     .switchImage {
       width: 700px;
       height: 66px;
@@ -331,74 +502,10 @@ export default {
       }
     }
   }
-  .user-active {
-    width: 100%;
-    background-color: #fff;
-    margin-top: 10px;
-    .active-box {
-      box-sizing: border-box;
-      border-bottom: 1px solid #ccc;
-      padding: 5px;
-      width: 100%;
-      min-height: 41px;
-      text-align: center;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      color: #555;
-      cursor: pointer;
-      span {
-        margin-left: 3px;
-        font-size: 12px;
-      }
-      i {
-        font-size: 14px;
-      }
-      .el-icon-right {
-        margin-right: 5px;
-      }
-    }
-  }
-  .share-thing {
-    width: 100%;
-    height: 255px;
-    color: #555;
-    background-color: #fff;
-    margin-top: 10px;
-    padding: 10px 0px 10px 10px;
-    box-sizing: border-box;
-    span {
-      font-size: 16px;
-    }
-    .social-icon {
-      margin-top: 10px;
-      svg {
-        width: 40px;
-        height: 40px;
-        margin-left: 10px;
-        margin-top: 10px;
-      }
-    }
-    .send-email {
-      margin-top: 20px;
-      span {
-        font-size: 12px;
-        padding: 10px;
-      }
-      .el-input {
-        margin-top: 20px;
-      }
-    }
-  }
-  .filter-box {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 10px;
-  }
 }
 .center-container {
   margin: 0 auto;
-  width: 970px;
+  width: 768px;
 }
 .el-tabs {
   margin-top: 15px;
@@ -407,6 +514,7 @@ export default {
   position: relative;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   width: 100%;
   height: 372px;
   padding: 0;
@@ -461,7 +569,7 @@ export default {
   background: #1a1a1a;
   opacity: 0.3;
   border-radius: 8px 8px 0px 0px;
-  z-index: 10;
+  z-index: 8;
   color: white;
 }
 .el-icon-arrow-down {
@@ -476,7 +584,7 @@ export default {
   opacity: 0.3;
   border-radius: 8px 8px 0px 0px;
   bottom: 0px;
-  z-index: 10;
+  z-index: 8;
   color: white;
 }
 .downCarousel {
@@ -508,7 +616,7 @@ export default {
   position: absolute;
   right: 12px;
   top: 12px;
-  z-index: 10;
+  z-index: 8;
 }
 .carouselContainer {
   display: flex;
@@ -528,6 +636,66 @@ export default {
 .el-icon-check {
   color: #248bfb;
 }
+.description-tutorial-makes {
+  width: 318px;
+  background-color: #f5f5f5;
+  margin-top: 0px;
+}
+.el-tabs--border-card {
+  background: #f5f5f5;
+  border: none;
+  box-shadow: none;
+}
+::v-deep .ortur-icon {
+  color: #000;
+}
+/* ::v-deep .share-box {
+  background: #f5f5f5;
+  box-shadow: none;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  width: 180px;
+  height: 84px;
+}
+::v-deep .share-icon-box {
+  width: 42px;
+  height: 42px;
+  margin-right: 12px;
+  margin-top: 12px;
+  line-height: 42px;
+  text-align: center;
+  box-sizing: border-box;
+  padding: 7px;
+  background: #e8ebf4;
+  border-radius: 6px;
+} */
+::v-deep .app-header__search {
+  width: 100%;
+  height: 42px;
+  border: 1px solid #cccccc !important;
+}
+::v-deep .el-tabs--border-card > .el-tabs__content {
+  padding-top: 20px;
+  padding-left: 0px;
+}
+::v-deep .comment-wrapper {
+  width: 100%;
+}
+.show-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+.show-header-left {
+  display: flex;
+  flex-direction: column;
+  font-size: 18px;
+  color: #1a1a1a;
+}
+.show-header-left-thing-name {
+  font-size: 18px;
+  color: #1a1a1a;
+}
 @media screen and (max-width: 768px) {
   .carousel {
     width: 100%;
@@ -543,10 +711,6 @@ export default {
   }
   .show-thing {
     width: 100%;
-  }
-  .author {
-    width: 100%;
-    box-sizing: border-box;
   }
 }
 </style>
