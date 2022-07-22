@@ -77,3 +77,11 @@ export function register(data) {
     data,
   });
 }
+
+export function getCommentList(data) {
+  return request({
+    url: "/user/getCommentList",
+    method: "post",
+    data,
+  });
+}
