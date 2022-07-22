@@ -84,7 +84,6 @@ export default {
 .button {
   // width: 90px;
   position: relative;
-  margin-left: 24px;
   color: #000;
   .num {
     color: #000;
@@ -96,8 +95,9 @@ export default {
     background: #ffffff;
     border-radius: 15px;
     top: 45px;
-    left: -330px;
+    left: -358px;
     overflow: auto;
+    z-index: 9;
     .downLoadAll {
       .fileNum {
         font-size: 12px;
