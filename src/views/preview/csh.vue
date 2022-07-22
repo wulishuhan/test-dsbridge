@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-tabs v-model="activeName">
+    <el-tabs v-model="activeName" style="display: none">
       <el-tab-pane label="aaaa" name="first">
         <div style="width: 1440px; height: 1749px">
           <div style="width: 768px; margin: 0 auto">
@@ -122,12 +122,45 @@
         <login></login>
       </el-tab-pane>
     </el-tabs>
-    <div style="width: 486px; margin: 0 auto">
-      <el-tabs type="border-card" stretch="true">
-        <el-tab-pane label="描述" name="first"
-          >描述
+    <div style="width: 486px; margin: 0 auto; display: none">
+      <el-tabs type="border-card" :stretch="true" v-model="activeName">
+        <el-tab-pane label="描述" name="description">
+          <show-more
+            :showHeight="showHeight"
+            :contentHeight="100"
+            v-if="activeName == 'description'"
+          >
+            xxxxxxxxxxxxxxx xxxxxxxx xxxxxxxxx xxxxxx xxxxxxxxx xxxxxxx
+            xxxxxxxxxxxxxx xxxxxxxxxxxxxx xxxxxxxxxxxx xxxxxxxxxx xxxxxxxxxxx
+            xxxxxxxxx xxxxxxxxxxxxxx xxxxxxxxxxx xxxxxxxxxxxxxxx xxxxxxxx
+            xxxxxxxxx xxxxxx xxxxxxxxx xxxxxxx xxxxxxxxxxxxxx xxxxxxxxxxxxxx
+            xxxxxxxxxxxx xxxxxxxxxx xxxxxxxxxxx xxxxxxxxx xxxxxxxxxxxxxx
+            xxxxxxxxxxx
+          </show-more>
+        </el-tab-pane>
+        <el-tab-pane label="步骤" name="step">
+          <show-more :showHeight="showHeight" v-if="activeName == 'step'">
+            xxxxxxxxxxxxxxx xxxxxxxx xxxxxxxxx xxxxxx xxxxxxxxx xxxxxxx
+            xxxxxxxxxxxxxx xxxxxxxxxxxxxx xxxxxxxxxxxx xxxxxxxxxx xxxxxxxxxxx
+            xxxxxxxxx xxxxxxxxxxxxxx xxxxxxxxxxx
+          </show-more>
+        </el-tab-pane>
+        <el-tab-pane label="制作" name="third">制作</el-tab-pane>
+      </el-tabs>
+    </div>
+    <div>
+      <div style="width: 486px; border: solid">
+        <div style="display: flex; justify-content: space-between">
+          <span
+            style="
+              font-size: 18px;
+              font-family: Source Han Sans CN;
+              font-weight: 400;
+              color: #1a1a1a;
+            "
+            >该创作者的更多作品</span
+          >
           <a
-            href=""
             style="
               font-size: 15px;
               font-family: Source Han Sans CN;
@@ -136,11 +169,30 @@
             "
             >查看全部</a
           >
-        </el-tab-pane>
-        <el-tab-pane label="步骤" name="second">步骤</el-tab-pane>
-        <el-tab-pane label="制作" name="third">制作</el-tab-pane>
-      </el-tabs>
+        </div>
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            margin-top: 31px;
+          "
+        >
+          <el-image
+            style="width: 138px; height: 84px"
+            src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
+          ></el-image>
+          <el-image
+            style="width: 138px; height: 84px"
+            src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
+          ></el-image>
+          <el-image
+            style="width: 138px; height: 84px"
+            src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
+          ></el-image>
+        </div>
+      </div>
     </div>
+    <login></login>
   </div>
 </template>
 <script>
@@ -150,12 +202,13 @@ import Login from "@/components/Login";
 import DownLoadButton from "@/components/DownLoadButton.vue";
 import BaseButton from "@/components/BaseButton.vue";
 import StarButton from "@/components/StarButton.vue";
+import ShowMore from "@/components/ShowMore.vue";
 // 用来预览组件
 export default {
   name: "csh",
   // components: { TestCard, Share },
   // components: { Login },
-  components: { StarButton, BaseButton, DownLoadButton, Login },
+  components: { StarButton, BaseButton, DownLoadButton, Login, ShowMore },
   data() {
     return {
       test: {
@@ -186,7 +239,9 @@ export default {
         },
       ],
       value: "",
-      activeName: "fourth",
+      activeName: "step",
+      showHeight: 50,
+      contentHeight: 0,
     };
   },
   methods: {
