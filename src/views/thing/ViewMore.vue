@@ -35,19 +35,16 @@ export default {
     getThingList(this.pagination).then((res) => {
       this.resources.push(...res.data.data);
     });
+    let container = document.querySelector(".more-container");
     this.load = throttle(() => {
       // 距离底部200px时加载一次
       let bottomOfWindow =
-        document.documentElement.offsetHeight -
-          document.documentElement.scrollTop -
-          window.innerHeight <=
+        container.scrollHeight - container.offsetHeight - container.scrollTop <=
         100;
-      console.log(document.querySelector(".more-container"));
       if (bottomOfWindow && !this.loading && !this.noMore) {
         this.pagination.currentPage++;
         getThingList(this.pagination)
           .then((res) => {
-            console.log("test");
             this.resources.push(...res.data.data);
             this.loading = false;
           })
@@ -57,10 +54,11 @@ export default {
           });
       }
     }, 1000);
-    window.addEventListener("scroll", this.load);
+    container.addEventListener("scroll", this.load);
   },
   beforeDestroy() {
-    window.removeEventListener("scroll", this.load);
+    let container = document.querySelector(".more-container");
+    container.removeEventListener("scroll", this.load);
   },
 };
 </script>

@@ -178,7 +178,20 @@
           <label-card></label-card>
           <div class="share-content">
             <div class="bottom-content-right-box-title">Share</div>
-            <share-card></share-card>
+            <div class="share">
+              <a class="share-icon" :href="shareLink.facebook">
+                <i class="ortur-icon-facebook ortur-icon"></i>
+              </a>
+              <a class="share-icon" :href="shareLink.twitter">
+                <i class="ortur-icon-twitter ortur-icon"></i>
+              </a>
+              <a class="share-icon" :href="shareLink.whatsapp">
+                <i class="ortur-icon-whats-app ortur-icon"></i>
+              </a>
+              <a class="share-icon" href="mailto:nowhere@mozilla.org">
+                <i class="ortur-icon-ins ortur-icon"></i>
+              </a>
+            </div>
           </div>
           <div style="margin-top: 32px">
             <div class="bottom-content-right-box-title">License</div>
@@ -206,17 +219,22 @@
       ></ElImageViewer>
     </div>
     <el-dialog :visible.sync="dialogTabsVisible" width="852px">
-      <el-tabs v-model="activeName">
-        <el-tab-pane label="More by this creator" name="second">
+      <el-tabs v-model="viewMoreActive">
+        <el-tab-pane label="More by this creator" name="view-more">
           <view-more></view-more>
         </el-tab-pane>
-        <el-tab-pane label="Similar with this" name="third">2</el-tab-pane>
-        <el-tab-pane label="Makes from others" name="fourth">3</el-tab-pane>
+        <el-tab-pane label="Similar with this" name="view-similar">
+          <view-more></view-more>
+        </el-tab-pane>
+        <el-tab-pane label="Makes from others" name="view-makes">
+          <view-more></view-more>
+        </el-tab-pane>
       </el-tabs>
     </el-dialog>
   </div>
 </template>
 <script>
+/* eslint-disable */
 import ElImageViewer from "element-ui/packages/image/src/image-viewer";
 import { getUserInfoByThingId } from "@/api/thing";
 import DownLoadButton from "@/components/DownLoadButton.vue";
@@ -257,6 +275,14 @@ export default {
       isCollected: false,
       showHeight: 50,
       dialogTabsVisible: false,
+      viewMoreActive: "view-more",
+      shareLink: {
+        // text文本后边可以传要分享的url，注意后期修改
+        facebook:
+          "https://www.facebook.com/sharer/sharer.php?u=test.leadiffer.com",
+        twitter: "https://twitter.com/share?url=test.leadiffer.com",
+        whatsapp: "https://web.whatsapp.com/send?text=test.leadiffer.com",
+      },
     };
   },
   methods: {
@@ -335,105 +361,148 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.share-icon {
+  font-size: 38px;
+  display: block;
+  width: 56px;
+  height: 56px;
+  text-align: center;
+}
+
+.share {
+  display: flex;
+  flex-flow: row wrap;
+}
+
 a {
   color: #1e78f0;
 }
+
 .flex {
   display: flex;
 }
+
 .justify-between {
   justify-content: space-between;
 }
+
 .justify-around {
   justify-content: space-around;
 }
+
 .align-center {
   align-items: center;
 }
+
 .user-name {
   font-size: 12px;
   color: #999999;
   margin-left: 7px;
 }
+
 .bottom-content {
   width: 768px;
   margin: 0 auto;
   margin-top: 24px;
 }
+
 .bottom-content-left {
   width: 478px;
 }
+
 .bottom-content-right {
   width: 194px;
 }
+
 .view-more {
   font-size: 15px;
   cursor: pointer;
 }
+
 .more-font {
   font-size: 18px;
   color: #1a1a1a;
   font-weight: 400;
 }
+
 .more-image-box {
   margin-top: 31px;
 }
+
 .more-image {
   width: 138px;
   height: 84px;
 }
+
 .split-line {
   border: solid #ccc 1px;
   height: 1px;
   margin-top: 30px;
 }
+
 .comment-box {
   margin-top: 30px;
 }
+
 .share-content {
   margin-top: 40px;
 }
+
 .bottom-content-right-box-title {
   font-size: 18px;
   color: #1a1a1a;
 }
+
 .license-box {
   width: 145px;
   margin-top: 17px;
   font-size: 35px;
 }
+
 .license-info {
   font-size: 15px;
   color: #9e9e9e;
   line-height: 23px;
 }
+
 .dialog-view-more {
   width: 852px;
   height: 738px;
   background: #ffffff;
   border-radius: 9px;
 }
+
 .imageViewer {
   ::v-deep .el-image-viewer__prev {
     background-color: black;
   }
+
+  .ortur-iconb {
+    font-size: 56px;
+  }
+
   ::v-deep .el-image-viewer__btn {
     border-radius: 6px;
   }
+
   ::v-deep .el-icon-close:before {
     font-family: "icomoon";
     content: "\e922";
     color: #fff;
   }
+
   ::v-deep .el-icon-arrow-left:before {
     content: "\e6e1";
   }
+
   ::v-deep .el-icon-arrow-right:before {
     content: "\e6df";
   }
+
   ::v-deep .el-image-viewer__actions {
     display: none;
   }
+
   ::v-deep .el-image-viewer__prev {
     width: 324px;
     height: 60px;
@@ -444,6 +513,7 @@ a {
     left: 50%;
     top: 210px;
   }
+
   ::v-deep .el-image-viewer__next {
     width: 324px;
     height: 60px;
@@ -457,6 +527,7 @@ a {
     bottom: 210px;
     top: auto;
   }
+
   ::v-deep .el-image-viewer__close {
     width: 60px;
     height: 60px;
@@ -465,22 +536,27 @@ a {
     border-radius: 6px;
     top: 210px;
   }
+
   ::v-deep .el-image-viewer__img {
     width: 1084px;
     height: 660px;
   }
 }
+
 .container {
   background-color: #f5f5f5;
   height: 100%;
   font-family: Source Han Sans CN;
   font-weight: 400;
+
   .model-button-group {
     background-color: #fff;
   }
+
   .show {
     margin-top: 20px;
   }
+
   .tip {
     width: 700px;
     height: 41px;
@@ -489,12 +565,15 @@ a {
     font-size: 14px;
     line-height: 41px;
   }
+
   .show-thing {
     margin-top: 30px;
+
     .switchImage {
       width: 700px;
       height: 66px;
       background-color: #fff;
+
       img {
         margin-left: 6px;
         cursor: pointer;
@@ -503,13 +582,16 @@ a {
     }
   }
 }
+
 .center-container {
   margin: 0 auto;
   width: 768px;
 }
+
 .el-tabs {
   margin-top: 15px;
 }
+
 .img-ul {
   position: relative;
   display: flex;
@@ -523,33 +605,41 @@ a {
   list-style: none;
   margin: 0;
 }
+
 .img-ul::-webkit-scrollbar {
   /*滚动条整体样式*/
-  width: 2px; /*高宽分别对应横竖滚动条的尺寸*/
+  width: 2px;
+  /*高宽分别对应横竖滚动条的尺寸*/
   height: 1px;
 }
+
 .img-ul::-webkit-scrollbar-thumb {
   /*滚动条里面小方块*/
   border-radius: 5px;
   box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
   background: #535353;
 }
+
 .img-ul::-webkit-scrollbar-track {
   /*滚动条里面轨道*/
   box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
   border-radius: 10px;
   background: #ededed;
 }
+
 .img-li {
   cursor: pointer;
+
   img {
     width: 138px;
     height: 84px;
   }
 }
+
 .img-activeBorder {
   border: 1px solid #248bfb;
 }
+
 .right-carousel {
   display: flex;
   width: 138px;
@@ -558,6 +648,7 @@ a {
   position: relative;
   margin-left: 24px;
 }
+
 .el-icon-arrow-up {
   display: inline-block;
   cursor: pointer;
@@ -572,6 +663,7 @@ a {
   z-index: 8;
   color: white;
 }
+
 .el-icon-arrow-down {
   display: inline-block;
   cursor: pointer;
@@ -587,6 +679,7 @@ a {
   z-index: 8;
   color: white;
 }
+
 .downCarousel {
   width: 138px;
   height: 36px;
@@ -597,6 +690,7 @@ a {
   bottom: 12px;
   margin-left: -64px;
 }
+
 .upCarousel {
   width: 138px;
   height: 36px;
@@ -607,6 +701,7 @@ a {
   top: 12px;
   margin-left: -64px;
 }
+
 .ortur-icon-enlarge {
   width: 60px;
   height: 60px;
@@ -618,37 +713,46 @@ a {
   top: 12px;
   z-index: 8;
 }
+
 .carouselContainer {
   display: flex;
 }
+
 .carousel {
   position: relative;
   width: 605px;
   height: 372px;
+
   img {
     width: 100%;
     height: 100%;
   }
 }
+
 .like-red {
   color: red;
 }
+
 .el-icon-check {
   color: #248bfb;
 }
+
 .description-tutorial-makes {
   width: 318px;
   background-color: #f5f5f5;
   margin-top: 0px;
 }
+
 .el-tabs--border-card {
   background: #f5f5f5;
   border: none;
   box-shadow: none;
 }
+
 ::v-deep .ortur-icon {
   color: #000;
 }
+
 /* ::v-deep .share-box {
   background: #f5f5f5;
   box-shadow: none;
@@ -674,41 +778,50 @@ a {
   height: 42px;
   border: 1px solid #cccccc !important;
 }
-::v-deep .el-tabs--border-card > .el-tabs__content {
+
+::v-deep .el-tabs--border-card>.el-tabs__content {
   padding-top: 20px;
   padding-left: 0px;
 }
+
 ::v-deep .comment-wrapper {
   width: 100%;
 }
+
 .show-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
 }
+
 .show-header-left {
   display: flex;
   flex-direction: column;
   font-size: 18px;
   color: #1a1a1a;
 }
+
 .show-header-left-thing-name {
   font-size: 18px;
   color: #1a1a1a;
 }
+
 @media screen and (max-width: 768px) {
   .carousel {
     width: 100%;
     height: 524px;
+
     img {
       width: 100%;
       height: 100%;
     }
   }
+
   .center-container {
     margin: 0 auto;
     width: 100%;
   }
+
   .show-thing {
     width: 100%;
   }
