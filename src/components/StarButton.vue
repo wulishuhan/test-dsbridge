@@ -3,6 +3,7 @@
     <el-button
       :style="{ color: isStar ? 'red' : 'black' }"
       class="baseButton button"
+      @click="click"
       :icon="isStar ? 'el-icon-star-on' : 'el-icon-star-off'"
     >
       <span class="num">{{ downLoadNum }}k</span>
@@ -12,6 +13,11 @@
 
 <script>
 export default {
+  methods: {
+    click() {
+      this.$emit("click");
+    },
+  },
   props: {
     downLoadNum: {
       type: Number,
