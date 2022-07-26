@@ -19,9 +19,9 @@
           </div>
         </div>
       </div>
-      <el-button @click.prevent="download" type="primary"
-        >Download <span>{{ file.downloadNumber }} </span></el-button
-      >
+      <el-button @click.prevent="download" type="primary">
+        Download <span>{{ file.downloadNumber }} </span>
+      </el-button>
     </div>
   </div>
 </template>
@@ -69,13 +69,14 @@ export default {
 <style lang="scss" scoped>
 .download-card {
   background-color: #fff;
-  width: 100%;
+  width: 92%;
   padding: 10px 1px;
   text-align: left;
+  margin: 0 auto;
   // border-bottom: solid 1px #ccc;
   box-sizing: border-box;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
   .left {
     display: flex;
@@ -111,5 +112,10 @@ export default {
     color: #999999;
     margin-right: 5px;
   }
+}
+.el-button {
+  width: 114px;
+  height: 36px;
+  font-size: 12px;
 }
 </style>

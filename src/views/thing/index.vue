@@ -15,7 +15,7 @@
                 </div>
               </div>
               <div class="flex justify-between" style="width: 335px">
-                <StarButton></StarButton>
+                <StarButton :isStar="isLike" @click="like"></StarButton>
                 <BaseButton style="width: 90px">
                   <div class="flex justify-around">
                     <i class="ortur-icon-share"></i>
@@ -235,7 +235,8 @@
 </template>
 <script>
 /* eslint-disable */
-import ElImageViewer from "element-ui/packages/image/src/image-viewer";
+// import ElImageViewer from "element-ui/packages/image/src/image-viewer";
+import ElImageViewer from "@/components/ImageViewer";
 import { getUserInfoByThingId } from "@/api/thing";
 import DownLoadButton from "@/components/DownLoadButton.vue";
 import BaseButton from "@/components/BaseButton.vue";
@@ -477,10 +478,6 @@ a {
     background-color: black;
   }
 
-  .ortur-iconb {
-    font-size: 56px;
-  }
-
   ::v-deep .el-image-viewer__btn {
     border-radius: 6px;
   }
@@ -535,6 +532,7 @@ a {
     opacity: 0.3;
     border-radius: 6px;
     top: 210px;
+    right: 515px;
   }
 
   ::v-deep .el-image-viewer__img {
@@ -548,27 +546,11 @@ a {
   height: 100%;
   font-family: Source Han Sans CN;
   font-weight: 400;
-
   .model-button-group {
     background-color: #fff;
   }
-
-  .show {
-    margin-top: 20px;
-  }
-
-  .tip {
-    width: 700px;
-    height: 41px;
-    background-color: #fca833;
-    color: #fff;
-    font-size: 14px;
-    line-height: 41px;
-  }
-
   .show-thing {
     margin-top: 30px;
-
     .switchImage {
       width: 700px;
       height: 66px;
@@ -596,7 +578,6 @@ a {
   position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   width: 100%;
   height: 372px;
   padding: 0;
@@ -712,6 +693,7 @@ a {
   right: 12px;
   top: 12px;
   z-index: 8;
+  cursor: pointer;
 }
 
 .carouselContainer {
@@ -738,7 +720,7 @@ a {
 }
 
 .description-tutorial-makes {
-  width: 318px;
+  width: 100%;
   background-color: #f5f5f5;
   margin-top: 0px;
 }
@@ -753,33 +735,13 @@ a {
   color: #000;
 }
 
-/* ::v-deep .share-box {
-  background: #f5f5f5;
-  box-shadow: none;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  width: 180px;
-  height: 84px;
-}
-::v-deep .share-icon-box {
-  width: 42px;
-  height: 42px;
-  margin-right: 12px;
-  margin-top: 12px;
-  line-height: 42px;
-  text-align: center;
-  box-sizing: border-box;
-  padding: 7px;
-  background: #e8ebf4;
-  border-radius: 6px;
-} */
 ::v-deep .app-header__search {
   width: 100%;
   height: 42px;
   border: 1px solid #cccccc !important;
 }
 
-::v-deep .el-tabs--border-card>.el-tabs__content {
+::v-deep .el-tabs--border-card > .el-tabs__content {
   padding-top: 20px;
   padding-left: 0px;
 }
@@ -792,6 +754,7 @@ a {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
+  margin-top: 30px;
 }
 
 .show-header-left {

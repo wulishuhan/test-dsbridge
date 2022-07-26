@@ -4,7 +4,7 @@
       <div class="downPanel" v-show="isShowDownPanel">
         <div class="downLoadAll">
           <span class="fileNum"> {{ fileNum }}个文件 </span>
-          <a style="color: #1e78f0" @click="downLoadAll">downLoadAll</a>
+          <a style="color: #1e78f0" @click="downLoadAll">download all</a>
         </div>
         <download-card
           v-for="item in fileList"
@@ -12,9 +12,9 @@
           :key="item.id"
         ></download-card>
       </div>
-      <span class="el-icon--left ortur-icon-file-download"
-        ><span class="path1"></span><span class="path2"></span
-      ></span>
+      <span class="el-icon--left ortur-icon-file-download">
+        <span class="path1"></span><span class="path2"> </span>
+      </span>
       <span class="num">{{ downLoadNum }}k</span>
       <i class="el-icon-arrow-down el-icon--right"></i>
     </el-button>

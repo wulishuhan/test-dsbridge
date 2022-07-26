@@ -16,7 +16,6 @@ Vue.config.productionTip = false;
 Vue.use(ElementUI);
 const VueAwesomeSwiper = require("vue-awesome-swiper/dist/ssr");
 Vue.use(VueAwesomeSwiper);
-
 // Vue.use(mock);
 new Vue({
   router,
