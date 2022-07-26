@@ -32,9 +32,9 @@
                 <div class="fileinfo">
                   <span class="filename">{{ source.name }}</span>
                   <div class="fileinfo-tag">
-                    <span class="filesize"
-                      >{{ (source.size / 1024).toFixed(2) }}kb</span
-                    >
+                    <span class="filesize">{{
+                      formatFileSize(source.size)
+                    }}</span>
                     <span class="filetype">{{
                       source.name.substring(source.name.lastIndexOf(".") + 1)
                     }}</span>
@@ -53,56 +53,50 @@
         <el-divider></el-divider>
         <div class="list-wrapper">
           <h5 class="list-wrapper-title">封面</h5>
-          <div v-swiper:mySwiper="swiperOptions" @someSwiperEvent="callback">
-            <draggable class="swiper-wrapper" handle=".handle">
-              <div class="swiper-slide swiper-no-swiping">
-                <img
-                  src="http://dummyimage.com/150x90/ef79f2/FFF&text=yqqmj11"
-                />
+          <div v-swiper:coverSwiper="swiperOptions" @someSwiperEvent="callback">
+            <draggable
+              class="swiper-wrapper"
+              handle=".handle"
+              v-model="coverList"
+            >
+              <div
+                class="swiper-slide swiper-no-swiping"
+                v-for="(coverItem, coverKey) in coverList"
+                :key="coverKey"
+              >
+                <img :src="coverItem.url" />
+                <i class="ortur-icon-minus" @click="removeCover(coverKey)">
+                  <span class="path1"></span>
+                  <span class="path2"></span>
+                </i>
                 <i class="handle el-icon-s-operation"></i>
+                <el-upload
+                  class="cover-edit"
+                  action="/dev-api/user/receiveImg"
+                  :show-file-list="showFile"
+                  :on-success="handleCoverEditSuccess"
+                >
+                  <i
+                    class="el-icon-edit"
+                    @click="currentEditIndex(coverKey)"
+                  ></i>
+                </el-upload>
               </div>
-              <div class="swiper-slide swiper-no-swiping">
-                <img
-                  src="http://dummyimage.com/150x90/ef79f2/FFF&text=yqqm22"
-                />
-                <i class="handle el-icon-s-operation"></i>
-              </div>
-              <div class="swiper-slide swiper-no-swiping">
-                <img
-                  src="http://dummyimage.com/150x90/ef79f2/FFF&text=yqqmj33"
-                />
-                <i class="handle el-icon-s-operation"></i>
-              </div>
-              <div class="swiper-slide swiper-no-swiping">
-                <img
-                  src="http://dummyimage.com/150x90/ef79f2/FFF&text=yqqmj44"
-                />
-                <i class="handle el-icon-s-operation"></i>
-              </div>
-              <div class="swiper-slide swiper-no-swiping">
-                <img
-                  src="http://dummyimage.com/150x90/ef79f2/FFF&text=yqqmj55"
-                />
-                <i class="handle el-icon-s-operation"></i>
-              </div>
-              <div class="swiper-slide swiper-no-swiping">
-                <img
-                  src="http://dummyimage.com/150x90/ef79f2/FFF&text=yqqmj66"
-                />
-                <i class="handle el-icon-s-operation"></i>
-              </div>
-              <div class="swiper-slide swiper-no-swiping">
-                <img
-                  src="http://dummyimage.com/150x90/ef79f2/FFF&text=yqqmj77"
-                />
-                <i class="handle el-icon-s-operation"></i>
+              <div class="swiper-slide">
+                <el-upload
+                  action="/dev-api/user/receiveImg"
+                  :show-file-list="showFile"
+                  class="cover-add"
+                  :on-success="handleCoverAddSuccess"
+                >
+                  <i class="el-icon-plus"></i>
+                </el-upload>
               </div>
             </draggable>
             <div class="swiper-button-prev swiper-button-black"></div>
             <!-- 白色 -->
             <div class="swiper-button-next swiper-button-black"></div>
             <!-- 黑色 -->
-            <div class="swiper-pagination"></div>
           </div>
         </div>
       </div>
@@ -113,7 +107,6 @@
         </div>
       </div>
     </div>
-
     <el-form
       ref="form"
       :model="baseinfoForm"
@@ -159,30 +152,80 @@
             :key="tutorialKey"
           >
             <el-form :modal="tutorialItem">
-              <el-form-item prop="desc">
+              <el-form-item prop="desc" style="margin-bottom: 20px">
                 <el-input
-                  v-model="tutorialItem.desc"
-                  placeholder="标题1"
+                  v-model="tutorialItem.step_title"
+                  placeholder="添加步骤标题"
                 ></el-input>
               </el-form-item>
-              <el-form-item>
-                <el-upload
-                  action="/dev-api/user/receiveImg"
-                  list-type="picture-card"
-                  :file-list="tutorialItem.fileList"
-                  :on-preview="handlePictureCardPreview"
-                  :on-remove="handleRemove"
+              <el-form-item style="margin: 20px auto">
+                <div
+                  v-swiper:[tutorialSwiper+tutorialKey]="tutorialSwiperOptions"
+                  @someSwiperEvent="callback"
                 >
-                  <i class="el-icon-plus"></i>
-                </el-upload>
-                <el-dialog :visible.sync="dialogVisible">
-                  <img width="100%" :src="dialogImageUrl" alt="" />
-                </el-dialog>
+                  <draggable
+                    class="swiper-wrapper"
+                    handle=".handle"
+                    v-model="tutorialItem.fileList"
+                  >
+                    <div
+                      class="swiper-slide swiper-no-swiping"
+                      v-for="(
+                        tutorialImgItem, tutorialImgKey
+                      ) in tutorialItem.fileList"
+                      :key="tutorialImgKey"
+                    >
+                      <img :src="tutorialImgItem.url" />
+                      <i
+                        class="ortur-icon-minus"
+                        @click="removeTutorialImg(tutorialKey, tutorialImgKey)"
+                      >
+                        <span class="path1"></span>
+                        <span class="path2"></span>
+                      </i>
+                      <i class="handle el-icon-s-operation"></i>
+                      <el-upload
+                        class="cover-edit"
+                        action="/dev-api/user/receiveImg"
+                        :show-file-list="showFile"
+                        :on-success="handleTutorialEditSuccess"
+                      >
+                        <i
+                          class="el-icon-edit"
+                          @click="
+                            currentTutorialEditIndex(
+                              tutorialKey,
+                              tutorialImgKey
+                            )
+                          "
+                        ></i>
+                      </el-upload>
+                    </div>
+                    <div class="swiper-slide">
+                      <el-upload
+                        action="/dev-api/user/receiveImg"
+                        :show-file-list="showFile"
+                        class="cover-add"
+                        :on-success="handleTutorialAddSuccess"
+                      >
+                        <i
+                          class="el-icon-plus"
+                          @click="currentTutorialEditIndex(tutorialKey, -1)"
+                        ></i>
+                      </el-upload>
+                    </div>
+                  </draggable>
+                  <div class="swiper-button-prev swiper-button-black"></div>
+                  <!-- 白色 -->
+                  <div class="swiper-button-next swiper-button-black"></div>
+                  <!-- 黑色 -->
+                </div>
               </el-form-item>
               <el-form-item label="" prop="desc">
                 <el-input
                   type="textarea"
                   v-model="tutorialItem.desc"
+                  placeholder="添加步骤说明"
                 ></el-input>
               </el-form-item>
               <el-button class="drag-btn"
@@ -195,11 +238,19 @@
               <el-button
                 class="remove-btn"
                 @click="removeTutorialItem(tutorialKey)"
+                v-if="tutorialForm.length != 1"
                 ><i class="el-icon-minus"></i
               ></el-button>
             </el-form>
           </div>
         </draggable>
+      </el-form-item>
+      <el-form-item>
+        <div class="action-btn">
+          <el-button type="primary" @click="handleSave()">Save</el-button>
+          <el-button>Preview</el-button>
+          <el-button>Reset</el-button>
+        </div>
       </el-form-item>
     </el-form>
   </div>
@@ -215,9 +266,12 @@ export default {
   },
   data() {
     return {
+      tutorialSwiper: "tutorialSwiper",
       showFile: false,
       dialogImageUrl: "",
       sourceList: [],
+      coverList: [],
+      tutorialImgList: [],
       dialogVisible: false,
       baseinfoFormRules: {
         title: [{ required: true, message: "title不能为空" }],
@@ -283,63 +337,36 @@ export default {
       tutorialForm: [
         {
           id: 1,
-          desc: "test1",
+          step_title: "",
+          desc: "",
           fileList: [
             {
               name: "food.jpeg",
-              url: "https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100",
+              url: "http://dummyimage.com/150x90/ef79f2/FFF&text=1",
             },
             {
               name: "food2.jpeg",
-              url: "https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100",
-            },
-          ],
-        },
-        {
-          id: 2,
-          desc: "test2",
-          fileList: [
-            {
-              name: "food.jpeg",
-              url: "https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100",
-            },
-            {
-              name: "food2.jpeg",
-              url: "https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100",
-            },
-            {
-              name: "food2.jpeg",
-              url: "https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100",
+              url: "http://dummyimage.com/150x90/ef79f2/FFF&text=2",
             },
           ],
         },
       ],
       swiperOptions: {
+        observer: true,
         slidesPerView: 5,
         navigation: {
           nextEl: ".swiper-button-next",
           prevEl: ".swiper-button-prev",
         },
-        // Some Swiper option/callback...
       },
-
-      groups: [],
-      myArray: [
-        {
-          id: 1,
-          url: "https://cdn.thingiverse.com/renders/ce/96/2a/78/ba/bc48f4232048053be71efddd58a1464e_thumb_tiny.jpg",
-          name: "MakePrintable Thing App",
-          author: "MixedDimensions",
+      tutorialSwiperOptions: {
+        observer: true,
+        slidesPerView: 5,
+        navigation: {
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev",
         },
-        {
-          id: 2,
-          url: "https://cdn.thingiverse.com/renders/28/31/42/14/6c/2a4816a865281bdd135e770afd5c6507_thumb_tiny.jpg",
-          name: "KiriMoto",
-          author: "stewartallen",
-        },
-      ],
-      value: "",
-      apps: 0,
+      },
     };
   },
   computed: {
@@ -349,11 +376,29 @@ export default {
   },
   mounted() {
     console.log("Current Swiper instance object", this.mySwiper);
-
-    let handleEl = document.querySelector(".handle");
-    console.log("===========", handleEl);
   },
   methods: {
+    removeCover(removeKey) {
+      console.log(removeKey);
+      this.coverList.splice(removeKey, 1);
+    },
+    formatFileSize(filesize) {
+      var units = "Byte";
+      if (filesize / 1024 > 1) {
+        filesize = filesize / 1024;
+        units = "KB";
+      }
+      if (filesize / 1024 > 1) {
+        filesize = filesize / 1024;
+        units = "MB";
+      }
+
+      if (filesize / 1024 > 1) {
+        filesize = filesize / 1024;
+        units = "GB";
+      }
+      return filesize.toFixed(2) + units;
+    },
     handleSourceChange(file) {
       console.log("=========", file);
     },
@@ -364,6 +409,48 @@ export default {
     handleSourceSuccess(response, file, fileList) {
       console.log(response, file, fileList);
     },
+    handleCoverAddSuccess() {
+      this.coverList.push({
+        url: "http://dummyimage.com/150x90/ef79f2/FFF&text=new",
+      });
+    },
+    handleCoverEditSuccess(response, file, fileList) {
+      console.log(response, file, fileList);
+      this.coverList.splice(this.coverEditIndex, 1, {
+        url: "http://dummyimage.com/150x90/ef79f2/FFF&text=edit",
+      });
+    },
+    currentTutorialEditIndex(tutorialKey, tutorialImgKey) {
+      console.log(tutorialKey, tutorialImgKey);
+      this.currentTutorialKey = tutorialKey;
+      this.currentTutorialImgKey = tutorialImgKey;
+    },
+    removeTutorialImg(tutorialKey, tutorialImgKey) {
+      console.log(tutorialKey, tutorialImgKey);
+      this.tutorialForm[tutorialKey].fileList.splice(tutorialImgKey, 1);
+    },
+    handleTutorialAddSuccess() {
+      this.tutorialForm[this.currentTutorialKey].fileList.push({
+        name: "test",
+        url: "http://dummyimage.com/150x90/ef79f2/FFF&text=new",
+      });
+    },
+    handleTutorialEditSuccess(response, file, fileList) {
+      console.log(response, file, fileList);
+      this.tutorialForm[this.currentTutorialKey].fileList.splice(
+        this.currentTutorialImgKey,
+        1,
+        {
+          name: "test",
+          url: "http://dummyimage.com/150x90/ef79f2/FFF&text=edit",
+        }
+      );
+    },
+
+    currentEditIndex(coverEditIndex) {
+      console.log(coverEditIndex);
+      this.coverEditIndex = coverEditIndex;
+    },
     tutorialChange() {
       console.log(this.tutorialForm);
     },
@@ -372,55 +459,25 @@ export default {
 
       this.tutorialForm.splice(tutorialKey + 1, 0, {
         id: Date.now(),
-        desc: "test3",
+        desc: "",
+        step_title: "",
+        fileList: [],
       });
     },
     removeTutorialItem(tutorialKey) {
       this.tutorialForm.splice(tutorialKey, 1);
     },
-    handleRemove(file, fileList) {
-      console.log(file, fileList);
-    },
-    handlePictureCardPreview(file) {
-      this.dialogImageUrl = file.url;
-      this.dialogVisible = true;
-    },
     callback() {},
-    getComponentData() {
-      return {
-        attrs: {},
-        props: {
-          options: this.swiperOptions,
-        },
-      };
-    },
-    handleStart(event) {
-      event.preventDefault();
-      console.log(event);
-    },
     format(percentage) {
-      return percentage === 100 ? "满" : `${percentage}%`;
+      // return percentage === 100 ? "满" : `${percentage}%`;
+
+      return `${percentage}%`;
     },
-    handlePreview() {
-      console.log("preview");
+    formatStatus(percentage) {
+      return percentage === 100 ? "success" : "exception";
     },
-    handleExceed(files, fileList) {
-      console.log(files, fileList);
-      this.$message.warning(
-        `当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${
-          files.length + fileList.length
-        } 个文件`
-      );
-    },
-    dropboxUpload() {
-      console.log("dropboxUpload");
-    },
-    handleSuccess(res, file) {
-      console.log("handleSuccess", file);
-    },
-    publicThing() {
-      console.log("public", this.form);
-      console.log("public refs", this.$refs.informationContent);
+    handleSave() {
+      console.log(this.tutorialForm);
     },
   },
 };
@@ -433,18 +490,57 @@ export default {
   text-align: center;
 }
 
+.swiper-button-next,
+.swiper-button-prev {
+  width: 0;
+}
+
 .swiper-slide {
   position: relative;
+  .ortur-icon-minus {
+    font-size: 20px;
+    position: absolute;
+    top: 10px;
+    right: 35px;
+    cursor: pointer;
+  }
+  .cover-edit {
+    font-size: 20px;
+    position: absolute;
+    top: 35px;
+    left: 90px;
+    cursor: pointer;
+  }
+  .cover-add {
+    width: 150px;
+    font-size: 34px;
+    border: 1px dashed #aaa;
+    height: 90px;
+    .el-upload {
+      width: 100%;
+      height: 100%;
+      .el-icon-plus {
+        line-height: 90px;
+        width: 100%;
+      }
+    }
+  }
+
+  .cover-add:hover {
+    border: 1px dashed #409eff;
+  }
   .handle {
     position: absolute;
     bottom: 10px;
-    right: 60px;
+    right: 35px;
     font-size: 20px;
     cursor: move;
     color: #444;
   }
   img {
+    display: block;
     margin: 0px auto;
+    width: 150px;
   }
 }
 .upload-container {
@@ -553,7 +649,11 @@ export default {
 .el-textarea {
   ::v-deep .el-textarea__inner {
     min-height: 300px !important;
+    height: 300px;
   }
+}
+.el-textarea textarea {
+  min-height: 300px !important;
 }
 .tutorial {
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
@@ -578,6 +678,21 @@ export default {
       right: -80px;
       top: 50%;
     }
+  }
+}
+.action-btn {
+  display: flex;
+  justify-content: flex-end;
+  .el-button {
+    width: 120px;
+    margin-left: 20px;
+  }
+}
+
+.el-form {
+  .el-form-item input,
+  .el-form-item textarea {
+    font-size: 12px;
   }
 }
 </style>

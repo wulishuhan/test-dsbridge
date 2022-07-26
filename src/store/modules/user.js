@@ -43,17 +43,22 @@ const actions = {
   login({ commit }, userInfo) {
     const { username, password } = userInfo;
     return new Promise((resolve, reject) => {
-      Login({ username: username.trim(), password: password })
+      Login({
+        client_subtype: "Windows",
+        client_type: "pc",
+        password,
+        username,
+      })
         .then((response) => {
           const data = response.data.data;
-          console.log(data);
-          commit("SET_TOKEN", data.token);
+          const userInfo = response.data.data.user_info;
+          commit("SET_TOKEN", data.access_token);
           commit("SET_ISLOGIN", true);
-          commit("SET_ROLES", data.roles);
-          commit("SET_NAME", data.name);
-          commit("SET_AVATAR", data.avatar);
-          commit("SET_USERID", data.userId);
-          setToken(data.token);
+          // commit("SET_ROLES", data.roles);
+          commit("SET_NAME", userInfo.nick_name);
+          commit("SET_AVATAR", userInfo.avatar);
+          commit("SET_USERID", userInfo.user_id);
+          setToken(data.access_token);
           resolve(data);
         })
         .catch((error) => {

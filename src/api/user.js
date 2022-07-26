@@ -8,7 +8,7 @@ export function getUserList(params) {
 }
 export function Login(data) {
   return request({
-    url: "/user/login",
+    url: "/auth/user/login",
     method: "post",
     data,
   });
@@ -68,5 +68,20 @@ export function findFollowsByUserId(params) {
     url: "/user/getFollowsByUserId",
     method: "get",
     params,
+  });
+}
+export function register(data) {
+  return request({
+    url: "/auth/user/register",
+    method: "post",
+    data,
+  });
+}
+
+export function getCommentList(data) {
+  return request({
+    url: "/user/getCommentList",
+    method: "post",
+    data,
   });
 }

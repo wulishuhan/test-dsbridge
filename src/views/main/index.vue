@@ -3,7 +3,7 @@
     <header class="groups-header">
       <div class="learn-more">了解更多</div>
     </header>
-    <div class="content">
+    <div class="content" id="content">
       <el-row class="filter">
         <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="8">
           <div class="select-box">
@@ -33,24 +33,22 @@
       </el-row>
       <p v-if="loading">loading...</p>
       <p v-if="noMore">no more</p>
+      <sroll-top-button :to="'#content'"></sroll-top-button>
     </div>
   </div>
 </template>
 <script>
 import ResourceCard from "@/components/ResourceCard";
+import SrollTopButton from "@/components/SrollTopButton";
 import { throttle } from "@/utils/cache.js";
 import { getThingList } from "@/api/thing";
 export default {
   // eslint-disable-next-line
   name: "Main",
-  components: { ResourceCard },
+  components: { ResourceCard, SrollTopButton },
   data() {
     return {
-      screenWidth: document.body.clientWidth,
-      things: [],
       total: 0,
-      filterPopular: "",
-      filterType: "",
       pagination: {
         pageSize: 10,
         currentPage: 1,
@@ -113,7 +111,7 @@ export default {
 <style scoped>
 .main {
   /* text-align: center; */
-  background-color: #fff;
+  background-color: #f5f5f5;
 }
 .content {
   width: 1080px;
@@ -133,8 +131,8 @@ p {
   width: 1080px;
   height: 294px;
   margin: 0 auto;
-  color: aliceblue;
-  border: solid;
+  color: #f5f5f5;
+  border: solid 1px #000;
   position: relative;
 }
 .learn-more {
@@ -175,7 +173,7 @@ p {
 .icon-hourglass {
   position: absolute;
   top: 12px;
-  left: 8px;
+  left: 2px;
   z-index: 2;
   font-size: 15px;
 }
@@ -187,6 +185,9 @@ p {
   position: absolute;
   top: 0px;
   left: 0px;
+}
+::v-deep .el-input__inner {
+  background: #f5f5f5;
 }
 .select:hover {
   border: 1px solid #c2c4cc;

@@ -1,16 +1,16 @@
 <template>
   <div class="share-box">
-    <a :href="shareLink.facebook">
-      <i class="ortur-icon-facebook"></i>
+    <a class="share-icon-box" :href="shareLink.facebook">
+      <i class="ortur-icon-facebook ortur-icon"></i>
     </a>
-    <a :href="shareLink.twitter">
-      <i class="ortur-icon-twitter"></i>
+    <a class="share-icon-box" :href="shareLink.twitter">
+      <i class="ortur-icon-twitter ortur-icon"></i>
     </a>
-    <a :href="shareLink.whatsapp">
-      <i class="ortur-icon-whats-app"></i>
+    <a class="share-icon-box" :href="shareLink.whatsapp">
+      <i class="ortur-icon-whats-app ortur-icon"></i>
     </a>
-    <a href="mailto:nowhere@mozilla.org">
-      <i class="ortur-icon-ins"></i>
+    <a class="share-icon-box" href="mailto:nowhere@mozilla.org">
+      <i class="ortur-icon-ins ortur-icon"></i>
     </a>
   </div>
 </template>
@@ -42,11 +42,11 @@ export default {
   justify-content: space-evenly;
   align-items: center;
 }
-i {
+.ortur-icon {
   color: #686565;
   font-size: 30px;
 }
-a {
+.share-icon-box {
   text-decoration: none;
 }
 </style>

@@ -38,18 +38,22 @@ let user = mock.mock({
   ],
 });
 let loginData = mock.mock({
-  name: "@name",
-  avatar: mock.mock("@image('300x200','@color', '#FFF', '@word')"),
-  token: /(\w\W\d){10,15}/,
-  roles: ["user"],
-  userId: "@id",
+  user_info: {
+    user_name: "@name",
+    nick_name: "@name",
+    avatar: "@image('300x200','@color', '#FFF', '@word')",
+    access_token: /(\w\W\d){10,15}/,
+    user_id: "@id",
+  },
 });
 let getInfo = mock.mock({
-  name: "@name",
+  user_id: "@id",
+  username: "@name",
+  email: "@email",
+  nickname: "@name",
   avatar: "@image('300x200','@color', '#FFF', '@word')",
   token: /(\w\W\d){10,15}/,
   roles: ["user"],
-  id: "@id",
 });
 let resetTokenData = mock.mock({
   name: "@name",
@@ -152,6 +156,29 @@ let userInfoByUserId = mock.mock({
 });
 let data = user.data;
 
+let commentList = mock.mock({
+  code: 0,
+  "data|10": [
+    {
+      id: "@increment()",
+      comment: "@sentence()",
+      fromNickname: "@name",
+      fromAvatar: "@image('40x40','@color', '#FFF', '@word')",
+      datetime: "@datetime",
+      "replyList|1-12": [
+        {
+          commentId: "@increment",
+          comment: "@sentence()",
+          fromNickname: "@name",
+          fromAvatar: "@image('40x40','@color', '#FFF', '@word')",
+          toNickname: "@name",
+          toAvatar: "@image('40x40','@color', '#FFF', '@word')",
+        },
+      ],
+    },
+  ],
+});
+
 module.exports = [
   {
     url: "/user/list",
@@ -187,13 +214,16 @@ module.exports = [
     },
   },
   {
-    url: "/user/login",
+    url: "/auth/user/login",
     type: "post",
     response: (req) => {
       const { username, password } = req.query;
       console.log(username, password);
+      loginData.expires_in = 259200;
       return {
         status: 200,
+        code: 0,
+        msg: "",
         data: loginData,
       };
     },
@@ -201,12 +231,10 @@ module.exports = [
   {
     url: "/user/getInfo",
     type: "get",
-    response: (req) => {
-      const { username, password } = req.query;
-      console.log(username, password);
+    response: () => {
       return {
-        status: 200,
-        data: loginData,
+        code: 0,
+        data: getInfo,
       };
     },
   },
@@ -225,7 +253,7 @@ module.exports = [
   {
     url: "/user/logout",
     type: "post",
-    response: (req) => {
+    response: () => {
       return {
         code: 200,
         data: "success",
@@ -306,6 +334,28 @@ module.exports = [
         message: "ok",
         data: followData,
       };
+    },
+  },
+  {
+    url: "/auth/user/register",
+    type: "post",
+    response: (req) => {
+      const { username, password } = req.query;
+      console.log(username, password);
+      loginData.expires_in = 259200;
+      return {
+        status: 200,
+        code: 0,
+        msg: "",
+        data: loginData,
+      };
+    },
+  },
+  {
+    url: "/user/getCommentList",
+    type: "post",
+    response: () => {
+      return commentList;
     },
   },
 ];

@@ -1,13 +1,11 @@
 <template>
   <div class="comment-wrapper">
-    <div v-for="(item, index) in commentList" :key="index">
+    <div v-for="(commentItem, index) in commentList" :key="index">
       <div class="userinfo-wrapper">
         <div class="profile">
-          <span class="user-avatar"
-            ><img src="http://dummyimage.com/300x200/ef79f2/FFF&text=yqqmj"
-          /></span>
-          <span class="nickname">{{ item.nickname }}</span>
-          <span class="release-date">{{ item.release_date }}</span>
+          <span class="user-avatar"><img :src="commentItem.fromAvatar" /></span>
+          <span class="nickname">{{ commentItem.fromNickname }}</span>
+          <span class="release-date">{{ commentItem.datetime }}</span>
         </div>
         <div class="message-btn" @click="outerVisible = true">
           <el-button><i class="ortur-icon-message"></i></el-button>
@@ -17,10 +15,12 @@
         </el-dialog>
       </div>
       <div class="reply-wrapper">
-        <div class="reply-detail">{{ item.comment }}</div>
+        <div class="reply-detail">{{ commentItem.comment }}</div>
         <el-button @click="showReplyList(index)">
-          <span style="color: #aaa">reply</span>
-          <span style="margin-right: 10px">{{ item.replyList.length }}</span>
+          <span style="color: #aaa">reply &nbsp;</span>
+          <span style="margin-right: 10px">{{
+            commentItem.replyList.length
+          }}</span>
           <i class="ortur-icon-arrow-down"></i>
         </el-button>
       </div>
@@ -32,8 +32,8 @@
             <span class="user-avatar"
               ><img src="http://dummyimage.com/300x200/ef79f2/FFF&text=yqqmj"
             /></span>
-            <span class="nickname">{{ replyRow.nickname }}</span>
-            <span class="release-date">{{ replyRow.release_date }}</span>
+            <span class="nickname">{{ replyRow.fromNickname }}</span>
+            <span class="release-date">{{ replyRow.datetime }}</span>
           </div>
           <div class="message-btn" @click="innerVisible = true">
             <el-button><i class="ortur-icon-message"></i></el-button>
@@ -56,7 +56,7 @@
 </template>
 
 <script>
-import { getInfo } from "@/api/user";
+import { getCommentList } from "@/api/user";
 import ReplyWidget from "@/components/Comment/ReplyWidget.vue";
 export default {
   data() {
@@ -66,156 +66,31 @@ export default {
       outerVisible: false,
       innerVisible: false,
       replyListDialog: false,
-      replyTotalRows: "12",
       currentComment: {},
+      replyTotalRows: "0条回复",
       replyTo: "reply to xxxx",
       keywords: "",
       select: "",
-      commentList: [
-        {
-          avatar: "http://dummyimage.com/300x200/ef79f2/FFF&text=yqqmj",
-          nickname: "Rubik's cube",
-          release_date: "2 days ago",
-          comment: "How to download this file1",
-          replyList: [
-            {
-              avatar: "http://dummyimage.com/300x200/ef79f2/FFF&text=yqqmj",
-              nickname: "Rubik's cube",
-              release_date: "2 days ago",
-              comment: "How to download this file",
-            },
-            {
-              avatar: "http://dummyimage.com/300x200/ef79f2/FFF&text=yqqmj",
-              nickname: "Rubik's cube",
-              release_date: "2 days ago",
-              comment: "How to download this file",
-            },
-            {
-              avatar: "http://dummyimage.com/300x200/ef79f2/FFF&text=yqqmj",
-              nickname: "Rubik's cube",
-              release_date: "2 days ago",
-              comment: "How to download this file",
-            },
-            {
-              avatar: "http://dummyimage.com/300x200/ef79f2/FFF&text=yqqmj",
-              nickname: "Rubik's cube",
-              release_date: "2 days ago",
-              comment: "How to download this file",
-            },
-          ],
-        },
-        {
-          avatar: "http://dummyimage.com/300x200/ef79f2/FFF&text=yqqmj",
-          nickname: "Rubik's cube",
-          release_date: "2 days ago",
-          comment: "How to download this file2",
-          replyList: [
-            {
-              avatar: "http://dummyimage.com/300x200/ef79f2/FFF&text=yqqmj",
-              nickname: "Rubik's cube",
-              release_date: "2 days ago",
-              comment: "How to download this file",
-            },
-            {
-              avatar: "http://dummyimage.com/300x200/ef79f2/FFF&text=yqqmj",
-              nickname: "Rubik's cube",
-              release_date: "2 days ago",
-              comment: "How to download this file",
-            },
-            {
-              avatar: "http://dummyimage.com/300x200/ef79f2/FFF&text=yqqmj",
-              nickname: "Rubik's cube",
-              release_date: "2 days ago",
-              comment: "How to download this file",
-            },
-            {
-              avatar: "http://dummyimage.com/300x200/ef79f2/FFF&text=yqqmj",
-              nickname: "Rubik's cube",
-              release_date: "2 days ago",
-              comment: "How to download this file",
-            },
-          ],
-        },
-        {
-          avatar: "http://dummyimage.com/300x200/ef79f2/FFF&text=yqqmj",
-          nickname: "Rubik's cube",
-          release_date: "2 days ago",
-          comment: "How to download this file3",
-          replyList: [
-            {
-              avatar: "http://dummyimage.com/300x200/ef79f2/FFF&text=yqqmj",
-              nickname: "Rubik's cube",
-              release_date: "2 days ago",
-              comment: "How to download this file",
-            },
-            {
-              avatar: "http://dummyimage.com/300x200/ef79f2/FFF&text=yqqmj",
-              nickname: "Rubik's cube",
-              release_date: "2 days ago",
-              comment: "How to download this file",
-            },
-            {
-              avatar: "http://dummyimage.com/300x200/ef79f2/FFF&text=yqqmj",
-              nickname: "Rubik's cube",
-              release_date: "2 days ago",
-              comment: "How to download this file",
-            },
-            {
-              avatar: "http://dummyimage.com/300x200/ef79f2/FFF&text=yqqmj",
-              nickname: "Rubik's cube",
-              release_date: "2 days ago",
-              comment: "How to download this file",
-            },
-          ],
-        },
-        {
-          avatar: "http://dummyimage.com/300x200/ef79f2/FFF&text=yqqmj",
-          nickname: "Rubik's cube",
-          release_date: "2 days ago",
-          comment: "How to download this file4",
-          replyList: [
-            {
-              avatar: "http://dummyimage.com/300x200/ef79f2/FFF&text=yqqmj",
-              nickname: "Rubik's cube",
-              release_date: "2 days ago",
-              comment: "How to download this file",
-            },
-            {
-              avatar: "http://dummyimage.com/300x200/ef79f2/FFF&text=yqqmj",
-              nickname: "Rubik's cube",
-              release_date: "2 days ago",
-              comment: "How to download this file",
-            },
-            {
-              avatar: "http://dummyimage.com/300x200/ef79f2/FFF&text=yqqmj",
-              nickname: "Rubik's cube",
-              release_date: "2 days ago",
-              comment: "How to download this file",
-            },
-            {
-              avatar: "http://dummyimage.com/300x200/ef79f2/FFF&text=yqqmj",
-              nickname: "Rubik's cube",
-              release_date: "2 days ago",
-              comment: "How to download this file",
-            },
-          ],
-        },
-      ],
+      commentList: [],
     };
   },
   components: {
     ReplyWidget,
   },
   mounted() {
-    getInfo().then(function (res) {
+    var that = this;
+    getCommentList().then(function (res) {
       console.log(res.data.data.avatar);
+      that.commentList = res.data.data;
     });
   },
+  computed: {},
   methods: {
     showReplyList(index) {
       console.log(index);
       this.replyListDialog = true;
       this.currentComment = this.commentList[index];
+      this.replyTotalRows = this.currentComment.replyList.length + "条回复";
     },
   },
 };
@@ -237,8 +112,8 @@ export default {
       }
       .user-avatar {
         display: inline-block;
-        width: 30px;
-        height: 30px;
+        width: 40px;
+        height: 40px;
         border-radius: 50%;
         overflow: hidden;
 
