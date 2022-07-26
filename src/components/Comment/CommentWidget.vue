@@ -7,12 +7,9 @@
           <span class="nickname">{{ commentItem.fromNickname }}</span>
           <span class="release-date">{{ commentItem.datetime }}</span>
         </div>
-        <div class="message-btn" @click="outerVisible = true">
+        <div class="message-btn" @click="showReplyOuterDialog(index)">
           <el-button><i class="ortur-icon-message"></i></el-button>
         </div>
-        <el-dialog :title="replyTo" :visible.sync="outerVisible">
-          <ReplyWidget></ReplyWidget>
-        </el-dialog>
       </div>
       <div class="reply-wrapper">
         <div class="reply-detail">{{ commentItem.comment }}</div>
@@ -25,7 +22,11 @@
         </el-button>
       </div>
     </div>
-    <el-dialog :title="replyTotalRows" :visible.sync="replyListDialog">
+    <el-dialog
+      :title="replyTotalRows"
+      :visible.sync="replyListDialog"
+      width="900px"
+    >
       <div class="userinfo-wrapper">
         <div class="profile">
           <span class="user-avatar"
@@ -34,12 +35,9 @@
           <span class="nickname">{{ currentComment.fromNickname }}</span>
           <span class="release-date">{{ currentComment.datetime }}</span>
         </div>
-        <div class="message-btn" @click="outerVisible = true">
+        <div class="message-btn" @click="showCommentInnerDialog()">
           <el-button><i class="ortur-icon-message"></i></el-button>
         </div>
-        <el-dialog :title="replyTo" :visible.sync="outerVisible" append-to-body>
-          <ReplyWidget></ReplyWidget>
-        </el-dialog>
       </div>
       <div class="reply-list">
         <div v-for="(replyRow, id) in currentComment.replyList" :key="id">
@@ -51,12 +49,21 @@
               <span class="nickname">{{ replyRow.fromNickname }}</span>
               <span class="release-date">{{ replyRow.datetime }}</span>
             </div>
-            <div class="message-btn" @click="innerVisible = true">
+            <div class="message-btn" @click="showReplyInnerDialog(id)">
               <el-button><i class="ortur-icon-message"></i></el-button>
             </div>
           </div>
           <div class="reply-wrapper">
             <div class="reply-detail">{{ replyRow.comment }}</div>
+            <div class="reply-ref-detail" v-if="replyRow.replyType == 2">
+              <span class="reply-label">回复</span>
+              &nbsp;
+              <span class="reply-nickname">{{
+                "@" + replyRow.toNickname
+              }}</span>
+              &nbsp;
+              <span class="reply-comment">{{ replyRow.refComment }}</span>
+            </div>
           </div>
         </div>
       </div>
@@ -68,6 +75,10 @@
       >
         <ReplyWidget></ReplyWidget>
       </el-dialog>
+    </el-dialog>
+
+    <el-dialog :title="replyTo" :visible.sync="outerVisible">
+      <ReplyWidget></ReplyWidget>
     </el-dialog>
   </div>
 </template>
@@ -103,6 +114,20 @@ export default {
   },
   computed: {},
   methods: {
+    showReplyOuterDialog(index) {
+      this.outerVisible = true;
+      this.currentComment = this.commentList[index];
+      this.replyTo = "reply to " + this.currentComment.fromNickname;
+    },
+    showCommentInnerDialog() {
+      this.innerVisible = true;
+      this.replyTo = "reply to " + this.currentComment.fromNickname;
+    },
+    showReplyInnerDialog(replyIndex) {
+      this.innerVisible = true;
+      this.replyTo =
+        "reply to " + this.currentComment.replyList[replyIndex].fromNickname;
+    },
     showReplyList(index) {
       console.log(index);
       this.replyListDialog = true;
@@ -160,6 +185,19 @@ export default {
       font-size: 16px;
       color: #1a1a1a;
     }
+    .reply-ref-detail {
+      font-size: 14px;
+      color: #1a1a1a;
+      background: #f5f5f5;
+      border-radius: 8px;
+      padding: 10px 20px;
+      .reply-label {
+        color: #999;
+      }
+      .reply-nickname {
+        color: #1e78f0;
+      }
+    }
     .reply-list-fold {
       background: #e8ebf4;
       border-radius: 8px;
@@ -172,7 +210,7 @@ export default {
   }
 
   .reply-list {
-    width: 90%;
+    width: 95%;
     margin: 20px auto;
     padding: 0px 20px;
     border-left: 2px solid #e6e6e6;

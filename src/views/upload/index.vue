@@ -119,7 +119,25 @@
         <el-input v-model="baseinfoForm.title"></el-input>
       </el-form-item>
       <el-form-item label="Tags" prop="tags">
-        <el-input v-model="baseinfoForm.tags"></el-input>
+        <el-tag
+          :key="tag"
+          v-for="tag in baseinfoForm.tags"
+          closable
+          :disable-transitions="false"
+          @close="handleClose(tag)"
+        >
+          {{ tag }}
+        </el-tag>
+        <el-input
+          placeholder="添加标签"
+          class="input-new-tag"
+          v-model="inputValue"
+          ref="saveTagInput"
+          size="small"
+          @keyup.enter.native="handleInputConfirm"
+          @blur="handleInputConfirm"
+        >
+        </el-input>
       </el-form-item>
       <el-form-item label="License" prop="license">
         <el-select
@@ -224,6 +242,7 @@
               <el-form-item label="" prop="desc">
                 <el-input
                   type="textarea"
+                  autosize
                   v-model="tutorialItem.desc"
                   placeholder="添加步骤说明"
                 ></el-input>
@@ -239,7 +258,7 @@
                 class="remove-btn"
                 @click="removeTutorialItem(tutorialKey)"
                 v-if="tutorialForm.length != 1"
-                ><i class="el-icon-minus"></i
+                ><i class="el-icon-delete"></i
               ></el-button>
             </el-form>
           </div>
@@ -249,7 +268,7 @@
         <div class="action-btn">
           <el-button type="primary" @click="handleSave()">Save</el-button>
           <el-button>Preview</el-button>
-          <el-button>Reset</el-button>
+          <el-button @click="resetForm()">Reset</el-button>
         </div>
       </el-form-item>
     </el-form>
@@ -269,6 +288,7 @@ export default {
       tutorialSwiper: "tutorialSwiper",
       showFile: false,
       dialogImageUrl: "",
+      inputValue: "",
       sourceList: [],
       coverList: [],
       tutorialImgList: [],
@@ -283,7 +303,7 @@ export default {
       },
       baseinfoForm: {
         title: "",
-        tags: "",
+        tags: ["标签一", "标签二", "标签三"],
         license: "GNU - LGPL",
         desc: "",
       },
@@ -378,6 +398,24 @@ export default {
     console.log("Current Swiper instance object", this.mySwiper);
   },
   methods: {
+    resetForm() {
+      this.baseinfoForm = this.$options.data().baseinfoForm;
+      this.tutorialForm = this.$options.data().tutorialForm;
+      this.sourceList = this.$options.data().sourceList;
+      this.coverList = this.$options.data().coverList;
+      this.tutorialImgList = this.$options.data().tutorialImgList;
+    },
+    handleClose(tag) {
+      this.baseinfoForm.tags.splice(this.dynamicTags.indexOf(tag), 1);
+    },
+    handleInputConfirm() {
+      let inputValue = this.inputValue;
+      if (inputValue) {
+        this.baseinfoForm.tags.push(inputValue);
+      }
+      this.inputVisible = false;
+      this.inputValue = "";
+    },
     removeCover(removeKey) {
       console.log(removeKey);
       this.coverList.splice(removeKey, 1);
@@ -646,15 +684,7 @@ export default {
     }
   }
 }
-.el-textarea {
-  ::v-deep .el-textarea__inner {
-    min-height: 300px !important;
-    height: 300px;
-  }
-}
-.el-textarea textarea {
-  min-height: 300px !important;
-}
+
 .tutorial {
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
   padding: 10px;
@@ -663,18 +693,19 @@ export default {
     box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
     padding: 10px;
     margin: 20px auto;
-    .drag-btn {
+    .el-button {
       position: absolute;
+      border: none;
+    }
+    .drag-btn {
       left: -80px;
       top: 50%;
     }
     .add-btn {
-      position: absolute;
       right: -80px;
       bottom: 10px;
     }
     .remove-btn {
-      position: absolute;
       right: -80px;
       top: 50%;
     }
@@ -694,5 +725,17 @@ export default {
   .el-form-item textarea {
     font-size: 12px;
   }
+}
+
+.el-tag + .el-tag {
+  margin-left: 10px;
+}
+.el-tag {
+  color: #1a1a1a;
+}
+.input-new-tag {
+  width: 90px;
+  margin-left: 10px;
+  vertical-align: bottom;
 }
 </style>

@@ -174,6 +174,30 @@ let commentList = mock.mock({
           toNickname: "@name",
           toAvatar: "@image('40x40','@color', '#FFF', '@word')",
           datetime: "@datetime",
+          replyType: 0, //回复类型，0.回复自己，1.回复楼主，2.回复层主
+          refComment: "@sentence",
+        },
+        {
+          commentId: "@increment",
+          comment: "@sentence()",
+          fromNickname: "@name",
+          fromAvatar: "@image('40x40','@color', '#FFF', '@word')",
+          toNickname: "@name",
+          toAvatar: "@image('40x40','@color', '#FFF', '@word')",
+          datetime: "@datetime",
+          replyType: 1, //回复类型，0.回复自己，1.回复楼主，2.回复层主
+          refComment: "@sentence",
+        },
+        {
+          commentId: "@increment",
+          comment: "@sentence()",
+          fromNickname: "@name",
+          fromAvatar: "@image('40x40','@color', '#FFF', '@word')",
+          toNickname: "@name",
+          toAvatar: "@image('40x40','@color', '#FFF', '@word')",
+          datetime: "@datetime",
+          replyType: 2, //回复类型，0.回复自己，1.回复楼主，2.回复层主
+          refComment: "@sentence",
         },
       ],
     },
