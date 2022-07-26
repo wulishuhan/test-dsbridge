@@ -175,6 +175,7 @@ export default {
     .message-btn {
       .el-button {
         border: none;
+        background: none;
       }
     }
   }
