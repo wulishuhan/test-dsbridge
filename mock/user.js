@@ -173,6 +173,7 @@ let commentList = mock.mock({
           fromAvatar: "@image('40x40','@color', '#FFF', '@word')",
           toNickname: "@name",
           toAvatar: "@image('40x40','@color', '#FFF', '@word')",
+          datetime: "@datetime",
         },
       ],
     },

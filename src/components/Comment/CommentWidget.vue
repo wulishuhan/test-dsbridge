@@ -16,8 +16,8 @@
       </div>
       <div class="reply-wrapper">
         <div class="reply-detail">{{ commentItem.comment }}</div>
-        <el-button @click="showReplyList(index)">
-          <span style="color: #aaa">reply &nbsp;</span>
+        <el-button @click="showReplyList(index)" class="reply-list-fold">
+          <span style="color: #1a1a1a">reply </span>
           <span style="margin-right: 10px">{{
             commentItem.replyList.length
           }}</span>
@@ -26,21 +26,38 @@
       </div>
     </div>
     <el-dialog :title="replyTotalRows" :visible.sync="replyListDialog">
-      <div v-for="(replyRow, id) in currentComment.replyList" :key="id">
-        <div class="userinfo-wrapper">
-          <div class="profile">
-            <span class="user-avatar"
-              ><img src="http://dummyimage.com/300x200/ef79f2/FFF&text=yqqmj"
-            /></span>
-            <span class="nickname">{{ replyRow.fromNickname }}</span>
-            <span class="release-date">{{ replyRow.datetime }}</span>
-          </div>
-          <div class="message-btn" @click="innerVisible = true">
-            <el-button><i class="ortur-icon-message"></i></el-button>
-          </div>
+      <div class="userinfo-wrapper">
+        <div class="profile">
+          <span class="user-avatar"
+            ><img :src="currentComment.fromAvatar"
+          /></span>
+          <span class="nickname">{{ currentComment.fromNickname }}</span>
+          <span class="release-date">{{ currentComment.datetime }}</span>
         </div>
-        <div class="reply-wrapper">
-          <div class="reply-detail">{{ replyRow.comment }}</div>
+        <div class="message-btn" @click="outerVisible = true">
+          <el-button><i class="ortur-icon-message"></i></el-button>
+        </div>
+        <el-dialog :title="replyTo" :visible.sync="outerVisible" append-to-body>
+          <ReplyWidget></ReplyWidget>
+        </el-dialog>
+      </div>
+      <div class="reply-list">
+        <div v-for="(replyRow, id) in currentComment.replyList" :key="id">
+          <div class="userinfo-wrapper">
+            <div class="profile">
+              <span class="user-avatar"
+                ><img src="http://dummyimage.com/300x200/ef79f2/FFF&text=yqqmj"
+              /></span>
+              <span class="nickname">{{ replyRow.fromNickname }}</span>
+              <span class="release-date">{{ replyRow.datetime }}</span>
+            </div>
+            <div class="message-btn" @click="innerVisible = true">
+              <el-button><i class="ortur-icon-message"></i></el-button>
+            </div>
+          </div>
+          <div class="reply-wrapper">
+            <div class="reply-detail">{{ replyRow.comment }}</div>
+          </div>
         </div>
       </div>
       <el-dialog
@@ -127,7 +144,12 @@ export default {
         font-weight: 700;
       }
       .release-date {
-        color: #aaa;
+        color: #999;
+      }
+    }
+    .message-btn {
+      .el-button {
+        border: none;
       }
     }
   }
@@ -135,7 +157,25 @@ export default {
     padding: 20px 62px;
     .reply-detail {
       margin-bottom: 10px;
+      font-size: 16px;
+      color: #1a1a1a;
     }
+    .reply-list-fold {
+      background: #e8ebf4;
+      border-radius: 8px;
+      width: 104px;
+      height: 40px;
+      .ortur-icon-arrow-down {
+        font-size: 12px;
+      }
+    }
+  }
+
+  .reply-list {
+    width: 90%;
+    margin: 20px auto;
+    padding: 0px 20px;
+    border-left: 2px solid #e6e6e6;
   }
 }
 </style>
