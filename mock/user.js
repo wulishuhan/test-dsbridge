@@ -156,6 +156,29 @@ let userInfoByUserId = mock.mock({
 });
 let data = user.data;
 
+let commentList = mock.mock({
+  code: 0,
+  "data|10": [
+    {
+      id: "@increment()",
+      comment: "@sentence()",
+      fromNickname: "@name",
+      fromAvatar: "@image('40x40','@color', '#FFF', '@word')",
+      datetime: "@datetime",
+      "replyList|1-12": [
+        {
+          commentId: "@increment",
+          comment: "@sentence()",
+          fromNickname: "@name",
+          fromAvatar: "@image('40x40','@color', '#FFF', '@word')",
+          toNickname: "@name",
+          toAvatar: "@image('40x40','@color', '#FFF', '@word')",
+        },
+      ],
+    },
+  ],
+});
+
 module.exports = [
   {
     url: "/user/list",
@@ -208,9 +231,7 @@ module.exports = [
   {
     url: "/user/getInfo",
     type: "get",
-    response: (req) => {
-      const { username, password } = req.query;
-      console.log(username, password);
+    response: () => {
       return {
         code: 0,
         data: getInfo,
@@ -232,7 +253,7 @@ module.exports = [
   {
     url: "/user/logout",
     type: "post",
-    response: (req) => {
+    response: () => {
       return {
         code: 200,
         data: "success",
@@ -328,6 +349,13 @@ module.exports = [
         msg: "",
         data: loginData,
       };
+    },
+  },
+  {
+    url: "/user/getCommentList",
+    type: "post",
+    response: () => {
+      return commentList;
     },
   },
 ];
