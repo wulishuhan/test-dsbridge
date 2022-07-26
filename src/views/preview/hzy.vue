@@ -3,7 +3,7 @@
     <ShareSocialMedia></ShareSocialMedia>
     <CollectButton :isCollect="true"></CollectButton>
     <CollectButton></CollectButton>
-    <StarButton></StarButton>
+    <StarButton @click="onStar"></StarButton>
     <StarButton :isStar="true"></StarButton>
     <DownLoadButton></DownLoadButton>
     <BaseButton @click="test">基础按钮</BaseButton>
@@ -81,6 +81,10 @@ export default {
     };
   },
   methods: {
+    onStar() {
+      //console.log(e)
+      console.log(111);
+    },
     test() {
       console.log(11);
     },

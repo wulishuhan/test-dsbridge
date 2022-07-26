@@ -2,10 +2,12 @@
   <div class="container-profile">
     <el-dialog :visible.sync="dialogFollowersVisible">
       <el-tabs v-model="activeTab" @tab-click="handleClick" class="tabsContent">
-        <el-tab-pane label="followers" name="first"
-          ><IndexFollowPanel></IndexFollowPanel
-        ></el-tab-pane>
-        <el-tab-pane label="following" name="second">following</el-tab-pane>
+        <el-tab-pane label="followers" name="first">
+          <IndexFollowPanel></IndexFollowPanel>
+        </el-tab-pane>
+        <el-tab-pane label="following" name="second">
+          <IndexFollowPanel></IndexFollowPanel>
+        </el-tab-pane>
       </el-tabs>
     </el-dialog>
     <div class="bg">
@@ -49,19 +51,24 @@
             </el-upload>
           </span>
 
-          <img class="img" :src="user.avatar" alt="" />
+          <img class="img" mode="widthFix" :src="user.avatar" alt="" />
         </div>
         <div class="name">{{ user.name }}</div>
         <FollowButton></FollowButton>
-        <div class="desc" @click="editDesc" v-if="!isDescEdit">
-          {{ user.desc }}
+        <div
+          class="desc"
+          @click="editDesc"
+          v-if="!isDescEdit"
+          :class="{ NoDesc: user.desc.length < 1 }"
+        >
+          {{ user.desc || "add a description" }}
         </div>
         <el-input
+          ref="descRef"
           @blur="descChange"
           @change="descChange"
-          v-if="isDescEdit"
+          v-show="isDescEdit"
           v-model="user.desc"
-          autofocus="true"
           placeholder=""
         ></el-input>
         <div class="follow">
@@ -72,10 +79,25 @@
             >{{ user.following }} following</span
           >
         </div>
-        <div class="twitter">5312</div>
+        <div
+          class="desc"
+          @click="editTwitter"
+          v-if="!isTwitterEdit"
+          :class="{ NoDesc: user.twitter.length < 1 }"
+        >
+          {{ user.twitter || "add a twitter" }}
+        </div>
+        <el-input
+          ref="twitterRef"
+          @blur="twitterChange"
+          @change="twitterChange"
+          v-show="isTwitterEdit"
+          v-model="user.twitter"
+          placeholder=""
+        ></el-input>
       </div>
       <div class="tabs">
-        <span class="editTab">edit</span>
+        <!-- <span class="editTab">edit</span> -->
         <el-tabs
           v-model="activeName"
           @tab-click="handleClick"
@@ -101,6 +123,26 @@ export default {
   // eslint-disable-next-line
   name: "Design",
   components: { IndexFollowPanel, FollowButton },
+  data() {
+    return {
+      activeTab: "first",
+      activeName: "first",
+      isYourAccount: true,
+      isDescEdit: false,
+      isTwitterEdit: false,
+      dialogFollowersVisible: false,
+      user: {
+        bgImg: "https://scpic.chinaz.net/files/pic/pic9/202207/apic42262.jpg",
+        name: "yang",
+        desc: "yang 654651",
+        twitter: "",
+        faceBook: "",
+        following: "14",
+        followers: "13",
+        avatar: "https://scpic.chinaz.net/files/pic/pic9/202207/apic42262.jpg",
+      },
+    };
+  },
   mounted() {
     getUserInfoByUserId({
       id: this.$route.params.userId,
@@ -110,20 +152,20 @@ export default {
     });
   },
   methods: {
-    handleBeforeImgUpload(file) {
-      //console.log(e)
+    async handleBeforeImgUpload(file) {
+      debugger;
       const isJPG = file.type === "image/jpeg";
       const isLt2M = file.size / 1024 / 1024 < 2;
-
+      console.log(this.test());
       if (!isJPG) {
         this.$message.error("上传头像图片只能是 JPG 格式!");
       }
       if (!isLt2M) {
         this.$message.error("上传头像图片大小不能超过 2MB!");
       }
-      debugger;
       return isJPG && isLt2M;
     },
+
     handleImgUploadErr(err) {
       //console.log(e)
       this.$message.error("上传失败" + err);
@@ -137,9 +179,13 @@ export default {
       this.activeTab = index;
       this.dialogFollowersVisible = true;
     },
-    descChange() {
-      //console.log(e)
+    descChange(e) {
+      console.log(e);
       this.isDescEdit = false;
+    },
+    twitterChange(e) {
+      console.log(e);
+      this.isTwitterEdit = false;
     },
     editDesc() {
       if (!this.isYourAccount) {
@@ -147,27 +193,23 @@ export default {
       }
       //console.log(e)
       this.isDescEdit = true;
+      setTimeout(() => {
+        this.$refs.descRef.focus();
+      }, 0);
+    },
+    editTwitter() {
+      if (!this.isYourAccount) {
+        return;
+      }
+      //console.log(e)
+      this.isTwitterEdit = true;
+      setTimeout(() => {
+        this.$refs.twitterRef.focus();
+      }, 0);
     },
     handleClick(tab, event) {
       console.log(tab, event);
     },
-  },
-  data() {
-    return {
-      activeTab: "first",
-      activeName: "first",
-      isYourAccount: true,
-      isDescEdit: false,
-      dialogFollowersVisible: false,
-      user: {
-        bgImg: "https://scpic.chinaz.net/files/pic/pic9/202207/apic42262.jpg",
-        name: "yang",
-        desc: "yang 654651",
-        following: "14",
-        followers: "13",
-        avatar: "https://scpic.chinaz.net/files/pic/pic9/202207/apic42262.jpg",
-      },
-    };
   },
 };
 </script>
@@ -178,6 +220,9 @@ export default {
   height: 100%;
 }
 .container-profile {
+  .NoDesc {
+    color: red;
+  }
   box-sizing: border-box;
   .tabs {
     width: 600px;
@@ -215,7 +260,6 @@ export default {
       color: white;
     }
   }
-  background: #f2f2f2;
   text-align: center;
   .content {
     display: flex;
