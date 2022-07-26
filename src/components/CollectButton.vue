@@ -1,6 +1,6 @@
 <template>
   <span>
-    <el-button class="baseButton button">
+    <el-button @click="click" class="baseButton button">
       <i class="el-icon--left" v-show="isCollect">
         <svg
           width="15"
@@ -27,6 +27,11 @@
 
 <script>
 export default {
+  methods: {
+    click() {
+      this.$emit("click");
+    },
+  },
   props: {
     downLoadNum: {
       type: Number,
