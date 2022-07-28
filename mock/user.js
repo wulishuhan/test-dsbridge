@@ -378,8 +378,9 @@ module.exports = [
   },
   {
     url: "/user/getCommentList",
-    type: "post",
-    response: () => {
+    type: "get",
+    response: (req) => {
+      console.log(req.query);
       return commentList;
     },
   },
