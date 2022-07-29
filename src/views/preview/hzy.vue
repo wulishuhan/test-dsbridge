@@ -1,7 +1,7 @@
 <template>
   <div>
     <ShareSocialMedia></ShareSocialMedia>
-    <CollectButton :isCollect="true"></CollectButton>
+    <CollectButton @click="onColect" :isCollect="true"></CollectButton>
     <CollectButton></CollectButton>
     <StarButton @click="onStar"></StarButton>
     <StarButton :isStar="true"></StarButton>
@@ -82,6 +82,10 @@ export default {
   },
   methods: {
     onStar() {
+      //console.log(e)
+      console.log(111);
+    },
+    onColect() {
       //console.log(e)
       console.log(111);
     },
