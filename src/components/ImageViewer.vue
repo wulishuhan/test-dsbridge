@@ -8,11 +8,11 @@
     >
       <div class="el-image-viewer__mask" @click.self="handleMaskClick"></div>
       <!-- CLOSE -->
-      <span class="el-image-viewer__btn el-image-viewer__close" @click="hide">
+      <!-- <span class="el-image-viewer__btn el-image-viewer__close" @click="hide">
         <i class="el-icon-close"></i>
-      </span>
+      </span> -->
       <!-- ARROW -->
-      <template v-if="!isSingle">
+      <!-- <template v-if="!isSingle">
         <span
           class="el-image-viewer__btn el-image-viewer__prev"
           :class="{ 'is-disabled': !infinite && isFirst }"
@@ -27,7 +27,7 @@
         >
           <i class="el-icon-arrow-right" />
         </span>
-      </template>
+      </template> -->
       <!-- ACTIONS -->
       <div class="el-image-viewer__btn el-image-viewer__actions">
         <div class="el-image-viewer__actions__inner">
@@ -62,6 +62,25 @@
             @mousedown="handleMouseDown"
           />
         </div>
+        <template v-if="!isSingle">
+          <span
+            class="el-image-viewer__btn el-image-viewer__prev"
+            :class="{ 'is-disabled': !infinite && isFirst }"
+            @click="prev"
+          >
+            <i class="el-icon-arrow-left" />
+          </span>
+          <span
+            class="el-image-viewer__btn el-image-viewer__next"
+            :class="{ 'is-disabled': !infinite && isLast }"
+            @click="next"
+          >
+            <i class="el-icon-arrow-right" />
+          </span>
+        </template>
+        <span class="el-image-viewer__btn el-image-viewer__close" @click="hide">
+          <i class="el-icon-close"></i>
+        </span>
       </div>
     </div>
   </transition>
@@ -343,3 +362,11 @@ export default {
   },
 };
 </script>
+<style scoped>
+.el-image-viewer__canvas {
+  position: relative;
+  width: 1084px;
+  height: 660px;
+  margin: 0 auto;
+}
+</style>

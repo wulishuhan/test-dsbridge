@@ -7,7 +7,15 @@ const filter = require("./filter");
 const designer = require("./designer");
 const dashboard = require("./dashboard");
 const template = require("./template");
-const mocks = [...user, ...thing, ...group, ...filter, ...designer, ...dashboard, ...template];
+const mocks = [
+  ...user,
+  ...thing,
+  ...group,
+  ...filter,
+  ...designer,
+  ...dashboard,
+  ...template,
+];
 
 // for front mock
 // please use it cautiously, it will redefine XMLHttpRequest,

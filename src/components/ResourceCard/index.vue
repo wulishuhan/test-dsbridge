@@ -24,7 +24,7 @@
     </div>
     <div class="card-box-bottom">
       <div class="card-box-bottom-left">
-        <el-avatar :size="30" :src="thing.avatar"></el-avatar>
+        <el-avatar :size="35" :src="thing.avatar"></el-avatar>
         <div class="card-box-bottom-left-name">
           <div class="thing-name">{{ thing.thingName }}</div>
           <span class="author" @click="viewAuthorInfo(thing.userId)">
@@ -146,7 +146,7 @@ export default {
 .author {
   color: #5c5959;
   border-bottom: solid 1px #fff;
-  font-size: 9px;
+  font-size: 12px;
   font-family: Source Han Sans CN;
   font-weight: 400;
   color: #999999;
@@ -162,13 +162,13 @@ export default {
 .card-box {
   border: 1px solid #f5f5f5;
   position: relative;
-  width: 258px;
-  border-radius: 5%;
-  padding: 5px;
+  width: 300px;
+  border-radius: 8px;
+  padding: 7px;
 }
 img {
-  width: 246px;
-  height: 150px;
+  width: 285px;
+  height: 180px;
   border-radius: 8px;
 }
 .card-box-bottom {
@@ -193,15 +193,15 @@ img {
   justify-content: space-between;
   align-items: center;
   color: #999999;
-  font-size: 11px;
+  font-size: 14px;
 }
 .card-box-bottom-right-like-box {
-  margin-right: 10px;
+  margin-right: 8px;
 }
 .icon-share,
 .icon-star {
-  margin-right: 7px;
-  font-size: 11px;
+  margin-right: 5px;
+  font-size: 13px;
 }
 .icon-share:hover {
   color: #000;
@@ -216,12 +216,12 @@ img:hover {
 }
 .share-container {
   position: absolute;
-  top: 192px;
-  left: 76px;
+  top: 222px;
+  right: 0px;
   z-index: 999;
 }
 .thing-name {
-  font-size: 11px;
+  font-size: 14px;
   font-family: Source Han Sans CN;
   font-weight: 400;
   color: #1a1a1a;
@@ -234,7 +234,7 @@ img:hover {
   width: 42px;
   height: 30px;
   background: rgba(30, 120, 240, 1);
-  border-radius: 3px;
+  border-radius: 4px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -244,7 +244,7 @@ img:hover {
   cursor: pointer;
 }
 .icon-collect {
-  font-size: 15px;
+  font-size: 20px;
   color: #fff;
 }
 </style>

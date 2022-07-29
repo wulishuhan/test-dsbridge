@@ -4,8 +4,8 @@
       :style="{ color: isStar ? 'red' : 'black' }"
       class="baseButton button"
       @click="click"
-      :icon="isStar ? 'el-icon-star-on' : 'el-icon-star-off'"
     >
+      <i :class="isStar ? 'el-icon-star-on' : 'el-icon-star-off'"></i>
       <span class="num">{{ downLoadNum }}k</span>
     </el-button>
   </span>
@@ -34,10 +34,13 @@ export default {
 <style></style>
 <style lang="scss" scoped>
 .button {
-  width: 90px;
-  margin-left: 24px;
+  width: 120px;
+  /* margin-left: 24px; */
   .num {
     color: #000;
+  }
+  i {
+    font-size: 18px;
   }
 }
 </style>

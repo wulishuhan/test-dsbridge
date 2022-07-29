@@ -15,7 +15,7 @@
     </div>
     <div
       class="control"
-      :class="{ 'show-more': showMore }"
+      :class="[{ 'show-more': showMore }, !showMore ? 'control-mask' : '']"
       v-show="isLongContent"
     >
       <el-button class="button-show-more" type="text" @click="toggleShowMore">
@@ -85,17 +85,19 @@ export default {
 .wrapper-container {
   position: relative;
   padding-bottom: 40px;
-  .control {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    padding-top: 40px;
-    background-image: linear-gradient(
-      -180deg,
-      rgba(255, 255, 255, 0) 0%,
-      #f5f5f5 70%
-    );
-  }
+}
+.control {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding-top: 40px;
+}
+.control-mask {
+  background-image: linear-gradient(
+    -180deg,
+    rgba(255, 255, 255, 0) 0%,
+    #f5f5f5 70%
+  );
 }
 .show-more {
   padding-top: 0;
@@ -104,5 +106,6 @@ export default {
 }
 .button-show-more {
   color: #1e78f0;
+  font-size: 16px;
 }
 </style>

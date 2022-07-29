@@ -82,7 +82,7 @@ export default {
 <style></style>
 <style lang="scss" scoped>
 .button {
-  // width: 90px;
+  width: 120px;
   position: relative;
   color: #000;
   .num {
@@ -94,8 +94,9 @@ export default {
     height: 360px;
     background: #ffffff;
     border-radius: 15px;
-    top: 45px;
-    left: -358px;
+    top: 42px;
+    /* left: -358px; */
+    right: 0px;
     overflow: auto;
     z-index: 9;
     .downLoadAll {
@@ -131,4 +132,7 @@ export default {
 // .button:hover .downPanel {
 //   display: block;
 // }
+.ortur-icon-file-download {
+  font-size: 18px;
+}
 </style>

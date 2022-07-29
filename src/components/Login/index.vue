@@ -1,7 +1,10 @@
 <template>
   <div>
     <a type="text" @click="switchLoginAndRegister('Log in')"> Log in </a>
-    <el-dialog width="550px" :visible.sync="isRegisterForm">
+    <el-dialog width="396px" :visible.sync="isRegisterForm">
+      <div :class="loginFormTip === '' ? 'no-tips' : 'tips'" slot="title">
+        {{ registerFormTip }}
+      </div>
       <el-form :model="registerForm" :rules="rules" ref="registerForm">
         <el-form-item>
           <div class="continue-with">Continue with</div>
@@ -47,21 +50,24 @@
           >
         </el-form-item>
         <el-form-item>
-          <div class="login-text">
-            Already have an account?
-            <a @click="switchLoginAndRegister('Log in')"> &nbsp; Log in </a>
-          </div>
-        </el-form-item>
-        <el-form-item>
-          <div class="login-text privacy-text">
-            By clicking "Create account", I agree to ORTUR's
-            <a href="#">Privacy policy</a>
-            .
+          <div style="display: flex; flex-direction: column">
+            <span class="login-text">
+              Already have an account?
+              <a @click="switchLoginAndRegister('Log in')"> &nbsp; Log in </a>
+            </span>
+            <span class="login-text privacy-text">
+              By clicking "Create account", I agree to ORTUR's
+              <a href="#">Privacy policy</a>
+              .
+            </span>
           </div>
         </el-form-item>
       </el-form>
     </el-dialog>
-    <el-dialog width="550px" :visible.sync="isLoginForm">
+    <el-dialog width="396px" :visible.sync="isLoginForm">
+      <div :class="loginFormTip === '' ? 'no-tips' : 'tips'" slot="title">
+        {{ loginFormTip }}
+      </div>
       <el-form :model="loginForm" ref="loginForm" :rules="rules">
         <el-form-item>
           <div class="continue-with">Continue with</div>
@@ -96,18 +102,21 @@
           <el-button @click="login('loginForm')">Log in</el-button>
         </el-form-item>
         <el-form-item>
-          <div class="login-text">
-            Forget password?
-            <a href="#">&nbsp; Reset it</a>
-          </div>
-        </el-form-item>
-        <el-form-item>
-          <div class="login-text">
-            No account?
-            <a @click="switchLoginAndRegister('Create one')">Create one</a>
+          <div class="login-text-nav">
+            <span class="login-text">
+              Forget password?
+              <a href="#">&nbsp; Reset it</a>
+            </span>
+            <span class="login-text">
+              No account?
+              <a @click="switchLoginAndRegister('Create one')">Create one</a>
+            </span>
           </div>
         </el-form-item>
       </el-form>
+      <el-dialog width="396px" :visible.sync="innerVisible" append-to-body>
+        <div class="loading-box" v-loading="loading"></div>
+      </el-dialog>
     </el-dialog>
   </div>
 </template>
@@ -135,7 +144,8 @@ export default {
       }
     };
     return {
-      dialogFormVisible: false,
+      loginFormTip: "",
+      registerFormTip: "",
       loginForm: {
         username: "",
         password: "",
@@ -147,9 +157,10 @@ export default {
         password2: "",
         email: "",
       },
-      formLabelWidth: "120px",
       isRegisterForm: false,
       isLoginForm: false,
+      innerVisible: false,
+      loading: true,
       rules: {
         email: [
           { required: true, message: "请输入邮箱", trigger: "blur" },
@@ -216,6 +227,8 @@ export default {
             });
         } else {
           console.log("error submit!!");
+          this.loginFormTip = "test";
+          this.innerVisible = true;
           return false;
         }
       });
@@ -245,67 +258,106 @@ export default {
 };
 </script>
 <style scoped>
+::v-deep .path {
+  stroke: #ccc !important;
+}
+.loading-box {
+  width: 100%;
+  height: 198px;
+}
+.login-text-nav {
+  display: flex;
+  flex-direction: column;
+}
+.no-tips {
+  width: 0px;
+  height: 0px;
+}
+.tips {
+  width: 312px;
+  height: 35px;
+  font-size: 15px;
+  font-family: Source Han Sans CN;
+  font-weight: 400;
+  color: #ff6161;
+  line-height: 23px;
+  margin: 30px auto -25px;
+}
 .continue-with {
-  font-size: 18px;
-  color: #000;
+  font-size: 15px;
+  color: #1a1a1a;
+  margin-top: -14px;
 }
 .icon {
-  font-size: 28px;
+  font-size: 22px;
   color: #000;
+  cursor: pointer;
 }
 .icon-box {
   display: flex;
   justify-content: space-between;
-  width: 280px;
-  margin-top: 20px;
+  width: 205px;
+  margin-top: 14px;
 }
 .or {
   text-align: center;
-  font-size: 20px;
+  font-size: 12px;
   color: #999;
+  padding-top: 4px;
 }
 .el-button {
-  background-color: #000;
+  background: #1e78f0;
   color: #fff;
-  width: 100%;
-  height: 60px;
+  width: 312px;
+  height: 48px;
   font-size: 18px;
   font-weight: 200;
   border-radius: 5px;
 }
 ::v-deep .el-input__inner {
-  height: 60px;
+  height: 48px;
+  width: 312px;
   font-size: 18px;
   font-weight: 200;
 }
 ::v-deep .el-dialog {
   border-radius: 15px;
+  font-weight: 400;
+  font-family: Source Han Sans CN;
 }
 .login-text {
-  font-size: 18px;
+  font-size: 15px;
   color: #000;
   text-align: center;
 }
 .privacy-text {
   margin: 0 auto;
-  width: 350px;
+  width: 278px;
+  height: 35px;
+  line-height: 23px;
   text-align: start;
 }
 .disabled-icon {
   color: #999;
+  cursor: default;
+}
+.el-form-item {
+  margin-bottom: 18px;
+}
+.el-form-item__content {
+  line-height: 36px;
 }
 a {
   text-decoration: none;
   cursor: pointer;
-  color: rgb(35, 95, 236);
+  color: #1e78f0;
 }
 ::v-deep .el-form {
-  width: 410px;
+  width: 312px;
   margin: 0 auto;
 }
 ::v-deep .el-dialog__headerbtn .el-dialog__close {
-  color: #909399;
-  font-size: 23px;
+  font-size: 11px;
   color: #000;
   border-radius: 15px;
 }
