@@ -44,11 +44,11 @@ export default {
 .container {
   background-color: #ccc;
   width: 100%;
-  padding: 10px 1px;
+  padding: 10px 10px;
   text-align: left;
   box-sizing: border-box;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
 }
 
