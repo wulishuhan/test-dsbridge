@@ -126,7 +126,7 @@
         <el-input
           class="descInput"
           ref="facebookRef"
-          @blur="locationChange"
+          @blur="facebookChange"
           @change="facebookChange"
           v-show="isFacebookEdit"
           v-model="user.facebook"
