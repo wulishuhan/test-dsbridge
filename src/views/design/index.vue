@@ -54,16 +54,18 @@
           <img class="img" mode="widthFix" :src="user.avatar" alt="" />
         </div>
         <div class="name">{{ user.name }}</div>
-        <FollowButton></FollowButton>
+        <FollowButton class="followBtn"></FollowButton>
         <div
           class="desc"
           @click="editDesc"
           v-if="!isDescEdit"
-          :class="{ NoDesc: user.desc.length < 1 }"
+          :class="{ NoDesc: !user.desc }"
         >
           {{ user.desc || "add a description" }}
         </div>
         <el-input
+          class="descInput"
+          type="textarea"
           ref="descRef"
           @blur="descChange"
           @change="descChange"
@@ -73,26 +75,61 @@
         ></el-input>
         <div class="follow">
           <span class="followers" @click="openFollowDialog('first')"
-            >{{ user.followers }} followers</span
-          >
+            >{{ user.followers }} <span style="color: #ccc"> followers</span>
+          </span>
           <span class="following" @click="openFollowDialog('second')"
-            >{{ user.following }} following</span
-          >
+            >{{ user.following }}<span style="color: #ccc"> following</span>
+          </span>
         </div>
         <div
           class="desc"
           @click="editTwitter"
           v-if="!isTwitterEdit"
-          :class="{ NoDesc: user.twitter.length < 1 }"
+          :class="{ NoDesc: !user.twitter }"
         >
           {{ user.twitter || "add a twitter" }}
         </div>
         <el-input
+          class="descInput"
           ref="twitterRef"
           @blur="twitterChange"
           @change="twitterChange"
           v-show="isTwitterEdit"
           v-model="user.twitter"
+          placeholder=""
+        ></el-input>
+        <div
+          class="desc"
+          @click="editLocation"
+          v-if="!isLocationEdit"
+          :class="{ NoDesc: !user.location }"
+        >
+          {{ user.location || "add a Location" }}
+        </div>
+        <el-input
+          class="descInput"
+          ref="locationRef"
+          @blur="locationChange"
+          @change="locationChange"
+          v-show="isLocationEdit"
+          v-model="user.location"
+          placeholder=""
+        ></el-input>
+        <div
+          class="desc"
+          @click="editFacebook"
+          v-if="!isFacebookEdit"
+          :class="{ NoDesc: !user.facebook }"
+        >
+          {{ user.facebook || "add a facebook" }}
+        </div>
+        <el-input
+          class="descInput"
+          ref="facebookRef"
+          @blur="locationChange"
+          @change="facebookChange"
+          v-show="isFacebookEdit"
+          v-model="user.facebook"
           placeholder=""
         ></el-input>
       </div>
@@ -130,13 +167,16 @@ export default {
       isYourAccount: true,
       isDescEdit: false,
       isTwitterEdit: false,
+      isFacebookEdit: false,
+      isLocationEdit: false,
       dialogFollowersVisible: false,
       user: {
         bgImg: "https://scpic.chinaz.net/files/pic/pic9/202207/apic42262.jpg",
-        name: "yang",
+        name: "yang4444444444",
         desc: "yang 654651",
         twitter: "",
         faceBook: "",
+        location: "",
         following: "14",
         followers: "13",
         avatar: "https://scpic.chinaz.net/files/pic/pic9/202207/apic42262.jpg",
@@ -187,6 +227,14 @@ export default {
       console.log(e);
       this.isTwitterEdit = false;
     },
+    locationChange(e) {
+      console.log(e);
+      this.isLocationEdit = false;
+    },
+    facebookChange(e) {
+      console.log(e);
+      this.isFacebookEdit = false;
+    },
     editDesc() {
       if (!this.isYourAccount) {
         return;
@@ -205,6 +253,26 @@ export default {
       this.isTwitterEdit = true;
       setTimeout(() => {
         this.$refs.twitterRef.focus();
+      }, 0);
+    },
+    editLocation() {
+      if (!this.isYourAccount) {
+        return;
+      }
+      //console.log(e)
+      this.isLocationEdit = true;
+      setTimeout(() => {
+        this.$refs.locationRef.focus();
+      }, 0);
+    },
+    editFacebook() {
+      if (!this.isYourAccount) {
+        return;
+      }
+      //console.log(e)
+      this.isFacebookEdit = true;
+      setTimeout(() => {
+        this.$refs.facebookRef.focus();
       }, 0);
     },
     handleClick(tab, event) {
@@ -262,6 +330,8 @@ export default {
   }
   text-align: center;
   .content {
+    text-align: left;
+    box-sizing: border-box;
     display: flex;
     justify-content: space-between;
     width: 1080px;
@@ -269,10 +339,43 @@ export default {
     .info {
       position: relative;
       top: -50px;
+      width: 300px;
+      .name {
+        margin-top: 12px;
+        text-align: center;
+        font-size: 25px;
+      }
+      .follow {
+        margin-top: 12px;
+        .followers {
+          margin-right: 12px;
+        }
+        .following {
+        }
+      }
+      .followBtn {
+        margin-top: 12px;
+        margin-left: 12px;
+        ::v-deep .el-button {
+          padding: 5px;
+          font-size: 12px;
+        }
+      }
+      .desc {
+        margin-top: 12px;
+        padding: 7px;
+        word-wrap: break-word;
+      }
+      .descInput {
+        margin-top: 12px;
+      }
     }
     .imgWrap {
       position: relative;
       display: inline-block;
+      left: 50%;
+      margin-left: -50px;
+      text-align: center;
       .upload-demo {
         position: absolute;
         top: 0;
@@ -316,7 +419,9 @@ export default {
       display: inline-block;
     }
     .desc:hover {
-      border: 1px solid #000;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      padding: 6px;
       cursor: pointer;
     }
   }
