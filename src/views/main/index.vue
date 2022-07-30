@@ -114,7 +114,7 @@ export default {
   background-color: #f5f5f5;
 }
 .content {
-  width: 1080px;
+  width: 1200px;
   margin: 0 auto;
 }
 .filter {
@@ -128,8 +128,8 @@ p {
   text-align: center;
 }
 .groups-header {
-  width: 1080px;
-  height: 294px;
+  width: 1200px;
+  height: 300px;
   margin: 0 auto;
   color: #f5f5f5;
   border: solid 1px #000;

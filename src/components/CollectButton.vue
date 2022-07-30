@@ -2,7 +2,7 @@
   <span>
     <el-button @click="click" class="baseButton button">
       <i class="el-icon--left" v-show="isCollect">
-        <svg
+        <!-- <svg
           width="15"
           height="15"
           viewBox="0 0 20 18"
@@ -14,9 +14,12 @@
             stroke="black"
             stroke-linecap="round"
           />
-        </svg>
+        </svg> -->
+        <i class="ortur-icon-add-collect"></i>
       </i>
-      <span v-show="!isCollect" class="ortur-icon-cancel-collect-fill"
+      <span
+        v-show="!isCollect"
+        class="ortur-icon-cancel-collect-fill el-icon--left"
         ><span class="path1"></span><span class="path2"></span
         ><span class="path3"></span
       ></span>
@@ -48,11 +51,17 @@ export default {
 <style></style>
 <style lang="scss" scoped>
 .button {
-  width: 90px;
-  margin-left: 24px;
+  width: 120px;
 
   .num {
     color: #000;
   }
+}
+.ortur-icon-cancel-collect-fill {
+  margin-left: 5px;
+  font-size: 18px;
+}
+.ortur-icon-add-collect {
+  font-size: 18px;
 }
 </style>

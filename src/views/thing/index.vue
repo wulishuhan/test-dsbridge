@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div id="detail-top" class="container">
     <div class="center-container">
       <div class="show">
         <el-row>
@@ -10,18 +10,16 @@
                   {{ user.thingName }}
                 </div>
                 <div class="flex align-center">
-                  <el-avatar :size="30" :src="user.avatar"></el-avatar>
+                  <el-avatar :size="40" :src="user.avatar"></el-avatar>
                   <span class="user-name">{{ user.name }}</span>
                 </div>
               </div>
-              <div class="flex justify-between" style="width: 335px">
-                <StarButton></StarButton>
-                <BaseButton style="width: 90px">
-                  <div class="flex justify-around">
-                    <i class="ortur-icon-share"></i>
-                    <span>0k</span>
-                  </div>
-                </BaseButton>
+              <div class="flex justify-between" style="width: 424px">
+                <StarButton :isStar="isLike" @click="like"></StarButton>
+                <CollectButton
+                  :isCollect="isCollected"
+                  @click="collect"
+                ></CollectButton>
                 <DownLoadButton></DownLoadButton>
               </div>
             </div>
@@ -43,7 +41,7 @@
                     ></button>
                     <el-carousel
                       direction="vertical"
-                      height="372px"
+                      height="496px"
                       :interval="3000"
                       arrow="never"
                       ref="carousel"
@@ -121,25 +119,40 @@
                 xxxxxxxxxxx xxxxxxxxx xxxxxxxxxxxxxx xxxxxxxxxxx
               </show-more>
             </el-tab-pane>
-            <el-tab-pane label="Makes" name="third">makes</el-tab-pane>
+            <el-tab-pane label="Makes" name="third">
+              <div>
+                <div class="flex justify-between">
+                  <a class="more-font">
+                    <i class="el-icon-plus"></i>
+                    Post a make
+                  </a>
+                  <a class="view-more" @click="openViewAllDialog('view-makes')">
+                    View all
+                  </a>
+                </div>
+                <div class="flex justify-between" style="flex-wrap: wrap">
+                  <el-image
+                    v-for="i in 6"
+                    :key="i"
+                    class="more-image"
+                    src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
+                  ></el-image>
+                </div>
+              </div>
+            </el-tab-pane>
           </el-tabs>
-          <div>
+          <div class="split-line"></div>
+          <div style="margin-top: 42px">
             <div style="display: flex; justify-content: space-between">
               <h2 class="more-font">More by this creator</h2>
-              <a class="view-more" @click="dialogTabsVisible = true"
-                >View all</a
-              >
+              <a class="view-more" @click="openViewAllDialog('view-creator')">
+                View all
+              </a>
             </div>
             <div class="flex justify-between more-image-box">
               <el-image
-                class="more-image"
-                src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
-              ></el-image>
-              <el-image
-                class="more-image"
-                src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
-              ></el-image>
-              <el-image
+                v-for="i in 3"
+                :key="i"
                 class="more-image"
                 src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
               ></el-image>
@@ -149,20 +162,14 @@
           <div>
             <div class="flex justify-between" style="margin-top: 35px">
               <h2 class="more-font">Similar with this</h2>
-              <a class="view-more" @click="dialogTabsVisible = true"
-                >View all</a
-              >
+              <a class="view-more" @click="openViewAllDialog('view-similar')">
+                View all
+              </a>
             </div>
             <div class="flex justify-between more-image-box">
               <el-image
-                class="more-image"
-                src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
-              ></el-image>
-              <el-image
-                class="more-image"
-                src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
-              ></el-image>
-              <el-image
+                v-for="i in 3"
+                :key="i"
                 class="more-image"
                 src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
               ></el-image>
@@ -220,38 +227,41 @@
     </div>
     <el-dialog :visible.sync="dialogTabsVisible" width="852px">
       <el-tabs v-model="viewMoreActive">
-        <el-tab-pane label="More by this creator" name="view-more">
-          <view-more></view-more>
+        <el-tab-pane label="More by this creator" name="view-creator">
+          <view-more v-if="viewMoreActive === 'view-creator'"></view-more>
         </el-tab-pane>
         <el-tab-pane label="Similar with this" name="view-similar">
-          <view-more></view-more>
+          <view-more v-if="viewMoreActive === 'view-similar'"></view-more>
         </el-tab-pane>
         <el-tab-pane label="Makes from others" name="view-makes">
-          <view-more></view-more>
+          <view-more v-if="viewMoreActive === 'view-makes'"></view-more>
         </el-tab-pane>
       </el-tabs>
     </el-dialog>
+    <sroll-top-button :to="'#detail-top'"></sroll-top-button>
   </div>
 </template>
 <script>
 /* eslint-disable */
-import ElImageViewer from "element-ui/packages/image/src/image-viewer";
+// import ElImageViewer from "element-ui/packages/image/src/image-viewer";
+import ElImageViewer from "@/components/ImageViewer";
 import { getUserInfoByThingId } from "@/api/thing";
 import DownLoadButton from "@/components/DownLoadButton.vue";
-import BaseButton from "@/components/BaseButton.vue";
 import StarButton from "@/components/StarButton.vue";
+import CollectButton from "@/components/CollectButton.vue";
 import LabelCard from "@/components/LabelCard.vue";
 import ShareCard from "@/components/ShareCard";
 import Comment from "@/components/Comment/CommentWidget.vue";
 import ShowMore from "@/components/ShowMore.vue";
 import Reply from "@/components/Comment/ReplyWidget.vue";
 import ViewMore from "./ViewMore.vue";
+import SrollTopButton from "@/components/SrollTopButton";
 export default {
   name: "Thing",
   components: {
     ElImageViewer,
     StarButton,
-    BaseButton,
+    CollectButton,
     DownLoadButton,
     LabelCard,
     ShareCard,
@@ -259,6 +269,7 @@ export default {
     ShowMore,
     Reply,
     ViewMore,
+    SrollTopButton,
   },
   data() {
     return {
@@ -339,6 +350,10 @@ export default {
     toUserProfileView() {
       this.$router.push(`/design/Favorites/${this.user.id}`);
     },
+    openViewAllDialog(name) {
+      this.viewMoreActive = name;
+      this.dialogTabsVisible = true;
+    },
   },
   created() {
     getUserInfoByThingId({
@@ -361,6 +376,10 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.el-avatar {
+  cursor: pointer;
+}
+
 .share-icon {
   font-size: 38px;
   display: block;
@@ -395,23 +414,23 @@ a {
 }
 
 .user-name {
-  font-size: 12px;
+  font-size: 16px;
   color: #999999;
   margin-left: 7px;
 }
 
 .bottom-content {
-  width: 768px;
+  width: 1024px;
   margin: 0 auto;
   margin-top: 24px;
 }
 
 .bottom-content-left {
-  width: 478px;
+  width: 637px;
 }
 
 .bottom-content-right {
-  width: 194px;
+  width: 259px;
 }
 
 .view-more {
@@ -430,18 +449,19 @@ a {
 }
 
 .more-image {
-  width: 138px;
-  height: 84px;
+  width: 184px;
+  height: 112px;
+  margin-top: 5px;
 }
 
 .split-line {
   border: solid #ccc 1px;
   height: 1px;
-  margin-top: 30px;
+  margin-top: 40px;
 }
 
 .comment-box {
-  margin-top: 30px;
+  margin-top: 40px;
 }
 
 .share-content {
@@ -477,10 +497,6 @@ a {
     background-color: black;
   }
 
-  .ortur-iconb {
-    font-size: 56px;
-  }
-
   ::v-deep .el-image-viewer__btn {
     border-radius: 6px;
   }
@@ -511,7 +527,7 @@ a {
     border-radius: 6px;
     transform: translateX(-50%);
     left: 50%;
-    top: 210px;
+    top: 12px;
   }
 
   ::v-deep .el-image-viewer__next {
@@ -524,7 +540,7 @@ a {
     // left: 50%;
     transform: translateX(-50%);
     left: 50%;
-    bottom: 210px;
+    bottom: 12px;
     top: auto;
   }
 
@@ -534,7 +550,8 @@ a {
     background: #1a1a1a;
     opacity: 0.3;
     border-radius: 6px;
-    top: 210px;
+    top: 12px;
+    right: 13px;
   }
 
   ::v-deep .el-image-viewer__img {
@@ -548,27 +565,11 @@ a {
   height: 100%;
   font-family: Source Han Sans CN;
   font-weight: 400;
-
   .model-button-group {
     background-color: #fff;
   }
-
-  .show {
-    margin-top: 20px;
-  }
-
-  .tip {
-    width: 700px;
-    height: 41px;
-    background-color: #fca833;
-    color: #fff;
-    font-size: 14px;
-    line-height: 41px;
-  }
-
   .show-thing {
     margin-top: 30px;
-
     .switchImage {
       width: 700px;
       height: 66px;
@@ -585,7 +586,7 @@ a {
 
 .center-container {
   margin: 0 auto;
-  width: 768px;
+  width: 1024px;
 }
 
 .el-tabs {
@@ -596,9 +597,8 @@ a {
   position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   width: 100%;
-  height: 372px;
+  height: 496px;
   padding: 0;
   overflow-y: auto;
   overflow-x: hidden;
@@ -631,8 +631,8 @@ a {
   cursor: pointer;
 
   img {
-    width: 138px;
-    height: 84px;
+    width: 184px;
+    height: 112px;
   }
 }
 
@@ -642,7 +642,7 @@ a {
 
 .right-carousel {
   display: flex;
-  width: 138px;
+  width: 184px;
   text-align: center;
   flex-direction: column;
   position: relative;
@@ -655,8 +655,8 @@ a {
   border: none;
   padding: 0;
   position: absolute;
-  width: 138px;
-  height: 18px;
+  width: 184px;
+  height: 24px;
   background: #1a1a1a;
   opacity: 0.3;
   border-radius: 8px 8px 0px 0px;
@@ -670,8 +670,8 @@ a {
   border: none;
   padding: 0;
   position: absolute;
-  width: 138px;
-  height: 18px;
+  width: 184px;
+  height: 24px;
   background: #1a1a1a;
   opacity: 0.3;
   border-radius: 8px 8px 0px 0px;
@@ -681,37 +681,38 @@ a {
 }
 
 .downCarousel {
-  width: 138px;
-  height: 36px;
+  width: 184px;
+  height: 48px;
   background: #1a1a1a;
   opacity: 0.3;
-  border-radius: 6px;
+  border-radius: 8px;
   left: 50%;
-  bottom: 12px;
-  margin-left: -64px;
+  bottom: 16px;
+  margin-left: -92px;
 }
 
 .upCarousel {
-  width: 138px;
-  height: 36px;
+  width: 184px;
+  height: 48px;
   background: #1a1a1a;
   opacity: 0.3;
-  border-radius: 6px;
+  border-radius: 8px;
   left: 50%;
-  top: 12px;
-  margin-left: -64px;
+  top: 16px;
+  margin-left: -92px;
 }
 
 .ortur-icon-enlarge {
-  width: 60px;
-  height: 60px;
+  width: 48px;
+  height: 48px;
   background: #1a1a1a;
   opacity: 0.3;
   border-radius: 6px;
   position: absolute;
-  right: 12px;
-  top: 12px;
+  right: 15px;
+  top: 15px;
   z-index: 8;
+  cursor: pointer;
 }
 
 .carouselContainer {
@@ -720,12 +721,13 @@ a {
 
 .carousel {
   position: relative;
-  width: 605px;
-  height: 372px;
+  width: 807px;
+  height: 496px;
 
   img {
     width: 100%;
     height: 100%;
+    object-fit: cover;
   }
 }
 
@@ -738,7 +740,7 @@ a {
 }
 
 .description-tutorial-makes {
-  width: 318px;
+  width: 100%;
   background-color: #f5f5f5;
   margin-top: 0px;
 }
@@ -753,35 +755,16 @@ a {
   color: #000;
 }
 
-/* ::v-deep .share-box {
-  background: #f5f5f5;
-  box-shadow: none;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  width: 180px;
-  height: 84px;
-}
-::v-deep .share-icon-box {
-  width: 42px;
-  height: 42px;
-  margin-right: 12px;
-  margin-top: 12px;
-  line-height: 42px;
-  text-align: center;
-  box-sizing: border-box;
-  padding: 7px;
-  background: #e8ebf4;
-  border-radius: 6px;
-} */
 ::v-deep .app-header__search {
   width: 100%;
   height: 42px;
   border: 1px solid #cccccc !important;
 }
 
-::v-deep .el-tabs--border-card>.el-tabs__content {
+::v-deep .el-tabs--border-card > .el-tabs__content {
   padding-top: 20px;
   padding-left: 0px;
+  padding-right: 0px;
 }
 
 ::v-deep .comment-wrapper {
@@ -792,6 +775,7 @@ a {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
+  margin-top: 30px;
 }
 
 .show-header-left {
@@ -802,7 +786,7 @@ a {
 }
 
 .show-header-left-thing-name {
-  font-size: 18px;
+  font-size: 24px;
   color: #1a1a1a;
 }
 

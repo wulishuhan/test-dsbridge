@@ -1,5 +1,4 @@
-const mock = require("mockjs");
-
+/* eslint-disable */
 module.exports = [
   {
     url: "/test/test",

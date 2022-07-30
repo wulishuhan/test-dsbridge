@@ -1,3 +1,4 @@
+/* eslint-disable */
 var mock = require("mockjs");
 let detailData = mock.mock({
   id: "@id",

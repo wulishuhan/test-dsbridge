@@ -77,7 +77,7 @@ module.exports = [
   {
     url: "/dashboard/getWatchList",
     type: "get",
-    response: (req) => {
+    response: () => {
       return {
         status: 200,
         message: "ok",
@@ -103,7 +103,7 @@ module.exports = [
   {
     url: "/dashboard/getDesignerList",
     type: "get",
-    response: (req) => {
+    response: () => {
       return {
         status: 200,
         message: "ok",
