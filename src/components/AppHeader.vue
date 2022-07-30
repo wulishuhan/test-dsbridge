@@ -177,7 +177,7 @@ export default {
       align-items: center;
       justify-content: space-between;
       padding: 0 0 0 1.5rem;
-      width: 700px;
+      width: 828px;
       .app-header__logo {
         font-size: 24px;
       }
@@ -191,6 +191,7 @@ export default {
             border: 1px solid #88bbf3 !important;
             border-right: transparent !important;
             border-radius: 4px 0px 0px 4px;
+            background: none;
           }
         }
 
@@ -201,6 +202,7 @@ export default {
             border-left: transparent !important;
             border-radius: 0px 4px 4px 0px;
             margin-left: -1px;
+            background: none;
           }
         }
         .input-with-select .el-input-group__prepend {

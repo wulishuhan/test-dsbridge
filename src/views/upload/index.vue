@@ -154,7 +154,11 @@
         </el-select>
       </el-form-item>
       <el-form-item label="Description" prop="desc">
-        <el-input type="textarea" v-model="baseinfoForm.desc"></el-input>
+        <el-input
+          type="textarea"
+          autosize
+          v-model="baseinfoForm.desc"
+        ></el-input>
       </el-form-item>
       <el-form-item label="Tutorial">
         <draggable
