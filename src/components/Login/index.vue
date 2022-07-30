@@ -215,20 +215,21 @@ export default {
       this.$refs[formName].validate((valid) => {
         this.loginForm.username = this.loginForm.email;
         if (valid) {
+          this.innerVisible = true;
           this.$store
             .dispatch("user/login", this.loginForm)
             .then((res) => {
               console.log(res);
               this.$router.push({ path: this.redirect || "/" });
+              this.innerVisible = false;
             })
             .catch((err) => {
               console.log(err);
               this.$message.error(err.msg);
+              this.innerVisible = false;
             });
         } else {
           console.log("error submit!!");
-          this.loginFormTip = "test";
-          this.innerVisible = true;
           return false;
         }
       });

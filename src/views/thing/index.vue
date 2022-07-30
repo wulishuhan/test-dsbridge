@@ -24,7 +24,7 @@
               </div>
             </div>
             <div class="show-thing">
-              <div class="carouselContainer">
+              <div class="flex justify-between">
                 <div>
                   <div class="carousel">
                     <button
@@ -46,7 +46,8 @@
                       arrow="never"
                       ref="carousel"
                       indicator-position="none"
-                      :autoplay="false"
+                      :autoplay="true"
+                      @change="carouselChange"
                     >
                       <el-carousel-item
                         v-for="(item, index) in imageList"
@@ -60,32 +61,30 @@
                     </el-carousel>
                   </div>
                 </div>
-                <div class="right-carousel">
-                  <button
-                    class="el-icon-arrow-up"
-                    @click="trunImageLeft()"
-                  ></button>
-                  <ul class="img-ul">
-                    <li
-                      v-for="(item, index) in showImg"
-                      class="img-li"
-                      :key="item.id + index"
-                      @click="changeImg(item, index)"
+                <div v-swiper:mySwiper="swiperOptions">
+                  <div class="swiper-wrapper">
+                    <div
+                      class="swiper-slide"
+                      v-for="(item, index) in imageList"
+                      :key="item.id"
                     >
                       <img
+                        @click="changeImg(index)"
                         :class="
-                          item.index === imgActiveIndex
-                            ? 'img-activeBorder'
-                            : ''
+                          index === imgActiveIndex ? 'img-activeBorder' : ''
                         "
                         :src="item.url"
+                        alt=""
                       />
-                    </li>
-                  </ul>
-                  <button
-                    class="el-icon-arrow-down"
-                    @click="trunImageRight()"
-                  ></button>
+                    </div>
+                  </div>
+                  <div class="swiper-scrollbar"></div>
+                  <div class="up swiper-container-button">
+                    <i class="ortur-icon-arrow-up"></i>
+                  </div>
+                  <div class="down swiper-container-button">
+                    <i class="ortur-icon-arrow-down"></i>
+                  </div>
                 </div>
               </div>
             </div>
@@ -98,6 +97,7 @@
             class="description-tutorial-makes"
             type="border-card"
             v-model="activeName"
+            :stretch="true"
           >
             <el-tab-pane label="Description" name="description">
               <show-more
@@ -225,8 +225,8 @@
         :initialIndex="imgActiveIndex"
       ></ElImageViewer>
     </div>
-    <el-dialog :visible.sync="dialogTabsVisible" width="852px">
-      <el-tabs v-model="viewMoreActive">
+    <el-dialog :visible.sync="dialogTabsVisible" width="1136px">
+      <el-tabs v-model="viewMoreActive" :stretch="true">
         <el-tab-pane label="More by this creator" name="view-creator">
           <view-more v-if="viewMoreActive === 'view-creator'"></view-more>
         </el-tab-pane>
@@ -279,8 +279,6 @@ export default {
       user: {},
       imgActiveIndex: 0, // 当前移动图片的索引值
       imageList: [],
-      showImg: [],
-      waitImg: [],
       viewModel: false,
       isLike: false,
       isCollected: false,
@@ -293,6 +291,21 @@ export default {
           "https://www.facebook.com/sharer/sharer.php?u=test.leadiffer.com",
         twitter: "https://twitter.com/share?url=test.leadiffer.com",
         whatsapp: "https://web.whatsapp.com/send?text=test.leadiffer.com",
+      },
+      swiperOptions: {
+        loop: true,
+        direction: "vertical",
+        mousewheel: true,
+        slidesPerView: 4,
+        slidesPerGroup: 4,
+        spaceBetween: 16,
+        navigation: {
+          nextEl: ".down",
+          prevEl: ".up",
+        },
+        scrollbar: {
+          el: ".swiper-scrollbar",
+        },
       },
     };
   },
@@ -307,39 +320,17 @@ export default {
     closeViewer() {
       this.showViewer = false;
     },
-
     arrowClick(val) {
       if (val === "down") {
         this.$refs.carousel.next();
       } else {
         this.$refs.carousel.prev();
       }
+      this.imgActiveIndex = this.$refs.carousel.activeIndex;
     },
-    setActiveItem(index) {
+    changeImg(index) {
       this.$refs.carousel.setActiveItem(index);
-    },
-    showModel() {
-      this.viewModel = true;
-    },
-    closeModel() {
-      this.viewModel = false;
-    },
-    handleClick(tab, event) {
-      console.log(tab, event);
-    },
-    changeImg(item) {
-      this.$refs.carousel.setActiveItem(item.index);
-      this.imgActiveIndex = item.index;
-    },
-    trunImageLeft() {
-      let currentShowImgLast = this.showImg.pop();
-      this.waitImg.unshift(currentShowImgLast);
-      this.showImg.unshift(this.waitImg.pop());
-    },
-    trunImageRight() {
-      let currentShowImgFirst = this.showImg.shift();
-      this.waitImg.push(currentShowImgFirst);
-      this.showImg.push(this.waitImg.shift());
+      this.imgActiveIndex = index;
     },
     like() {
       this.isLike = !this.isLike;
@@ -354,6 +345,10 @@ export default {
       this.viewMoreActive = name;
       this.dialogTabsVisible = true;
     },
+    carouselChange() {
+      this.imgActiveIndex = this.$refs.carousel.activeIndex;
+      this.mySwiper.slideTo(this.$refs.carousel.activeIndex, 1000, false);
+    },
   },
   created() {
     getUserInfoByThingId({
@@ -364,18 +359,50 @@ export default {
       this.isLike = this.user.isLike;
       this.isCollected = this.user.isCollected;
       this.imageList = this.user.image;
-      for (let i = 0; i < this.imageList.length; i++) {
-        let obj = {
-          ...this.imageList[i],
-          index: i,
-        };
-        i < 8 ? this.showImg.push(obj) : this.waitImg.push(obj);
-      }
     });
   },
 };
 </script>
 <style lang="scss" scoped>
+.swiper-container {
+  width: 184px;
+  height: 496px;
+  margin: 0;
+  .swiper-wrapper {
+    height: 496px;
+    width: 184px;
+    .swiper-slide {
+      width: 184px;
+      img {
+        height: 112px;
+        width: 100%;
+        cursor: pointer;
+      }
+    }
+  }
+  .swiper-container-button {
+    text-align: center;
+    width: 100%;
+    height: 24px;
+    background: #1a1a1a;
+    opacity: 0.3;
+    z-index: 15;
+    position: absolute;
+    i {
+      color: #fff;
+      opacity: 1;
+      font-size: 16px;
+    }
+  }
+  .up {
+    top: 0px;
+    border-radius: 10px 10px 0px 0px;
+  }
+  .down {
+    border-radius: 0px 0px 10px 10px;
+    bottom: 0px;
+  }
+}
 .el-avatar {
   cursor: pointer;
 }
@@ -485,13 +512,6 @@ a {
   line-height: 23px;
 }
 
-.dialog-view-more {
-  width: 852px;
-  height: 738px;
-  background: #ffffff;
-  border-radius: 9px;
-}
-
 .imageViewer {
   ::v-deep .el-image-viewer__prev {
     background-color: black;
@@ -570,17 +590,6 @@ a {
   }
   .show-thing {
     margin-top: 30px;
-    .switchImage {
-      width: 700px;
-      height: 66px;
-      background-color: #fff;
-
-      img {
-        margin-left: 6px;
-        cursor: pointer;
-        margin-top: 5px;
-      }
-    }
   }
 }
 
@@ -606,47 +615,8 @@ a {
   margin: 0;
 }
 
-.img-ul::-webkit-scrollbar {
-  /*滚动条整体样式*/
-  width: 2px;
-  /*高宽分别对应横竖滚动条的尺寸*/
-  height: 1px;
-}
-
-.img-ul::-webkit-scrollbar-thumb {
-  /*滚动条里面小方块*/
-  border-radius: 5px;
-  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
-  background: #535353;
-}
-
-.img-ul::-webkit-scrollbar-track {
-  /*滚动条里面轨道*/
-  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
-  border-radius: 10px;
-  background: #ededed;
-}
-
-.img-li {
-  cursor: pointer;
-
-  img {
-    width: 184px;
-    height: 112px;
-  }
-}
-
 .img-activeBorder {
   border: 1px solid #248bfb;
-}
-
-.right-carousel {
-  display: flex;
-  width: 184px;
-  text-align: center;
-  flex-direction: column;
-  position: relative;
-  margin-left: 24px;
 }
 
 .el-icon-arrow-up {
@@ -715,15 +685,10 @@ a {
   cursor: pointer;
 }
 
-.carouselContainer {
-  display: flex;
-}
-
 .carousel {
   position: relative;
   width: 807px;
   height: 496px;
-
   img {
     width: 100%;
     height: 100%;
@@ -770,6 +735,26 @@ a {
 ::v-deep .comment-wrapper {
   width: 100%;
 }
+::v-deep .el-tabs--border-card > .el-tabs__header .el-tabs__item.is-active {
+  color: #fff;
+  background-color: #f5f5f5;
+  border-right-color: #f5f5f5;
+  border-left-color: #f5f5f5;
+  width: 120px;
+  height: 40px;
+  background: #1e78f0;
+  border-radius: 8px;
+}
+::v-deep .el-tabs--border-card > .el-tabs__header {
+  border: none;
+}
+::v-deep .el-tabs--border-card {
+  background: #f5f5f5;
+  border: none;
+}
+::v-deep .el-tabs__header .is-top {
+  width: 360px;
+}
 
 .show-header {
   display: flex;
@@ -788,26 +773,5 @@ a {
 .show-header-left-thing-name {
   font-size: 24px;
   color: #1a1a1a;
-}
-
-@media screen and (max-width: 768px) {
-  .carousel {
-    width: 100%;
-    height: 524px;
-
-    img {
-      width: 100%;
-      height: 100%;
-    }
-  }
-
-  .center-container {
-    margin: 0 auto;
-    width: 100%;
-  }
-
-  .show-thing {
-    width: 100%;
-  }
 }
 </style>
