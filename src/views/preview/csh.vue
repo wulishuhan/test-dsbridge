@@ -1,3 +1,4 @@
+<!-- eslint-disable  -->
 <template>
   <div>
     <div style="width: 486px">
@@ -74,12 +75,41 @@
     <div style="margin-top: 50px">
       <preview></preview>
     </div>
+    <div v-swiper:mySwiper="swiperOptions">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide" v-for="(item, index) in urls" :key="item">
+          <img @click="imgIndex(index)" :src="item" alt="" />
+        </div>
+      </div>
+      <div class="swiper-scrollbar"></div>
+      <div class="up">
+        <i class="ortur-icon-arrow-up"></i>
+      </div>
+      <div class="down">
+        <i class="ortur-icon-arrow-down"></i>
+      </div>
+    </div>
+    <el-tabs type="border-card" :stretch="true" style="width: 360px">
+      <el-tab-pane>
+        <div class="tab-items" slot="label">aaa</div>
+        bbb
+      </el-tab-pane>
+      <el-tab-pane>
+        <div class="tab-items" slot="label">bbb</div>
+        ccc
+      </el-tab-pane>
+      <el-tab-pane>
+        <div class="tab-items" slot="label">ccc</div>
+        ddd
+      </el-tab-pane>
+    </el-tabs>
   </div>
 </template>
 <script>
 import Login from "@/components/Login";
 import ShowMore from "@/components/ShowMore.vue";
 import Preview from "@/components/Preview.vue";
+// more module style...
 // 用来预览组件
 export default {
   name: "csh",
@@ -121,6 +151,36 @@ export default {
       activeName: "step",
       showHeight: 100,
       contentHeight: 0,
+      urls: [
+        "https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg",
+        "https://fuss10.elemecdn.com/1/34/19aa98b1fcb2781c4fba33d850549jpeg.jpeg",
+        "https://fuss10.elemecdn.com/0/6f/e35ff375812e6b0020b6b4e8f9583jpeg.jpeg",
+        "https://fuss10.elemecdn.com/9/bb/e27858e973f5d7d3904835f46abbdjpeg.jpeg",
+        "https://fuss10.elemecdn.com/d/e6/c4d93a3805b3ce3f323f7974e6f78jpeg.jpeg",
+        "https://fuss10.elemecdn.com/3/28/bbf893f792f03a54408b3b7a7ebf0jpeg.jpeg",
+        "https://fuss10.elemecdn.com/2/11/6535bcfb26e4c79b48ddde44f4b6fjpeg.jpeg",
+      ],
+      swiperOptions: {
+        direction: "vertical",
+        mousewheel: true,
+        slidesPerView: 4,
+        spaceBetween: 16,
+        navigation: {
+          nextEl: ".down",
+          prevEl: ".up",
+        },
+        scrollbar: {
+          el: ".swiper-scrollbar",
+        },
+        on: {
+          slideChange: function () {
+            console.log("改变了，activeIndex为" + this.activeIndex);
+          },
+          click: function () {
+            console.log("activeIndex为" + this.activeIndex);
+          },
+        },
+      },
     };
   },
   methods: {
@@ -130,24 +190,87 @@ export default {
     next() {
       this.$refs.nop.next();
     },
+    imgIndex(index) {
+      console.log(index);
+    },
   },
+  mounted() {},
 };
 </script>
-<style scoped>
-.el-carousel__item h3 {
-  color: #475669;
-  font-size: 14px;
-  opacity: 0.75;
-  line-height: 200px;
-  margin: 0;
+<style lang="scss" scoped>
+.swiper-container {
+  width: 184px;
+  height: 496px;
+  .swiper-wrapper {
+    height: 496px;
+    width: 184px;
+    .swiper-slide {
+      width: 184px;
+      img {
+        height: 112px;
+        width: 100%;
+      }
+    }
+  }
+  .up {
+    z-index: 15;
+    position: absolute;
+    top: 0px;
+    text-align: center;
+    width: 100%;
+    height: 24px;
+    background: #1a1a1a;
+    opacity: 0.3;
+    border-radius: 10px 10px 0px 0px;
+    i {
+      color: #fff;
+      opacity: 1;
+      font-size: 16px;
+    }
+  }
+  .down {
+    z-index: 15;
+    position: absolute;
+    border-radius: 0px 0px 10px 10px;
+    bottom: 0px;
+    text-align: center;
+    width: 100%;
+    height: 24px;
+    background: #1a1a1a;
+    opacity: 0.3;
+    i {
+      color: #fff;
+      opacity: 1;
+      font-size: 16px;
+    }
+  }
 }
-
-.el-carousel__item:nth-child(2n) {
-  background-color: #99a9bf;
+::v-deep .el-tabs--border-card > .el-tabs__header .el-tabs__item.is-active {
+  color: #fff;
+  background-color: #f5f5f5;
+  border-right-color: #f5f5f5;
+  border-left-color: #f5f5f5;
+  width: 120px;
+  height: 40px;
+  background: #1e78f0;
+  border-radius: 8px;
 }
-
-.el-carousel__item:nth-child(2n + 1) {
-  background-color: #d3dce6;
+::v-deep .el-tabs--border-card > .el-tabs__header {
+  border: none;
+}
+::v-deep .el-tabs--border-card {
+  background: #f5f5f5;
+  border: none;
+}
+.tab-items {
+  background: none;
+  width: 100%;
+  height: 40px;
+  font-size: 16px;
+  font-family: Source Han Sans CN;
+  font-weight: 400;
+  text-align: center;
+  line-height: 40px;
 }
 .btn-div {
   position: absolute;

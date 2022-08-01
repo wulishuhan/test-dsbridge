@@ -82,23 +82,6 @@ const routes = [
     ],
   },
   {
-    path: "/login",
-    name: "login",
-    component: Layout,
-    meta: {
-      title: "login",
-    },
-    children: [
-      {
-        path: "/login",
-        meta: {
-          title: "login",
-        },
-        component: () => import("@/views/login/index"),
-      },
-    ],
-  },
-  {
     path: "/editProfile",
     name: "editProfile",
     component: Layout,
