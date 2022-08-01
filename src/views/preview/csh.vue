@@ -73,18 +73,14 @@
     </div>
     <div>
       <h1>login组件</h1>
-      登录拟态框：<a href="#" @click="showLogin"> login</a>
+      登录拟态框：<a href="#" @click="showDialog('login')"> login</a>
       <login
-        :loadLoginDialog="true"
-        :visible.sync="dialogLoginVisible"
-        @handleClose="dialogLoginVisible = false"
+        :loadLoginDialog="isLoginForm"
+        :visible.sync="dialogVisible"
+        @handleClose="dialogVisible = false"
+        @changeView="changeView"
       ></login>
-      注册拟态框：<a href="#" @click="showRegister"> register</a>
-      <login
-        :loadLoginDialog="false"
-        :visible.sync="dialogRegisterVisible"
-        @handleClose="dialogRegisterVisible = false"
-      ></login>
+      注册拟态框：<a href="#" @click="showDialog('register')"> register</a>
     </div>
 
     <div style="margin-top: 50px">
@@ -135,8 +131,8 @@ export default {
   },
   data() {
     return {
-      dialogLoginVisible: false,
-      dialogRegisterVisible: false,
+      dialogVisible: false,
+      isLoginForm: true,
       test: {
         avatar: "http://dummyimage.com/300x200/f27982/FFF&text=vknro",
         id: "620000197009121720",
@@ -210,16 +206,20 @@ export default {
     imgIndex(index) {
       console.log(index);
     },
-    showLogin() {
-      this.dialogLoginVisible = true;
+    showDialog(view) {
+      if (view === "login") {
+        this.isLoginForm = true;
+      } else {
+        this.isLoginForm = false;
+      }
+      this.dialogVisible = true;
     },
-    showRegister() {
-      this.dialogRegisterVisible = true;
-    },
-    // 修改是否让页面显示与隐藏的事件
-    updateVisible(val) {
-      this.dialogRegisterVisible = val;
-      this.dialogLoginVisible = val;
+    changeView(view) {
+      if (view === "login") {
+        this.isLoginForm = true;
+      } else {
+        this.isLoginForm = false;
+      }
     },
   },
   mounted() {},

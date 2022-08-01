@@ -5,7 +5,7 @@
       :visible.sync="dialogVisible"
       :before-close="handleClose"
     >
-      <div v-if="!isLoginForm">
+      <div v-show="!isLogin">
         <div :class="loginFormTip === '' ? 'no-tips' : 'tips'" slot="title">
           {{ registerFormTip }}
         </div>
@@ -57,7 +57,7 @@
             <div style="display: flex; flex-direction: column">
               <span class="login-text">
                 Already have an account?
-                <a @click="switchLoginAndRegister"> &nbsp; Log in </a>
+                <a @click="switchLoginAndRegister('login')"> &nbsp; Log in </a>
               </span>
               <span class="login-text privacy-text">
                 By clicking "Create account", I agree to ORTUR's
@@ -68,7 +68,7 @@
           </el-form-item>
         </el-form>
       </div>
-      <div v-if="isLoginForm">
+      <div v-show="isLogin">
         <div :class="loginFormTip === '' ? 'no-tips' : 'tips'" slot="title">
           {{ loginFormTip }}
         </div>
@@ -113,7 +113,7 @@
               </span>
               <span class="login-text">
                 No account?
-                <a @click="switchLoginAndRegister">Create one</a>
+                <a @click="switchLoginAndRegister('register')">Create one</a>
               </span>
             </div>
           </el-form-item>
@@ -142,9 +142,9 @@ export default {
     dialogVisible: function () {
       return this.visible;
     },
-  },
-  mounted() {
-    this.isLoginForm = this.loadLoginDialog;
+    isLogin: function () {
+      return this.loadLoginDialog;
+    },
   },
   data() {
     var validatePass1 = (rule, value, callback) => {
@@ -180,8 +180,6 @@ export default {
         password2: "",
         email: "",
       },
-      isRegisterForm: false,
-      isLoginForm: false,
       innerVisible: false,
       loading: true,
       show: true,
@@ -224,8 +222,8 @@ export default {
     };
   },
   methods: {
-    switchLoginAndRegister() {
-      this.isLoginForm = !this.isLoginForm;
+    switchLoginAndRegister(view) {
+      this.$emit("changeView", view);
     },
     login(formName) {
       this.$refs[formName].validate((valid) => {
