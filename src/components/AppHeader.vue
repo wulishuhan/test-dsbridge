@@ -118,7 +118,7 @@ import { getInfo } from "@/api/user";
 export default {
   data() {
     return {
-      isLogin: true,
+      isLogin: false,
       userinfo: {
         email: "",
         nickname: "",
