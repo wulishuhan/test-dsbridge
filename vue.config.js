@@ -13,25 +13,22 @@ module.exports = defineConfig({
     config.plugins.delete("prefetch");
   },
   devServer: {
-    // onBeforeSetupMiddleware: function (devServer) {
+    // setupMiddlewares: (middlewares, devServer) => {
     //   if (!devServer) {
     //     throw new Error("webpack-dev-server is not defined");
     //   }
-    //   Mock(devServer.app);
+    //   // Mock(devServer.app);
+    //   mockServer(devServer.app);
+    //   return middlewares;
     // },
-    setupMiddlewares: (middlewares, devServer) => {
-      if (!devServer) {
-        throw new Error("webpack-dev-server is not defined");
-      }
-      // Mock(devServer.app);
-      mockServer(devServer.app);
-      return middlewares;
+    proxy: {
+      [process.env.VUE_APP_BASE_API]: {
+        target: "https://api.leadiffer.cn",
+        changeOrigin: true,
+        pathRewrite: {
+          ["^" + process.env.VUE_APP_BASE_API]: "",
+        },
+      },
     },
-    // proxy: {
-    //   "/local-dev-api": {
-    //     target: "https://api.leadiffer.cn",
-    //     pathRewrite: { "^/local-dev-api": "" },
-    //   },
-    // },
   },
 });

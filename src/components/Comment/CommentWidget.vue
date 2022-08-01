@@ -73,12 +73,12 @@
         append-to-body
         top="35vh"
       >
-        <ReplyWidget></ReplyWidget>
+        <ReplyWidget @closeReplyModal="handleClose('inner')"></ReplyWidget>
       </el-dialog>
     </el-dialog>
 
     <el-dialog :title="replyTo" :visible.sync="outerVisible">
-      <ReplyWidget></ReplyWidget>
+      <ReplyWidget @closeReplyModal="handleClose('outer')"></ReplyWidget>
     </el-dialog>
   </div>
 </template>
@@ -89,8 +89,6 @@ import ReplyWidget from "@/components/Comment/ReplyWidget.vue";
 export default {
   data() {
     return {
-      activeIndex: "1",
-      activeIndex2: "1",
       outerVisible: false,
       innerVisible: false,
       replyListDialog: false,
@@ -108,12 +106,22 @@ export default {
   mounted() {
     var that = this;
     getCommentList().then(function (res) {
-      console.log(res.data.data.avatar);
       that.commentList = res.data.data;
     });
   },
   computed: {},
   methods: {
+    handleClose(space) {
+      var that = this;
+      if (space == "inner") {
+        this.innerVisible = false;
+      } else {
+        this.outerVisible = false;
+      }
+      getCommentList().then(function (res) {
+        that.commentList = res.data.data;
+      });
+    },
     showReplyOuterDialog(index) {
       this.outerVisible = true;
       this.currentComment = this.commentList[index];

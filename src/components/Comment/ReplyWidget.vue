@@ -6,32 +6,42 @@
       /></el-button>
       <el-input
         placeholder="Add a comment"
-        v-model="keywords"
+        v-model="comment"
         class="el-input-search input-with-select"
+        @keyup.native.enter="handleEnter"
       >
       </el-input>
-      <el-button class="el-btn-post">Post</el-button>
+      <el-button class="el-btn-post" @click="handlePost()">Post</el-button>
     </div>
   </div>
 </template>
 
 <script>
-import { getInfo } from "@/api/user";
+import { getCommentList } from "@/api/user";
 export default {
   data() {
     return {
-      activeIndex: "1",
-      activeIndex2: "1",
-      keywords: "",
-      select: "",
+      comment: "",
     };
   },
-  mounted() {
-    getInfo().then(function (res) {
-      console.log(res.data.data.avatar);
-    });
+  mounted() {},
+  methods: {
+    handleEnter() {
+      this.handlePost();
+    },
+    handlePost() {
+      var that = this;
+      this.$message({
+        message: "发送成功",
+        type: "success",
+      });
+      this.comment = "";
+      this.$emit("closeReplyModal");
+      getCommentList().then(function (res) {
+        that.commentList = res.data.data;
+      });
+    },
   },
-  methods: {},
 };
 </script>
 <style lang="scss" scoped>

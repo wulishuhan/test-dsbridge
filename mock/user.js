@@ -239,7 +239,7 @@ module.exports = [
     },
   },
   {
-    url: "/auth/user/login",
+    url: "/mock-api/auth/user/login",
     type: "post",
     response: (req) => {
       const { username, password } = req.query;
@@ -362,7 +362,7 @@ module.exports = [
     },
   },
   {
-    url: "/auth/user/register",
+    url: "/mock-api/auth/user/register",
     type: "post",
     response: (req) => {
       const { username, password } = req.query;
@@ -378,8 +378,9 @@ module.exports = [
   },
   {
     url: "/user/getCommentList",
-    type: "post",
-    response: () => {
+    type: "get",
+    response: (req) => {
+      console.log(req.query);
       return commentList;
     },
   },

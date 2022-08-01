@@ -120,10 +120,10 @@
       </el-form-item>
       <el-form-item label="Tags" prop="tags">
         <el-tag
-          :key="tag"
-          v-for="tag in baseinfoForm.tags"
+          :key="index"
+          v-for="(tag, index) in baseinfoForm.tags"
           closable
-          :disable-transitions="false"
+          :disable-transitions="true"
           @close="handleClose(tag)"
         >
           {{ tag }}
@@ -154,7 +154,11 @@
         </el-select>
       </el-form-item>
       <el-form-item label="Description" prop="desc">
-        <el-input type="textarea" v-model="baseinfoForm.desc"></el-input>
+        <el-input
+          type="textarea"
+          autosize
+          v-model="baseinfoForm.desc"
+        ></el-input>
       </el-form-item>
       <el-form-item label="Tutorial">
         <draggable
@@ -296,10 +300,8 @@ export default {
       baseinfoFormRules: {
         title: [{ required: true, message: "title不能为空" }],
         tags: [{ required: true, message: "tags不能为空" }],
-        license: [
-          { required: true, message: "请选择活动区域", trigger: "change" },
-        ],
-        desc: [{ required: true, message: "请选择活动区域" }],
+        license: [{ required: true, message: "不能为空", trigger: "change" }],
+        desc: [{ required: true, message: "不能为空" }],
       },
       baseinfoForm: {
         title: "",
@@ -406,7 +408,7 @@ export default {
       this.tutorialImgList = this.$options.data().tutorialImgList;
     },
     handleClose(tag) {
-      this.baseinfoForm.tags.splice(this.dynamicTags.indexOf(tag), 1);
+      this.baseinfoForm.tags.splice(this.baseinfoForm.tags.indexOf(tag), 1);
     },
     handleInputConfirm() {
       let inputValue = this.inputValue;

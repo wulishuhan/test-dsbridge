@@ -78,10 +78,10 @@ export function register(data) {
   });
 }
 
-export function getCommentList(data) {
+export function getCommentList(params) {
   return request({
     url: "/user/getCommentList",
-    method: "post",
-    data,
+    method: "get",
+    params,
   });
 }

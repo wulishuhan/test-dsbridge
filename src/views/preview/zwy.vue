@@ -3,6 +3,7 @@
     <app-header></app-header>
     <reply-widget style="margin-top: 50px"></reply-widget>
     <comment-widget></comment-widget>
+    <canvas class="myCanvas"></canvas>
   </div>
 </template>
 <script>
@@ -17,6 +18,14 @@ export default {
     AppHeader,
     ReplyWidget,
     CommentWidget,
+  },
+  mounted() {
+    let canvas = document.querySelector(".myCanvas");
+    canvas.width = 1000;
+    canvas.style.background = "#aaa";
+    let rect = canvas.getBoundingClientRect();
+    var gl = canvas.getContext("webgl");
+    console.log(rect, canvas, gl);
   },
 };
 </script>

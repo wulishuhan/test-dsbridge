@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div id="detail-top" class="container">
     <div class="center-container">
       <div class="show">
         <el-row>
@@ -10,23 +10,21 @@
                   {{ user.thingName }}
                 </div>
                 <div class="flex align-center">
-                  <el-avatar :size="30" :src="user.avatar"></el-avatar>
+                  <el-avatar :size="40" :src="user.avatar"></el-avatar>
                   <span class="user-name">{{ user.name }}</span>
                 </div>
               </div>
-              <div class="flex justify-between" style="width: 335px">
-                <StarButton></StarButton>
-                <BaseButton style="width: 90px">
-                  <div class="flex justify-around">
-                    <i class="ortur-icon-share"></i>
-                    <span>0k</span>
-                  </div>
-                </BaseButton>
+              <div class="flex justify-between" style="width: 424px">
+                <StarButton :isStar="isLike" @click="like"></StarButton>
+                <CollectButton
+                  :isCollect="isCollected"
+                  @click="collect"
+                ></CollectButton>
                 <DownLoadButton></DownLoadButton>
               </div>
             </div>
             <div class="show-thing">
-              <div class="carouselContainer">
+              <div class="flex justify-between">
                 <div>
                   <div class="carousel">
                     <button
@@ -43,12 +41,13 @@
                     ></button>
                     <el-carousel
                       direction="vertical"
-                      height="372px"
+                      height="496px"
                       :interval="3000"
                       arrow="never"
                       ref="carousel"
                       indicator-position="none"
-                      :autoplay="false"
+                      :autoplay="true"
+                      @change="carouselChange"
                     >
                       <el-carousel-item
                         v-for="(item, index) in imageList"
@@ -62,32 +61,30 @@
                     </el-carousel>
                   </div>
                 </div>
-                <div class="right-carousel">
-                  <button
-                    class="el-icon-arrow-up"
-                    @click="trunImageLeft()"
-                  ></button>
-                  <ul class="img-ul">
-                    <li
-                      v-for="(item, index) in showImg"
-                      class="img-li"
-                      :key="item.id + index"
-                      @click="changeImg(item, index)"
+                <div v-swiper:mySwiper="swiperOptions">
+                  <div class="swiper-wrapper">
+                    <div
+                      class="swiper-slide"
+                      v-for="(item, index) in imageList"
+                      :key="item.id"
                     >
                       <img
+                        @click="changeImg(index)"
                         :class="
-                          item.index === imgActiveIndex
-                            ? 'img-activeBorder'
-                            : ''
+                          index === imgActiveIndex ? 'img-activeBorder' : ''
                         "
                         :src="item.url"
+                        alt=""
                       />
-                    </li>
-                  </ul>
-                  <button
-                    class="el-icon-arrow-down"
-                    @click="trunImageRight()"
-                  ></button>
+                    </div>
+                  </div>
+                  <div class="swiper-scrollbar"></div>
+                  <div class="up swiper-container-button">
+                    <i class="ortur-icon-arrow-up"></i>
+                  </div>
+                  <div class="down swiper-container-button">
+                    <i class="ortur-icon-arrow-down"></i>
+                  </div>
                 </div>
               </div>
             </div>
@@ -100,6 +97,7 @@
             class="description-tutorial-makes"
             type="border-card"
             v-model="activeName"
+            :stretch="true"
           >
             <el-tab-pane label="Description" name="description">
               <show-more
@@ -121,25 +119,40 @@
                 xxxxxxxxxxx xxxxxxxxx xxxxxxxxxxxxxx xxxxxxxxxxx
               </show-more>
             </el-tab-pane>
-            <el-tab-pane label="Makes" name="third">makes</el-tab-pane>
+            <el-tab-pane label="Makes" name="third">
+              <div>
+                <div class="flex justify-between">
+                  <a class="more-font">
+                    <i class="el-icon-plus"></i>
+                    Post a make
+                  </a>
+                  <a class="view-more" @click="openViewAllDialog('view-makes')">
+                    View all
+                  </a>
+                </div>
+                <div class="flex justify-between" style="flex-wrap: wrap">
+                  <el-image
+                    v-for="i in 6"
+                    :key="i"
+                    class="more-image"
+                    src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
+                  ></el-image>
+                </div>
+              </div>
+            </el-tab-pane>
           </el-tabs>
-          <div>
+          <div class="split-line"></div>
+          <div style="margin-top: 42px">
             <div style="display: flex; justify-content: space-between">
               <h2 class="more-font">More by this creator</h2>
-              <a class="view-more" @click="dialogTabsVisible = true"
-                >View all</a
-              >
+              <a class="view-more" @click="openViewAllDialog('view-creator')">
+                View all
+              </a>
             </div>
             <div class="flex justify-between more-image-box">
               <el-image
-                class="more-image"
-                src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
-              ></el-image>
-              <el-image
-                class="more-image"
-                src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
-              ></el-image>
-              <el-image
+                v-for="i in 3"
+                :key="i"
                 class="more-image"
                 src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
               ></el-image>
@@ -149,20 +162,14 @@
           <div>
             <div class="flex justify-between" style="margin-top: 35px">
               <h2 class="more-font">Similar with this</h2>
-              <a class="view-more" @click="dialogTabsVisible = true"
-                >View all</a
-              >
+              <a class="view-more" @click="openViewAllDialog('view-similar')">
+                View all
+              </a>
             </div>
             <div class="flex justify-between more-image-box">
               <el-image
-                class="more-image"
-                src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
-              ></el-image>
-              <el-image
-                class="more-image"
-                src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
-              ></el-image>
-              <el-image
+                v-for="i in 3"
+                :key="i"
                 class="more-image"
                 src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
               ></el-image>
@@ -218,40 +225,43 @@
         :initialIndex="imgActiveIndex"
       ></ElImageViewer>
     </div>
-    <el-dialog :visible.sync="dialogTabsVisible" width="852px">
-      <el-tabs v-model="viewMoreActive">
-        <el-tab-pane label="More by this creator" name="view-more">
-          <view-more></view-more>
+    <el-dialog :visible.sync="dialogTabsVisible" width="1136px">
+      <el-tabs v-model="viewMoreActive" :stretch="true">
+        <el-tab-pane label="More by this creator" name="view-creator">
+          <view-more v-if="viewMoreActive === 'view-creator'"></view-more>
         </el-tab-pane>
         <el-tab-pane label="Similar with this" name="view-similar">
-          <view-more></view-more>
+          <view-more v-if="viewMoreActive === 'view-similar'"></view-more>
         </el-tab-pane>
         <el-tab-pane label="Makes from others" name="view-makes">
-          <view-more></view-more>
+          <view-more v-if="viewMoreActive === 'view-makes'"></view-more>
         </el-tab-pane>
       </el-tabs>
     </el-dialog>
+    <sroll-top-button :to="'#detail-top'"></sroll-top-button>
   </div>
 </template>
 <script>
 /* eslint-disable */
-import ElImageViewer from "element-ui/packages/image/src/image-viewer";
+// import ElImageViewer from "element-ui/packages/image/src/image-viewer";
+import ElImageViewer from "@/components/ImageViewer";
 import { getUserInfoByThingId } from "@/api/thing";
 import DownLoadButton from "@/components/DownLoadButton.vue";
-import BaseButton from "@/components/BaseButton.vue";
 import StarButton from "@/components/StarButton.vue";
+import CollectButton from "@/components/CollectButton.vue";
 import LabelCard from "@/components/LabelCard.vue";
 import ShareCard from "@/components/ShareCard";
 import Comment from "@/components/Comment/CommentWidget.vue";
 import ShowMore from "@/components/ShowMore.vue";
 import Reply from "@/components/Comment/ReplyWidget.vue";
 import ViewMore from "./ViewMore.vue";
+import SrollTopButton from "@/components/SrollTopButton";
 export default {
   name: "Thing",
   components: {
     ElImageViewer,
     StarButton,
-    BaseButton,
+    CollectButton,
     DownLoadButton,
     LabelCard,
     ShareCard,
@@ -259,6 +269,7 @@ export default {
     ShowMore,
     Reply,
     ViewMore,
+    SrollTopButton,
   },
   data() {
     return {
@@ -268,8 +279,6 @@ export default {
       user: {},
       imgActiveIndex: 0, // 当前移动图片的索引值
       imageList: [],
-      showImg: [],
-      waitImg: [],
       viewModel: false,
       isLike: false,
       isCollected: false,
@@ -282,6 +291,21 @@ export default {
           "https://www.facebook.com/sharer/sharer.php?u=test.leadiffer.com",
         twitter: "https://twitter.com/share?url=test.leadiffer.com",
         whatsapp: "https://web.whatsapp.com/send?text=test.leadiffer.com",
+      },
+      swiperOptions: {
+        loop: true,
+        direction: "vertical",
+        mousewheel: true,
+        slidesPerView: 4,
+        slidesPerGroup: 4,
+        spaceBetween: 16,
+        navigation: {
+          nextEl: ".down",
+          prevEl: ".up",
+        },
+        scrollbar: {
+          el: ".swiper-scrollbar",
+        },
       },
     };
   },
@@ -296,39 +320,17 @@ export default {
     closeViewer() {
       this.showViewer = false;
     },
-
     arrowClick(val) {
       if (val === "down") {
         this.$refs.carousel.next();
       } else {
         this.$refs.carousel.prev();
       }
+      this.imgActiveIndex = this.$refs.carousel.activeIndex;
     },
-    setActiveItem(index) {
+    changeImg(index) {
       this.$refs.carousel.setActiveItem(index);
-    },
-    showModel() {
-      this.viewModel = true;
-    },
-    closeModel() {
-      this.viewModel = false;
-    },
-    handleClick(tab, event) {
-      console.log(tab, event);
-    },
-    changeImg(item) {
-      this.$refs.carousel.setActiveItem(item.index);
-      this.imgActiveIndex = item.index;
-    },
-    trunImageLeft() {
-      let currentShowImgLast = this.showImg.pop();
-      this.waitImg.unshift(currentShowImgLast);
-      this.showImg.unshift(this.waitImg.pop());
-    },
-    trunImageRight() {
-      let currentShowImgFirst = this.showImg.shift();
-      this.waitImg.push(currentShowImgFirst);
-      this.showImg.push(this.waitImg.shift());
+      this.imgActiveIndex = index;
     },
     like() {
       this.isLike = !this.isLike;
@@ -338,6 +340,14 @@ export default {
     },
     toUserProfileView() {
       this.$router.push(`/design/Favorites/${this.user.id}`);
+    },
+    openViewAllDialog(name) {
+      this.viewMoreActive = name;
+      this.dialogTabsVisible = true;
+    },
+    carouselChange() {
+      this.imgActiveIndex = this.$refs.carousel.activeIndex;
+      this.mySwiper.slideTo(this.$refs.carousel.activeIndex, 1000, false);
     },
   },
   created() {
@@ -349,18 +359,54 @@ export default {
       this.isLike = this.user.isLike;
       this.isCollected = this.user.isCollected;
       this.imageList = this.user.image;
-      for (let i = 0; i < this.imageList.length; i++) {
-        let obj = {
-          ...this.imageList[i],
-          index: i,
-        };
-        i < 8 ? this.showImg.push(obj) : this.waitImg.push(obj);
-      }
     });
   },
 };
 </script>
 <style lang="scss" scoped>
+.swiper-container {
+  width: 184px;
+  height: 496px;
+  margin: 0;
+  .swiper-wrapper {
+    height: 496px;
+    width: 184px;
+    .swiper-slide {
+      width: 184px;
+      img {
+        height: 112px;
+        width: 100%;
+        cursor: pointer;
+      }
+    }
+  }
+  .swiper-container-button {
+    text-align: center;
+    width: 100%;
+    height: 24px;
+    background: #1a1a1a;
+    opacity: 0.3;
+    z-index: 15;
+    position: absolute;
+    i {
+      color: #fff;
+      opacity: 1;
+      font-size: 16px;
+    }
+  }
+  .up {
+    top: 0px;
+    border-radius: 10px 10px 0px 0px;
+  }
+  .down {
+    border-radius: 0px 0px 10px 10px;
+    bottom: 0px;
+  }
+}
+.el-avatar {
+  cursor: pointer;
+}
+
 .share-icon {
   font-size: 38px;
   display: block;
@@ -395,23 +441,23 @@ a {
 }
 
 .user-name {
-  font-size: 12px;
+  font-size: 16px;
   color: #999999;
   margin-left: 7px;
 }
 
 .bottom-content {
-  width: 768px;
+  width: 1024px;
   margin: 0 auto;
   margin-top: 24px;
 }
 
 .bottom-content-left {
-  width: 478px;
+  width: 637px;
 }
 
 .bottom-content-right {
-  width: 194px;
+  width: 259px;
 }
 
 .view-more {
@@ -430,18 +476,19 @@ a {
 }
 
 .more-image {
-  width: 138px;
-  height: 84px;
+  width: 184px;
+  height: 112px;
+  margin-top: 5px;
 }
 
 .split-line {
   border: solid #ccc 1px;
   height: 1px;
-  margin-top: 30px;
+  margin-top: 40px;
 }
 
 .comment-box {
-  margin-top: 30px;
+  margin-top: 40px;
 }
 
 .share-content {
@@ -465,20 +512,9 @@ a {
   line-height: 23px;
 }
 
-.dialog-view-more {
-  width: 852px;
-  height: 738px;
-  background: #ffffff;
-  border-radius: 9px;
-}
-
 .imageViewer {
   ::v-deep .el-image-viewer__prev {
     background-color: black;
-  }
-
-  .ortur-iconb {
-    font-size: 56px;
   }
 
   ::v-deep .el-image-viewer__btn {
@@ -511,7 +547,7 @@ a {
     border-radius: 6px;
     transform: translateX(-50%);
     left: 50%;
-    top: 210px;
+    top: 12px;
   }
 
   ::v-deep .el-image-viewer__next {
@@ -524,7 +560,7 @@ a {
     // left: 50%;
     transform: translateX(-50%);
     left: 50%;
-    bottom: 210px;
+    bottom: 12px;
     top: auto;
   }
 
@@ -534,7 +570,8 @@ a {
     background: #1a1a1a;
     opacity: 0.3;
     border-radius: 6px;
-    top: 210px;
+    top: 12px;
+    right: 13px;
   }
 
   ::v-deep .el-image-viewer__img {
@@ -548,44 +585,17 @@ a {
   height: 100%;
   font-family: Source Han Sans CN;
   font-weight: 400;
-
   .model-button-group {
     background-color: #fff;
   }
-
-  .show {
-    margin-top: 20px;
-  }
-
-  .tip {
-    width: 700px;
-    height: 41px;
-    background-color: #fca833;
-    color: #fff;
-    font-size: 14px;
-    line-height: 41px;
-  }
-
   .show-thing {
     margin-top: 30px;
-
-    .switchImage {
-      width: 700px;
-      height: 66px;
-      background-color: #fff;
-
-      img {
-        margin-left: 6px;
-        cursor: pointer;
-        margin-top: 5px;
-      }
-    }
   }
 }
 
 .center-container {
   margin: 0 auto;
-  width: 768px;
+  width: 1024px;
 }
 
 .el-tabs {
@@ -596,9 +606,8 @@ a {
   position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   width: 100%;
-  height: 372px;
+  height: 496px;
   padding: 0;
   overflow-y: auto;
   overflow-x: hidden;
@@ -606,47 +615,8 @@ a {
   margin: 0;
 }
 
-.img-ul::-webkit-scrollbar {
-  /*滚动条整体样式*/
-  width: 2px;
-  /*高宽分别对应横竖滚动条的尺寸*/
-  height: 1px;
-}
-
-.img-ul::-webkit-scrollbar-thumb {
-  /*滚动条里面小方块*/
-  border-radius: 5px;
-  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
-  background: #535353;
-}
-
-.img-ul::-webkit-scrollbar-track {
-  /*滚动条里面轨道*/
-  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
-  border-radius: 10px;
-  background: #ededed;
-}
-
-.img-li {
-  cursor: pointer;
-
-  img {
-    width: 138px;
-    height: 84px;
-  }
-}
-
 .img-activeBorder {
   border: 1px solid #248bfb;
-}
-
-.right-carousel {
-  display: flex;
-  width: 138px;
-  text-align: center;
-  flex-direction: column;
-  position: relative;
-  margin-left: 24px;
 }
 
 .el-icon-arrow-up {
@@ -655,8 +625,8 @@ a {
   border: none;
   padding: 0;
   position: absolute;
-  width: 138px;
-  height: 18px;
+  width: 184px;
+  height: 24px;
   background: #1a1a1a;
   opacity: 0.3;
   border-radius: 8px 8px 0px 0px;
@@ -670,8 +640,8 @@ a {
   border: none;
   padding: 0;
   position: absolute;
-  width: 138px;
-  height: 18px;
+  width: 184px;
+  height: 24px;
   background: #1a1a1a;
   opacity: 0.3;
   border-radius: 8px 8px 0px 0px;
@@ -681,51 +651,48 @@ a {
 }
 
 .downCarousel {
-  width: 138px;
-  height: 36px;
+  width: 184px;
+  height: 48px;
   background: #1a1a1a;
   opacity: 0.3;
-  border-radius: 6px;
+  border-radius: 8px;
   left: 50%;
-  bottom: 12px;
-  margin-left: -64px;
+  bottom: 16px;
+  margin-left: -92px;
 }
 
 .upCarousel {
-  width: 138px;
-  height: 36px;
+  width: 184px;
+  height: 48px;
   background: #1a1a1a;
   opacity: 0.3;
-  border-radius: 6px;
+  border-radius: 8px;
   left: 50%;
-  top: 12px;
-  margin-left: -64px;
+  top: 16px;
+  margin-left: -92px;
 }
 
 .ortur-icon-enlarge {
-  width: 60px;
-  height: 60px;
+  width: 48px;
+  height: 48px;
   background: #1a1a1a;
   opacity: 0.3;
   border-radius: 6px;
   position: absolute;
-  right: 12px;
-  top: 12px;
+  right: 15px;
+  top: 15px;
   z-index: 8;
-}
-
-.carouselContainer {
-  display: flex;
+  cursor: pointer;
 }
 
 .carousel {
   position: relative;
-  width: 605px;
-  height: 372px;
-
+  width: 807px;
+  height: 496px;
   img {
     width: 100%;
     height: 100%;
+    object-fit: cover;
   }
 }
 
@@ -738,7 +705,7 @@ a {
 }
 
 .description-tutorial-makes {
-  width: 318px;
+  width: 100%;
   background-color: #f5f5f5;
   margin-top: 0px;
 }
@@ -753,45 +720,47 @@ a {
   color: #000;
 }
 
-/* ::v-deep .share-box {
-  background: #f5f5f5;
-  box-shadow: none;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  width: 180px;
-  height: 84px;
-}
-::v-deep .share-icon-box {
-  width: 42px;
-  height: 42px;
-  margin-right: 12px;
-  margin-top: 12px;
-  line-height: 42px;
-  text-align: center;
-  box-sizing: border-box;
-  padding: 7px;
-  background: #e8ebf4;
-  border-radius: 6px;
-} */
 ::v-deep .app-header__search {
   width: 100%;
   height: 42px;
   border: 1px solid #cccccc !important;
 }
 
-::v-deep .el-tabs--border-card>.el-tabs__content {
+::v-deep .el-tabs--border-card > .el-tabs__content {
   padding-top: 20px;
   padding-left: 0px;
+  padding-right: 0px;
 }
 
 ::v-deep .comment-wrapper {
   width: 100%;
+}
+::v-deep .el-tabs--border-card > .el-tabs__header .el-tabs__item.is-active {
+  color: #fff;
+  background-color: #f5f5f5;
+  border-right-color: #f5f5f5;
+  border-left-color: #f5f5f5;
+  width: 120px;
+  height: 40px;
+  background: #1e78f0;
+  border-radius: 8px;
+}
+::v-deep .el-tabs--border-card > .el-tabs__header {
+  border: none;
+}
+::v-deep .el-tabs--border-card {
+  background: #f5f5f5;
+  border: none;
+}
+::v-deep .el-tabs__header .is-top {
+  width: 360px;
 }
 
 .show-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
+  margin-top: 30px;
 }
 
 .show-header-left {
@@ -802,28 +771,7 @@ a {
 }
 
 .show-header-left-thing-name {
-  font-size: 18px;
+  font-size: 24px;
   color: #1a1a1a;
-}
-
-@media screen and (max-width: 768px) {
-  .carousel {
-    width: 100%;
-    height: 524px;
-
-    img {
-      width: 100%;
-      height: 100%;
-    }
-  }
-
-  .center-container {
-    margin: 0 auto;
-    width: 100%;
-  }
-
-  .show-thing {
-    width: 100%;
-  }
 }
 </style>

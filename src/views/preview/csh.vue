@@ -1,128 +1,7 @@
+<!-- eslint-disable  -->
 <template>
   <div>
-    <el-tabs v-model="activeName" style="display: none">
-      <el-tab-pane label="aaaa" name="first">
-        <div style="width: 1440px; height: 1749px">
-          <div style="width: 768px; margin: 0 auto">
-            <div
-              style="
-                margin: 0 auto;
-                display: flex;
-                justify-content: space-between;
-                align-items: flex-end;
-              "
-            >
-              <div style="display: flex; flex-direction: column">
-                <div
-                  style="
-                    font-size: 18px;
-                    font-family: Source Han Sans CN;
-                    font-weight: 400;
-                    color: #1a1a1a;
-                  "
-                >
-                  xxxxx
-                </div>
-                <div style="display: flex; align-items: center">
-                  <el-avatar :size="30" class="el-icon-plus"></el-avatar>
-                  <span
-                    style="
-                      font-size: 12px;
-                      font-family: Source Han Sans CN;
-                      font-weight: 400;
-                      color: #999999;
-                      margin-left: 7px;
-                    "
-                    >xxx</span
-                  >
-                </div>
-              </div>
-              <div>
-                <!-- <el-button icon="ortur-icon-star">1.2K</el-button>
-                <el-button icon="ortur-icon-share">1.2K</el-button>
-                <el-button>
-                  <i class="ortur-icon-file"></i>
-                  1.5K
-                  <i style="font-size: 7px" class="ortur-icon-arrow-down"></i>
-                </el-button> -->
-                <StarButton></StarButton>
-                <BaseButton @click="test">基础按钮</BaseButton>
-                <DownLoadButton></DownLoadButton>
-              </div>
-            </div>
-            <div
-              style="
-                display: flex;
-                justify-content: space-between;
-                margin-top: 30px;
-              "
-            >
-              <div style="width: 605px; height: 372px; border: solid 1px"></div>
-              <div style="height: 372px; width: 138px; border: solid 1px"></div>
-            </div>
-            <div
-              style="
-                display: flex;
-                justify-content: space-between;
-                margin-top: 24px;
-              "
-            >
-              <div
-                style="width: 478px; height: 1000px; border: solid 1px"
-              ></div>
-              <div style="width: 201px; height: 500px; border: solid 1px"></div>
-            </div>
-          </div>
-        </div>
-      </el-tab-pane>
-      <el-tab-pane label="bbbb" name="second">
-        <div class="btn-div">
-          <div class="btn btn-up" @click="prev()">
-            <i class="ortur-icon-arrow-up"></i>
-          </div>
-          <div class="btn btn-down" @click="next()">
-            <i class="ortur-icon-arrow-bottom"></i>
-          </div>
-        </div>
-        <div class="btn-enlarge">
-          <i class="ortur-icon-enlarge"></i>
-        </div>
-        <div style="border: solid"></div>
-        <div>
-          <div class="select-box">
-            <i class="ortur-icon-hourglass icon-hourglass"></i>
-            <el-select v-model="value" placeholder="The Popular" class="select">
-              <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-                style="font-size: 12px"
-                class="option"
-              >
-              </el-option>
-            </el-select>
-          </div></div
-      ></el-tab-pane>
-      <el-tab-pane label="cccc" name="third">
-        <el-carousel
-          height="372px"
-          direction="vertical"
-          :autoplay="true"
-          arrow="always"
-          trigger="click"
-          ref="nop"
-        >
-          <el-carousel-item v-for="item in 3" :key="item">
-            <h3 class="medium">{{ item }}</h3>
-          </el-carousel-item>
-        </el-carousel>
-      </el-tab-pane>
-      <el-tab-pane label="login" name="fourth">
-        <login></login>
-      </el-tab-pane>
-    </el-tabs>
-    <div style="width: 486px; margin: 0 auto; display: none">
+    <div style="width: 486px">
       <el-tabs type="border-card" :stretch="true" v-model="activeName">
         <el-tab-pane label="描述" name="description">
           <show-more
@@ -193,22 +72,52 @@
       </div>
     </div>
     <login></login>
+    <div style="margin-top: 50px">
+      <preview></preview>
+    </div>
+    <div v-swiper:mySwiper="swiperOptions">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide" v-for="(item, index) in urls" :key="item">
+          <img @click="imgIndex(index)" :src="item" alt="" />
+        </div>
+      </div>
+      <div class="swiper-scrollbar"></div>
+      <div class="up">
+        <i class="ortur-icon-arrow-up"></i>
+      </div>
+      <div class="down">
+        <i class="ortur-icon-arrow-down"></i>
+      </div>
+    </div>
+    <el-tabs type="border-card" :stretch="true" style="width: 360px">
+      <el-tab-pane>
+        <div class="tab-items" slot="label">aaa</div>
+        bbb
+      </el-tab-pane>
+      <el-tab-pane>
+        <div class="tab-items" slot="label">bbb</div>
+        ccc
+      </el-tab-pane>
+      <el-tab-pane>
+        <div class="tab-items" slot="label">ccc</div>
+        ddd
+      </el-tab-pane>
+    </el-tabs>
   </div>
 </template>
 <script>
-// import TestCard from "@/components/ResourceCard/index";
-// import Share from "@/components/ShareCard/index";
 import Login from "@/components/Login";
-import DownLoadButton from "@/components/DownLoadButton.vue";
-import BaseButton from "@/components/BaseButton.vue";
-import StarButton from "@/components/StarButton.vue";
 import ShowMore from "@/components/ShowMore.vue";
+import Preview from "@/components/Preview.vue";
+// more module style...
 // 用来预览组件
 export default {
   name: "csh",
-  // components: { TestCard, Share },
-  // components: { Login },
-  components: { StarButton, BaseButton, DownLoadButton, Login, ShowMore },
+  components: {
+    Login,
+    ShowMore,
+    Preview,
+  },
   data() {
     return {
       test: {
@@ -240,8 +149,38 @@ export default {
       ],
       value: "",
       activeName: "step",
-      showHeight: 50,
+      showHeight: 100,
       contentHeight: 0,
+      urls: [
+        "https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg",
+        "https://fuss10.elemecdn.com/1/34/19aa98b1fcb2781c4fba33d850549jpeg.jpeg",
+        "https://fuss10.elemecdn.com/0/6f/e35ff375812e6b0020b6b4e8f9583jpeg.jpeg",
+        "https://fuss10.elemecdn.com/9/bb/e27858e973f5d7d3904835f46abbdjpeg.jpeg",
+        "https://fuss10.elemecdn.com/d/e6/c4d93a3805b3ce3f323f7974e6f78jpeg.jpeg",
+        "https://fuss10.elemecdn.com/3/28/bbf893f792f03a54408b3b7a7ebf0jpeg.jpeg",
+        "https://fuss10.elemecdn.com/2/11/6535bcfb26e4c79b48ddde44f4b6fjpeg.jpeg",
+      ],
+      swiperOptions: {
+        direction: "vertical",
+        mousewheel: true,
+        slidesPerView: 4,
+        spaceBetween: 16,
+        navigation: {
+          nextEl: ".down",
+          prevEl: ".up",
+        },
+        scrollbar: {
+          el: ".swiper-scrollbar",
+        },
+        on: {
+          slideChange: function () {
+            console.log("改变了，activeIndex为" + this.activeIndex);
+          },
+          click: function () {
+            console.log("activeIndex为" + this.activeIndex);
+          },
+        },
+      },
     };
   },
   methods: {
@@ -251,24 +190,87 @@ export default {
     next() {
       this.$refs.nop.next();
     },
+    imgIndex(index) {
+      console.log(index);
+    },
   },
+  mounted() {},
 };
 </script>
-<style scoped>
-.el-carousel__item h3 {
-  color: #475669;
-  font-size: 14px;
-  opacity: 0.75;
-  line-height: 200px;
-  margin: 0;
+<style lang="scss" scoped>
+.swiper-container {
+  width: 184px;
+  height: 496px;
+  .swiper-wrapper {
+    height: 496px;
+    width: 184px;
+    .swiper-slide {
+      width: 184px;
+      img {
+        height: 112px;
+        width: 100%;
+      }
+    }
+  }
+  .up {
+    z-index: 15;
+    position: absolute;
+    top: 0px;
+    text-align: center;
+    width: 100%;
+    height: 24px;
+    background: #1a1a1a;
+    opacity: 0.3;
+    border-radius: 10px 10px 0px 0px;
+    i {
+      color: #fff;
+      opacity: 1;
+      font-size: 16px;
+    }
+  }
+  .down {
+    z-index: 15;
+    position: absolute;
+    border-radius: 0px 0px 10px 10px;
+    bottom: 0px;
+    text-align: center;
+    width: 100%;
+    height: 24px;
+    background: #1a1a1a;
+    opacity: 0.3;
+    i {
+      color: #fff;
+      opacity: 1;
+      font-size: 16px;
+    }
+  }
 }
-
-.el-carousel__item:nth-child(2n) {
-  background-color: #99a9bf;
+::v-deep .el-tabs--border-card > .el-tabs__header .el-tabs__item.is-active {
+  color: #fff;
+  background-color: #f5f5f5;
+  border-right-color: #f5f5f5;
+  border-left-color: #f5f5f5;
+  width: 120px;
+  height: 40px;
+  background: #1e78f0;
+  border-radius: 8px;
 }
-
-.el-carousel__item:nth-child(2n + 1) {
-  background-color: #d3dce6;
+::v-deep .el-tabs--border-card > .el-tabs__header {
+  border: none;
+}
+::v-deep .el-tabs--border-card {
+  background: #f5f5f5;
+  border: none;
+}
+.tab-items {
+  background: none;
+  width: 100%;
+  height: 40px;
+  font-size: 16px;
+  font-family: Source Han Sans CN;
+  font-weight: 400;
+  text-align: center;
+  line-height: 40px;
 }
 .btn-div {
   position: absolute;

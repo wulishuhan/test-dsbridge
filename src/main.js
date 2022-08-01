@@ -16,7 +16,10 @@ Vue.config.productionTip = false;
 Vue.use(ElementUI);
 const VueAwesomeSwiper = require("vue-awesome-swiper/dist/ssr");
 Vue.use(VueAwesomeSwiper);
-
+if (process.env.NODE_ENV === "development") {
+  const { mockXHR } = require("../mock");
+  mockXHR();
+}
 // Vue.use(mock);
 new Vue({
   router,
