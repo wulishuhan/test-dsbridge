@@ -33,7 +33,7 @@
           <el-form-item prop="password1">
             <el-input
               type="password"
-              v-model="registerForm.password1"
+              v-model="registerForm.password"
               autocomplete="off"
               placeholder="Password"
               show-password
@@ -151,7 +151,7 @@ export default {
       if (value === "") {
         callback(new Error("请输入密码"));
       } else {
-        if (this.registerForm.password1 !== "") {
+        if (this.registerForm.password !== "") {
           this.$refs.registerForm.validateField("password2");
         }
         callback();
@@ -160,7 +160,7 @@ export default {
     var validatePass2 = (rule, value, callback) => {
       if (value === "") {
         callback(new Error("请再次输入密码"));
-      } else if (value !== this.registerForm.password1) {
+      } else if (value !== this.registerForm.password) {
         callback(new Error("两次输入密码不一致!"));
       } else {
         callback();
@@ -176,7 +176,7 @@ export default {
       },
       registerForm: {
         username: "",
-        password1: "",
+        password: "",
         password2: "",
         email: "",
       },
@@ -252,6 +252,12 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           this.registerForm.username = this.registerForm.email;
+          console.log("registerForm:", {
+            auto_login: true,
+            client_subtype: "Windows",
+            client_type: "pc",
+            ...this.registerForm,
+          });
           register({
             auto_login: true,
             client_subtype: "Windows",
