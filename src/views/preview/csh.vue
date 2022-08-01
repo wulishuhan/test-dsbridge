@@ -71,7 +71,22 @@
         </div>
       </div>
     </div>
-    <login></login>
+    <div>
+      <h1>login组件</h1>
+      登录拟态框：<a href="#" @click="showLogin"> login</a>
+      <login
+        :loadLoginDialog="true"
+        :visible.sync="dialogLoginVisible"
+        @handleClose="dialogLoginVisible = false"
+      ></login>
+      注册拟态框：<a href="#" @click="showRegister"> register</a>
+      <login
+        :loadLoginDialog="false"
+        :visible.sync="dialogRegisterVisible"
+        @handleClose="dialogRegisterVisible = false"
+      ></login>
+    </div>
+
     <div style="margin-top: 50px">
       <preview></preview>
     </div>
@@ -120,6 +135,8 @@ export default {
   },
   data() {
     return {
+      dialogLoginVisible: false,
+      dialogRegisterVisible: false,
       test: {
         avatar: "http://dummyimage.com/300x200/f27982/FFF&text=vknro",
         id: "620000197009121720",
@@ -192,6 +209,17 @@ export default {
     },
     imgIndex(index) {
       console.log(index);
+    },
+    showLogin() {
+      this.dialogLoginVisible = true;
+    },
+    showRegister() {
+      this.dialogRegisterVisible = true;
+    },
+    // 修改是否让页面显示与隐藏的事件
+    updateVisible(val) {
+      this.dialogRegisterVisible = val;
+      this.dialogLoginVisible = val;
     },
   },
   mounted() {},
