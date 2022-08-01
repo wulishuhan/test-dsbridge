@@ -20,7 +20,7 @@
                 </div>
               </div>
               <div class="show-thing">
-                <div class="carouselContainer">
+                <div class="carouselContainer justify-between">
                   <div>
                     <div class="carousel">
                       <button
@@ -42,7 +42,8 @@
                         arrow="never"
                         ref="carousel"
                         indicator-position="none"
-                        :autoplay="false"
+                        @change="carouselChange"
+                        :autoplay="true"
                       >
                         <el-carousel-item
                           v-for="(item, index) in imageList"
@@ -56,33 +57,6 @@
                       </el-carousel>
                     </div>
                   </div>
-                  <!-- <div class="right-carousel">
-                    <button
-                      class="el-icon-arrow-up"
-                      @click="trunImageLeft()"
-                    ></button>
-                    <ul class="img-ul">
-                      <li
-                        v-for="(item, index) in showImg"
-                        class="img-li"
-                        :key="item.id + index"
-                        @click="changeImg(item, index)"
-                      >
-                        <img
-                          :class="
-                            item.index === imgActiveIndex
-                              ? 'img-activeBorder'
-                              : ''
-                          "
-                          :src="item.url"
-                        />
-                      </li>
-                    </ul>
-                    <button
-                      class="el-icon-arrow-down"
-                      @click="trunImageRight()"
-                    ></button>
-                  </div> -->
                   <div v-swiper:mySwiper="swiperOptions">
                     <div class="swiper-wrapper">
                       <div
@@ -216,8 +190,19 @@ export default {
       this.showViewer = false;
     },
     changeImg(index) {
+      console.log("changeImg", index);
       this.$refs.carousel.setActiveItem(index);
       this.imgActiveIndex = index;
+    },
+    carouselChange() {
+      this.imgActiveIndex = this.$refs.carousel.activeIndex;
+      this.mySwiper.activeIndex = this.imgActiveIndex;
+      this.mySwiper.slideTo(this.$refs.carousel.activeIndex, 1000, false);
+      console.log(
+        "carouselChange",
+        this.imgActiveIndex,
+        this.mySwiper.activeIndex
+      );
     },
     arrowClick(val) {
       if (val === "down") {
@@ -225,6 +210,8 @@ export default {
       } else {
         this.$refs.carousel.prev();
       }
+      console.log("refs:", this.$refs.carousel.activeIndex);
+      this.imgActiveIndex = this.$refs.carousel.activeIndex;
     },
     setActiveItem(index) {
       this.$refs.carousel.setActiveItem(index);
@@ -495,7 +482,9 @@ export default {
     height: 84px;
   }
 }
-
+.img-activeBorder {
+  border: 1px solid #248bfb;
+}
 .imageViewer {
   z-index: 9999;
   ::v-deep .el-image-viewer__prev {
