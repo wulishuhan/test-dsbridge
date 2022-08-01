@@ -163,11 +163,11 @@ export default {
       showHeight: 200,
       imageViewerIndex: 9999,
       swiperOptions: {
-        loop: true,
+        // loop: true,
         direction: "vertical",
         mousewheel: true,
         slidesPerView: 4,
-        slidesPerGroup: 4,
+        // slidesPerGroup: 4,
         spaceBetween: 16,
         navigation: {
           nextEl: ".down",
@@ -190,7 +190,6 @@ export default {
       this.showViewer = false;
     },
     changeImg(index) {
-      console.log("changeImg", index);
       this.$refs.carousel.setActiveItem(index);
       this.imgActiveIndex = index;
     },
@@ -198,11 +197,6 @@ export default {
       this.imgActiveIndex = this.$refs.carousel.activeIndex;
       this.mySwiper.activeIndex = this.imgActiveIndex;
       this.mySwiper.slideTo(this.$refs.carousel.activeIndex, 1000, false);
-      console.log(
-        "carouselChange",
-        this.imgActiveIndex,
-        this.mySwiper.activeIndex
-      );
     },
     arrowClick(val) {
       if (val === "down") {
@@ -212,6 +206,7 @@ export default {
       }
       console.log("refs:", this.$refs.carousel.activeIndex);
       this.imgActiveIndex = this.$refs.carousel.activeIndex;
+      this.mySwiper.slideTo(this.$refs.carousel.activeIndex, 1000, false);
     },
     setActiveItem(index) {
       this.$refs.carousel.setActiveItem(index);
@@ -438,49 +433,6 @@ export default {
   left: 50%;
   top: 12px;
   margin-left: -64px;
-}
-
-.img-ul {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 372px;
-  padding: 0;
-  overflow-y: auto;
-  overflow-x: hidden;
-  list-style: none;
-  margin: 0;
-}
-
-.img-ul::-webkit-scrollbar {
-  /*滚动条整体样式*/
-  width: 2px;
-  /*高宽分别对应横竖滚动条的尺寸*/
-  height: 1px;
-}
-
-.img-ul::-webkit-scrollbar-thumb {
-  /*滚动条里面小方块*/
-  border-radius: 5px;
-  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
-  background: #535353;
-}
-
-.img-ul::-webkit-scrollbar-track {
-  /*滚动条里面轨道*/
-  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
-  border-radius: 10px;
-  background: #ededed;
-}
-
-.img-li {
-  cursor: pointer;
-
-  img {
-    width: 138px;
-    height: 84px;
-  }
 }
 .img-activeBorder {
   border: 1px solid #248bfb;
