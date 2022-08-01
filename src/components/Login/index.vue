@@ -1,119 +1,124 @@
 <template>
   <div>
-    <a type="text" @click="switchLoginAndRegister('Log in')"> Log in </a>
-    <el-dialog width="396px" :visible.sync="isRegisterForm">
-      <div :class="loginFormTip === '' ? 'no-tips' : 'tips'" slot="title">
-        {{ registerFormTip }}
+    <el-dialog
+      width="396px"
+      :visible.sync="dialogVisible"
+      :before-close="handleClose"
+    >
+      <div v-if="!isLoginForm">
+        <div :class="loginFormTip === '' ? 'no-tips' : 'tips'" slot="title">
+          {{ registerFormTip }}
+        </div>
+        <el-form :model="registerForm" :rules="rules" ref="registerForm">
+          <el-form-item>
+            <div class="continue-with">Continue with</div>
+            <div class="icon-box">
+              <i class="ortur-icon-facebook icon"></i>
+              <i class="ortur-icon-github icon"></i>
+              <i class="ortur-icon-tiktok icon"></i>
+              <i class="ortur-icon-google icon"></i>
+              <i class="ortur-icon-apple icon disabled-icon"></i>
+            </div>
+          </el-form-item>
+          <el-form-item>
+            <div class="or">or</div>
+          </el-form-item>
+          <el-form-item prop="email">
+            <el-input
+              v-model="registerForm.email"
+              autocomplete="off"
+              placeholder="Email"
+            ></el-input>
+          </el-form-item>
+          <el-form-item prop="password1">
+            <el-input
+              type="password"
+              v-model="registerForm.password1"
+              autocomplete="off"
+              placeholder="Password"
+              show-password
+            ></el-input>
+          </el-form-item>
+          <el-form-item prop="password2">
+            <el-input
+              type="password"
+              v-model="registerForm.password2"
+              autocomplete="off"
+              placeholder="Password"
+              show-password
+            ></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-button @click="createAccount('registerForm')"
+              >Create Account</el-button
+            >
+          </el-form-item>
+          <el-form-item>
+            <div style="display: flex; flex-direction: column">
+              <span class="login-text">
+                Already have an account?
+                <a @click="switchLoginAndRegister"> &nbsp; Log in </a>
+              </span>
+              <span class="login-text privacy-text">
+                By clicking "Create account", I agree to ORTUR's
+                <a href="#">Privacy policy</a>
+                .
+              </span>
+            </div>
+          </el-form-item>
+        </el-form>
       </div>
-      <el-form :model="registerForm" :rules="rules" ref="registerForm">
-        <el-form-item>
-          <div class="continue-with">Continue with</div>
-          <div class="icon-box">
-            <i class="ortur-icon-facebook icon"></i>
-            <i class="ortur-icon-github icon"></i>
-            <i class="ortur-icon-tiktok icon"></i>
-            <i class="ortur-icon-google icon"></i>
-            <i class="ortur-icon-apple icon disabled-icon"></i>
-          </div>
-        </el-form-item>
-        <el-form-item>
-          <div class="or">or</div>
-        </el-form-item>
-        <el-form-item prop="email">
-          <el-input
-            v-model="registerForm.email"
-            autocomplete="off"
-            placeholder="Email"
-          ></el-input>
-        </el-form-item>
-        <el-form-item prop="password1">
-          <el-input
-            type="password"
-            v-model="registerForm.password1"
-            autocomplete="off"
-            placeholder="Password"
-            show-password
-          ></el-input>
-        </el-form-item>
-        <el-form-item prop="password2">
-          <el-input
-            type="password"
-            v-model="registerForm.password2"
-            autocomplete="off"
-            placeholder="Password"
-            show-password
-          ></el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-button @click="createAccount('registerForm')"
-            >Create Account</el-button
-          >
-        </el-form-item>
-        <el-form-item>
-          <div style="display: flex; flex-direction: column">
-            <span class="login-text">
-              Already have an account?
-              <a @click="switchLoginAndRegister('Log in')"> &nbsp; Log in </a>
-            </span>
-            <span class="login-text privacy-text">
-              By clicking "Create account", I agree to ORTUR's
-              <a href="#">Privacy policy</a>
-              .
-            </span>
-          </div>
-        </el-form-item>
-      </el-form>
-    </el-dialog>
-    <el-dialog width="396px" :visible.sync="isLoginForm">
-      <div :class="loginFormTip === '' ? 'no-tips' : 'tips'" slot="title">
-        {{ loginFormTip }}
-      </div>
-      <el-form :model="loginForm" ref="loginForm" :rules="rules">
-        <el-form-item>
-          <div class="continue-with">Continue with</div>
-          <div class="icon-box">
-            <i class="ortur-icon-facebook icon"></i>
-            <i class="ortur-icon-github icon"></i>
-            <i class="ortur-icon-tiktok icon"></i>
-            <i class="ortur-icon-google icon"></i>
-            <i class="ortur-icon-apple icon disabled-icon"></i>
-          </div>
-        </el-form-item>
-        <el-form-item>
-          <div class="or">or</div>
-        </el-form-item>
+      <div v-if="isLoginForm">
+        <div :class="loginFormTip === '' ? 'no-tips' : 'tips'" slot="title">
+          {{ loginFormTip }}
+        </div>
+        <el-form :model="loginForm" ref="loginForm" :rules="rules">
+          <el-form-item>
+            <div class="continue-with">Continue with</div>
+            <div class="icon-box">
+              <i class="ortur-icon-facebook icon"></i>
+              <i class="ortur-icon-github icon"></i>
+              <i class="ortur-icon-tiktok icon"></i>
+              <i class="ortur-icon-google icon"></i>
+              <i class="ortur-icon-apple icon disabled-icon"></i>
+            </div>
+          </el-form-item>
+          <el-form-item>
+            <div class="or">or</div>
+          </el-form-item>
 
-        <el-form-item prop="email">
-          <el-input
-            v-model="loginForm.email"
-            autocomplete="off"
-            placeholder="Email"
-          ></el-input>
-        </el-form-item>
-        <el-form-item prop="password">
-          <el-input
-            v-model="loginForm.password"
-            autocomplete="off"
-            placeholder="Password"
-            show-password
-          ></el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-button @click="login('loginForm')">Log in</el-button>
-        </el-form-item>
-        <el-form-item>
-          <div class="login-text-nav">
-            <span class="login-text">
-              Forget password?
-              <a href="#">&nbsp; Reset it</a>
-            </span>
-            <span class="login-text">
-              No account?
-              <a @click="switchLoginAndRegister('Create one')">Create one</a>
-            </span>
-          </div>
-        </el-form-item>
-      </el-form>
+          <el-form-item prop="email">
+            <el-input
+              v-model="loginForm.email"
+              autocomplete="off"
+              placeholder="Email"
+            ></el-input>
+          </el-form-item>
+          <el-form-item prop="password">
+            <el-input
+              v-model="loginForm.password"
+              autocomplete="off"
+              placeholder="Password"
+              show-password
+            ></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-button @click="login('loginForm')">Log in</el-button>
+          </el-form-item>
+          <el-form-item>
+            <div class="login-text-nav">
+              <span class="login-text">
+                Forget password?
+                <a href="#">&nbsp; Reset it</a>
+              </span>
+              <span class="login-text">
+                No account?
+                <a @click="switchLoginAndRegister">Create one</a>
+              </span>
+            </div>
+          </el-form-item>
+        </el-form>
+      </div>
       <el-dialog width="396px" :visible.sync="innerVisible" append-to-body>
         <div class="loading-box" v-loading="loading"></div>
       </el-dialog>
@@ -123,6 +128,24 @@
 <script>
 import { register } from "@/api/user";
 export default {
+  props: {
+    loadLoginDialog: {
+      type: Boolean,
+      default: true,
+    },
+    visible: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  computed: {
+    dialogVisible: function () {
+      return this.visible;
+    },
+  },
+  mounted() {
+    this.isLoginForm = this.loadLoginDialog;
+  },
   data() {
     var validatePass1 = (rule, value, callback) => {
       if (value === "") {
@@ -161,6 +184,7 @@ export default {
       isLoginForm: false,
       innerVisible: false,
       loading: true,
+      show: true,
       rules: {
         email: [
           { required: true, message: "请输入邮箱", trigger: "blur" },
@@ -200,16 +224,8 @@ export default {
     };
   },
   methods: {
-    switchLoginAndRegister(view) {
-      if (view === "Create one") {
-        this.isRegisterForm = true;
-        this.isLoginForm = false;
-      } else if (view === "Log in") {
-        this.isRegisterForm = false;
-        this.isLoginForm = true;
-      } else {
-        console.log("reset password");
-      }
+    switchLoginAndRegister() {
+      this.isLoginForm = !this.isLoginForm;
     },
     login(formName) {
       this.$refs[formName].validate((valid) => {
@@ -254,6 +270,9 @@ export default {
           return false;
         }
       });
+    },
+    handleClose() {
+      this.$emit("handleClose");
     },
   },
 };

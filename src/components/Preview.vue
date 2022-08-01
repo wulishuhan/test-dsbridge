@@ -3,7 +3,7 @@
     <el-button type="text" @click="dialogVisible = true">
       {{ buttonText }}
     </el-button>
-    <el-dialog width="852px" :visible.sync="dialogVisible">
+    <el-dialog width="1136px" :visible.sync="dialogVisible">
       <div class="center-container">
         <div class="show">
           <el-row>
@@ -37,7 +37,7 @@
                       ></button>
                       <el-carousel
                         direction="vertical"
-                        height="372px"
+                        height="496px"
                         :interval="3000"
                         arrow="never"
                         ref="carousel"
@@ -56,7 +56,7 @@
                       </el-carousel>
                     </div>
                   </div>
-                  <div class="right-carousel">
+                  <!-- <div class="right-carousel">
                     <button
                       class="el-icon-arrow-up"
                       @click="trunImageLeft()"
@@ -82,6 +82,31 @@
                       class="el-icon-arrow-down"
                       @click="trunImageRight()"
                     ></button>
+                  </div> -->
+                  <div v-swiper:mySwiper="swiperOptions">
+                    <div class="swiper-wrapper">
+                      <div
+                        class="swiper-slide"
+                        v-for="(item, index) in imageList"
+                        :key="item.id"
+                      >
+                        <img
+                          @click="changeImg(index)"
+                          :class="
+                            index === imgActiveIndex ? 'img-activeBorder' : ''
+                          "
+                          :src="item.url"
+                          alt=""
+                        />
+                      </div>
+                    </div>
+                    <div class="swiper-scrollbar"></div>
+                    <div class="up swiper-container-button">
+                      <i class="ortur-icon-arrow-up"></i>
+                    </div>
+                    <div class="down swiper-container-button">
+                      <i class="ortur-icon-arrow-down"></i>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -163,6 +188,21 @@ export default {
       activeName: "description",
       showHeight: 200,
       imageViewerIndex: 9999,
+      swiperOptions: {
+        loop: true,
+        direction: "vertical",
+        mousewheel: true,
+        slidesPerView: 4,
+        slidesPerGroup: 4,
+        spaceBetween: 16,
+        navigation: {
+          nextEl: ".down",
+          prevEl: ".up",
+        },
+        scrollbar: {
+          el: ".swiper-scrollbar",
+        },
+      },
     };
   },
   methods: {
@@ -175,19 +215,9 @@ export default {
     closeViewer() {
       this.showViewer = false;
     },
-    changeImg(item) {
-      this.$refs.carousel.setActiveItem(item.index);
-      this.imgActiveIndex = item.index;
-    },
-    trunImageLeft() {
-      let currentShowImgLast = this.showImg.pop();
-      this.waitImg.unshift(currentShowImgLast);
-      this.showImg.unshift(this.waitImg.pop());
-    },
-    trunImageRight() {
-      let currentShowImgFirst = this.showImg.shift();
-      this.waitImg.push(currentShowImgFirst);
-      this.showImg.push(this.waitImg.shift());
+    changeImg(index) {
+      this.$refs.carousel.setActiveItem(index);
+      this.imgActiveIndex = index;
     },
     arrowClick(val) {
       if (val === "down") {
@@ -209,13 +239,6 @@ export default {
       this.isLike = this.user.isLike;
       this.isCollected = this.user.isCollected;
       this.imageList = this.user.image;
-      for (let i = 0; i < this.imageList.length; i++) {
-        let obj = {
-          ...this.imageList[i],
-          index: i,
-        };
-        i < 8 ? this.showImg.push(obj) : this.waitImg.push(obj);
-      }
     });
   },
   mounted() {
@@ -224,12 +247,51 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.swiper-container {
+  width: 184px;
+  height: 496px;
+  margin: 0;
+  .swiper-wrapper {
+    height: 496px;
+    width: 184px;
+    .swiper-slide {
+      width: 184px;
+      img {
+        height: 112px;
+        width: 100%;
+        cursor: pointer;
+      }
+    }
+  }
+  .swiper-container-button {
+    text-align: center;
+    width: 100%;
+    height: 24px;
+    background: #1a1a1a;
+    opacity: 0.3;
+    z-index: 15;
+    position: absolute;
+    i {
+      color: #fff;
+      opacity: 1;
+      font-size: 16px;
+    }
+  }
+  .up {
+    top: 0px;
+    border-radius: 10px 10px 0px 0px;
+  }
+  .down {
+    border-radius: 0px 0px 10px 10px;
+    bottom: 0px;
+  }
+}
 ::v-deep .el-dialog {
   background: #f5f5f5;
 }
 .center-container {
   margin: 0 auto;
-  width: 768px;
+  width: 1024px;
 }
 .el-tabs--border-card {
   background: #f5f5f5;
@@ -242,17 +304,17 @@ export default {
   margin-top: 0px;
 }
 .bottom-content {
-  width: 768px;
+  width: 1024px;
   margin: 0 auto;
   margin-top: 24px;
 }
 
 .bottom-content-left {
-  width: 478px;
+  width: 637px;
 }
 
 .bottom-content-right {
-  width: 194px;
+  width: 328px;
 }
 .el-icon-arrow-up {
   display: inline-block;
@@ -352,8 +414,8 @@ export default {
 
 .carousel {
   position: relative;
-  width: 605px;
-  height: 372px;
+  width: 807px;
+  height: 496px;
 
   img {
     width: 100%;
@@ -373,11 +435,11 @@ export default {
 
 .right-carousel {
   display: flex;
-  width: 138px;
+  width: 184px;
   text-align: center;
   flex-direction: column;
   position: relative;
-  margin-left: 24px;
+  margin-left: 32px;
 }
 
 .upCarousel {
