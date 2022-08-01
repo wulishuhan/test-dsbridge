@@ -4,67 +4,51 @@ import { getToken, setToken, removeToken } from "@/utils/auth";
 
 const getDefaultState = () => {
   return {
-    token: getToken(),
-    name: "",
-    avatar: "",
-    roles: [],
+    userInfo: {
+      user_id: 0,
+      nick_name: "",
+      avatar: "",
+      email: "",
+      user_name: "",
+    },
+    expiresIn: [],
     isLogin: false,
-    userId: "",
+    accessToken: getToken(),
   };
 };
 const state = getDefaultState();
 
 const mutations = {
-  SET_ISLOGIN: (state, isLogin) => {
-    state.isLogin = isLogin;
-  },
   RESET_STATE: (state) => {
     Object.assign(state, getDefaultState());
   },
-  SET_TOKEN: (state, token) => {
-    state.token = token;
-  },
-  SET_NAME: (state, name) => {
-    state.name = name;
-  },
-  SET_AVATAR: (state, avatar) => {
-    state.avatar = avatar;
-  },
-  SET_ROLES: (state, roles) => {
-    state.roles = roles;
-  },
-  SET_USERID: (state, userId) => {
-    state.userId = userId;
+  SET_LOGININFO: (state, payload) => {
+    state.userInfo = payload.user_info;
+    state.expiresIn = payload.expires_in;
+    state.accessToken = payload.access_token;
+    state.isLogin = true;
   },
 };
 
 const actions = {
   // eslint-disable-next-line
-  login({ commit }, userInfo) {
-    const { username, password } = userInfo;
-    return new Promise((resolve, reject) => {
-      Login({
-        client_subtype: "Windows",
-        client_type: "pc",
-        password,
-        username,
+  login({ commit }, payload) {
+    const { loginForm, loginSuccess } = payload;
+    Login({
+      client_subtype: "Windows",
+      client_type: "pc",
+      password: loginForm.password,
+      username: loginForm.username,
+    })
+      .then((res) => {
+        let data = res.data.data;
+        commit("SET_LOGININFO", data);
+        setToken(data.access_token);
+        loginSuccess(data);
       })
-        .then((response) => {
-          const data = response.data.data;
-          const userInfo = response.data.data.user_info;
-          commit("SET_TOKEN", data.access_token);
-          commit("SET_ISLOGIN", true);
-          // commit("SET_ROLES", data.roles);
-          commit("SET_NAME", userInfo.nick_name);
-          commit("SET_AVATAR", userInfo.avatar);
-          commit("SET_USERID", userInfo.user_id);
-          setToken(data.access_token);
-          resolve(data);
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
+      .catch((error) => {
+        console.log(error);
+      });
   },
   getInfo({ commit, state }) {
     return new Promise((resolve, reject) => {

@@ -230,23 +230,20 @@ export default {
         this.loginForm.username = this.loginForm.email;
         if (valid) {
           this.innerVisible = true;
-          this.$store
-            .dispatch("user/login", this.loginForm)
-            .then((res) => {
-              console.log(res);
-              this.$router.push({ path: this.redirect || "/" });
-              this.innerVisible = false;
-            })
-            .catch((err) => {
-              console.log(err);
-              this.$message.error(err.msg);
-              this.innerVisible = false;
-            });
+          this.$store.dispatch("user/login", {
+            loginForm: this.loginForm,
+            loginSuccess: this.loginSuccess,
+          });
         } else {
           console.log("error submit!!");
           return false;
         }
       });
+    },
+    loginSuccess(data) {
+      console.log(data);
+      this.innerVisible = false;
+      this.handleClose();
     },
     createAccount(formName) {
       this.$refs[formName].validate((valid) => {

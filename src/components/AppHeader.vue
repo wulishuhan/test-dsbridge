@@ -70,7 +70,7 @@
                       <img :src="userinfo.avatar" />
                     </div>
                     <div class="username-and-email">
-                      <span class="username">{{ userinfo.nickname }}</span>
+                      <span class="username">{{ accessToken }}</span>
                       <span class="email">{{ userinfo.email }}</span>
                     </div>
                   </el-dropdown-item>
@@ -95,6 +95,7 @@
             <li>
               <el-button
                 style="background: #f5f5f5; border: none; font-size: 20px"
+                @click="showLoginDialog('login')"
               >
                 Log in
               </el-button>
@@ -102,6 +103,7 @@
             <li>
               <el-button
                 style="background: #f5f5f5; border: none; font-size: 20px"
+                @click="showLoginDialog('register')"
               >
                 Sign up
               </el-button>
@@ -110,15 +112,25 @@
         </div>
       </div>
     </div>
+    <login
+      :loadLoginDialog="isLoginForm"
+      :visible.sync="dialogVisible"
+      @handleClose="dialogVisible = false"
+      @changeView="changeLoginView"
+    ></login>
   </div>
 </template>
 
 <script>
 import { getInfo } from "@/api/user";
+import Login from "@/components/Login";
+import { createNamespacedHelpers } from "vuex";
+const { mapState } = createNamespacedHelpers("user");
 export default {
   data() {
     return {
-      isLogin: false,
+      isLoginForm: true,
+      dialogVisible: false,
       userinfo: {
         email: "",
         nickname: "",
@@ -129,7 +141,14 @@ export default {
       select: "",
     };
   },
+  components: {
+    Login,
+  },
+  computed: {
+    ...mapState(["accessToken", "expiresIn", "userInfo", "isLogin"]),
+  },
   mounted() {
+    console.log("userinfo========", this.accessToken);
     var that = this;
     getInfo().then(function (res) {
       console.log("res.data", res.data);
@@ -137,8 +156,23 @@ export default {
     });
   },
   methods: {
-    handleSelect(key, keyPath) {
-      console.log(key, keyPath);
+    handleSelect() {
+      console.log(this.$store);
+    },
+    showLoginDialog(view) {
+      if (view === "login") {
+        this.isLoginForm = true;
+      } else {
+        this.isLoginForm = false;
+      }
+      this.dialogVisible = true;
+    },
+    changeLoginView(view) {
+      if (view === "login") {
+        this.isLoginForm = true;
+      } else {
+        this.isLoginForm = false;
+      }
     },
   },
 };
