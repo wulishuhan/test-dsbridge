@@ -3,7 +3,7 @@
     <el-button type="text" @click="dialogVisible = true">
       {{ buttonText }}
     </el-button>
-    <el-dialog width="852px" :visible.sync="dialogVisible">
+    <el-dialog width="1136px" :visible.sync="dialogVisible">
       <div class="center-container">
         <div class="show">
           <el-row>
@@ -20,7 +20,7 @@
                 </div>
               </div>
               <div class="show-thing">
-                <div class="carouselContainer">
+                <div class="carouselContainer justify-between">
                   <div>
                     <div class="carousel">
                       <button
@@ -37,12 +37,13 @@
                       ></button>
                       <el-carousel
                         direction="vertical"
-                        height="372px"
+                        height="496px"
                         :interval="3000"
                         arrow="never"
                         ref="carousel"
                         indicator-position="none"
-                        :autoplay="false"
+                        @change="carouselChange"
+                        :autoplay="true"
                       >
                         <el-carousel-item
                           v-for="(item, index) in imageList"
@@ -56,32 +57,30 @@
                       </el-carousel>
                     </div>
                   </div>
-                  <div class="right-carousel">
-                    <button
-                      class="el-icon-arrow-up"
-                      @click="trunImageLeft()"
-                    ></button>
-                    <ul class="img-ul">
-                      <li
-                        v-for="(item, index) in showImg"
-                        class="img-li"
-                        :key="item.id + index"
-                        @click="changeImg(item, index)"
+                  <div v-swiper:mySwiper="swiperOptions">
+                    <div class="swiper-wrapper">
+                      <div
+                        class="swiper-slide"
+                        v-for="(item, index) in imageList"
+                        :key="item.id"
                       >
                         <img
+                          @click="changeImg(index)"
                           :class="
-                            item.index === imgActiveIndex
-                              ? 'img-activeBorder'
-                              : ''
+                            index === imgActiveIndex ? 'img-activeBorder' : ''
                           "
                           :src="item.url"
+                          alt=""
                         />
-                      </li>
-                    </ul>
-                    <button
-                      class="el-icon-arrow-down"
-                      @click="trunImageRight()"
-                    ></button>
+                      </div>
+                    </div>
+                    <div class="swiper-scrollbar"></div>
+                    <div class="up swiper-container-button">
+                      <i class="ortur-icon-arrow-up"></i>
+                    </div>
+                    <div class="down swiper-container-button">
+                      <i class="ortur-icon-arrow-down"></i>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -163,6 +162,21 @@ export default {
       activeName: "description",
       showHeight: 200,
       imageViewerIndex: 9999,
+      swiperOptions: {
+        // loop: true,
+        direction: "vertical",
+        mousewheel: true,
+        slidesPerView: 4,
+        // slidesPerGroup: 4,
+        spaceBetween: 16,
+        navigation: {
+          nextEl: ".down",
+          prevEl: ".up",
+        },
+        scrollbar: {
+          el: ".swiper-scrollbar",
+        },
+      },
     };
   },
   methods: {
@@ -175,19 +189,14 @@ export default {
     closeViewer() {
       this.showViewer = false;
     },
-    changeImg(item) {
-      this.$refs.carousel.setActiveItem(item.index);
-      this.imgActiveIndex = item.index;
+    changeImg(index) {
+      this.$refs.carousel.setActiveItem(index);
+      this.imgActiveIndex = index;
     },
-    trunImageLeft() {
-      let currentShowImgLast = this.showImg.pop();
-      this.waitImg.unshift(currentShowImgLast);
-      this.showImg.unshift(this.waitImg.pop());
-    },
-    trunImageRight() {
-      let currentShowImgFirst = this.showImg.shift();
-      this.waitImg.push(currentShowImgFirst);
-      this.showImg.push(this.waitImg.shift());
+    carouselChange() {
+      this.imgActiveIndex = this.$refs.carousel.activeIndex;
+      this.mySwiper.activeIndex = this.imgActiveIndex;
+      this.mySwiper.slideTo(this.$refs.carousel.activeIndex, 1000, false);
     },
     arrowClick(val) {
       if (val === "down") {
@@ -195,6 +204,9 @@ export default {
       } else {
         this.$refs.carousel.prev();
       }
+      console.log("refs:", this.$refs.carousel.activeIndex);
+      this.imgActiveIndex = this.$refs.carousel.activeIndex;
+      this.mySwiper.slideTo(this.$refs.carousel.activeIndex, 1000, false);
     },
     setActiveItem(index) {
       this.$refs.carousel.setActiveItem(index);
@@ -209,13 +221,6 @@ export default {
       this.isLike = this.user.isLike;
       this.isCollected = this.user.isCollected;
       this.imageList = this.user.image;
-      for (let i = 0; i < this.imageList.length; i++) {
-        let obj = {
-          ...this.imageList[i],
-          index: i,
-        };
-        i < 8 ? this.showImg.push(obj) : this.waitImg.push(obj);
-      }
     });
   },
   mounted() {
@@ -224,12 +229,51 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.swiper-container {
+  width: 184px;
+  height: 496px;
+  margin: 0;
+  .swiper-wrapper {
+    height: 496px;
+    width: 184px;
+    .swiper-slide {
+      width: 184px;
+      img {
+        height: 112px;
+        width: 100%;
+        cursor: pointer;
+      }
+    }
+  }
+  .swiper-container-button {
+    text-align: center;
+    width: 100%;
+    height: 24px;
+    background: #1a1a1a;
+    opacity: 0.3;
+    z-index: 15;
+    position: absolute;
+    i {
+      color: #fff;
+      opacity: 1;
+      font-size: 16px;
+    }
+  }
+  .up {
+    top: 0px;
+    border-radius: 10px 10px 0px 0px;
+  }
+  .down {
+    border-radius: 0px 0px 10px 10px;
+    bottom: 0px;
+  }
+}
 ::v-deep .el-dialog {
   background: #f5f5f5;
 }
 .center-container {
   margin: 0 auto;
-  width: 768px;
+  width: 1024px;
 }
 .el-tabs--border-card {
   background: #f5f5f5;
@@ -242,17 +286,17 @@ export default {
   margin-top: 0px;
 }
 .bottom-content {
-  width: 768px;
+  width: 1024px;
   margin: 0 auto;
   margin-top: 24px;
 }
 
 .bottom-content-left {
-  width: 478px;
+  width: 637px;
 }
 
 .bottom-content-right {
-  width: 194px;
+  width: 328px;
 }
 .el-icon-arrow-up {
   display: inline-block;
@@ -352,8 +396,8 @@ export default {
 
 .carousel {
   position: relative;
-  width: 605px;
-  height: 372px;
+  width: 807px;
+  height: 496px;
 
   img {
     width: 100%;
@@ -373,11 +417,11 @@ export default {
 
 .right-carousel {
   display: flex;
-  width: 138px;
+  width: 184px;
   text-align: center;
   flex-direction: column;
   position: relative;
-  margin-left: 24px;
+  margin-left: 32px;
 }
 
 .upCarousel {
@@ -390,50 +434,9 @@ export default {
   top: 12px;
   margin-left: -64px;
 }
-
-.img-ul {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 372px;
-  padding: 0;
-  overflow-y: auto;
-  overflow-x: hidden;
-  list-style: none;
-  margin: 0;
+.img-activeBorder {
+  border: 1px solid #248bfb;
 }
-
-.img-ul::-webkit-scrollbar {
-  /*滚动条整体样式*/
-  width: 2px;
-  /*高宽分别对应横竖滚动条的尺寸*/
-  height: 1px;
-}
-
-.img-ul::-webkit-scrollbar-thumb {
-  /*滚动条里面小方块*/
-  border-radius: 5px;
-  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
-  background: #535353;
-}
-
-.img-ul::-webkit-scrollbar-track {
-  /*滚动条里面轨道*/
-  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
-  border-radius: 10px;
-  background: #ededed;
-}
-
-.img-li {
-  cursor: pointer;
-
-  img {
-    width: 138px;
-    height: 84px;
-  }
-}
-
 .imageViewer {
   z-index: 9999;
   ::v-deep .el-image-viewer__prev {

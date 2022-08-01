@@ -71,7 +71,18 @@
         </div>
       </div>
     </div>
-    <login></login>
+    <div>
+      <h1>login组件</h1>
+      登录拟态框：<a href="#" @click="showDialog('login')"> login</a>
+      <login
+        :loadLoginDialog="isLoginForm"
+        :visible.sync="dialogVisible"
+        @handleClose="dialogVisible = false"
+        @changeView="changeView"
+      ></login>
+      注册拟态框：<a href="#" @click="showDialog('register')"> register</a>
+    </div>
+
     <div style="margin-top: 50px">
       <preview></preview>
     </div>
@@ -120,6 +131,8 @@ export default {
   },
   data() {
     return {
+      dialogVisible: false,
+      isLoginForm: true,
       test: {
         avatar: "http://dummyimage.com/300x200/f27982/FFF&text=vknro",
         id: "620000197009121720",
@@ -192,6 +205,21 @@ export default {
     },
     imgIndex(index) {
       console.log(index);
+    },
+    showDialog(view) {
+      if (view === "login") {
+        this.isLoginForm = true;
+      } else {
+        this.isLoginForm = false;
+      }
+      this.dialogVisible = true;
+    },
+    changeView(view) {
+      if (view === "login") {
+        this.isLoginForm = true;
+      } else {
+        this.isLoginForm = false;
+      }
     },
   },
   mounted() {},

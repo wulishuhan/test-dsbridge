@@ -5,11 +5,7 @@
         <div class="app-header-left">
           <div class="app-header__logo">
             <router-link to="/main">
-              <span class="ortur-icon-logo"
-                ><span class="path1"></span><span class="path2"></span
-                ><span class="path3"></span><span class="path4"></span
-                ><span class="path5"></span><span class="path6"></span
-              ></span>
+              <img src="@/assets/logo.png" style="height: 36px" />
             </router-link>
           </div>
           <div class="app-header__search">
