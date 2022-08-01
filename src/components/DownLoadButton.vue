@@ -90,10 +90,10 @@ export default {
   }
   .downPanel {
     position: absolute;
-    width: 444px;
-    height: 360px;
+    width: 592px;
+    height: 480px;
     background: #ffffff;
-    border-radius: 15px;
+    border-radius: 20px;
     top: 42px;
     /* left: -358px; */
     right: 0px;

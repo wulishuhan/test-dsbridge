@@ -7,7 +7,7 @@
         alt="can't load this image"
       />
       <div
-        v-show="isCollectIconShow"
+        v-show="showCollection && isCollectIconShow"
         @click="switchCollect"
         class="icon-collect-box"
       >
@@ -21,6 +21,13 @@
           <span class="path3"> </span>
         </span>
       </div>
+      <div
+        v-show="showEdit && isCollectIconShow"
+        @click="toUpload(thing.thingId)"
+        class="icon-collect-box"
+      >
+        <i class="ortur-icon-pen"></i>
+      </div>
     </div>
     <div class="card-box-bottom">
       <div class="card-box-bottom-left">
@@ -33,12 +40,16 @@
         </div>
       </div>
       <div class="card-box-bottom-right">
-        <div class="card-box-bottom-right-like-box" @click="like">
+        <div
+          class="card-box-bottom-right-like-box"
+          @click="like"
+          v-show="showStar"
+        >
           <i v-if="!isLike" class="el-icon-star-off icon-star"></i>
           <i v-else class="ortur-icon-star-border icon-star"></i>
           {{ thing.likes }}
         </div>
-        <div @click="share" class="share-box">
+        <div @click="share" class="share-box" v-show="showShare">
           <i class="el-icon-share icon-share"></i>
           1.2k
         </div>
@@ -56,6 +67,30 @@ export default {
   name: "ResourceCard",
   components: { ShareSocialMedia },
   props: {
+    showEdit: {
+      type: Boolean,
+      default: () => {
+        return false;
+      },
+    },
+    showCollection: {
+      type: Boolean,
+      default: () => {
+        return true;
+      },
+    },
+    showShare: {
+      type: Boolean,
+      default: () => {
+        return true;
+      },
+    },
+    showStar: {
+      type: Boolean,
+      default: () => {
+        return true;
+      },
+    },
     thing: {
       type: Object,
       default: function () {
@@ -90,6 +125,9 @@ export default {
     this.isCollected = this.thing.isCollected;
   },
   methods: {
+    toUpload(id) {
+      this.$router.push({ name: "uploadIndex", params: id });
+    },
     toDetail(id) {
       this.$router.push(`/thing/${id}`);
     },

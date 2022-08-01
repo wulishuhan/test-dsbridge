@@ -49,12 +49,15 @@
                 <i class="ortur-icon-collected"></i>
               </el-button>
             </li>
-            <li>
+            <li class="alert" @click="handleAlertClick">
               <el-button
                 style="background: #f5f5f5; border: none; font-size: 20px"
               >
                 <i class="ortur-icon-alert"></i>
               </el-button>
+              <div class="noticePanel" v-show="isShowNoticePanel">
+                isShowNoticePanel
+              </div>
             </li>
 
             <li>
@@ -122,6 +125,7 @@ import { getInfo } from "@/api/user";
 export default {
   data() {
     return {
+      isShowNoticePanel: false,
       isLogin: true,
       userinfo: {
         email: "",
@@ -141,6 +145,10 @@ export default {
     });
   },
   methods: {
+    handleAlertClick() {
+      //console.log(e)
+      this.isShowNoticePanel = !this.isShowNoticePanel;
+    },
     handleSelect(key, keyPath) {
       console.log(key, keyPath);
     },
@@ -217,6 +225,13 @@ export default {
       margin-left: auto;
       padding: 0 1.5rem 0 0;
       ul.app-header-dots {
+        .alert {
+          position: relative;
+          .noticePanel {
+            position: absolute;
+            top: 20px;
+          }
+        }
         width: 400px;
         list-style-type: none;
         display: flex;

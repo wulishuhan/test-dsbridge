@@ -125,6 +125,7 @@ const routes = [
     children: [
       {
         path: "/upload",
+        name: "uploadIndex",
         meta: {
           title: "upload",
         },

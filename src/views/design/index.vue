@@ -59,7 +59,7 @@
           class="desc"
           @click="editDesc"
           v-if="!isDescEdit"
-          :class="{ NoDesc: !user.desc }"
+          :class="[{ NoDesc: !user.desc }, { descHover: isYourAccount }]"
         >
           {{ user.desc || "add a description" }}
         </div>
@@ -81,57 +81,29 @@
             >{{ user.following }}<span style="color: #ccc"> following</span>
           </span>
         </div>
-        <div
-          class="desc"
-          @click="editTwitter"
-          v-if="!isTwitterEdit"
-          :class="{ NoDesc: !user.twitter }"
-        >
-          {{ user.twitter || "add a twitter" }}
+        <div v-for="(item, index) in user.diyArr" :key="item.id">
+          <div
+            class="desc"
+            @click="editDiy(item, index)"
+            v-if="!item.isEdit"
+            :class="[{ NoDesc: !item.text }, { descHover: isYourAccount }]"
+          >
+            <a target="_blank" v-if="!isYourAccount" :href="item.text">
+              {{ item.text }}
+            </a>
+            <div v-if="isYourAccount">{{ item.text || "add something" }}</div>
+          </div>
+          <el-input
+            class="descInput"
+            ref="diyRef"
+            @blur="editChange(item)"
+            @change="editChange(item)"
+            v-show="item.isEdit"
+            v-model="item.text"
+            placeholder=""
+          ></el-input>
         </div>
-        <el-input
-          class="descInput"
-          ref="twitterRef"
-          @blur="twitterChange"
-          @change="twitterChange"
-          v-show="isTwitterEdit"
-          v-model="user.twitter"
-          placeholder=""
-        ></el-input>
-        <div
-          class="desc"
-          @click="editLocation"
-          v-if="!isLocationEdit"
-          :class="{ NoDesc: !user.location }"
-        >
-          {{ user.location || "add a Location" }}
-        </div>
-        <el-input
-          class="descInput"
-          ref="locationRef"
-          @blur="locationChange"
-          @change="locationChange"
-          v-show="isLocationEdit"
-          v-model="user.location"
-          placeholder=""
-        ></el-input>
-        <div
-          class="desc"
-          @click="editFacebook"
-          v-if="!isFacebookEdit"
-          :class="{ NoDesc: !user.facebook }"
-        >
-          {{ user.facebook || "add a facebook" }}
-        </div>
-        <el-input
-          class="descInput"
-          ref="facebookRef"
-          @blur="facebookChange"
-          @change="facebookChange"
-          v-show="isFacebookEdit"
-          v-model="user.facebook"
-          placeholder=""
-        ></el-input>
+        <div v-show="isYourAccount" class="add" @click="addDiy">+</div>
       </div>
       <div class="tabs">
         <!-- <span class="editTab">edit</span> -->
@@ -140,50 +112,183 @@
           @tab-click="handleClick"
           class="tabsContent"
         >
-          <el-tab-pane label="Resource" name="first">Resource</el-tab-pane>
-          <el-tab-pane label="Likes" name="second">Likes</el-tab-pane>
-          <el-tab-pane label="Collections" name="third"
-            >Collections</el-tab-pane
-          >
-          <el-tab-pane label="History" name="fourth">History</el-tab-pane>
+          <el-tab-pane label="Resource" name="first" v-if="isYourAccount">
+            <el-row :gutter="20">
+              <div
+                v-for="(item, index) in resources"
+                :key="item.thingId"
+                @contextmenu="showMenu(index, item)"
+              >
+                <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
+                  <resource-card
+                    :thing="item"
+                    :showEdit="true"
+                    :showStar="false"
+                    :showCollection="false"
+                  >
+                  </resource-card>
+                </el-col>
+                <vue-context-menu
+                  class="contextMenu"
+                  :contextMenuData="contextMenuData"
+                  :transferIndex="transferIndex"
+                  @Handler1="Handler_A(index)"
+                  @Handler2="Handler_B(index)"
+                  @Handler3="Handler_C(index)"
+                  @Handler4="Handler_D(index)"
+                  @Handler5="Handler_E(index)"
+                ></vue-context-menu>
+              </div>
+            </el-row>
+          </el-tab-pane>
+          <el-tab-pane label="Likes" name="second">
+            <el-row :gutter="20">
+              <div
+                v-for="(item, index) in Likes"
+                :key="item.thingId"
+                @contextmenu="showMenu(index, item)"
+              >
+                <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
+                  <resource-card
+                    :thing="item"
+                    :showEdit="false"
+                    :showStar="true"
+                    :showCollection="false"
+                  >
+                  </resource-card>
+                </el-col>
+              </div>
+            </el-row>
+          </el-tab-pane>
+          <el-tab-pane label="Collections" name="third">
+            <el-row :gutter="20">
+              <div
+                v-for="(item, index) in collections"
+                :key="item.thingId"
+                @contextmenu="showMenu(index, item)"
+              >
+                <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
+                  <resource-card
+                    :thing="item"
+                    :showEdit="false"
+                    :showStar="false"
+                  >
+                  </resource-card>
+                </el-col>
+              </div>
+            </el-row>
+          </el-tab-pane>
+          <el-tab-pane label="History" name="fourth">
+            <el-row :gutter="20">
+              <div
+                v-for="(item, index) in histories"
+                :key="item.thingId"
+                @contextmenu="showMenu(index, item)"
+              >
+                <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
+                  <resource-card :thing="item"> </resource-card>
+                </el-col>
+              </div>
+            </el-row>
+          </el-tab-pane>
         </el-tabs>
       </div>
     </div>
+    <SrollTopButton></SrollTopButton>
   </div>
 </template>
 <script>
 import FollowButton from "@/components/FollowButton.vue";
+import SrollTopButton from "@/components/SrollTopButton/index.vue";
+import ResourceCard from "@/components/ResourceCard/index.vue";
+import { getThingList } from "@/api/thing";
 
 import IndexFollowPanel from "./IndexFollowPanel.vue";
 import { getUserInfoByUserId } from "@/api/user";
 export default {
-  // eslint-disable-next-line
   name: "Design",
-  components: { IndexFollowPanel, FollowButton },
+  components: {
+    IndexFollowPanel,
+    FollowButton,
+    SrollTopButton,
+    ResourceCard,
+  },
   data() {
     return {
+      histories: [],
+      collections: [],
+      Likes: [],
+      transferIndex: null,
+      contextMenuData: {
+        menuName: "demo",
+        axis: {
+          x: null,
+          y: null,
+        },
+        menulists: [
+          {
+            btnName: "Delete",
+            fnHandler: "Handler1",
+          },
+          {
+            btnName: "Move to",
+            // fnHandler: "Handler2",
+
+            children: [
+              {
+                fnHandler: "Handler5",
+                btnName: "Collections",
+              },
+              {
+                fnHandler: "Handler5",
+                btnName: "Likes",
+              },
+            ],
+          },
+
+          {
+            btnName: "Download",
+            fnHandler: "Handler3",
+          },
+        ],
+      },
+      resources: [],
       activeTab: "first",
       activeName: "first",
       isYourAccount: true,
       isDescEdit: false,
-      isTwitterEdit: false,
-      isFacebookEdit: false,
-      isLocationEdit: false,
+      pagination: {
+        pageSize: 10,
+        currentPage: 1,
+      },
       dialogFollowersVisible: false,
       user: {
         bgImg: "https://scpic.chinaz.net/files/pic/pic9/202207/apic42262.jpg",
-        name: "yang4444444444",
-        desc: "yang 654651",
-        twitter: "",
-        faceBook: "",
-        location: "",
+        avatar: "https://scpic.chinaz.net/files/pic/pic9/202207/apic42262.jpg",
         following: "14",
         followers: "13",
-        avatar: "https://scpic.chinaz.net/files/pic/pic9/202207/apic42262.jpg",
+        name: "yang4444444444",
+        desc: "yang 654651",
+        diyArr: [
+          {
+            isEdit: false,
+            text: "11",
+          },
+          {
+            isEdit: false,
+            text: "11",
+          },
+        ],
       },
     };
   },
   mounted() {
+    getThingList(this.pagination).then((res) => {
+      this.resources.push(...res.data.data);
+      this.Likes.push(...res.data.data);
+      this.collections.push(...res.data.data);
+      this.histories.push(...res.data.data);
+    });
     getUserInfoByUserId({
       id: this.$route.params.userId,
       userId: this.$store.getters.userId,
@@ -192,6 +297,40 @@ export default {
     });
   },
   methods: {
+    showMenu(index, item) {
+      console.log("item: ", item);
+      console.log("index: ", index);
+      this.transferIndex = index; // tranfer index to child component
+      event.preventDefault();
+      var x = event.clientX;
+      var y = event.clientY;
+      this.contextMenuData.axis = {
+        x,
+        y,
+      };
+    },
+    Handler_A(index) {
+      console.log("index:", index, "选项1-1-1绑定事件执行");
+    },
+    Handler_B(index) {
+      console.log("index:", index, "选项1-1-2绑定事件执行");
+    },
+    Handler_C(index) {
+      console.log("index:", index, "选项1-2-1绑定事件执行");
+    },
+    Handler_D(index) {
+      console.log("index:", index, "选项1-2-2绑定事件执行");
+    },
+    Handler_E(index) {
+      console.log("index:", index, "选项2-1绑定事件执行");
+    },
+    addDiy() {
+      //console.log(e)
+      this.user.diyArr.push({
+        isEdit: false,
+        text: "",
+      });
+    },
     async handleBeforeImgUpload(file) {
       debugger;
       const isJPG = file.type === "image/jpeg";
@@ -223,18 +362,10 @@ export default {
       console.log(e);
       this.isDescEdit = false;
     },
-    twitterChange(e) {
-      console.log(e);
-      this.isTwitterEdit = false;
+    editChange(item) {
+      item.isEdit = false;
     },
-    locationChange(e) {
-      console.log(e);
-      this.isLocationEdit = false;
-    },
-    facebookChange(e) {
-      console.log(e);
-      this.isFacebookEdit = false;
-    },
+
     editDesc() {
       if (!this.isYourAccount) {
         return;
@@ -245,36 +376,17 @@ export default {
         this.$refs.descRef.focus();
       }, 0);
     },
-    editTwitter() {
+    editDiy(item, index) {
       if (!this.isYourAccount) {
         return;
       }
       //console.log(e)
-      this.isTwitterEdit = true;
+      item.isEdit = true;
       setTimeout(() => {
-        this.$refs.twitterRef.focus();
+        this.$refs.diyRef[index].focus();
       }, 0);
     },
-    editLocation() {
-      if (!this.isYourAccount) {
-        return;
-      }
-      //console.log(e)
-      this.isLocationEdit = true;
-      setTimeout(() => {
-        this.$refs.locationRef.focus();
-      }, 0);
-    },
-    editFacebook() {
-      if (!this.isYourAccount) {
-        return;
-      }
-      //console.log(e)
-      this.isFacebookEdit = true;
-      setTimeout(() => {
-        this.$refs.facebookRef.focus();
-      }, 0);
-    },
+
     handleClick(tab, event) {
       console.log(tab, event);
     },
@@ -288,12 +400,47 @@ export default {
   height: 100%;
 }
 .container-profile {
+  width: 1440px;
+  margin: 0 auto;
+  .tabsContent {
+    ::v-deep .el-tabs__item {
+      font-size: 20px;
+      font-family: Source Han Sans CN;
+      font-weight: 400;
+      color: #1e78f0;
+    }
+    .contextMenu {
+      background-color: black;
+      color: white;
+      ::v-deep {
+        .context-menu-list {
+          background-color: black;
+          .btn-wrapper-simple {
+            height: auto !important;
+          }
+        }
+        .child-ul-wrapper {
+          background-color: black;
+          color: white;
+          .child-li-wrapper {
+            background-color: black;
+          }
+          .btn-wrapper-simple {
+            height: auto !important;
+          }
+        }
+      }
+    }
+  }
   .NoDesc {
-    color: red;
+    font-size: 14px;
+    font-family: Source Han Sans CN;
+    font-weight: 400;
+    color: #cccccc !important;
   }
   box-sizing: border-box;
   .tabs {
-    width: 600px;
+    width: 1072px;
     position: relative;
     .editTab {
       position: absolute;
@@ -303,8 +450,8 @@ export default {
   }
   .bg {
     margin: 0 auto;
-    width: 1080px;
-    height: 200px;
+    width: 1440px;
+    height: 392px;
     position: relative;
     .upload-bg {
       // right: 12px;
@@ -334,16 +481,22 @@ export default {
     box-sizing: border-box;
     display: flex;
     justify-content: space-between;
-    width: 1080px;
     margin: 0 auto;
     .info {
       position: relative;
       top: -50px;
-      width: 300px;
+      width: 350px;
+      .add {
+        font-size: 30px;
+        text-align: center;
+      }
       .name {
         margin-top: 12px;
         text-align: center;
-        font-size: 25px;
+        font-size: 30px;
+        font-family: Source Han Sans CN;
+        font-weight: 500;
+        color: #1a1a1a;
       }
       .follow {
         margin-top: 12px;
@@ -355,16 +508,23 @@ export default {
       }
       .followBtn {
         margin-top: 12px;
-        margin-left: 12px;
         ::v-deep .el-button {
           padding: 5px;
-          font-size: 12px;
+          width: 112px;
+          height: 40px;
+          background: #1e78f0;
+          border-radius: 8px;
+          font-size: 16px;
         }
       }
       .desc {
         margin-top: 12px;
         padding: 7px;
         word-wrap: break-word;
+        font-size: 16px;
+        font-family: Source Han Sans CN;
+        font-weight: 400;
+        color: #1a1a1a;
       }
       .descInput {
         margin-top: 12px;
@@ -403,22 +563,22 @@ export default {
         line-height: 100px;
         color: white;
         opacity: 0.5;
-        width: 100px;
-        height: 100px;
+        width: 120px;
+        height: 119px;
         border-radius: 50%;
         display: none;
       }
       .img {
         background-color: red;
-        width: 100px;
-        height: 100px;
+        width: 120px;
+        height: 119px;
         border-radius: 50%;
       }
     }
     .imgWrap:hover .imgEdit {
       display: inline-block;
     }
-    .desc:hover {
+    .descHover:hover {
       border: 1px solid #ccc;
       border-radius: 6px;
       padding: 6px;

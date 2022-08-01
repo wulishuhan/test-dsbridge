@@ -12,6 +12,8 @@ import "swiper/css/swiper.css";
 import "@/permission";
 import "@/style/index.scss";
 import "@/assets/css/icon.css";
+import VueContextMenu from "vue-contextmenu";
+Vue.use(VueContextMenu);
 Vue.config.productionTip = false;
 Vue.use(ElementUI);
 const VueAwesomeSwiper = require("vue-awesome-swiper/dist/ssr");

@@ -82,7 +82,7 @@ export default {
     display: flex;
   }
   .name {
-    font-size: 12px;
+    font-size: 16px;
     font-family: Source Han Sans CN;
     font-weight: 400;
     color: #1a1a1a;
@@ -99,10 +99,14 @@ export default {
   }
   .time {
     margin-top: 2px;
+    font-size: 14px;
+    font-family: Source Han Sans CN;
+    font-weight: 400;
+    color: #999999;
   }
   img {
-    width: 66px;
-    height: 42px;
+    width: 88px;
+    height: 56px;
     margin-right: 10px;
   }
   span {
@@ -114,8 +118,13 @@ export default {
   }
 }
 .el-button {
-  width: 114px;
-  height: 36px;
-  font-size: 12px;
+  width: 152px;
+  height: 48px;
+  background: #1e78f0;
+  border-radius: 8px;
+  font-size: 16px;
+  font-family: Source Han Sans CN;
+  font-weight: 400;
+  color: #ffffff;
 }
 </style>
