@@ -126,7 +126,6 @@
   </div>
 </template>
 <script>
-import { register } from "@/api/user";
 export default {
   props: {
     loadLoginDialog: {
@@ -249,23 +248,20 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           this.registerForm.username = this.registerForm.email;
-          console.log("registerForm:", {
-            auto_login: true,
-            client_subtype: "Windows",
-            client_type: "pc",
-            ...this.registerForm,
-          });
-          register({
-            auto_login: true,
-            client_subtype: "Windows",
-            client_type: "pc",
-            ...this.registerForm,
-          })
-            .then((res) => {
-              console.log(res);
+          this.$store
+            .dispatch("user/register", {
+              auto_login: true,
+              client_subtype: "Windows",
+              client_type: "pc",
+              ...this.registerForm,
             })
-            .catch((err) => {
-              this.$message.error(err.msg);
+            .then((res) => {
+              if (res.code == 0) {
+                this.handleClose();
+              }
+            })
+            .catch((e) => {
+              console.log(e);
             });
         } else {
           return false;
