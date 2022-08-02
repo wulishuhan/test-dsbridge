@@ -24,7 +24,7 @@
               </div>
             </div>
             <div class="show-thing">
-              <div class="flex justify-between">
+              <div class="carousel-box flex justify-between">
                 <div>
                   <div class="carousel">
                     <button
@@ -43,7 +43,7 @@
                       direction="vertical"
                       height="496px"
                       :interval="3000"
-                      arrow="never"
+                      arrow="hover"
                       ref="carousel"
                       indicator-position="none"
                       :autoplay="true"
@@ -112,11 +112,9 @@
                 xxxxxxxxxxxxxx xxxxxxxxxxx
               </show-more>
             </el-tab-pane>
-            <el-tab-pane label="Tutorial" name="step">
-              <show-more :showHeight="showHeight" v-if="activeName == 'step'">
-                xxxxxxxxxxxxxxx xxxxxxxx xxxxxxxxx xxxxxx xxxxxxxxx xxxxxxx
-                xxxxxxxxxxxxxx xxxxxxxxxxxxxx xxxxxxxxxxxx xxxxxxxxxx
-                xxxxxxxxxxx xxxxxxxxx xxxxxxxxxxxxxx xxxxxxxxxxx
+            <el-tab-pane label="Tutorial" name="steps">
+              <show-more :showHeight="showHeight" v-if="activeName == 'steps'">
+                <tutorial></tutorial>
               </show-more>
             </el-tab-pane>
             <el-tab-pane label="Makes" name="third">
@@ -256,6 +254,7 @@ import ShowMore from "@/components/ShowMore.vue";
 import Reply from "@/components/Comment/ReplyWidget.vue";
 import ViewMore from "./ViewMore.vue";
 import SrollTopButton from "@/components/SrollTopButton";
+import Tutorial from "./components/Tutorial.vue";
 export default {
   name: "Thing",
   components: {
@@ -270,6 +269,7 @@ export default {
     Reply,
     ViewMore,
     SrollTopButton,
+    Tutorial,
   },
   data() {
     return {
@@ -365,6 +365,13 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.carousel-box {
+  .carousel {
+    button {
+      display: none;
+    }
+  }
+}
 .swiper-container {
   width: 184px;
   height: 496px;

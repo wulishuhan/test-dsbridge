@@ -1,4 +1,5 @@
 import axios from "axios";
+import { getToken } from "@/utils/auth";
 const service = axios.create({
   // timeout: 1000,
   baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
@@ -14,7 +15,7 @@ service.interceptors.request.use(
     // let each request carry token
     // ['X-Token'] is a custom headers key
     // please modify it according to the actual situation
-    //config.headers['Authorization'] = 'Bearer ' + getToken()
+    config.headers["Authorization"] = "Bearer " + getToken();
     //}
     return config;
   },
