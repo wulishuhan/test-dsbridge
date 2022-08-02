@@ -4,6 +4,8 @@ import { getToken, setToken, removeToken } from "@/utils/auth";
 
 const getDefaultState = () => {
   return {
+    loginDialogVisible: false,
+    isLoginForm: true,
     userInfo: {
       user_id: 0,
       nick_name: "",
@@ -35,6 +37,10 @@ const mutations = {
     state.userInfo.email = payload.email;
     state.userInfo.user_name = payload.user_name;
     state.isLogin = true;
+  },
+  SWITCH_LOGIN_REGISTER_FORM: (state, payload) => {
+    state.loginDialogVisible = payload.loginDialogVisible;
+    state.isLoginForm = payload.isLoginForm;
   },
 };
 
@@ -109,6 +115,9 @@ const actions = {
         resolve();
       });
     });
+  },
+  switchLoginRegisteForm({ commit }, payload) {
+    commit("SWITCH_LOGIN_REGISTER_FORM", payload);
   },
 };
 
