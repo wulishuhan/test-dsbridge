@@ -160,7 +160,7 @@ export default {
       urlList: [], //大图列表
       imgActiveIndex: 0, // 当前移动图片的索引值
       activeName: "description",
-      showHeight: 200,
+      showHeight: 50,
       imageViewerIndex: 9999,
       swiperOptions: {
         // loop: true,
@@ -477,7 +477,7 @@ export default {
     border-radius: 6px;
     transform: translateX(-50%);
     left: 50%;
-    top: 210px;
+    top: 16px;
   }
 
   ::v-deep .el-image-viewer__next {
@@ -490,7 +490,7 @@ export default {
     // left: 50%;
     transform: translateX(-50%);
     left: 50%;
-    bottom: 210px;
+    bottom: 16px;
     top: auto;
   }
 
@@ -500,8 +500,8 @@ export default {
     background: #1a1a1a;
     opacity: 0.3;
     border-radius: 6px;
-    top: 210px;
-    right: 515px;
+    top: 16px;
+    right: 16px;
   }
 
   ::v-deep .el-image-viewer__img {
