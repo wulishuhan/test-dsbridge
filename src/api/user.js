@@ -22,12 +22,10 @@ export function Logout(data) {
   });
 }
 
-export function getInfo(token) {
+export function getUserInfo() {
   return request({
-    // url: '/userApi/oauth/userinfos',
-    url: "/user/getInfo",
+    url: "/system/user/getUserInfo",
     method: "get",
-    headers: { Authorization: "Bearer " + token },
   });
 }
 

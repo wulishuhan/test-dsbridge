@@ -254,7 +254,7 @@ module.exports = [
     },
   },
   {
-    url: "/user/getInfo",
+    url: "/mock-api/user/getInfo",
     type: "get",
     response: () => {
       return {

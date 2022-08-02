@@ -1,4 +1,6 @@
 import axios from "axios";
+import { getToken } from "@/utils/auth";
+import store from "@/store";
 const service = axios.create({
   // timeout: 1000,
   baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
@@ -14,7 +16,7 @@ service.interceptors.request.use(
     // let each request carry token
     // ['X-Token'] is a custom headers key
     // please modify it according to the actual situation
-    //config.headers['Authorization'] = 'Bearer ' + getToken()
+    config.headers["Authorization"] = "Bearer " + getToken();
     //}
     return config;
   },
@@ -26,8 +28,7 @@ service.interceptors.request.use(
 
 service.interceptors.response.use((res) => {
   const code = res.data.code;
-  console.log(res);
-  console.log("code: " + code);
+  console.log("store=====", store);
   switch (code) {
     case 0:
       return Promise.resolve(res);
@@ -104,6 +105,12 @@ service.interceptors.response.use((res) => {
     case 1012:
       return Promise.reject({
         msg: "The email already exists",
+      });
+    case 1013:
+      //未登录
+      return Promise.reject({
+        code: 1013,
+        msg: "Token已经过期,请重新登录",
       });
     case 1016:
       return Promise.reject({

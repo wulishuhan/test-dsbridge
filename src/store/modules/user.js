@@ -1,5 +1,5 @@
 // eslint-disable-next-line
-import { Login, Logout, getInfo, refresh } from "@/api/user";
+import { Login, Logout, getUserInfo, refresh, register } from "@/api/user";
 import { getToken, setToken, removeToken } from "@/utils/auth";
 
 const getDefaultState = () => {
@@ -28,6 +28,14 @@ const mutations = {
     state.accessToken = payload.access_token;
     state.isLogin = true;
   },
+  SET_USERINFO: (state, payload) => {
+    state.userInfo.user_id = payload.user_id;
+    state.userInfo.nick_name = payload.nick_name;
+    state.userInfo.avatar = payload.avatar;
+    state.userInfo.email = payload.email;
+    state.userInfo.user_name = payload.user_name;
+    state.isLogin = true;
+  },
 };
 
 const actions = {
@@ -50,20 +58,27 @@ const actions = {
         console.log(error);
       });
   },
-  getInfo({ commit, state }) {
+  register({ commit }, payload) {
     return new Promise((resolve, reject) => {
-      getInfo(state.token)
-        .then((response) => {
-          const { data } = response.data;
-          if (!data) {
-            return reject("Verification failed, please Login again.");
+      register(payload)
+        .then((res) => {
+          console.log("register=========", res);
+          commit("SET_LOGININFO", res.data.data);
+          resolve(res.data);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  },
+  getUserInfo({ commit }) {
+    return new Promise((resolve, reject) => {
+      getUserInfo()
+        .then((res) => {
+          if (res.data.code == 0) {
+            commit("SET_USERINFO", res.data.data);
           }
-          const { name, avatar, roles, id } = data;
-          commit("SET_ROLES", roles);
-          commit("SET_NAME", name);
-          commit("SET_AVATAR", avatar);
-          commit("SET_USERID", id);
-          resolve(data);
+          resolve(res.data);
         })
         .catch((error) => {
           reject(error);
