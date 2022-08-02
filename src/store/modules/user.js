@@ -64,6 +64,7 @@ const actions = {
         .then((res) => {
           console.log("register=========", res);
           commit("SET_LOGININFO", res.data.data);
+          setToken(res.data.data.access_token);
           resolve(res.data);
         })
         .catch((err) => {
