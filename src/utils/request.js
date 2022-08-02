@@ -7,7 +7,6 @@ const service = axios.create({
   // withCredentials: true, // send cookies when cross-domain requests
   timeout: 5000, // request timeout
 });
-
 // request interceptor
 service.interceptors.request.use(
   (config) => {
@@ -28,7 +27,8 @@ service.interceptors.request.use(
 
 service.interceptors.response.use((res) => {
   const code = res.data.code;
-  console.log("store=====", store);
+  const WHITE_LIST_URL = ["/system/user/getUserInfo"];
+  console.log("request", res);
   switch (code) {
     case 0:
       return Promise.resolve(res);
@@ -108,6 +108,14 @@ service.interceptors.response.use((res) => {
       });
     case 1013:
       //未登录
+      if (WHITE_LIST_URL.indexOf(res.config.url) != 0) {
+        store.dispatch("user/switchLoginRegisteForm", {
+          loginDialogVisible: true,
+          isLoginForm: true,
+        });
+        store.dispatch("user/logout");
+      }
+
       return Promise.reject({
         code: 1013,
         msg: "Token已经过期,请重新登录",

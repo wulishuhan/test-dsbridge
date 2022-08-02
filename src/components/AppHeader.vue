@@ -126,9 +126,9 @@
     </div>
     <login
       :loadLoginDialog="isLoginForm"
-      :visible.sync="dialogVisible"
-      @handleClose="dialogVisible = false"
-      @changeView="changeLoginView"
+      :visible.sync="loginDialogVisible"
+      @handleClose="handleCloseDialog"
+      @changeView="showLoginDialog"
     ></login>
   </div>
 </template>
@@ -140,10 +140,6 @@ const { mapState } = createNamespacedHelpers("user");
 export default {
   data() {
     return {
-      isLoginForm: true,
-      dialogVisible: false,
-      activeIndex: "1",
-      activeIndex2: "1",
       keywords: "",
       select: "",
     };
@@ -152,37 +148,35 @@ export default {
     Login,
   },
   computed: {
-    ...mapState(["accessToken", "expiresIn", "userInfo", "isLogin"]),
+    ...mapState([
+      "accessToken",
+      "expiresIn",
+      "userInfo",
+      "isLogin",
+      "loginDialogVisible",
+      "isLoginForm",
+    ]),
   },
   mounted() {
-    this.$store.dispatch("user/getUserInfo").then((res) => {
-      console.log("user/getUserInfo========", res);
-      if (res.code != 0) {
-        console.log("获取用户信息失败，请重新登录");
-      }
+    this.$store.dispatch("user/getUserInfo").catch((e) => {
+      console.log(e);
     });
   },
   methods: {
     showLoginDialog(view) {
-      if (view === "login") {
-        this.isLoginForm = true;
-      } else {
-        this.isLoginForm = false;
+      let payload = { loginDialogVisible: true, isLoginForm: false };
+      if (view == "login") {
+        payload.isLoginForm = true;
       }
-      this.dialogVisible = true;
-    },
-    changeLoginView(view) {
-      if (view === "login") {
-        this.isLoginForm = true;
-      } else {
-        this.isLoginForm = false;
-      }
+      this.$store.dispatch("user/switchLoginRegisteForm", payload);
     },
     logout() {
-      this.$store.dispatch("user/logout").then((res) => {
-        if (res.data.code != 200) {
-          this.$message.error("退出登录失败");
-        }
+      this.$store.dispatch("user/logout");
+    },
+    handleCloseDialog() {
+      this.$store.dispatch("user/switchLoginRegisteForm", {
+        loginDialogVisible: false,
+        isLoginForm: false,
       });
     },
   },
