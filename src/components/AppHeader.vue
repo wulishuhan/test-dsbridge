@@ -38,22 +38,20 @@
                 </el-button>
               </router-link>
             </li>
-            <li>
+            <li @click="handleCollectClick">
               <el-button
                 style="background: #f5f5f5; border: none; font-size: 20px"
               >
                 <i class="ortur-icon-collected"></i>
               </el-button>
             </li>
-            <li class="alert" @click="handleAlertClick">
+            <li class="alert">
               <el-button
                 style="background: #f5f5f5; border: none; font-size: 20px"
               >
                 <i class="ortur-icon-alert"></i>
               </el-button>
-              <div class="noticePanel" v-show="isShowNoticePanel">
-                isShowNoticePanel
-              </div>
+              <div class="noticePanel"></div>
             </li>
 
             <li>
@@ -118,10 +116,10 @@
 
 <script>
 import { getInfo } from "@/api/user";
+
 export default {
   data() {
     return {
-      isShowNoticePanel: false,
       isLogin: true,
       userinfo: {
         email: "",
@@ -141,10 +139,10 @@ export default {
     });
   },
   methods: {
-    handleAlertClick() {
-      //console.log(e)
-      this.isShowNoticePanel = !this.isShowNoticePanel;
+    handleCollectClick() {
+      this.$router.push({ path: "/design/yourSelf" });
     },
+
     handleSelect(key, keyPath) {
       console.log(key, keyPath);
     },
@@ -223,10 +221,6 @@ export default {
       ul.app-header-dots {
         .alert {
           position: relative;
-          .noticePanel {
-            position: absolute;
-            top: 20px;
-          }
         }
         width: 400px;
         list-style-type: none;

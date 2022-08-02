@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="wrapper">
     <div class="container" v-for="item in userList" :key="item.userId">
       <div class="left">
         <img class="img" :src="item.imgUrl" alt="" />
@@ -42,9 +42,8 @@ export default {
 
 <style lang="scss" scoped>
 .container {
-  background-color: #ccc;
   width: 100%;
-  padding: 10px 10px;
+  padding: 16px 16px;
   text-align: left;
   box-sizing: border-box;
   display: flex;
@@ -59,8 +58,9 @@ export default {
 }
 
 .img {
-  width: 66px;
-  height: 42px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
   margin-right: 10px;
 }
 </style>

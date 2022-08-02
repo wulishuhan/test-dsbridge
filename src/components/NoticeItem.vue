@@ -4,12 +4,13 @@
       <div v-show="noticeInfo.isRead" class="dot"></div>
       <div class="left">
         <router-link :to="'/design/' + noticeInfo.userId">
-          <img :src="noticeInfo.url" class="img" alt="" />
+          <!-- <img :src="noticeInfo.url" class="imgSystem" alt="" /> -->
+          <span class="ortur-icon-message" style="font-size: 36px"></span>
         </router-link>
       </div>
       <div class="right">
         <div class="name">
-          <span class="username">
+          <span class="username" style="margin-right: 4px">
             <router-link :to="'/design/' + noticeInfo.userId">
               {{ noticeInfo.userName }}
             </router-link>
@@ -54,7 +55,7 @@
       <div v-show="noticeInfo.isRead" class="dot"></div>
       <div class="left">
         <router-link :to="'/design/' + noticeInfo.userId">
-          <img :src="noticeInfo.url" class="img" alt="" />
+          <span class="ortur-icon-broadcast" style="font-size: 36px"></span>
         </router-link>
       </div>
       <div class="right">
@@ -112,7 +113,8 @@ export default {
           thing: "3d 裸眼",
           thingId: "5453",
           comment: "真不错",
-          yourComment: "还行",
+          yourComment:
+            "还行真不错真不错真不错真不错真不错真不错真不错真不错真不错真不错真不错真不错真不错真不错真不错真不错真不错真不错真不错真不错真不错",
           type: "comment",
         };
       },
@@ -132,42 +134,82 @@ export default {
   position: relative;
   .left {
     .img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+    }
+    .imgSystem {
+      width: 40px;
+      height: 40px;
     }
   }
   .right {
+    margin-left: 18px;
+
     .time {
-      margin-top: 12px;
+      margin-top: 7px;
+      font-size: 14px;
+      font-family: Source Han Sans CN;
+      font-weight: 400;
+      color: #999999;
     }
     .name {
       word-wrap: break-word;
+
+      .username {
+        font-size: 16px;
+        font-family: Source Han Sans CN;
+        font-weight: 500;
+        color: #1a1a1a;
+        margin-right: 36px;
+      }
       a {
         color: black;
+      }
+      .thing {
+        font-size: 16px;
+        font-family: Source Han Sans CN;
+        font-weight: 400;
+        color: #1a1a1a;
       }
     }
     .info {
       color: #ccc;
-      margin-top: 12px;
+      margin-top: 7px;
+      font-size: 14px;
+      font-family: Source Han Sans CN;
+      font-weight: 400;
+      color: #999999;
     }
     .yourComment {
       word-wrap: break-word;
-      background-color: #ccc;
+      background: #f0f0f0;
+      border-radius: 6px;
       display: inline-block;
-      padding: 5px;
-      margin-top: 12px;
+      padding: 18px;
+      margin-top: 7px;
+      font-size: 16px;
+      font-family: Source Han Sans CN;
+      font-weight: 400;
+      color: #1a1a1a;
     }
     .comment {
-      margin-top: 12px;
+      margin-top: 7px;
       word-wrap: break-word;
+      font-size: 16px;
+      font-family: Source Han Sans CN;
+      font-weight: 400;
+      color: #1a1a1a;
     }
   }
   .dot {
     position: absolute;
-    top: 2px;
-    left: 10px;
-    width: 4px;
-    height: 4px;
+    top: 13px;
+    left: 2px;
+    width: 8px;
+    height: 8px;
+    background: #ff6161;
     border-radius: 50%;
-    background-color: red;
   }
 }
 

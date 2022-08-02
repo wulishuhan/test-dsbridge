@@ -1,11 +1,15 @@
 <template>
   <div class="container-profile">
     <el-dialog :visible.sync="dialogFollowersVisible">
-      <el-tabs v-model="activeTab" @tab-click="handleClick" class="tabsContent">
-        <el-tab-pane label="followers" name="first">
+      <el-tabs
+        v-model="activeTab"
+        @tab-click="handleFollowTapClick"
+        class="tabsContent"
+      >
+        <el-tab-pane label="followers" name="first" class="followTapPanel">
           <IndexFollowPanel></IndexFollowPanel>
         </el-tab-pane>
-        <el-tab-pane label="following" name="second">
+        <el-tab-pane label="following" name="second" class="followTapPanel">
           <IndexFollowPanel></IndexFollowPanel>
         </el-tab-pane>
       </el-tabs>
@@ -109,7 +113,7 @@
         <!-- <span class="editTab">edit</span> -->
         <el-tabs
           v-model="activeName"
-          @tab-click="handleClick"
+          @tab-click="handleResourceClick"
           class="tabsContent"
         >
           <el-tab-pane label="Resource" name="first" v-if="isYourAccount">
@@ -132,9 +136,9 @@
                   class="contextMenu"
                   :contextMenuData="contextMenuData"
                   :transferIndex="transferIndex"
-                  @Handler1="Handler_A(index)"
+                  @Handler1="Handler_Del(index)"
                   @Handler2="Handler_B(index)"
-                  @Handler3="Handler_C(index)"
+                  @Handler3="Handler_Down(index)"
                   @Handler4="Handler_D(index)"
                   @Handler5="Handler_E(index)"
                 ></vue-context-menu>
@@ -143,11 +147,7 @@
           </el-tab-pane>
           <el-tab-pane label="Likes" name="second">
             <el-row :gutter="20">
-              <div
-                v-for="(item, index) in Likes"
-                :key="item.thingId"
-                @contextmenu="showMenu(index, item)"
-              >
+              <div v-for="item in Likes" :key="item.thingId">
                 <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
                   <resource-card
                     :thing="item"
@@ -162,11 +162,7 @@
           </el-tab-pane>
           <el-tab-pane label="Collections" name="third">
             <el-row :gutter="20">
-              <div
-                v-for="(item, index) in collections"
-                :key="item.thingId"
-                @contextmenu="showMenu(index, item)"
-              >
+              <div v-for="item in collections" :key="item.thingId">
                 <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
                   <resource-card
                     :thing="item"
@@ -180,11 +176,7 @@
           </el-tab-pane>
           <el-tab-pane label="History" name="fourth">
             <el-row :gutter="20">
-              <div
-                v-for="(item, index) in histories"
-                :key="item.thingId"
-                @contextmenu="showMenu(index, item)"
-              >
+              <div v-for="item in histories" :key="item.thingId">
                 <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
                   <resource-card :thing="item"> </resource-card>
                 </el-col>
@@ -201,7 +193,7 @@
 import FollowButton from "@/components/FollowButton.vue";
 import SrollTopButton from "@/components/SrollTopButton/index.vue";
 import ResourceCard from "@/components/ResourceCard/index.vue";
-import { getThingList } from "@/api/thing";
+import { getResourceList, updateDiy } from "@/api/design";
 
 import IndexFollowPanel from "./IndexFollowPanel.vue";
 import { getUserInfoByUserId } from "@/api/user";
@@ -283,12 +275,12 @@ export default {
     };
   },
   mounted() {
-    getThingList(this.pagination).then((res) => {
-      this.resources.push(...res.data.data);
-      this.Likes.push(...res.data.data);
-      this.collections.push(...res.data.data);
-      this.histories.push(...res.data.data);
-    });
+    if ("yourSelf" == this.$route.params.userId) {
+      this.isYourAccount = true;
+      this.getLikesList();
+      this.activeName = "second";
+    }
+    this.getResourceList();
     getUserInfoByUserId({
       id: this.$route.params.userId,
       userId: this.$store.getters.userId,
@@ -297,6 +289,27 @@ export default {
     });
   },
   methods: {
+    handleFollowTapClick() {},
+    getResourceList() {
+      getResourceList(this.pagination).then((res) => {
+        this.resources.push(...res.data.data);
+      });
+    },
+    getLikesList() {
+      getResourceList(this.pagination).then((res) => {
+        this.Likes.push(...res.data.data);
+      });
+    },
+    getCollectionsList() {
+      getResourceList(this.pagination).then((res) => {
+        this.collections.push(...res.data.data);
+      });
+    },
+    getHistoriesList() {
+      getResourceList(this.pagination).then((res) => {
+        this.histories.push(...res.data.data);
+      });
+    },
     showMenu(index, item) {
       console.log("item: ", item);
       console.log("index: ", index);
@@ -309,13 +322,13 @@ export default {
         y,
       };
     },
-    Handler_A(index) {
+    Handler_Del(index) {
       console.log("index:", index, "选项1-1-1绑定事件执行");
     },
     Handler_B(index) {
       console.log("index:", index, "选项1-1-2绑定事件执行");
     },
-    Handler_C(index) {
+    Handler_Down(index) {
       console.log("index:", index, "选项1-2-1绑定事件执行");
     },
     Handler_D(index) {
@@ -363,7 +376,9 @@ export default {
       this.isDescEdit = false;
     },
     editChange(item) {
-      item.isEdit = false;
+      updateDiy({ item }).then(() => {
+        item.isEdit = false;
+      });
     },
 
     editDesc() {
@@ -387,8 +402,16 @@ export default {
       }, 0);
     },
 
-    handleClick(tab, event) {
-      console.log(tab, event);
+    handleResourceClick() {
+      if (this.activeName == "first") {
+        this.getResourceList();
+      } else if (this.activeName == "second") {
+        this.getLikesList();
+      } else if (this.activeName == "third") {
+        this.getCollectionsList();
+      } else if (this.activeName == "fourth") {
+        this.getHistoriesList();
+      }
     },
   },
 };
@@ -402,6 +425,12 @@ export default {
 .container-profile {
   width: 1440px;
   margin: 0 auto;
+  ::v-deep .el-dialog {
+    width: 488px;
+    height: 472px;
+    background: #ffffff;
+    border-radius: 20px;
+  }
   .tabsContent {
     ::v-deep .el-tabs__item {
       font-size: 20px;
