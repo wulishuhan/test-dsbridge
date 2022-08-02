@@ -14,7 +14,6 @@ router.beforeEach(async (to, from, next) => {
         next();
       } else {
         try {
-          store.dispatch("user/getInfo");
           next();
         } catch (error) {
           Message.error(error || "Has Error");

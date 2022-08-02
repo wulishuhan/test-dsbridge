@@ -4,13 +4,17 @@
     <div class="upload-wrapper">
       <div class="select-area">
         <el-upload
-          action="/dev-api/user/receiveImg"
+          action="/dev-api/library/resource/upload"
           :show-file-list="showFile"
           :file-list="sourceList"
           drag
           multiple
           :on-change="handleSourceChange"
           :on-progress="handleSourceProgress"
+          :on-success="handleSourceSuccess"
+          :headers="headers"
+          :accept="acceptType"
+          :before-upload="beforeUpload"
         >
           <i class="ortur-icon-file" style="font-size: 60px"></i>
           <span>Drag your file & photo here (&lt;12MB)</span>
@@ -24,7 +28,7 @@
         <div class="list-wrapper">
           <h5 class="list-wrapper-title">文件列表</h5>
           <ul>
-            <li v-for="source in sourceList" :key="source.uid">
+            <li v-for="(source, sourceIndex) in sourceList" :key="sourceIndex">
               <div class="fileinfo-wrapper">
                 <div class="fileicon">
                   <i class="ortur-icon-file" style="font-size: 40px"></i>
@@ -44,7 +48,18 @@
               <el-progress
                 :percentage="source.percentage"
                 :format="format"
+                v-if="source.success != true"
               ></el-progress>
+              <div v-if="source.success == true">
+                <span
+                  class="ortur-icon-minus"
+                  style="font-size: 24px; cursor: pointer"
+                  @click="handleRemoveSource(sourceIndex)"
+                >
+                  <span class="path1"></span>
+                  <span class="path2"></span>
+                </span>
+              </div>
             </li>
           </ul>
         </div>
@@ -72,9 +87,10 @@
                 <i class="handle el-icon-s-operation"></i>
                 <el-upload
                   class="cover-edit"
-                  action="/dev-api/user/receiveImg"
+                  action="/dev-api/library/resource/upload"
                   :show-file-list="showFile"
                   :on-success="handleCoverEditSuccess"
+                  :headers="headers"
                 >
                   <i
                     class="el-icon-edit"
@@ -84,10 +100,11 @@
               </div>
               <div class="swiper-slide">
                 <el-upload
-                  action="/dev-api/user/receiveImg"
+                  action="/dev-api/library/resource/upload"
                   :show-file-list="showFile"
                   class="cover-add"
                   :on-success="handleCoverAddSuccess"
+                  :headers="headers"
                 >
                   <i class="el-icon-plus"></i>
                 </el-upload>
@@ -281,6 +298,8 @@
 
 <script>
 import draggable from "vuedraggable";
+import { getToken } from "@/utils/auth";
+import { save } from "@/api/resource";
 export default {
   // eslint-disable-next-line
   name: "upload",
@@ -289,6 +308,7 @@ export default {
   },
   data() {
     return {
+      acceptType: ".jpg,.png,.svg,.dxf,.gc,.nc",
       tutorialSwiper: "tutorialSwiper",
       showFile: false,
       dialogImageUrl: "",
@@ -392,14 +412,27 @@ export default {
     };
   },
   computed: {
-    swiper() {
-      return this.$refs.mySwiper;
+    headers() {
+      return {
+        Authorization: "Bearer " + getToken(),
+      };
     },
   },
   mounted() {
     console.log("Current Swiper instance object", this.mySwiper);
   },
   methods: {
+    beforeUpload(file) {
+      let extension = file.name.substring(file.name.lastIndexOf(".") + 1);
+      let accept = this.acceptType.indexOf(extension) < 0 ? false : true;
+      if (!accept) {
+        this.$message({
+          message: "Supported Files:" + this.acceptType,
+          type: "warning",
+        });
+      }
+      return accept;
+    },
     resetForm() {
       this.baseinfoForm = this.$options.data().baseinfoForm;
       this.tutorialForm = this.$options.data().tutorialForm;
@@ -440,14 +473,20 @@ export default {
       return filesize.toFixed(2) + units;
     },
     handleSourceChange(file) {
-      console.log("=========", file);
+      console.log("handleSourceChange=========", file);
     },
     handleSourceProgress(event, file, fileList) {
-      console.log(event, file, fileList);
+      console.log("handleSourceProgres========", event, file, fileList);
       this.sourceList = fileList;
     },
     handleSourceSuccess(response, file, fileList) {
-      console.log(response, file, fileList);
+      file.success = true;
+      this.sourceList = fileList;
+      //TODO 完成的时候隐藏掉进度条，显示移除
+      console.log("handleSourceSuccess", response, file, fileList);
+    },
+    handleRemoveSource(sourceIndex) {
+      this.sourceList.splice(sourceIndex, 1);
     },
     handleCoverAddSuccess() {
       this.coverList.push({
@@ -518,6 +557,13 @@ export default {
     },
     handleSave() {
       console.log(this.tutorialForm);
+      save()
+        .then((res) => {
+          console.log("save========", res);
+        })
+        .catch((e) => {
+          console.log("save========", e);
+        });
     },
   },
 };
@@ -632,7 +678,6 @@ export default {
           margin-bottom: 20px;
           align-items: center;
           flex-direction: row;
-          justify-content: space-between;
           .fileinfo-wrapper {
             width: 40%;
             display: flex;
