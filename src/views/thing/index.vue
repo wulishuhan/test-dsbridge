@@ -226,7 +226,7 @@
       ></ElImageViewer>
     </div>
     <el-dialog :visible.sync="dialogTabsVisible" width="1136px">
-      <el-tabs v-model="viewMoreActive" :stretch="true">
+      <el-tabs class="more-dialog" v-model="viewMoreActive" :stretch="true">
         <el-tab-pane label="More by this creator" name="view-creator">
           <view-more v-if="viewMoreActive === 'view-creator'"></view-more>
         </el-tab-pane>
@@ -351,6 +351,7 @@ export default {
     },
   },
   created() {
+    console.log("token", this.token, this.userId);
     getUserInfoByThingId({
       thingId: this.$route.params.thingId,
       userId: this.$store.getters.userId,
@@ -754,6 +755,12 @@ a {
 }
 ::v-deep .el-tabs__header .is-top {
   width: 360px;
+}
+
+.more-dialog {
+  ::v-deep .el-tabs__header .is-top {
+    width: 477px;
+  }
 }
 
 .show-header {

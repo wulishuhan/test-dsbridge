@@ -82,6 +82,11 @@
       ></login>
       注册拟态框：<a href="#" @click="showDialog('register')"> register</a>
     </div>
+    <el-avatar
+      class="ortur-icon-user-info"
+      size="30"
+      style="font-size: 40px"
+    ></el-avatar>
 
     <div style="margin-top: 50px">
       <preview></preview>
