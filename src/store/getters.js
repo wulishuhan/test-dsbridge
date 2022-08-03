@@ -10,5 +10,6 @@ const getters = {
   userId: (state) => state.user.userId,
   selectorModules: (state) => state.upload.selectorModules,
   searchKeywords: (state) => state.search.userId,
+  userInfo: (state) => state.user.userInfo,
 };
 export default getters;
