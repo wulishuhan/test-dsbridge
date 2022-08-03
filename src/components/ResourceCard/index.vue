@@ -2,8 +2,8 @@
   <div class="card-box" @mouseenter="enter" @mouseleave="leave">
     <div style="position: relative">
       <img
-        :src="thing.url"
-        @click="toDetail(thing.thingId)"
+        :src="thing.image"
+        @click="toDetail(thing.id)"
         alt="can't load this image"
       />
       <div
@@ -24,11 +24,11 @@
     </div>
     <div class="card-box-bottom">
       <div class="card-box-bottom-left">
-        <el-avatar :size="35" :src="thing.avatar"></el-avatar>
+        <el-avatar :size="35" :src="thing.creator.avatar"></el-avatar>
         <div class="card-box-bottom-left-name">
-          <div class="thing-name">{{ thing.thingName }}</div>
-          <span class="author" @click="viewAuthorInfo(thing.userId)">
-            {{ thing.userName }}
+          <div class="thing-name">{{ thing.title }}</div>
+          <span class="author" @click="viewAuthorInfo(thing.creator.id)">
+            {{ thing.creator.name }}
           </span>
         </div>
       </div>
@@ -36,11 +36,11 @@
         <div class="card-box-bottom-right-like-box" @click="like">
           <i v-if="!isLike" class="el-icon-star-off icon-star"></i>
           <i v-else class="ortur-icon-star-border icon-star"></i>
-          {{ thing.likes }}
+          {{ thing.like_count }}
         </div>
         <div @click="share" class="share-box">
           <i class="el-icon-share icon-share"></i>
-          1.2k
+          {{ thing.share_count }}
         </div>
       </div>
     </div>
@@ -50,7 +50,8 @@
   </div>
 </template>
 <script>
-import { changeCollect, changeLike } from "@/api/thing";
+import { changeCollect } from "@/api/thing";
+import { addLike, deleteLike } from "@/api/like";
 import ShareSocialMedia from "../ShareCard";
 export default {
   name: "ResourceCard",
@@ -60,17 +61,18 @@ export default {
       type: Object,
       default: function () {
         return {
-          avatar: "http://dummyimage.com/300x200/f27982/FFF&text=vknro",
-          id: "620000197009121720",
-          isCollected: true,
-          isLike: false,
-          likes: 737,
-          publicTime: "1976 02 23",
-          thingId: "620000197009121720",
-          thingName: "ccdfsctoh",
-          url: "http://dummyimage.com/300x200/79a5f2/FFF&text=gxmorr",
-          userId: "620000197009121720",
-          userName: "gcxzxpbyne",
+          creator: {
+            name: "ccc@ccc.cccq",
+            id: 110,
+            avatar:
+              "https://orturbucket.s3.amazonaws.com/pic/5f93f983524def3dca464469d2cf9f3e",
+          },
+          id: 2,
+          image:
+            "https://orturbucket.s3.amazonaws.com/assets/2022/08/02/lu2-2_20220802163925A001.png",
+          like_count: 0,
+          share_count: 0,
+          title: "laser",
         };
       },
     },
@@ -96,20 +98,31 @@ export default {
     like() {
       if (this.isLike) {
         this.likes = Number(this.likes) - 1;
+        deleteLike({
+          resId: this.thing.id,
+        }).then(() => {
+          this.$message({
+            message: "delete likes successfully",
+            type: "success",
+          });
+          this.isLike = !this.isLike;
+        });
       } else {
         this.likes = 1 + Number(this.likes);
+        addLike({
+          resId: this.thing.id,
+        })
+          .then(() => {
+            this.$message({
+              message: "add likes successfully",
+              type: "success",
+            });
+            this.isLike = !this.isLike;
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       }
-      changeLike({
-        isLike: !this.isLike,
-        userId: this.$store.getters.userId,
-        thingId: this.thing.thingId,
-      }).then((res) => {
-        this.$message({
-          message: res.data.message,
-          type: "success",
-        });
-        this.isLike = !this.isLike;
-      });
     },
     share() {
       this.isShare = !this.isShare;
