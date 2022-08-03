@@ -1,8 +1,23 @@
 import request from "@/utils/request";
-export function save(params) {
+export function saveResource(data) {
   return request({
     url: `library/resource`,
     method: "post",
-    params,
+    data,
+  });
+}
+
+export function getResource(id) {
+  return request({
+    url: `library/resource/detail/${id}`,
+    method: "get",
+  });
+}
+
+export function updateResource(data) {
+  return request({
+    url: `library/resource`,
+    method: "put",
+    data,
   });
 }
