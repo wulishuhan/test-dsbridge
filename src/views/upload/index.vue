@@ -315,16 +315,22 @@
       <el-form-item>
         <div class="action-btn">
           <el-button type="primary" @click="handleSave()">Save</el-button>
-          <el-button>Preview</el-button>
+          <el-button @click="previewDialogVisible = true">Preview</el-button>
           <el-button @click="resetForm()">Reset</el-button>
         </div>
       </el-form-item>
     </el-form>
+    <Preview
+      :dialogVisible="previewDialogVisible"
+      :close="closePreviewDialog"
+      :preview-data="previewData"
+    ></Preview>
   </div>
 </template>
 
 <script>
 import draggable from "vuedraggable";
+import Preview from "@/components/Preview";
 import { getToken } from "@/utils/auth";
 import { saveResource, getResource, updateResource } from "@/api/resource";
 export default {
@@ -332,9 +338,11 @@ export default {
   name: "upload",
   components: {
     draggable,
+    Preview,
   },
   data() {
     return {
+      previewDialogVisible: false,
       sourceId: 0,
       headerTitle: "Create project",
       fileList: [],
@@ -443,6 +451,13 @@ export default {
         Authorization: "Bearer " + getToken(),
       };
     },
+    previewData() {
+      return {
+        ...this.resourceForm,
+        tutorials: this.tutorialForm,
+        editDatetime: "Editd on " + new Date().toString(),
+      };
+    },
   },
   mounted() {
     this.sourceId = parseInt(this.$route.params.sourceId);
@@ -464,6 +479,9 @@ export default {
     //更新标题
   },
   methods: {
+    closePreviewDialog() {
+      this.previewDialogVisible = false;
+    },
     beforeUpload(file) {
       let extension = file.name.substring(file.name.lastIndexOf(".") + 1);
       let accept = this.acceptType.indexOf(extension) < 0 ? false : true;

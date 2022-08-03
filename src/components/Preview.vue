@@ -1,9 +1,6 @@
 <template>
   <div>
-    <el-button type="text" @click="dialogVisible = true">
-      {{ buttonText }}
-    </el-button>
-    <el-dialog width="1136px" :visible.sync="dialogVisible">
+    <el-dialog width="1136px" :visible="dialogVisible" @close="close()">
       <div class="center-container">
         <div class="show">
           <el-row>
@@ -11,11 +8,15 @@
               <div class="show-header">
                 <div class="show-header-left">
                   <div class="show-header-left-thing-name">
-                    {{ user.thingName }}
+                    {{ previewData.title }}
                   </div>
-                  <div class="flex align-center">
+                  <div class="flex align-center" style="margin-top: 5px">
                     <el-avatar :size="30" :src="user.avatar"></el-avatar>
-                    <span class="user-name">{{ user.name }}</span>
+                    <span
+                      class="user-name"
+                      style="font-size: 12px; margin-left: 5px; color: #999999"
+                      >{{ previewData.editDatetime }}</span
+                    >
                   </div>
                 </div>
               </div>
@@ -46,13 +47,13 @@
                         :autoplay="true"
                       >
                         <el-carousel-item
-                          v-for="(item, index) in imageList"
+                          v-for="(item, index) in previewData.images"
                           :name="'' + index"
                           :key="item.id"
                           indicator-position="outside"
                           autoplay="true"
                         >
-                          <img :src="item.url" />
+                          <img :src="item" />
                         </el-carousel-item>
                       </el-carousel>
                     </div>
@@ -61,7 +62,7 @@
                     <div class="swiper-wrapper">
                       <div
                         class="swiper-slide"
-                        v-for="(item, index) in imageList"
+                        v-for="(item, index) in previewData.images"
                         :key="item.id"
                       >
                         <img
@@ -69,7 +70,7 @@
                           :class="
                             index === imgActiveIndex ? 'img-activeBorder' : ''
                           "
-                          :src="item.url"
+                          :src="item"
                           alt=""
                         />
                       </div>
@@ -99,12 +100,7 @@
                   :showHeight="showHeight"
                   v-if="activeName == 'description'"
                 >
-                  xxxxxxxxxxxxxxx xxxxxxxx xxxxxxxxx xxxxxx xxxxxxxxx xxxxxxx
-                  xxxxxxxxxxxxxx xxxxxxxxxxxxxx xxxxxxxxxxxx xxxxxxxxxx
-                  xxxxxxxxxxx xxxxxxxxx xxxxxxxxxxxxxx xxxxxxxxxxx
-                  xxxxxxxxxxxxxxx xxxxxxxx xxxxxxxxx xxxxxx xxxxxxxxx xxxxxxx
-                  xxxxxxxxxxxxxx xxxxxxxxxxxxxx xxxxxxxxxxxx xxxxxxxxxx
-                  xxxxxxxxxxx xxxxxxxxx xxxxxxxxxxxxxx xxxxxxxxxxx
+                  <pre>{{ previewData.description }}</pre>
                 </show-more>
               </el-tab-pane>
               <el-tab-pane label="Tutorial" name="step">
@@ -125,7 +121,7 @@
           ref="test"
           class="imageViewer"
           :on-close="closeViewer"
-          :url-list="urlList"
+          :url-list="previewData.images"
           :initialIndex="imgActiveIndex"
           v-show="showViewer"
           :zIndex="imageViewerIndex"
@@ -144,14 +140,19 @@ export default {
   name: "Preview",
   components: { LabelCard, ShowMore, ElImageViewer },
   props: {
-    buttonText: {
-      type: String,
-      default: "预览文本",
+    dialogVisible: {
+      type: Boolean,
+    },
+    close: {
+      required: true,
+      type: Function,
+    },
+    previewData: {
+      type: Object,
     },
   },
   data() {
     return {
-      dialogVisible: false,
       imageList: [],
       showImg: [],
       waitImg: [],
@@ -180,10 +181,10 @@ export default {
     };
   },
   methods: {
+    handleClose() {
+      console.log("关闭模态框");
+    },
     openImageView() {
-      this.urlList = this.imageList.map((item) => {
-        return item.url;
-      });
       this.showViewer = true;
     },
     closeViewer() {
