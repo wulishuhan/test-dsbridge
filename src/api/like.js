@@ -17,7 +17,7 @@ export function deleteLike(params) {
 export function getLikelist(params) {
   return request({
     url: `/library/like/list`,
-    method: "post",
+    method: "get",
     params,
   });
 }

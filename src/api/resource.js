@@ -6,14 +6,12 @@ export function saveResource(data) {
     data,
   });
 }
-
 export function getResource(id) {
   return request({
     url: `library/resource/detail/${id}`,
     method: "get",
   });
 }
-
 export function updateResource(data) {
   return request({
     url: `library/resource`,
@@ -21,10 +19,10 @@ export function updateResource(data) {
     data,
   });
 }
-export function getResourceList(data) {
+export function getResourceList(params) {
   return request({
-    url: `/library/resource/list`,
+    url: `/library/resource/search`,
     method: "get",
-    data,
+    params,
   });
 }

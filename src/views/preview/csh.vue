@@ -119,12 +119,14 @@
         ddd
       </el-tab-pane>
     </el-tabs>
+    <ResourceCard></ResourceCard>
   </div>
 </template>
 <script>
 import Login from "@/components/Login";
 import ShowMore from "@/components/ShowMore.vue";
 import Preview from "@/components/Preview.vue";
+import ResourceCard from "@/components/ResourceCard";
 // more module style...
 // 用来预览组件
 export default {
@@ -133,6 +135,7 @@ export default {
     Login,
     ShowMore,
     Preview,
+    ResourceCard,
   },
   data() {
     return {
