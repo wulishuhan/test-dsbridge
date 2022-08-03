@@ -55,12 +55,11 @@ h2 {
 .images {
   width: 637px;
   display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
+  flex-direction: column;
 }
 img {
-  width: 184px;
-  height: 112px;
-  margin-top: 20px;
+  width: 237px;
+  height: 144px;
+  margin-top: 10px;
 }
 </style>

@@ -32,6 +32,10 @@ service.interceptors.response.use((res) => {
   switch (code) {
     case 0:
       return Promise.resolve(res);
+    case 1:
+      return Promise.reject({
+        msg: "server database error",
+      });
     case 2:
       return Promise.reject({
         msg: "server error",

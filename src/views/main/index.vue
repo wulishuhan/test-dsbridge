@@ -48,8 +48,10 @@
 import ResourceCard from "@/components/ResourceCard";
 import SrollTopButton from "@/components/SrollTopButton";
 import { throttle } from "@/utils/cache.js";
-import { getThingList } from "@/api/thing";
+// import { getThingList } from "@/api/thing";
+import { getResourceList } from "@/api/resource";
 import { getBanner } from "@/api/banner";
+import { getLikelist } from "@/api/like";
 export default {
   // eslint-disable-next-line
   name: "Main",
@@ -85,8 +87,9 @@ export default {
     };
   },
   mounted() {
-    getThingList(this.pagination).then((res) => {
-      this.resources.push(...res.data.data);
+    getResourceList(this.pagination).then((res) => {
+      console.log("mouns", res.data.rows);
+      this.resources.push(...res.data.rows);
     });
     this.load = throttle(() => {
       // 距离底部200px时加载一次
@@ -97,9 +100,9 @@ export default {
         100;
       if (bottomOfWindow && !this.loading && !this.noMore) {
         this.pagination.currentPage++;
-        getThingList(this.pagination)
+        getResourceList(this.pagination)
           .then((res) => {
-            this.resources.push(...res.data.data);
+            this.resources.push(...res.data.rows);
             this.loading = false;
           })
           .catch(() => {
@@ -111,6 +114,9 @@ export default {
     window.addEventListener("scroll", this.load);
     getBanner().then((res) => {
       this.bannerImages = res.data.data;
+    });
+    getLikelist().then((res) => {
+      console.log("likeList", res);
     });
   },
   beforeDestroy() {

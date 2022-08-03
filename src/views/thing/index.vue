@@ -24,21 +24,29 @@
               </div>
             </div>
             <div class="show-thing">
-              <div class="carousel-box flex justify-between">
+              <div
+                class="carousel-box flex justify-between"
+                @mouseenter="enterCarousel"
+                @mouseleave="leaveCarousel"
+              >
                 <div>
                   <div class="carousel">
-                    <button
-                      class="ortur-icon-enlarge"
-                      @click="openImageView()"
-                    ></button>
-                    <button
-                      class="el-icon-arrow-up upCarousel"
-                      @click="arrowClick()"
-                    ></button>
-                    <button
-                      class="el-icon-arrow-down downCarousel"
-                      @click="arrowClick('down')"
-                    ></button>
+                    <transition name="carousel-button-fade">
+                      <div v-show="mouseEnterCarousel">
+                        <button
+                          class="ortur-icon-enlarge"
+                          @click="openImageView()"
+                        ></button>
+                        <button
+                          class="el-icon-arrow-up upCarousel"
+                          @click="arrowClick()"
+                        ></button>
+                        <button
+                          class="el-icon-arrow-down downCarousel"
+                          @click="arrowClick('down')"
+                        ></button>
+                      </div>
+                    </transition>
                     <el-carousel
                       direction="vertical"
                       height="496px"
@@ -79,12 +87,16 @@
                     </div>
                   </div>
                   <div class="swiper-scrollbar"></div>
-                  <div class="up swiper-container-button">
-                    <i class="ortur-icon-arrow-up"></i>
-                  </div>
-                  <div class="down swiper-container-button">
-                    <i class="ortur-icon-arrow-down"></i>
-                  </div>
+                  <transition name="carousel-button-fade">
+                    <div v-show="mouseEnterCarousel">
+                      <div class="up swiper-container-button">
+                        <i class="ortur-icon-arrow-up"></i>
+                      </div>
+                      <div class="down swiper-container-button">
+                        <i class="ortur-icon-arrow-down"></i>
+                      </div>
+                    </div>
+                  </transition>
                 </div>
               </div>
             </div>
@@ -307,6 +319,7 @@ export default {
           el: ".swiper-scrollbar",
         },
       },
+      mouseEnterCarousel: false,
     };
   },
   methods: {
@@ -349,6 +362,14 @@ export default {
       this.imgActiveIndex = this.$refs.carousel.activeIndex;
       this.mySwiper.slideTo(this.$refs.carousel.activeIndex, 1000, false);
     },
+    enterCarousel() {
+      this.mouseEnterCarousel = true;
+      console.log("enter carousel", this.mouseEnterCarousel);
+    },
+    leaveCarousel() {
+      this.mouseEnterCarousel = false;
+      console.log("leave carousel", this.mouseEnterCarousel);
+    },
   },
   created() {
     console.log("token", this.token, this.userId);
@@ -365,13 +386,6 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.carousel-box {
-  .carousel {
-    button {
-      display: none;
-    }
-  }
-}
 .swiper-container {
   width: 184px;
   height: 496px;
@@ -411,6 +425,19 @@ export default {
     bottom: 0px;
   }
 }
+.carousel-button-fade-enter,
+.carousel-button-fade-leave-to {
+  opacity: 0;
+}
+.carousel-button-fade-enter-to,
+.carousel-button-fade-leave {
+  opacity: 1;
+}
+.carousel-button-fade-enter-active,
+.carousel-button-fade-leave-active {
+  transition: all 0.3s;
+}
+
 .el-avatar {
   cursor: pointer;
 }
