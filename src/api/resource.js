@@ -1,8 +1,8 @@
 import request from "@/utils/request";
-export function getResourceList(data) {
+export function getResourceList(params) {
   return request({
-    url: `/library/resource/list`,
+    url: `/library/resource/search`,
     method: "get",
-    data,
+    params,
   });
 }

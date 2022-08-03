@@ -32,7 +32,7 @@
         <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4"> </el-col>
       </el-row>
       <el-row class="row">
-        <div v-for="item in resources" :key="item.thingId">
+        <div v-for="item in resources" :key="item.id">
           <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="6">
             <resource-card :thing="item"></resource-card>
           </el-col>
@@ -52,6 +52,7 @@ import { throttle } from "@/utils/cache.js";
 import { getResourceList } from "@/api/resource";
 import { getBanner } from "@/api/banner";
 import { getLikelist } from "@/api/like";
+import { mapGetters } from "vuex";
 export default {
   // eslint-disable-next-line
   name: "Main",
@@ -60,8 +61,8 @@ export default {
     return {
       total: 0,
       pagination: {
-        pageSize: 10,
-        currentPage: 1,
+        pageSize: 4,
+        pageNum: 1,
       },
       options: [
         {
@@ -84,45 +85,72 @@ export default {
       resourcesTotal: 0,
       noMore: false,
       bannerImages: [],
+      likeList: [],
     };
   },
+  computed: {
+    ...mapGetters(["isLogin"]),
+  },
   mounted() {
-    getResourceList(this.pagination).then((res) => {
-      console.log("mouns", res.data.rows);
-      this.resources.push(...res.data.rows);
-    });
-    this.load = throttle(() => {
-      // 距离底部200px时加载一次
-      let bottomOfWindow =
-        document.documentElement.offsetHeight -
-          document.documentElement.scrollTop -
-          window.innerHeight <=
-        100;
-      if (bottomOfWindow && !this.loading && !this.noMore) {
-        this.pagination.currentPage++;
-        getResourceList(this.pagination)
-          .then((res) => {
-            this.resources.push(...res.data.rows);
-            this.loading = false;
-          })
-          .catch(() => {
-            this.loading = false;
-            this.noMore = true;
-          });
-      }
-    }, 1000);
-    window.addEventListener("scroll", this.load);
+    getLikelist()
+      .then((res) => {
+        for (let i = 0; i < res.data.rows.length; i++) {
+          const element = res.data.rows[i];
+          this.likeList.push(element.id);
+        }
+      })
+      .then(() => {
+        this.getResourceList();
+      })
+      .then(() => {
+        this.load = throttle(() => {
+          // 距离底部200px时加载一次
+          let bottomOfWindow =
+            document.documentElement.offsetHeight -
+              document.documentElement.scrollTop -
+              window.innerHeight <=
+            200;
+          if (bottomOfWindow && !this.loading && !this.noMore) {
+            this.pagination.pageNum++;
+            if (
+              this.pagination.pageNum <=
+              this.resourcesTotal / this.pagination.pageSize
+            ) {
+              this.getResourceList();
+            }
+          }
+        }, 1000);
+        window.addEventListener("scroll", this.load);
+      });
     getBanner().then((res) => {
       this.bannerImages = res.data.data;
-    });
-    getLikelist().then((res) => {
-      console.log("likeList", res);
     });
   },
   beforeDestroy() {
     window.removeEventListener("scroll", this.load);
   },
-  methods: {},
+  methods: {
+    getResourceList() {
+      getResourceList(this.pagination)
+        .then((res) => {
+          let resource = res.data.rows;
+          for (let i = 0; i < resource.length; i++) {
+            if (this.likeList.includes(resource[i].id)) {
+              resource[i].isLike = true;
+            } else {
+              resource[i].isLike = false;
+            }
+          }
+          this.resources.push(...resource);
+          this.resourcesTotal = res.data.total;
+          this.loading = false;
+        })
+        .catch(() => {
+          this.loading = false;
+          this.noMore = true;
+        });
+    },
+  },
 };
 </script>
 
