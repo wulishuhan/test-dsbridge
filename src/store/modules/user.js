@@ -1,85 +1,91 @@
 // eslint-disable-next-line
-import { Login, Logout, getInfo, refresh } from "@/api/user";
+import { Login, Logout, getUserInfo, refresh, register } from "@/api/user";
 import { getToken, setToken, removeToken } from "@/utils/auth";
 
 const getDefaultState = () => {
   return {
-    token: getToken(),
-    name: "",
-    avatar: "",
-    roles: [],
+    loginDialogVisible: false,
+    isLoginForm: true,
+    userInfo: {
+      user_id: 0,
+      nick_name: "",
+      avatar: "",
+      email: "",
+      user_name: "",
+    },
+    expiresIn: [],
     isLogin: false,
-    userId: "",
+    accessToken: getToken(),
   };
 };
 const state = getDefaultState();
 
 const mutations = {
-  SET_ISLOGIN: (state, isLogin) => {
-    state.isLogin = isLogin;
-  },
   RESET_STATE: (state) => {
     Object.assign(state, getDefaultState());
   },
-  SET_TOKEN: (state, token) => {
-    state.token = token;
+  SET_LOGININFO: (state, payload) => {
+    state.userInfo = payload.user_info;
+    state.expiresIn = payload.expires_in;
+    state.accessToken = payload.access_token;
+    state.isLogin = true;
   },
-  SET_NAME: (state, name) => {
-    state.name = name;
+  SET_USERINFO: (state, payload) => {
+    state.userInfo.user_id = payload.user_id;
+    state.userInfo.nick_name = payload.nick_name;
+    state.userInfo.avatar = payload.avatar;
+    state.userInfo.email = payload.email;
+    state.userInfo.user_name = payload.user_name;
+    state.isLogin = true;
   },
-  SET_AVATAR: (state, avatar) => {
-    state.avatar = avatar;
-  },
-  SET_ROLES: (state, roles) => {
-    state.roles = roles;
-  },
-  SET_USERID: (state, userId) => {
-    state.userId = userId;
+  SWITCH_LOGIN_REGISTER_FORM: (state, payload) => {
+    state.loginDialogVisible = payload.loginDialogVisible;
+    state.isLoginForm = payload.isLoginForm;
   },
 };
 
 const actions = {
   // eslint-disable-next-line
-  login({ commit }, userInfo) {
-    const { username, password } = userInfo;
-    return new Promise((resolve, reject) => {
-      Login({
-        client_subtype: "Windows",
-        client_type: "pc",
-        password,
-        username,
+  login({ commit }, payload) {
+    const { loginForm, loginSuccess } = payload;
+    Login({
+      client_subtype: "Windows",
+      client_type: "pc",
+      password: loginForm.password,
+      username: loginForm.username,
+    })
+      .then((res) => {
+        let data = res.data.data;
+        commit("SET_LOGININFO", data);
+        setToken(data.access_token);
+        loginSuccess(data);
       })
-        .then((response) => {
-          const data = response.data.data;
-          const userInfo = response.data.data.user_info;
-          commit("SET_TOKEN", data.access_token);
-          commit("SET_ISLOGIN", true);
-          // commit("SET_ROLES", data.roles);
-          commit("SET_NAME", userInfo.nick_name);
-          commit("SET_AVATAR", userInfo.avatar);
-          commit("SET_USERID", userInfo.user_id);
-          setToken(data.access_token);
-          resolve(data);
+      .catch((error) => {
+        console.log(error);
+      });
+  },
+  register({ commit }, payload) {
+    return new Promise((resolve, reject) => {
+      register(payload)
+        .then((res) => {
+          console.log("register=========", res);
+          commit("SET_LOGININFO", res.data.data);
+          setToken(res.data.data.access_token);
+          resolve(res.data);
         })
-        .catch((error) => {
-          reject(error);
+        .catch((err) => {
+          reject(err);
         });
     });
   },
-  getInfo({ commit, state }) {
+  getUserInfo({ commit }) {
     return new Promise((resolve, reject) => {
-      getInfo(state.token)
-        .then((response) => {
-          const { data } = response.data;
-          if (!data) {
-            return reject("Verification failed, please Login again.");
+      getUserInfo()
+        .then((res) => {
+          if (res.data.code == 0) {
+            commit("SET_USERINFO", res.data.data);
           }
-          const { name, avatar, roles, id } = data;
-          commit("SET_ROLES", roles);
-          commit("SET_NAME", name);
-          commit("SET_AVATAR", avatar);
-          commit("SET_USERID", id);
-          resolve(data);
+          resolve(res.data);
         })
         .catch((error) => {
           reject(error);
@@ -109,6 +115,9 @@ const actions = {
         resolve();
       });
     });
+  },
+  switchLoginRegisteForm({ commit }, payload) {
+    commit("SWITCH_LOGIN_REGISTER_FORM", payload);
   },
 };
 

@@ -24,7 +24,7 @@
               </div>
             </div>
             <div class="show-thing">
-              <div class="flex justify-between">
+              <div class="carousel-box flex justify-between">
                 <div>
                   <div class="carousel">
                     <button
@@ -43,7 +43,7 @@
                       direction="vertical"
                       height="496px"
                       :interval="3000"
-                      arrow="never"
+                      arrow="hover"
                       ref="carousel"
                       indicator-position="none"
                       :autoplay="true"
@@ -112,11 +112,9 @@
                 xxxxxxxxxxxxxx xxxxxxxxxxx
               </show-more>
             </el-tab-pane>
-            <el-tab-pane label="Tutorial" name="step">
-              <show-more :showHeight="showHeight" v-if="activeName == 'step'">
-                xxxxxxxxxxxxxxx xxxxxxxx xxxxxxxxx xxxxxx xxxxxxxxx xxxxxxx
-                xxxxxxxxxxxxxx xxxxxxxxxxxxxx xxxxxxxxxxxx xxxxxxxxxx
-                xxxxxxxxxxx xxxxxxxxx xxxxxxxxxxxxxx xxxxxxxxxxx
+            <el-tab-pane label="Tutorial" name="steps">
+              <show-more :showHeight="showHeight" v-if="activeName == 'steps'">
+                <tutorial></tutorial>
               </show-more>
             </el-tab-pane>
             <el-tab-pane label="Makes" name="third">
@@ -226,7 +224,7 @@
       ></ElImageViewer>
     </div>
     <el-dialog :visible.sync="dialogTabsVisible" width="1136px">
-      <el-tabs v-model="viewMoreActive" :stretch="true">
+      <el-tabs class="more-dialog" v-model="viewMoreActive" :stretch="true">
         <el-tab-pane label="More by this creator" name="view-creator">
           <view-more v-if="viewMoreActive === 'view-creator'"></view-more>
         </el-tab-pane>
@@ -256,6 +254,7 @@ import ShowMore from "@/components/ShowMore.vue";
 import Reply from "@/components/Comment/ReplyWidget.vue";
 import ViewMore from "./ViewMore.vue";
 import SrollTopButton from "@/components/SrollTopButton";
+import Tutorial from "./components/Tutorial.vue";
 export default {
   name: "Thing",
   components: {
@@ -270,6 +269,7 @@ export default {
     Reply,
     ViewMore,
     SrollTopButton,
+    Tutorial,
   },
   data() {
     return {
@@ -351,6 +351,7 @@ export default {
     },
   },
   created() {
+    console.log("token", this.token, this.userId);
     getUserInfoByThingId({
       thingId: this.$route.params.thingId,
       userId: this.$store.getters.userId,
@@ -364,6 +365,13 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.carousel-box {
+  .carousel {
+    button {
+      display: none;
+    }
+  }
+}
 .swiper-container {
   width: 184px;
   height: 496px;
@@ -754,6 +762,12 @@ a {
 }
 ::v-deep .el-tabs__header .is-top {
   width: 360px;
+}
+
+.more-dialog {
+  ::v-deep .el-tabs__header .is-top {
+    width: 477px;
+  }
 }
 
 .show-header {

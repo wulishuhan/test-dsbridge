@@ -58,7 +58,13 @@
               <el-dropdown class="el-dropdown-userinfo">
                 <el-button>
                   <span>
-                    <img :src="userinfo.avatar" />
+                    <img
+                      :src="
+                        userInfo.avatar
+                          ? userInfo.avatar
+                          : 'http://dummyimage.com/300x200/96f279/FFF&text=gcfqdvmp'
+                      "
+                    />
                     <i class="el-icon-arrow-down el-icon--right"></i>
                   </span>
                 </el-button>
@@ -68,11 +74,17 @@
                 >
                   <el-dropdown-item class="header-userinfo">
                     <div class="header-avatar">
-                      <img :src="userinfo.avatar" />
+                      <img
+                        :src="
+                          userInfo.avatar
+                            ? userInfo.avatar
+                            : 'http://dummyimage.com/300x200/96f279/FFF&text=gcfqdvmp'
+                        "
+                      />
                     </div>
                     <div class="username-and-email">
-                      <span class="username">{{ userinfo.nickname }}</span>
-                      <span class="email">{{ userinfo.email }}</span>
+                      <span class="username">{{ userInfo.nick_name }}</span>
+                      <span class="email">{{ userInfo.email }}</span>
                     </div>
                   </el-dropdown-item>
                   <el-dropdown-item>
@@ -84,7 +96,7 @@
                   <el-dropdown-item>
                     <i class="el-icon-fork-spoon"></i>&nbsp; 设置
                   </el-dropdown-item>
-                  <el-dropdown-item>
+                  <el-dropdown-item @click.native="logout">
                     <i class="el-icon-back"></i>&nbsp; 退出
                   </el-dropdown-item>
                 </el-dropdown-menu>
@@ -96,6 +108,7 @@
             <li>
               <el-button
                 style="background: #f5f5f5; border: none; font-size: 20px"
+                @click="showLoginDialog('login')"
               >
                 Log in
               </el-button>
@@ -103,6 +116,7 @@
             <li>
               <el-button
                 style="background: #f5f5f5; border: none; font-size: 20px"
+                @click="showLoginDialog('register')"
               >
                 Sign up
               </el-button>
@@ -111,31 +125,42 @@
         </div>
       </div>
     </div>
+    <login
+      :loadLoginDialog="isLoginForm"
+      :visible.sync="loginDialogVisible"
+      @handleClose="handleCloseDialog"
+      @changeView="showLoginDialog"
+    ></login>
   </div>
 </template>
 
 <script>
-import { getInfo } from "@/api/user";
-
+import Login from "@/components/Login";
+import { createNamespacedHelpers } from "vuex";
+const { mapState } = createNamespacedHelpers("user");
 export default {
   data() {
     return {
-      isLogin: true,
-      userinfo: {
-        email: "",
-        nickname: "",
-      },
-      activeIndex: "1",
-      activeIndex2: "1",
       keywords: "",
       select: "",
     };
   },
+  components: {
+    Login,
+  },
+  computed: {
+    ...mapState([
+      "accessToken",
+      "expiresIn",
+      "userInfo",
+      "isLogin",
+      "loginDialogVisible",
+      "isLoginForm",
+    ]),
+  },
   mounted() {
-    var that = this;
-    getInfo().then(function (res) {
-      console.log("res.data", res.data);
-      that.userinfo = res.data.data;
+    this.$store.dispatch("user/getUserInfo").catch((e) => {
+      console.log(e);
     });
   },
   methods: {
@@ -145,6 +170,22 @@ export default {
 
     handleSelect(key, keyPath) {
       console.log(key, keyPath);
+    },
+    showLoginDialog(view) {
+      let payload = { loginDialogVisible: true, isLoginForm: false };
+      if (view == "login") {
+        payload.isLoginForm = true;
+      }
+      this.$store.dispatch("user/switchLoginRegisteForm", payload);
+    },
+    logout() {
+      this.$store.dispatch("user/logout");
+    },
+    handleCloseDialog() {
+      this.$store.dispatch("user/switchLoginRegisteForm", {
+        loginDialogVisible: false,
+        isLoginForm: false,
+      });
     },
   },
 };
@@ -312,7 +353,7 @@ export default {
         overflow: hidden;
         white-space: nowrap;
         width: 100%;
-        line-height: 16px;
+        line-height: 20px;
       }
       .email {
         font-size: 12px;

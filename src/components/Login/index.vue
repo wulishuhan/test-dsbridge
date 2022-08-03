@@ -126,7 +126,6 @@
   </div>
 </template>
 <script>
-import { register } from "@/api/user";
 export default {
   props: {
     loadLoginDialog: {
@@ -230,45 +229,39 @@ export default {
         this.loginForm.username = this.loginForm.email;
         if (valid) {
           this.innerVisible = true;
-          this.$store
-            .dispatch("user/login", this.loginForm)
-            .then((res) => {
-              console.log(res);
-              this.$router.push({ path: this.redirect || "/" });
-              this.innerVisible = false;
-            })
-            .catch((err) => {
-              console.log(err);
-              this.$message.error(err.msg);
-              this.innerVisible = false;
-            });
+          this.$store.dispatch("user/login", {
+            loginForm: this.loginForm,
+            loginSuccess: this.loginSuccess,
+          });
         } else {
           console.log("error submit!!");
           return false;
         }
       });
     },
+    loginSuccess(data) {
+      console.log(data);
+      this.innerVisible = false;
+      this.handleClose();
+    },
     createAccount(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           this.registerForm.username = this.registerForm.email;
-          console.log("registerForm:", {
-            auto_login: true,
-            client_subtype: "Windows",
-            client_type: "pc",
-            ...this.registerForm,
-          });
-          register({
-            auto_login: true,
-            client_subtype: "Windows",
-            client_type: "pc",
-            ...this.registerForm,
-          })
-            .then((res) => {
-              console.log(res);
+          this.$store
+            .dispatch("user/register", {
+              auto_login: true,
+              client_subtype: "Windows",
+              client_type: "pc",
+              ...this.registerForm,
             })
-            .catch((err) => {
-              this.$message.error(err.msg);
+            .then((res) => {
+              if (res.code == 0) {
+                this.handleClose();
+              }
+            })
+            .catch((e) => {
+              console.log(e);
             });
         } else {
           return false;

@@ -1,7 +1,14 @@
 <template>
-  <div class="main">
+  <div id="top" class="main">
     <header class="groups-header">
-      <div class="learn-more">了解更多</div>
+      <el-carousel>
+        <el-carousel-item v-for="item in bannerImages" :key="item.title">
+          <a :href="item.url">
+            <img :src="item.image" alt="" />
+            <div class="learn-more">了解更多</div>
+          </a>
+        </el-carousel-item>
+      </el-carousel>
     </header>
     <div class="content" id="content">
       <el-row class="filter">
@@ -33,7 +40,7 @@
       </el-row>
       <p v-if="loading">loading...</p>
       <p v-if="noMore">no more</p>
-      <sroll-top-button :to="'#content'"></sroll-top-button>
+      <sroll-top-button :to="'#top'"></sroll-top-button>
     </div>
   </div>
 </template>
@@ -42,6 +49,7 @@ import ResourceCard from "@/components/ResourceCard";
 import SrollTopButton from "@/components/SrollTopButton";
 import { throttle } from "@/utils/cache.js";
 import { getThingList } from "@/api/thing";
+import { getBanner } from "@/api/banner";
 export default {
   // eslint-disable-next-line
   name: "Main",
@@ -73,6 +81,7 @@ export default {
       loading: false,
       resourcesTotal: 0,
       noMore: false,
+      bannerImages: [],
     };
   },
   mounted() {
@@ -100,6 +109,9 @@ export default {
       }
     }, 1000);
     window.addEventListener("scroll", this.load);
+    getBanner().then((res) => {
+      this.bannerImages = res.data.data;
+    });
   },
   beforeDestroy() {
     window.removeEventListener("scroll", this.load);
@@ -108,7 +120,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .main {
   /* text-align: center; */
   background-color: #f5f5f5;
@@ -132,25 +144,31 @@ p {
   height: 300px;
   margin: 0 auto;
   color: #f5f5f5;
-  border: solid 1px #000;
   position: relative;
-}
-.learn-more {
-  position: absolute;
-  width: 84px;
-  height: 36px;
-  background: #1a1a1a;
-  opacity: 0.3;
-  border-radius: 5px;
-  bottom: 12px;
-  right: 12px;
-  font-size: 12px;
-  font-family: Source Han Sans CN;
-  font-weight: 400;
-  color: #ffffff;
-  line-height: 36px;
-  text-align: center;
-  cursor: pointer;
+  img {
+    width: 100%;
+    height: 100%;
+  }
+  a {
+    position: relative;
+    .learn-more {
+      position: absolute;
+      width: 84px;
+      height: 36px;
+      background: #1a1a1a;
+      opacity: 0.3;
+      border-radius: 5px;
+      bottom: 12px;
+      right: 12px;
+      font-size: 12px;
+      font-family: Source Han Sans CN;
+      font-weight: 400;
+      color: #ffffff;
+      line-height: 36px;
+      text-align: center;
+      cursor: pointer;
+    }
+  }
 }
 ::v-deep .el-input__inner,
 .el-input,

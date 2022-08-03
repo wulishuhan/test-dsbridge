@@ -70,8 +70,8 @@ export default {
         ),
       },
     };
-    this.initBuffers(gl);
-    this.drawScene(gl, programInfo);
+
+    this.drawScene(gl, programInfo, this.initBuffers(gl));
   },
   methods: {
     loadShader(gl, type, source) {
@@ -125,9 +125,7 @@ export default {
       const positionBuffer = gl.createBuffer();
       gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 
-      var vertices = [
-        1.0, 1.0, 0.0, -1.0, 1.0, 0.0, 1.0, -1.0, 0.0, -1.0, -1.0, 0.0,
-      ];
+      var vertices = [0, 0, 0, Math.random(), 0.7, 0];
 
       console.log(new Float32Array(vertices));
       gl.bufferData(
@@ -140,7 +138,7 @@ export default {
         position: positionBuffer,
       };
     },
-    drawScene(gl, programInfo) {
+    drawScene(gl, programInfo, buffers) {
       gl.clearColor(0.0, 0.0, 0.0, 1.0); // Clear to black, fully opaque
       gl.clearDepth(1.0); // Clear everything
       gl.enable(gl.DEPTH_TEST); // Enable depth testing
@@ -174,24 +172,26 @@ export default {
 
       // Now move the drawing position a bit to where we want to
       // start drawing the square.
-
+      console.log("modelViewMatrix:", modelViewMatrix);
       mat4.translate(
         modelViewMatrix, // destination matrix
         modelViewMatrix, // matrix to translate
-        [-0.0, 0.0, -6]
+        [-0.0, 0.0, -6.0]
       ); // amount to translate
-
+      console.log("modelViewMatrix:", modelViewMatrix);
       // Tell WebGL how to pull out the positions from the position
       // buffer into the vertexPosition attribute.
       {
-        const numComponents = 3; // pull out 3 values per iteration
+        const numComponents = 2; // pull out 3 values per iteration
         const type = gl.FLOAT; // the data in the buffer is 32bit floats
         const normalize = false; // don't normalize
         const stride = 0; // how many bytes to get from one set of values to the next
         // 0 = use type and numComponents above
         const offset = 0; // how many bytes inside the buffer to start from
-        // gl.bindBuffer(gl.ARRAY_BUFFER, 0);
+        gl.bindBuffer(gl.ARRAY_BUFFER, buffers.position);
         // console.log(buffers);
+        //绑定顶点属性数据，并且激活
+        gl.enableVertexAttribArray(programInfo.attribLocations.vertexPosition);
         gl.vertexAttribPointer(
           programInfo.attribLocations.vertexPosition,
           numComponents,
@@ -200,7 +200,6 @@ export default {
           stride,
           offset
         );
-        gl.enableVertexAttribArray(programInfo.attribLocations.vertexPosition);
       }
 
       // Tell WebGL to use our program when drawing
@@ -222,9 +221,60 @@ export default {
 
       {
         const offset = 0;
-        const vertexCount = 4;
-        gl.drawArrays(gl.TRIANGLE_STRIP, offset, vertexCount);
+        const vertexCount = 3;
+        gl.drawArrays(gl.LINE_LOOP, offset, vertexCount);
       }
+    },
+    setRectangle(gl, x, y, width, height) {
+      var x1 = x;
+      var x2 = x + width;
+      var y1 = y;
+      var y2 = y + height;
+
+      // 注意: gl.bufferData(gl.ARRAY_BUFFER, ...) 将会影响到
+      // 当前绑定点`ARRAY_BUFFER`的绑定缓冲
+      // 目前我们只有一个缓冲，如果我们有多个缓冲
+      // 我们需要先将所需缓冲绑定到`ARRAY_BUFFER`
+
+      gl.bufferData(
+        gl.ARRAY_BUFFER,
+        new Float32Array([x1, y1, x2, y1, x1, y2, x1, y2, x2, y1, x2, y2]),
+        gl.STATIC_DRAW
+      );
+    },
+    //生成顶点着色器需要的所有点的位置
+    initVertexBuffers(gl) {
+      let circleCenter = [0, 0];
+      let n = 36;
+      let stepAngle = 360 / n;
+      let arr = [circleCenter[0], circleCenter[1]];
+      for (let i = 0; i < n; i++) {
+        let xy = this.getXYByIndex(i, stepAngle);
+        let { x, y } = xy;
+        arr.push(x);
+        arr.push(y);
+      }
+      //如果没有下面3行代码，会出现一个缺口
+      let xyRight = this.getXYByIndex(0, n);
+      arr.push(xyRight.x);
+      arr.push(xyRight.y);
+      let verticesColors = new Float32Array(arr);
+      let buffer = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+      gl.bufferData(gl.ARRAY_BUFFER, verticesColors, gl.STATIC_DRAW);
+      let a_Position = gl.getAttribLocation(gl.program, "a_Position");
+      gl.vertexAttribPointer(a_Position, 2, gl.FLOAT, false, 0, 0);
+      gl.enableVertexAttribArray(a_Position);
+      return n + 2;
+    },
+    getXYByIndex(index, stepAngle) {
+      let pai = 3.1415926;
+      let circleRadius = 0.6;
+      let angle = stepAngle * index;
+      let angleInRadian = (angle * pai) / 180;
+      let x = Math.cos(angleInRadian) * circleRadius;
+      let y = Math.sin(angleInRadian) * circleRadius;
+      return { x, y };
     },
   },
 };

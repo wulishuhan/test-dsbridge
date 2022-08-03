@@ -99,23 +99,6 @@ const routes = [
     ],
   },
   {
-    path: "/register",
-    name: "register",
-    component: Layout,
-    meta: {
-      title: "register",
-    },
-    children: [
-      {
-        path: "/register",
-        meta: {
-          title: "register",
-        },
-        component: () => import("@/views/register/index"),
-      },
-    ],
-  },
-  {
     path: "/upload",
     name: "upload",
     component: Layout,
