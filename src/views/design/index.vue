@@ -41,11 +41,12 @@
             <el-upload
               v-if="isYourAccount"
               class="upload-demo"
+              :headers="headers"
               :on-success="handleImgUploadSuccess"
               :on-error="handleImgUploadErr"
               :before-upload="handleBeforeImgUpload"
               ref="upload"
-              action="https://jsonplaceholder.typicode.com/posts/"
+              action="https://api.leadiffer.cn/system/user/avatar"
               :auto-upload="true"
               :show-file-list="false"
             >
@@ -197,6 +198,7 @@ import { getResourceList, updateDiy } from "@/api/design";
 
 import IndexFollowPanel from "./IndexFollowPanel.vue";
 import { getUserInfoByUserId } from "@/api/user";
+import getters from "@/store/getters";
 export default {
   name: "Design",
   components: {
@@ -207,6 +209,10 @@ export default {
   },
   data() {
     return {
+      getters: {},
+      headers: {
+        Authorization: getters.token,
+      },
       histories: [],
       collections: [],
       Likes: [],
@@ -275,6 +281,8 @@ export default {
     };
   },
   mounted() {
+    // console.log(this.$store.getters.token);
+    this.getters = this.$store.getters;
     if ("yourSelf" == this.$route.params.userId) {
       this.isYourAccount = true;
       this.getLikesList();
@@ -345,7 +353,6 @@ export default {
       });
     },
     async handleBeforeImgUpload(file) {
-      debugger;
       const isJPG = file.type === "image/jpeg";
       const isLt2M = file.size / 1024 / 1024 < 2;
       console.log(this.test());
@@ -355,6 +362,8 @@ export default {
       if (!isLt2M) {
         this.$message.error("上传头像图片大小不能超过 2MB!");
       }
+      debugger;
+
       return isJPG && isLt2M;
     },
 
