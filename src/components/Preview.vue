@@ -11,12 +11,15 @@
                     {{ previewData.title }}
                   </div>
                   <div class="flex align-center" style="margin-top: 5px">
-                    <el-avatar :size="30" :src="user.avatar"></el-avatar>
-                    <span
-                      class="user-name"
-                      style="font-size: 12px; margin-left: 5px; color: #999999"
-                      >{{ previewData.editDatetime }}</span
-                    >
+                    <el-avatar :size="30" :src="userInfo.avatar"></el-avatar>
+                    <div class="user-profile">
+                      <span class="username">
+                        {{ userInfo.nick_name }}
+                      </span>
+                      <span class="datetime">{{
+                        previewData.editDatetime
+                      }}</span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -112,11 +115,10 @@
             </el-tabs>
           </div>
           <div class="bottom-content-right">
-            <label-card></label-card>
+            <label-card :LabelArr="previewData.tags"></label-card>
           </div>
         </div>
         <ElImageViewer
-          ref="test"
           class="imageViewer"
           :on-close="closeViewer"
           :url-list="previewData.images"
@@ -132,9 +134,10 @@
 // import ElImageViewer from "element-ui/packages/image/src/image-viewer";
 import ElImageViewer from "@/components/ImageViewer.vue";
 import Tutorial from "@/views/thing/components/Tutorial";
-import { getUserInfoByThingId } from "@/api/thing";
 import ShowMore from "@/components/ShowMore.vue";
 import LabelCard from "@/components/LabelCard.vue";
+import { createNamespacedHelpers } from "vuex";
+const { mapState } = createNamespacedHelpers("user");
 export default {
   name: "Preview",
   components: { LabelCard, ShowMore, ElImageViewer, Tutorial },
@@ -179,6 +182,9 @@ export default {
       },
     };
   },
+  computed: {
+    ...mapState(["userInfo"]),
+  },
   methods: {
     handleClose() {
       console.log("关闭模态框");
@@ -212,23 +218,25 @@ export default {
       this.$refs.carousel.setActiveItem(index);
     },
   },
-  created() {
-    getUserInfoByThingId({
-      thingId: this.$route.params.thingId,
-      userId: this.$store.getters.userId,
-    }).then((res) => {
-      this.user = res.data.data;
-      this.isLike = this.user.isLike;
-      this.isCollected = this.user.isCollected;
-      this.imageList = this.user.image;
-    });
-  },
-  mounted() {
-    console.log("imageViewer:", this);
-  },
+  created() {},
+  mounted() {},
 };
 </script>
 <style lang="scss" scoped>
+.user-profile {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-left: 8px;
+  .username {
+    color: #1a1a1a;
+    font-size: 14px;
+  }
+  .datetime {
+    font-size: 12px;
+    color: #999999;
+  }
+}
 .swiper-container {
   width: 184px;
   height: 496px;

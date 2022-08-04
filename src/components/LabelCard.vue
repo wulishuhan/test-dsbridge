@@ -4,11 +4,11 @@
     <div class="labelCard">
       <BaseButton
         class="button"
-        @click="onBaseButtonClick(item.id)"
-        v-for="item in LabelArr"
-        :key="item.id"
+        @click="onBaseButtonClick(index)"
+        v-for="(tag, index) in LabelArr"
+        :key="index"
       >
-        {{ item.label }}
+        {{ tag }}
       </BaseButton>
     </div>
   </div>
@@ -21,18 +21,7 @@ export default {
     LabelArr: {
       type: Array,
       default: () => {
-        return [
-          { id: "1", label: "路飞1111" },
-          { id: "2", label: "萨博" },
-          { id: "3", label: "路飞" },
-          { id: "4", label: "萨博" },
-          { id: "5", label: "路飞" },
-          { id: "6", label: "萨博" },
-          { id: "7", label: "路飞" },
-          { id: "8", label: "萨博" },
-          { id: "9", label: "路飞" },
-          { id: "10", label: "萨博" },
-        ];
+        return ["标签一", "标签二", "标签三", "标签四"];
       },
     },
   },
@@ -58,7 +47,6 @@ export default {
 .labelCard {
   display: flex;
   flex-wrap: wrap;
-  width: 200px;
   .button {
     margin-right: 12px;
     margin-top: 12px;
@@ -66,6 +54,7 @@ export default {
     font-family: Source Han Sans CN;
     font-weight: 400;
     color: #999999;
+    margin-left: unset;
   }
 }
 </style>
