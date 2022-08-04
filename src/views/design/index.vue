@@ -46,7 +46,7 @@
               :on-error="handleImgUploadErr"
               :before-upload="handleBeforeImgUpload"
               ref="upload"
-              action="https://api.leadiffer.cn/system/user/avatar"
+              :action="baseURL + '/system/user/avatar'"
               :auto-upload="true"
               :show-file-list="false"
             >
@@ -56,10 +56,17 @@
             </el-upload>
           </span>
 
-          <img class="img" mode="widthFix" :src="user.avatar" alt="" />
+          <img
+            class="img"
+            mode="widthFix"
+            :src="isYourAccount ? userInfo.avatar : user.avatar"
+            alt=""
+          />
         </div>
-        <div class="name">{{ user.name }}</div>
-        <FollowButton class="followBtn"></FollowButton>
+        <div class="name">
+          {{ isYourAccount ? userInfo.nick_name : user.nick_name }}
+        </div>
+        <FollowButton class="followBtn" v-show="!isYourAccount"></FollowButton>
         <div
           class="desc"
           @click="editDesc"
@@ -86,7 +93,7 @@
             >{{ user.following }}<span style="color: #ccc"> following</span>
           </span>
         </div>
-        <div v-for="(item, index) in user.diyArr" :key="item.id">
+        <div v-for="(item, index) in diyArr" :key="item.id">
           <div
             class="desc"
             @click="editDiy(item, index)"
@@ -117,7 +124,7 @@
           @tab-click="handleResourceClick"
           class="tabsContent"
         >
-          <el-tab-pane label="Resource" name="first" v-if="isYourAccount">
+          <el-tab-pane label="Resource" name="first">
             <el-row :gutter="20">
               <div
                 v-for="(item, index) in resources"
@@ -128,6 +135,7 @@
                   <resource-card
                     :thing="item"
                     :showEdit="true"
+                    :showAvatar="false"
                     :showStar="false"
                     :showCollection="false"
                   >
@@ -138,10 +146,8 @@
                   :contextMenuData="contextMenuData"
                   :transferIndex="transferIndex"
                   @Handler1="Handler_Del(index)"
-                  @Handler2="Handler_B(index)"
+                  @Handler2="Handler_MoveTo(index)"
                   @Handler3="Handler_Down(index)"
-                  @Handler4="Handler_D(index)"
-                  @Handler5="Handler_E(index)"
                 ></vue-context-menu>
               </div>
             </el-row>
@@ -194,11 +200,13 @@
 import FollowButton from "@/components/FollowButton.vue";
 import SrollTopButton from "@/components/SrollTopButton/index.vue";
 import ResourceCard from "@/components/ResourceCard/index.vue";
-import { getResourceList, updateDiy } from "@/api/design";
+import { getResourceList, getLikesList, updateDiy } from "@/api/design";
 
 import IndexFollowPanel from "./IndexFollowPanel.vue";
-import { getUserInfoByUserId } from "@/api/user";
-import getters from "@/store/getters";
+// import { getUserInfo } from "@/api/user";
+import { getToken } from "@/utils/auth";
+import { createNamespacedHelpers } from "vuex";
+const { mapState } = createNamespacedHelpers("user");
 export default {
   name: "Design",
   components: {
@@ -209,9 +217,8 @@ export default {
   },
   data() {
     return {
-      getters: {},
       headers: {
-        Authorization: getters.token,
+        Authorization: getToken(),
       },
       histories: [],
       collections: [],
@@ -230,18 +237,18 @@ export default {
           },
           {
             btnName: "Move to",
-            // fnHandler: "Handler2",
+            fnHandler: "Handler2",
 
-            children: [
-              {
-                fnHandler: "Handler5",
-                btnName: "Collections",
-              },
-              {
-                fnHandler: "Handler5",
-                btnName: "Likes",
-              },
-            ],
+            // children: [
+            //   {
+            //     fnHandler: "Handler5",
+            //     btnName: "Collections",
+            //   },
+            //   {
+            //     fnHandler: "Handler5",
+            //     btnName: "Likes",
+            //   },
+            // ],
           },
 
           {
@@ -260,62 +267,80 @@ export default {
         currentPage: 1,
       },
       dialogFollowersVisible: false,
+      diyArr: [
+        {
+          isEdit: false,
+          text: "11",
+        },
+        {
+          isEdit: false,
+          text: "11",
+        },
+      ],
       user: {
+        userId: "",
+        nick_name: "",
+        avatar: "",
         bgImg: "https://scpic.chinaz.net/files/pic/pic9/202207/apic42262.jpg",
-        avatar: "https://scpic.chinaz.net/files/pic/pic9/202207/apic42262.jpg",
         following: "14",
         followers: "13",
-        name: "yang4444444444",
         desc: "yang 654651",
-        diyArr: [
-          {
-            isEdit: false,
-            text: "11",
-          },
-          {
-            isEdit: false,
-            text: "11",
-          },
-        ],
       },
     };
   },
   mounted() {
-    // console.log(this.$store.getters.token);
-    this.getters = this.$store.getters;
-    if ("yourSelf" == this.$route.params.userId) {
+    console.log(this.userInfo);
+
+    let userId = this.$route.params.userId;
+
+    if (userId == "fromLike") {
       this.isYourAccount = true;
       this.getLikesList();
       this.activeName = "second";
+    } else if (this.userInfo.user_id == userId) {
+      this.isYourAccount = true;
+      this.getResourceList();
+    } else {
+      this.isYourAccount = false;
+      this.user.nick_name = "test";
+      this.user.userId = userId;
+      this.getResourceList();
     }
-    this.getResourceList();
-    getUserInfoByUserId({
-      id: this.$route.params.userId,
-      userId: this.$store.getters.userId,
-    }).then((res) => {
-      console.log(res);
-    });
+    // getUserInfo({}).then((res) => {
+    //   Object.assign(this.user, res.data.data);
+    // });
+    // this.$store.dispatch("user/getUserInfo").catch((e) => {
+    //   console.log(e);
+    // });
+  },
+  computed: {
+    ...mapState(["userInfo"]),
   },
   methods: {
     handleFollowTapClick() {},
     getResourceList() {
-      getResourceList(this.pagination).then((res) => {
-        this.resources.push(...res.data.data);
+      let userId = "";
+      this.isYourAccount
+        ? (userId = this.userInfo.user_id)
+        : (userId = this.user.userId);
+      getResourceList({ userId }).then((res) => {
+        this.resources = res.data.rows;
+        // this.resources.push(...res.data.rows);
       });
     },
     getLikesList() {
-      getResourceList(this.pagination).then((res) => {
-        this.Likes.push(...res.data.data);
+      getLikesList().then((res) => {
+        this.Likes = res.data.rows;
       });
     },
     getCollectionsList() {
       getResourceList(this.pagination).then((res) => {
-        this.collections.push(...res.data.data);
+        this.collections = res.data.rows;
       });
     },
     getHistoriesList() {
       getResourceList(this.pagination).then((res) => {
-        this.histories.push(...res.data.data);
+        this.histories = res.data.rows;
       });
     },
     showMenu(index, item) {
@@ -333,38 +358,33 @@ export default {
     Handler_Del(index) {
       console.log("index:", index, "选项1-1-1绑定事件执行");
     },
-    Handler_B(index) {
+    Handler_MoveTo(index) {
       console.log("index:", index, "选项1-1-2绑定事件执行");
     },
     Handler_Down(index) {
       console.log("index:", index, "选项1-2-1绑定事件执行");
     },
-    Handler_D(index) {
-      console.log("index:", index, "选项1-2-2绑定事件执行");
-    },
-    Handler_E(index) {
-      console.log("index:", index, "选项2-1绑定事件执行");
-    },
+
     addDiy() {
       //console.log(e)
-      this.user.diyArr.push({
+      this.diyArr.push({
         isEdit: false,
         text: "",
       });
     },
     async handleBeforeImgUpload(file) {
-      const isJPG = file.type === "image/jpeg";
-      const isLt2M = file.size / 1024 / 1024 < 2;
-      console.log(this.test());
-      if (!isJPG) {
-        this.$message.error("上传头像图片只能是 JPG 格式!");
-      }
-      if (!isLt2M) {
-        this.$message.error("上传头像图片大小不能超过 2MB!");
-      }
-      debugger;
+      // const isJPG = file.type === "image/jpeg";
+      const isLt1M = file.size / 1024 / 1024 < 1;
+      // // debugger;
 
-      return isJPG && isLt2M;
+      // if (!isJPG) {
+      //   this.$message.error("上传头像图片只能是 JPG 格式!");
+      // }
+      if (!isLt1M) {
+        this.$message.error("上传头像图片大小不能超过 1MB!");
+      }
+      // return isJPG && isLt2M;
+      return isLt1M;
     },
 
     handleImgUploadErr(err) {
@@ -372,7 +392,9 @@ export default {
       this.$message.error("上传失败" + err);
     },
     handleImgUploadSuccess() {
-      //console.log(e)
+      this.$store.dispatch("user/getUserInfo").catch((e) => {
+        console.log(e);
+      });
       this.$message.success("上传成功");
     },
     openFollowDialog(index) {
@@ -434,6 +456,7 @@ export default {
 .container-profile {
   width: 1440px;
   margin: 0 auto;
+  padding-bottom: 100px;
   ::v-deep .el-dialog {
     width: 488px;
     height: 472px;
@@ -448,24 +471,40 @@ export default {
       color: #1e78f0;
     }
     .contextMenu {
-      background-color: black;
-      color: white;
+      box-sizing: border-box;
+      padding: 8px;
+      color: black;
+      width: 160px;
+      // height: 176px;
+      background: #ffffff;
+      box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.07);
+      border-radius: 10px;
+
       ::v-deep {
         .context-menu-list {
-          background-color: black;
-          .btn-wrapper-simple {
-            height: auto !important;
+          background-color: white;
+          // width: 144px;
+          height: 48px;
+          padding-top: 8px;
+
+          .no-child-btn {
+            margin: auto;
+            font-size: 16px;
+            font-family: Source Han Sans CN;
+            font-weight: 400;
+            color: #1a1a1a;
           }
+          // .no-child-btn:hover {
+
+          // }
         }
-        .child-ul-wrapper {
-          background-color: black;
-          color: white;
-          .child-li-wrapper {
-            background-color: black;
-          }
-          .btn-wrapper-simple {
-            height: auto !important;
-          }
+        .context-menu-list:hover {
+          background: #8ab5ef !important;
+          font-size: 16px;
+          width: 144px;
+          height: 48px;
+          color: #ffffff;
+          border-radius: 8px;
         }
       }
     }
@@ -484,6 +523,11 @@ export default {
       position: absolute;
       top: 12px;
       right: 12px;
+    }
+    ::v-deep {
+      .el-tabs__content {
+        overflow: visible;
+      }
     }
   }
   .bg {

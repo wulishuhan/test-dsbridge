@@ -23,7 +23,7 @@
       </div>
       <div
         v-show="showEdit && isCollectIconShow"
-        @click="toUpload(thing.thingId)"
+        @click="toUpload(thing.id)"
         class="icon-collect-box"
       >
         <i class="ortur-icon-pen"></i>
@@ -31,10 +31,18 @@
     </div>
     <div class="card-box-bottom">
       <div class="card-box-bottom-left">
-        <el-avatar :size="35" :src="thing.creator.avatar"></el-avatar>
+        <el-avatar
+          v-if="showAvatar"
+          :size="35"
+          :src="thing.creator.avatar"
+        ></el-avatar>
         <div class="card-box-bottom-left-name">
           <div class="thing-name">{{ thing.title }}</div>
-          <span class="author" @click="viewAuthorInfo(thing.creator.id)">
+          <span
+            v-if="showAvatar"
+            class="author"
+            @click="viewAuthorInfo(thing.creator.id)"
+          >
             {{ thing.creator.name }}
           </span>
         </div>
@@ -68,6 +76,12 @@ export default {
   name: "ResourceCard",
   components: { ShareSocialMedia },
   props: {
+    showAvatar: {
+      type: Boolean,
+      default: () => {
+        return true;
+      },
+    },
     showEdit: {
       type: Boolean,
       default: () => {
@@ -168,7 +182,7 @@ export default {
     },
     viewAuthorInfo(userId) {
       this.$store.commit("filterCard/SET_SELECTPROFILE", "Designs");
-      this.$router.push(`/design/Designs/${userId}`);
+      this.$router.push(`/design/${userId}`);
     },
     switchCollect() {
       this.isCollected = !this.isCollected;

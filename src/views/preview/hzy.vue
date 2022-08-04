@@ -1,5 +1,6 @@
 <template>
   <div>
+    <RowFolder :value="folder" @input="handleFolderChange"></RowFolder>
     <ShareSocialMedia></ShareSocialMedia>
     <CollectButton @click="onColect" :isCollect="true"></CollectButton>
     <CollectButton></CollectButton>
@@ -20,15 +21,32 @@ import DownLoadButton from "@/components/DownLoadButton.vue";
 import BaseButton from "@/components/BaseButton.vue";
 import LabelCard from "@/components/LabelCard.vue";
 import NoticePanel from "@/components/NoticePanel.vue";
+import RowFolder from "@/components/RowFolder.vue";
 
 // 用来预览组件
 export default {
   // eslint-disable-next-line
   name: "hzy",
   data() {
-    return {};
+    return {
+      folder:[
+          {
+            name: "111",
+            id: "1",
+            isEdit: false,
+          },
+          {
+            name: "222",
+            id: "2",
+            isEdit: false,
+          },
+        ];
+    };
   },
   methods: {
+    handleFolderChange () {
+      
+    }, 
     onStar() {
       //console.log(e)
       console.log(111);
@@ -49,6 +67,7 @@ export default {
     BaseButton,
     LabelCard,
     NoticePanel,
+    RowFolder,
   },
 };
 </script>

@@ -165,7 +165,7 @@ export default {
   },
   methods: {
     handleCollectClick() {
-      this.$router.push({ path: "/design/yourSelf" });
+      this.$router.push({ path: "/design/fromLike" });
     },
 
     handleSelect(key, keyPath) {

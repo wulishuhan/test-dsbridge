@@ -3,6 +3,7 @@ import App from "./App.vue";
 import router from "./router";
 import store from "./store";
 import ElementUI from "element-ui";
+import { baseURL } from "@/utils/request";
 
 import "element-ui/lib/theme-chalk/index.css";
 import "element-ui/lib/theme-chalk/display.css";
@@ -13,6 +14,7 @@ import "@/permission";
 import "@/style/index.scss";
 import "@/assets/css/icon.css";
 import VueContextMenu from "vue-contextmenu";
+Vue.prototype.baseURL = baseURL;
 Vue.use(VueContextMenu);
 Vue.config.productionTip = false;
 Vue.use(ElementUI);
