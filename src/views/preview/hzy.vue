@@ -29,24 +29,22 @@ export default {
   name: "hzy",
   data() {
     return {
-      folder:[
-          {
-            name: "111",
-            id: "1",
-            isEdit: false,
-          },
-          {
-            name: "222",
-            id: "2",
-            isEdit: false,
-          },
-        ];
+      folder: [
+        {
+          name: "111",
+          id: "1",
+          isEdit: false,
+        },
+        {
+          name: "222",
+          id: "2",
+          isEdit: false,
+        },
+      ],
     };
   },
   methods: {
-    handleFolderChange () {
-      
-    }, 
+    handleFolderChange() {},
     onStar() {
       //console.log(e)
       console.log(111);
