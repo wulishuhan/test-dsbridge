@@ -105,9 +105,7 @@
               </el-tab-pane>
               <el-tab-pane label="Tutorial" name="step">
                 <show-more :showHeight="showHeight" v-if="activeName == 'step'">
-                  xxxxxxxxxxxxxxx xxxxxxxx xxxxxxxxx xxxxxx xxxxxxxxx xxxxxxx
-                  xxxxxxxxxxxxxx xxxxxxxxxxxxxx xxxxxxxxxxxx xxxxxxxxxx
-                  xxxxxxxxxxx xxxxxxxxx xxxxxxxxxxxxxx xxxxxxxxxxx
+                  <tutorial :step="previewData.tutorials"></tutorial>
                 </show-more>
               </el-tab-pane>
               <!-- <el-tab-pane label="Makes" name="third">makes</el-tab-pane> -->
@@ -133,12 +131,13 @@
 <script>
 // import ElImageViewer from "element-ui/packages/image/src/image-viewer";
 import ElImageViewer from "@/components/ImageViewer.vue";
+import Tutorial from "@/views/thing/components/Tutorial";
 import { getUserInfoByThingId } from "@/api/thing";
 import ShowMore from "@/components/ShowMore.vue";
 import LabelCard from "@/components/LabelCard.vue";
 export default {
   name: "Preview",
-  components: { LabelCard, ShowMore, ElImageViewer },
+  components: { LabelCard, ShowMore, ElImageViewer, Tutorial },
   props: {
     dialogVisible: {
       type: Boolean,
