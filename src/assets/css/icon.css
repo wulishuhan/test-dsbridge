@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('../fonts/icomoon.eot?yskfwq');
-  src:  url('../fonts/icomoon.eot?yskfwq#iefix') format('embedded-opentype'),
-    url('../fonts/icomoon.ttf?yskfwq') format('truetype'),
-    url('../fonts/icomoon.woff?yskfwq') format('woff'),
-    url('../fonts/icomoon.svg?yskfwq#icomoon') format('svg');
+  src:  url('../fonts/icomoon.eot?gqw7lf');
+  src:  url('../fonts/icomoon.eot?gqw7lf#iefix') format('embedded-opentype'),
+    url('../fonts/icomoon.ttf?gqw7lf') format('truetype'),
+    url('../fonts/icomoon.woff?gqw7lf') format('woff'),
+    url('../fonts/icomoon.svg?gqw7lf#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,31 +25,60 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.ortur-icon-logo .path1:before {
+.ortur-icon-logo-black .path1:before {
+  content: "\e936";
+  color: rgb(0, 0, 0);
+}
+.ortur-icon-logo-black .path2:before {
+  content: "\e937";
+  margin-left: -4.67578125em;
+  color: rgb(0, 0, 0);
+}
+.ortur-icon-logo-black .path3:before {
+  content: "\e938";
+  margin-left: -4.67578125em;
+  color: rgb(0, 0, 0);
+}
+.ortur-icon-logo-black .path4:before {
+  content: "\e939";
+  margin-left: -4.67578125em;
+  color: rgb(0, 0, 0);
+}
+.ortur-icon-logo-black .path5:before {
+  content: "\e93a";
+  margin-left: -4.67578125em;
+  color: rgb(0, 0, 0);
+}
+.ortur-icon-logo-black .path6:before {
+  content: "\e93b";
+  margin-left: -4.67578125em;
+  color: rgb(231, 54, 26);
+}
+.ortur-icon-logo-white .path1:before {
   content: "\e930";
   color: rgb(255, 255, 255);
 }
-.ortur-icon-logo .path2:before {
+.ortur-icon-logo-white .path2:before {
   content: "\e931";
   margin-left: -4.681640625em;
   color: rgb(255, 255, 255);
 }
-.ortur-icon-logo .path3:before {
+.ortur-icon-logo-white .path3:before {
   content: "\e932";
   margin-left: -4.681640625em;
   color: rgb(255, 255, 255);
 }
-.ortur-icon-logo .path4:before {
+.ortur-icon-logo-white .path4:before {
   content: "\e933";
   margin-left: -4.681640625em;
   color: rgb(255, 255, 255);
 }
-.ortur-icon-logo .path5:before {
+.ortur-icon-logo-white .path5:before {
   content: "\e934";
   margin-left: -4.681640625em;
   color: rgb(255, 255, 255);
 }
-.ortur-icon-logo .path6:before {
+.ortur-icon-logo-white .path6:before {
   content: "\e935";
   margin-left: -4.681640625em;
   color: rgb(231, 54, 26);

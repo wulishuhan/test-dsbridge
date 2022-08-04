@@ -1,19 +1,26 @@
 <template>
   <div class="card-box" @mouseenter="enter" @mouseleave="leave">
     <div style="position: relative">
-      <img
-        :src="thing.image"
-        @click="toDetail(thing.id)"
-        alt="can't load this image"
-      />
+      <div class="resource-show-image">
+        <img
+          class="resource-show-image"
+          :src="thing.image"
+          @click="toDetail(thing.id)"
+          alt="can't load this image"
+        />
+      </div>
       <div
         v-show="showCollection && isCollectIconShow"
-        @click="switchCollect"
         class="icon-collect-box"
       >
-        <i v-show="isCollected" class="ortur-icon-add-collect icon-collect"></i>
+        <i
+          v-if="isCollected"
+          @click="addCollection"
+          class="ortur-icon-add-collect icon-collect"
+        ></i>
         <span
-          v-show="!isCollected"
+          v-if="!isCollected"
+          @click="deleteCollection"
           class="ortur-icon-cancel-collect-strokes icon-collect"
         >
           <span class="path1"> </span>
@@ -35,6 +42,7 @@
           v-if="showAvatar"
           :size="35"
           :src="thing.creator.avatar"
+          :fit="'cover'"
         ></el-avatar>
         <div class="card-box-bottom-left-name">
           <div class="thing-name">{{ thing.title }}</div>
@@ -66,15 +74,24 @@
     <div class="share-container">
       <share-social-media v-if="isShare"></share-social-media>
     </div>
+    <div class="collected-option-container">
+      <CollectedOption
+        :show="openCollectedOption"
+        :folders="folders"
+        @close="closeCollectedOption"
+        @move="moveCollectedOption"
+        @addFolder="addFolder"
+      ></CollectedOption>
+    </div>
   </div>
 </template>
 <script>
-import { changeCollect } from "@/api/thing";
 import { addLike, deleteLike } from "@/api/like";
-import ShareSocialMedia from "../ShareCard";
+import ShareSocialMedia from "@/components/ShareCard";
+import CollectedOption from "@/components/CollectedOption";
 export default {
   name: "ResourceCard",
-  components: { ShareSocialMedia },
+  components: { ShareSocialMedia, CollectedOption },
   props: {
     showAvatar: {
       type: Boolean,
@@ -118,10 +135,11 @@ export default {
           },
           id: 2,
           image:
-            "https://orturbucket.s3.amazonaws.com/assets/2022/08/02/lu2-2_20220802163925A001.png",
+            "https://orturbucket.s3.amazonaws.com/pic/5f93f983524def3dca464469d2cf9f3e",
           like_count: 0,
           share_count: 0,
           title: "laser",
+          isLike: false,
         };
       },
     },
@@ -133,10 +151,26 @@ export default {
       isCollected: false,
       isShare: false,
       isCollectIconShow: false,
+      folder: true,
+      openCollectedOption: false,
+      folders: [
+        {
+          name: "aa",
+          id: 1,
+        },
+        {
+          name: "bb",
+          id: 2,
+        },
+        {
+          name: "cc",
+          id: 3,
+        },
+      ],
     };
   },
   mounted() {
-    this.likes = this.thing.likes;
+    this.likes = this.thing.like_count;
     this.isLike = this.thing.isLike;
     this.isCollected = this.thing.isCollected;
   },
@@ -184,19 +218,25 @@ export default {
       this.$store.commit("filterCard/SET_SELECTPROFILE", "Designs");
       this.$router.push(`/design/${userId}`);
     },
-    switchCollect() {
+    addCollection() {
+      console.log("add");
       this.isCollected = !this.isCollected;
-      changeCollect({
-        thingId: this.thing.thingId,
-        isCollected: this.isCollected,
-        userId: this.$store.getters.userId,
-      }).then((res) => {
-        console.log("switchCollect", res);
-        this.$message({
-          message: res.data.message,
-          type: "success",
-        });
-      });
+      this.openCollectedOption = true;
+    },
+    deleteCollection() {
+      console.log("delete");
+      this.isCollected = !this.isCollected;
+      this.openCollectedOption = false;
+    },
+    closeCollectedOption() {
+      this.openCollectedOption = false;
+    },
+    moveCollectedOption(directionObject) {
+      console.log(directionObject);
+    },
+    addFolder(folderName) {
+      this.folders.push({ name: folderName });
+      console.log(folderName);
     },
     enter() {
       this.isCollectIconShow = true;
@@ -231,10 +271,14 @@ export default {
   border-radius: 8px;
   padding: 7px;
 }
-img {
+.resource-show-image {
   width: 285px;
   height: 180px;
   border-radius: 8px;
+  object-fit: contain;
+}
+::v-deep .el-avatar > img {
+  width: 100%;
 }
 .card-box-bottom {
   display: flex;
@@ -283,6 +327,12 @@ img:hover {
   position: absolute;
   top: 222px;
   right: 0px;
+  z-index: 999;
+}
+.collected-option-container {
+  position: absolute;
+  bottom: 152px;
+  right: 21px;
   z-index: 999;
 }
 .thing-name {

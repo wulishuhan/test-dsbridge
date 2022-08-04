@@ -29,7 +29,6 @@ service.interceptors.request.use(
 service.interceptors.response.use((res) => {
   const code = res.data.code;
   const WHITE_LIST_URL = ["/system/user/getUserInfo"];
-  console.log("request", res);
   switch (code) {
     case 0:
       return Promise.resolve(res);

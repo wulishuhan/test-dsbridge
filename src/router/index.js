@@ -21,6 +21,13 @@ const routes = [
         },
         component: () => import("@/views/main/index"),
       },
+      {
+        path: "/upload/:sourceId?",
+        meta: {
+          title: "upload",
+        },
+        component: () => import("@/views/upload/index"),
+      },
     ],
   },
   {

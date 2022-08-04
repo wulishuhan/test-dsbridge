@@ -84,7 +84,7 @@
     </div>
     <el-avatar
       class="ortur-icon-user-info"
-      size="30"
+      :size="30"
       style="font-size: 40px"
     ></el-avatar>
 
@@ -119,12 +119,33 @@
         ddd
       </el-tab-pane>
     </el-tabs>
+    <ResourceCard></ResourceCard>
+    <div>
+      <h1>CollectedOption组件</h1>
+      <p>控制收藏框显示隐藏属性： show</p>
+      <p>传入文件夹数据属性： folders</p>
+      <p>关闭框事件： close</p>
+      <p>点击move按钮事件： moveFolder</p>
+      <p>添加文件夹事件：addFolder</p>
+    </div>
+    <el-button @click="openCollectedOption = !openCollectedOption"
+      >CollectedOption组件点击显示隐藏</el-button
+    >
+    <CollectedOption
+      :show="openCollectedOption"
+      :folders="folders"
+      @close="closeCollectedOption"
+      @moveFolder="moveCollectedOption"
+      @addFolder="addFolder"
+    ></CollectedOption>
   </div>
 </template>
 <script>
 import Login from "@/components/Login";
 import ShowMore from "@/components/ShowMore.vue";
 import Preview from "@/components/Preview.vue";
+import ResourceCard from "@/components/ResourceCard";
+import CollectedOption from "@/components/CollectedOption";
 // more module style...
 // 用来预览组件
 export default {
@@ -133,6 +154,8 @@ export default {
     Login,
     ShowMore,
     Preview,
+    ResourceCard,
+    CollectedOption,
   },
   data() {
     return {
@@ -199,6 +222,21 @@ export default {
           },
         },
       },
+      openCollectedOption: false,
+      folders: [
+        {
+          name: "aa",
+          id: 1,
+        },
+        {
+          name: "bb",
+          id: 2,
+        },
+        {
+          name: "cc",
+          id: 3,
+        },
+      ],
     };
   },
   methods: {
@@ -225,6 +263,17 @@ export default {
       } else {
         this.isLoginForm = false;
       }
+    },
+    closeCollectedOption() {
+      this.openCollectedOption = false;
+    },
+    moveCollectedOption(directionObject) {
+      console.log("拿到选择的文件名", directionObject);
+    },
+    addFolder(folderName) {
+      console.log("拿到新建的文件名", folderName);
+      // 加入组件渲染的文件夹数组之中
+      this.folders.push({ name: folderName });
     },
   },
   mounted() {},
