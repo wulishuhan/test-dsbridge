@@ -44,7 +44,9 @@ export default {
     };
   },
   methods: {
-    handleFolderChange() {},
+    handleFolderChange(e) {
+      console.log(e);
+    },
     onStar() {
       //console.log(e)
       console.log(111);

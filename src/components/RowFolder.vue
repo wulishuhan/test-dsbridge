@@ -7,6 +7,7 @@
           {{ item.name }}
         </div>
         <input
+          ref="folderInputs"
           @blur="handleEdited(item)"
           @change="handleEdited(item)"
           class="editInput"
@@ -16,7 +17,7 @@
         />
       </div>
     </div>
-    <div class="plus" @click="addFolder">+</div>
+    <div class="plus" @click="addFolder" v-show="!isEdit">+</div>
   </div>
 </template>
 
@@ -48,6 +49,7 @@ export default {
   // },
   data() {
     return {
+      isEdit: false,
       folders: [...this.value],
     };
   },
@@ -58,22 +60,31 @@ export default {
       element.addEventListener("wheel", (event) => {
         event.preventDefault();
         element.scrollBy({
-          left: event.deltaY < 0 ? -3 : 3, // >0 是下滑，<0是上滑
+          left: event.deltaY < 0 ? -1 : 1, // >0 是下滑，<0是上滑
         });
       });
     },
     handleEdit(item) {
-      item.isEdit = true;
+      console.log("item: ", item);
+      // return;
+      // item.isEdit = true;
     },
     handleEdited(item) {
       item.isEdit = false;
+      this.isEdit = false;
+
       this.$emit("input", [...this.folders]);
     },
     addFolder() {
+      this.isEdit = true;
       this.folders.push({
-        name: "new",
+        name: "",
         id: this.folders.length,
         isEdit: true,
+      });
+      this.$nextTick(() => {
+        console.log(this.$refs.folderInputs[0].focus());
+        // [this.folders.length - 1].focus();
       });
     },
   },
