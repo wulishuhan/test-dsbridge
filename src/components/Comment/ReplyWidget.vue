@@ -1,8 +1,13 @@
 <template>
   <div>
-    <div class="app-header__search">
+    <div class="reply-widget-wrapper">
       <el-button class="el-btn-avatar"
-        ><img src="http://dummyimage.com/300x200/ef79f2/FFF&text=yqqmj"
+        ><img
+          :src="
+            userInfo.avatar
+              ? userInfo.avatar
+              : 'http://dummyimage.com/300x200/96f279/FFF&text=gcfqdvmp'
+          "
       /></el-button>
       <el-input
         placeholder="Add a comment"
@@ -18,6 +23,8 @@
 
 <script>
 import { getCommentList } from "@/api/user";
+import { createNamespacedHelpers } from "vuex";
+const { mapState } = createNamespacedHelpers("user");
 export default {
   data() {
     return {
@@ -25,6 +32,9 @@ export default {
     };
   },
   mounted() {},
+  computed: {
+    ...mapState(["userInfo"]),
+  },
   methods: {
     handleEnter() {
       this.handlePost();
@@ -45,8 +55,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.app-header__search {
-  width: 80%;
+.reply-widget-wrapper {
   margin: 0px auto;
   position: relative;
   display: flex;

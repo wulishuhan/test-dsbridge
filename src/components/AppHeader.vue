@@ -204,7 +204,7 @@ export default {
     flex-direction: row;
     align-items: center;
     background: #f5f5f5;
-    width: 1440px;
+    width: 1640px;
     height: 100%;
     margin: 0px auto;
     .app-header-left {

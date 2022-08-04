@@ -455,16 +455,16 @@ export default {
       return {
         ...this.resourceForm,
         tutorials: this.tutorialForm,
-        editDatetime: "Editd on " + new Date().toString(),
+        editDatetime: "Editd on " + this.$moment().format("ll"),
       };
     },
   },
   mounted() {
-    this.sourceId = parseInt(this.$route.params.sourceId);
+    this.sourceId = this.$route.params.sourceId;
     if (this.sourceId != undefined) {
       this.headerTitle = "Edit Project";
       //调用详解接口
-      getResource(this.sourceId).then((res) => {
+      getResource(parseInt(this.sourceId)).then((res) => {
         let detail = res.data.data;
         console.log("资源详情", detail);
         this.resourceForm.description = detail.description;

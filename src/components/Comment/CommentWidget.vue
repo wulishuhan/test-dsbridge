@@ -12,14 +12,16 @@
         </div>
       </div>
       <div class="reply-wrapper">
-        <div class="reply-detail">{{ commentItem.comment }}</div>
-        <el-button @click="showReplyList(index)" class="reply-list-fold">
-          <span style="color: #1a1a1a">reply </span>
-          <span style="margin-right: 10px">{{
-            commentItem.replyList.length
-          }}</span>
-          <i class="ortur-icon-arrow-down"></i>
-        </el-button>
+        <div class="comment-detail">{{ commentItem.comment }}</div>
+        <div class="reply-list-wrapper">
+          <el-button @click="showReplyList(index)" class="reply-list-fold">
+            <span>View all replies </span>
+            <span style="margin-right: 6px; color: #999">{{
+              commentItem.replyList.length
+            }}</span>
+            <i class="el-icon-right" style="color: #999"></i>
+          </el-button>
+        </div>
       </div>
     </div>
     <el-dialog
@@ -54,7 +56,7 @@
             </div>
           </div>
           <div class="reply-wrapper">
-            <div class="reply-detail">{{ replyRow.comment }}</div>
+            <div class="comment-detail">{{ replyRow.comment }}</div>
             <div class="reply-ref-detail" v-if="replyRow.replyType == 2">
               <span class="reply-label">回复</span>
               &nbsp;
@@ -112,14 +114,13 @@ export default {
   computed: {},
   methods: {
     handleClose(space) {
-      var that = this;
       if (space == "inner") {
         this.innerVisible = false;
       } else {
         this.outerVisible = false;
       }
-      getCommentList().then(function (res) {
-        that.commentList = res.data.data;
+      getCommentList().then((res) => {
+        this.commentList = res.data.data;
       });
     },
     showReplyOuterDialog(index) {
@@ -189,7 +190,7 @@ export default {
   }
   .reply-wrapper {
     padding: 20px 62px;
-    .reply-detail {
+    .comment-detail {
       margin-bottom: 10px;
       font-size: 16px;
       color: #1a1a1a;
@@ -207,13 +208,19 @@ export default {
         color: #1e78f0;
       }
     }
-    .reply-list-fold {
+    .reply-list-wrapper {
       background: #e8ebf4;
+      padding: 10px;
       border-radius: 8px;
-      width: 104px;
-      height: 40px;
-      .ortur-icon-arrow-down {
-        font-size: 12px;
+      .reply-list-fold {
+        color: #1e78f0;
+        background: none;
+        border: none;
+        width: 104px;
+        height: 40px;
+        .reply-label {
+          color: #1e78f0;
+        }
       }
     }
   }

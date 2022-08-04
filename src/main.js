@@ -3,7 +3,7 @@ import App from "./App.vue";
 import router from "./router";
 import store from "./store";
 import ElementUI from "element-ui";
-
+import moment from "moment";
 import "element-ui/lib/theme-chalk/index.css";
 import "element-ui/lib/theme-chalk/display.css";
 // import mock from "mockjs";
@@ -20,6 +20,8 @@ if (process.env.NODE_ENV === "development") {
   const { mockXHR } = require("../mock");
   mockXHR();
 }
+moment.locale("en");
+Vue.prototype.$moment = moment;
 // Vue.use(mock);
 new Vue({
   router,
