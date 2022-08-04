@@ -9,94 +9,21 @@
           alt="can't load this image"
         />
       </div>
-      <div
-        v-show="isCollectIconShow"
-        @click="switchCollect"
-        class="icon-collect-box"
-      >
-        <i v-show="isCollected" class="ortur-icon-add-collect icon-collect"></i>
+      <div v-show="isCollectIconShow" class="icon-collect-box">
+        <i
+          v-if="isCollected"
+          @click="addCollection"
+          class="ortur-icon-add-collect icon-collect"
+        ></i>
         <span
-          v-show="!isCollected"
+          v-if="!isCollected"
+          @click="deleteCollection"
           class="ortur-icon-cancel-collect-strokes icon-collect"
         >
           <span class="path1"> </span>
           <span class="path2"> </span>
           <span class="path3"> </span>
         </span>
-      </div>
-      <div
-        style="
-          width: 224px;
-          height: 360px;
-          background: #ffffff;
-          box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.07);
-          border-radius: 10px;
-          position: absolute;
-          top: -240px;
-          right: 12px;
-          display: flex;
-          flex-direction: column;
-          justify-content: space-between;
-          z-index: 888;
-          border: solid;
-          flex-wrap: wrap;
-          padding: 8px;
-        "
-      >
-        <span
-          style="
-            height: 36px;
-            width: 208px;
-            font-size: 14px;
-            font-family: Source Han Sans CN;
-            font-weight: 400;
-            color: #999999;
-            text-align: center;
-            line-height: 36px;
-            border-bottom: solid #ccc 1px;
-          "
-          >Collect to</span
-        >
-        <a
-          style="
-            font-size: 14px;
-            font-family: Source Han Sans CN;
-            font-weight: 400;
-            color: #1a1a1a;
-            width: 208px;
-            height: 48px;
-            border-radius: 8px;
-          "
-          >Draft</a
-        >
-        <a
-          class="el-icon-folder"
-          style="
-            font-size: 14px;
-            font-family: Source Han Sans CN;
-            font-weight: 400;
-            width: 208px;
-            height: 48px;
-            color: #1a1a1a;
-          "
-          >t1</a
-        >
-        <a
-          v-if="folder"
-          class="el-icon-plus"
-          style="
-            width: 208px;
-            height: 48px;
-            font-size: 14px;
-            font-family: Source Han Sans CN;
-            font-weight: 400;
-            color: #1a1a1a;
-            color: #1e78f0;
-          "
-          @click="folder = false"
-          >New File</a
-        >
-        <el-input v-if="!folder" @keyup.enter.native="folder = true"></el-input>
       </div>
     </div>
     <div class="card-box-bottom">
@@ -128,15 +55,24 @@
     <div class="share-container">
       <share-social-media v-if="isShare"></share-social-media>
     </div>
+    <div class="collected-option-container">
+      <CollectedOption
+        :show="openCollectedOption"
+        :folders="folders"
+        @close="closeCollectedOption"
+        @move="moveCollectedOption"
+        @addFolder="addFolder"
+      ></CollectedOption>
+    </div>
   </div>
 </template>
 <script>
-import { changeCollect } from "@/api/thing";
 import { addLike, deleteLike } from "@/api/like";
-import ShareSocialMedia from "../ShareCard";
+import ShareSocialMedia from "@/components/ShareCard";
+import CollectedOption from "@/components/CollectedOption";
 export default {
   name: "ResourceCard",
-  components: { ShareSocialMedia },
+  components: { ShareSocialMedia, CollectedOption },
   props: {
     thing: {
       type: Object,
@@ -167,6 +103,21 @@ export default {
       isShare: false,
       isCollectIconShow: false,
       folder: true,
+      openCollectedOption: false,
+      folders: [
+        {
+          name: "aa",
+          id: 1,
+        },
+        {
+          name: "bb",
+          id: 2,
+        },
+        {
+          name: "cc",
+          id: 3,
+        },
+      ],
     };
   },
   mounted() {
@@ -215,19 +166,25 @@ export default {
       this.$store.commit("filterCard/SET_SELECTPROFILE", "Designs");
       this.$router.push(`/design/Designs/${userId}`);
     },
-    switchCollect() {
+    addCollection() {
+      console.log("add");
       this.isCollected = !this.isCollected;
-      changeCollect({
-        thingId: this.thing.thingId,
-        isCollected: this.isCollected,
-        userId: this.$store.getters.userId,
-      }).then((res) => {
-        console.log("switchCollect", res);
-        this.$message({
-          message: res.data.message,
-          type: "success",
-        });
-      });
+      this.openCollectedOption = true;
+    },
+    deleteCollection() {
+      console.log("delete");
+      this.isCollected = !this.isCollected;
+      this.openCollectedOption = false;
+    },
+    closeCollectedOption() {
+      this.openCollectedOption = false;
+    },
+    moveCollectedOption(directionObject) {
+      console.log(directionObject);
+    },
+    addFolder(folderName) {
+      this.folders.push({ name: folderName });
+      console.log(folderName);
     },
     enter() {
       this.isCollectIconShow = true;
@@ -318,6 +275,12 @@ img:hover {
   position: absolute;
   top: 222px;
   right: 0px;
+  z-index: 999;
+}
+.collected-option-container {
+  position: absolute;
+  bottom: 152px;
+  right: 21px;
   z-index: 999;
 }
 .thing-name {
