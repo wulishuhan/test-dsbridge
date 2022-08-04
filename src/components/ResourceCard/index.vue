@@ -176,7 +176,7 @@ export default {
   },
   methods: {
     toUpload(id) {
-      this.$router.push({ name: "uploadIndex", params: id });
+      this.$router.push(`/upload/${id}`);
     },
     toDetail(id) {
       this.$router.push(`/thing/${id}`);
