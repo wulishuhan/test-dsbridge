@@ -36,6 +36,10 @@ export default {
         ];
       },
     },
+    onFolderAdd: {
+      type: Function,
+      default: () => {},
+    },
   },
   // computed: {
   //   folders: {
@@ -47,10 +51,16 @@ export default {
   //     },
   //   },
   // },
+  computed: {
+    folders() {
+      // debugger;
+      return [...this.value];
+    },
+  },
   data() {
     return {
       isEdit: false,
-      folders: [...this.value],
+      // folders: [...this.value],
     };
   },
   mounted() {},
@@ -70,16 +80,17 @@ export default {
       // item.isEdit = true;
     },
     handleEdited(item) {
-      item.isEdit = false;
-      this.isEdit = false;
-
-      this.$emit("input", [...this.folders]);
+      this.onFolderAdd().then(() => {
+        item.isEdit = false;
+        this.isEdit = false;
+      });
+      // this.$emit("input", [...this.folders]);
     },
     addFolder() {
       this.isEdit = true;
       this.folders.push({
         name: "",
-        id: this.folders.length,
+        id: this.folders.length + 1,
         isEdit: true,
       });
       this.$nextTick(() => {

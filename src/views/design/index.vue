@@ -1,5 +1,13 @@
 <template>
   <div class="container-profile">
+    <CollectedOption
+      class="collectMenu"
+      :show="openCollectedOption"
+      :folders="folders"
+      @close="closeCollectedOption"
+      @moveFolder="moveCollectedOption"
+      @addFolder="addFolder"
+    ></CollectedOption>
     <el-dialog :visible.sync="dialogFollowersVisible">
       <el-tabs
         v-model="activeTab"
@@ -127,14 +135,17 @@
           <el-tab-pane label="Resource" name="first">
             <el-row :gutter="20">
               <div
+                class="resourceWrapper"
                 v-for="(item, index) in resources"
                 :key="item.thingId"
                 @contextmenu="showMenu(index, item)"
               >
                 <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
                   <resource-card
+                    @showMoveMenu="Handler_MoveTo"
                     :thing="item"
                     :showEdit="true"
+                    :showMoreMenuBtn="true"
                     :showAvatar="false"
                     :showStar="false"
                     :showCollection="false"
@@ -145,9 +156,9 @@
                   class="contextMenu"
                   :contextMenuData="contextMenuData"
                   :transferIndex="transferIndex"
-                  @Handler1="Handler_Del(index)"
-                  @Handler2="Handler_MoveTo(index)"
-                  @Handler3="Handler_Down(index)"
+                  @Handler1="Handler_Del(item)"
+                  @Handler2="Handler_MoveTo(item)"
+                  @Handler3="Handler_Down(item)"
                 ></vue-context-menu>
               </div>
             </el-row>
@@ -201,8 +212,9 @@ import FollowButton from "@/components/FollowButton.vue";
 import SrollTopButton from "@/components/SrollTopButton/index.vue";
 import ResourceCard from "@/components/ResourceCard/index.vue";
 import { getResourceList, getLikesList, updateDiy } from "@/api/design";
-
 import IndexFollowPanel from "./IndexFollowPanel.vue";
+import CollectedOption from "@/components/CollectedOption";
+
 // import { getUserInfo } from "@/api/user";
 import { getToken } from "@/utils/auth";
 import { createNamespacedHelpers } from "vuex";
@@ -214,9 +226,25 @@ export default {
     FollowButton,
     SrollTopButton,
     ResourceCard,
+    CollectedOption,
   },
   data() {
     return {
+      openCollectedOption: false,
+      folders: [
+        {
+          name: "aa",
+          id: 1,
+        },
+        {
+          name: "bb",
+          id: 2,
+        },
+        {
+          name: "cc",
+          id: 3,
+        },
+      ],
       headers: {
         Authorization: getToken(),
       },
@@ -317,6 +345,17 @@ export default {
     ...mapState(["userInfo"]),
   },
   methods: {
+    closeCollectedOption() {
+      this.openCollectedOption = false;
+    },
+    moveCollectedOption(directionObject) {
+      console.log("拿到选择的文件名", directionObject);
+    },
+    addFolder(folderName) {
+      console.log("拿到新建的文件名", folderName);
+      // 加入组件渲染的文件夹数组之中
+      this.folders.push({ name: folderName });
+    },
     handleFollowTapClick() {},
     getResourceList() {
       let userId = "";
@@ -360,6 +399,7 @@ export default {
     },
     Handler_MoveTo(index) {
       console.log("index:", index, "选项1-1-2绑定事件执行");
+      this.openCollectedOption = true;
     },
     Handler_Down(index) {
       console.log("index:", index, "选项1-2-1绑定事件执行");
@@ -457,6 +497,7 @@ export default {
   width: 1440px;
   margin: 0 auto;
   padding-bottom: 100px;
+
   ::v-deep .el-dialog {
     width: 488px;
     height: 472px;
@@ -484,10 +525,12 @@ export default {
         .context-menu-list {
           background-color: white;
           // width: 144px;
-          height: 48px;
+          margin: 0;
           padding-top: 8px;
 
           .no-child-btn {
+            height: 48px;
+            padding: 10px;
             margin: auto;
             font-size: 16px;
             font-family: Source Han Sans CN;
@@ -502,7 +545,7 @@ export default {
           background: #8ab5ef !important;
           font-size: 16px;
           width: 144px;
-          height: 48px;
+          // height: 48px;
           color: #ffffff;
           border-radius: 8px;
         }

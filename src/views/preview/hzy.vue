@@ -1,6 +1,6 @@
 <template>
   <div>
-    <RowFolder :value="folder" @input="handleFolderChange"></RowFolder>
+    <RowFolder :value="folder" :onFolderAdd="onFolderAdd"></RowFolder>
     <ShareSocialMedia></ShareSocialMedia>
     <CollectButton @click="onColect" :isCollect="true"></CollectButton>
     <CollectButton></CollectButton>
@@ -44,8 +44,11 @@ export default {
     };
   },
   methods: {
-    handleFolderChange(e) {
-      console.log(e);
+    onFolderAdd() {
+      return new Promise((resolve) => {
+        return resolve(1);
+      });
+      // this.folder = [...e];
     },
     onStar() {
       //console.log(e)
