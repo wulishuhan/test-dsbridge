@@ -9,10 +9,12 @@
         :label="item"
         :key="item.id"
       >
-        <i class="el-icon-folder"></i>
-        <span class="folder-button-text">
-          {{ item.name }}
-        </span>
+        <el-tooltip effect="dark" :content="item.name" placement="left-start">
+          <span class="folder-button-text">
+            <i class="el-icon-folder"></i>
+            {{ item.name }}
+          </span>
+        </el-tooltip>
       </el-radio-button>
     </el-radio-group>
     <a
@@ -139,10 +141,10 @@ export default {
       border-radius: 8px;
       text-align: start;
       .folder-button-text {
-        margin-left: 8px;
-      }
-      .el-icon-folder {
-        font-size: 16px;
+        margin-left: 0px;
+        .el-icon-folder {
+          font-size: 16px;
+        }
       }
     }
     ::v-deep .el-radio-button__inner {

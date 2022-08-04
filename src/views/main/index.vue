@@ -61,7 +61,7 @@ export default {
     return {
       total: 0,
       pagination: {
-        pageSize: 4,
+        pageSize: 10,
         pageNum: 1,
       },
       options: [
@@ -117,7 +117,7 @@ export default {
             this.pagination.pageNum++;
             if (
               this.pagination.pageNum <=
-              this.resourcesTotal / this.pagination.pageSize
+              this.resourcesTotal / this.pagination.pageSize + 1
             ) {
               this.getResourceList();
             }

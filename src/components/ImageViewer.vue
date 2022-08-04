@@ -368,5 +368,9 @@ export default {
   width: 1084px;
   height: 660px;
   margin: 0 auto;
+  margin-top: 96px;
+}
+.el-image-viewer__img {
+  object-fit: contain;
 }
 </style>

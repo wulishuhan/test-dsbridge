@@ -89,7 +89,6 @@
     ></el-avatar>
 
     <div style="margin-top: 50px">
-      <preview></preview>
     </div>
     <div v-swiper:mySwiper="swiperOptions">
       <div class="swiper-wrapper">
@@ -143,7 +142,7 @@
 <script>
 import Login from "@/components/Login";
 import ShowMore from "@/components/ShowMore.vue";
-import Preview from "@/components/Preview.vue";
+// import Preview from "@/components/Preview.vue";
 import ResourceCard from "@/components/ResourceCard";
 import CollectedOption from "@/components/CollectedOption";
 // more module style...
@@ -153,7 +152,7 @@ export default {
   components: {
     Login,
     ShowMore,
-    Preview,
+    // Preview
     ResourceCard,
     CollectedOption,
   },
