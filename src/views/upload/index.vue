@@ -296,7 +296,7 @@
                 ></el-input>
               </el-form-item>
               <el-button class="drag-btn"
-                ><i class="el-icon-s-grid"></i
+                ><i class="el-icon-s-operation"></i
               ></el-button>
 
               <el-button class="add-btn" @click="addTutorialItem(tutorialKey)">
