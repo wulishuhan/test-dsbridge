@@ -41,7 +41,7 @@
         <el-avatar
           v-if="showAvatar"
           :size="35"
-          :src="thing.creator.avatar"
+          :src="thing.creator && thing.creator.avatar"
           :fit="'cover'"
         ></el-avatar>
         <div class="card-box-bottom-left-name">
@@ -49,9 +49,9 @@
           <span
             v-if="showAvatar"
             class="author"
-            @click="viewAuthorInfo(thing.creator.id)"
+            @click="viewAuthorInfo(thing.creator && thing.creator.id)"
           >
-            {{ thing.creator.name }}
+            {{ thing.creator && thing.creator.name }}
           </span>
         </div>
       </div>
@@ -349,7 +349,7 @@ export default {
     background: #ffffff;
     box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.07);
     border-radius: 10px;
-    bottom: 20px;
+    bottom: 40px;
     right: 20px;
     text-align: left;
     .moreMenuItem {
