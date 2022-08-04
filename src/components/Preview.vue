@@ -16,9 +16,9 @@
                       <span class="username">
                         {{ userInfo.nick_name }}
                       </span>
-                      <span class="datetime">{{
-                        previewData.editDatetime
-                      }}</span>
+                      <span class="datetime">
+                        {{ previewData.editDatetime }}
+                      </span>
                     </div>
                   </div>
                 </div>
