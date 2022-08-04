@@ -68,9 +68,7 @@ export default {
       ],
     },
   },
-  mounted() {
-    console.log("mounted", this.folders);
-  },
+  mounted() {},
   data() {
     return {
       isNewFileLink: true,

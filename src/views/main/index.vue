@@ -89,15 +89,18 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["isLogin"]),
+    ...mapGetters(["isLogin", "userInfo"]),
   },
   mounted() {
-    getLikelist()
+    getLikelist({
+      userId: this.userInfo.user_id,
+    })
       .then((res) => {
         for (let i = 0; i < res.data.rows.length; i++) {
           const element = res.data.rows[i];
           this.likeList.push(element.id);
         }
+        console.log("========", res, this.likeList);
       })
       .then(() => {
         this.getResourceList();
