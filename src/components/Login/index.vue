@@ -13,7 +13,11 @@
           <el-form-item>
             <div class="continue-with">Continue with</div>
             <div class="icon-box">
-              <i class="ortur-icon-facebook icon"></i>
+              <a
+                href="https://sso.leadiffer.com/oauth/thirdParty?from=facebook"
+              >
+                <i class="ortur-icon-facebook icon"></i
+              ></a>
               <i class="ortur-icon-github icon"></i>
               <i class="ortur-icon-tiktok icon"></i>
               <i class="ortur-icon-google icon"></i>
@@ -76,7 +80,11 @@
           <el-form-item>
             <div class="continue-with">Continue with</div>
             <div class="icon-box">
-              <i class="ortur-icon-facebook icon"></i>
+              <a
+                href="https://sso.leadiffer.com/oauth/thirdParty?from=facebook"
+              >
+                <i class="ortur-icon-facebook icon"></i
+              ></a>
               <i class="ortur-icon-github icon"></i>
               <i class="ortur-icon-tiktok icon"></i>
               <i class="ortur-icon-google icon"></i>

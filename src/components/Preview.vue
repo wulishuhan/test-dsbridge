@@ -96,6 +96,7 @@
             <el-tabs
               class="description-tutorial-makes"
               type="border-card"
+              :stretch="true"
               v-model="activeName"
             >
               <el-tab-pane label="Description" name="description">
@@ -519,5 +520,31 @@ export default {
 }
 ::v-deep .el-dialog__header {
   padding: 0px;
+}
+::v-deep .el-tabs--border-card > .el-tabs__content {
+  padding-top: 20px;
+  padding-left: 0px;
+  padding-right: 0px;
+}
+::v-deep .el-tabs--border-card > .el-tabs__header .el-tabs__item.is-active {
+  color: #fff;
+  background-color: #f5f5f5;
+  border-right-color: #f5f5f5;
+  border-left-color: #f5f5f5;
+  width: 120px;
+  height: 40px;
+  background: #1e78f0;
+  border-radius: 8px;
+}
+::v-deep .el-tabs--border-card > .el-tabs__header {
+  border: none;
+  background-color: #f5f5f5;
+}
+::v-deep .el-tabs--border-card {
+  background: #f5f5f5;
+  border: none;
+}
+::v-deep .el-tabs__header .is-top {
+  width: 240px;
 }
 </style>

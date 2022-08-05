@@ -1,7 +1,7 @@
 <template>
   <div id="top" class="main">
     <header class="groups-header">
-      <el-carousel>
+      <el-carousel indicator-position="outside">
         <el-carousel-item v-for="item in bannerImages" :key="item.title">
           <a :href="item.url">
             <img :src="item.image" alt="" />
@@ -34,7 +34,18 @@
       <el-row class="row">
         <div v-for="item in resources" :key="item.id">
           <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="6">
-            <resource-card :thing="item"></resource-card>
+            <resource-card
+              :thing="item"
+              :isLike="likeList.includes(item.id)"
+              :isCollected="collectedList.includes(item.id)"
+              :folders="folders"
+              @addLike="addLike"
+              @cancelLike="cancelLike"
+              @addCollectionFolder="addCollectionFolder"
+              @moveResourceToFolder="moveResourceToFolder"
+              @cancelCollected="cancelCollected"
+              @loadCollection="getCollectionList"
+            ></resource-card>
           </el-col>
         </div>
       </el-row>
@@ -53,6 +64,14 @@ import { getResourceList } from "@/api/resource";
 import { getBanner } from "@/api/banner";
 import { getLikelist } from "@/api/like";
 import { mapGetters } from "vuex";
+import { addLike, deleteLike } from "@/api/like";
+import {
+  getCollectionList,
+  addCollection,
+  addResourceToCollection,
+  getCollectionResourceList,
+  deleteCollectionResource,
+} from "@/api/collection";
 export default {
   // eslint-disable-next-line
   name: "Main",
@@ -61,7 +80,7 @@ export default {
     return {
       total: 0,
       pagination: {
-        pageSize: 4,
+        pageSize: 10,
         pageNum: 1,
       },
       options: [
@@ -86,6 +105,8 @@ export default {
       noMore: false,
       bannerImages: [],
       likeList: [],
+      folders: [],
+      collectedList: [],
     };
   },
   computed: {
@@ -100,7 +121,17 @@ export default {
           const element = res.data.rows[i];
           this.likeList.push(element.id);
         }
-        console.log("========", res, this.likeList);
+      })
+      .then(() => {
+        getCollectionResourceList({
+          userId: this.userInfo.user_id,
+        }).then((res) => {
+          console.log("allCollectionList", res);
+          for (let i = 0; i < res.data.rows.length; i++) {
+            const element = res.data.rows[i];
+            this.collectedList.push(element.id);
+          }
+        });
       })
       .then(() => {
         this.getResourceList();
@@ -117,7 +148,7 @@ export default {
             this.pagination.pageNum++;
             if (
               this.pagination.pageNum <=
-              this.resourcesTotal / this.pagination.pageSize
+              this.resourcesTotal / this.pagination.pageSize + 1
             ) {
               this.getResourceList();
             }
@@ -137,13 +168,6 @@ export default {
       getResourceList(this.pagination)
         .then((res) => {
           let resource = res.data.rows;
-          for (let i = 0; i < resource.length; i++) {
-            if (this.likeList.includes(resource[i].id)) {
-              resource[i].isLike = true;
-            } else {
-              resource[i].isLike = false;
-            }
-          }
           this.resources.push(...resource);
           this.resourcesTotal = res.data.total;
           this.loading = false;
@@ -152,6 +176,88 @@ export default {
           this.loading = false;
           this.noMore = true;
         });
+    },
+    getCollectionList() {
+      getCollectionList().then((res) => {
+        this.folders = res.data.data;
+      });
+    },
+    addResourceToCollection(data) {
+      addResourceToCollection(data).then((res) => {
+        console.log(res);
+        this.$message({
+          message: "move successfully",
+          type: "success",
+        });
+        this.collectedList.push(data.collectionId);
+      });
+    },
+    cancelLike(id) {
+      deleteLike({
+        resId: id,
+      }).then(() => {
+        this.$message({
+          message: "delete likes successfully",
+          type: "success",
+        });
+        for (let i = 0; i < this.likeList.length; i++) {
+          if (this.likeList[i] === id) {
+            this.likeList.splice(i, 1);
+          }
+        }
+      });
+    },
+    addLike(id) {
+      addLike({
+        resId: id,
+      })
+        .then(() => {
+          this.$message({
+            message: "add likes successfully",
+            type: "success",
+          });
+          this.likeList.push(id);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    addCollectionFolder(folderName) {
+      addCollection({ name: folderName })
+        .then(() => {
+          this.$message({
+            message: "add folder successfully",
+            type: "success",
+          });
+        })
+        .then(() => {
+          this.getCollectionList();
+        });
+    },
+    moveResourceToFolder(folderObject) {
+      this.addResourceToCollection({
+        resourceId: folderObject.resourceId,
+        collectionId: folderObject.id,
+      });
+    },
+    cancelCollected(id) {
+      deleteCollectionResource({
+        userId: this.userInfo.user_id,
+        collectionId: id,
+        resourceId: id,
+      }).then((res) => {
+        console.log("cancelCollected", res);
+        this.$message({
+          message: "cancel collected successfully",
+          type: "success",
+        });
+      });
+      console.log("等待删除接口！");
+      for (let i = 0; i < this.collectedList.length; i++) {
+        if (this.collectedList[i] === id) {
+          this.collectedList.splice(i, 1);
+        }
+      }
     },
   },
 };

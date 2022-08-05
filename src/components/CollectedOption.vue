@@ -9,10 +9,13 @@
         :label="item"
         :key="item.id"
       >
-        <i class="el-icon-folder"></i>
-        <span class="folder-button-text">
-          {{ item.name }}
-        </span>
+        <el-tooltip effect="light" placement="left-start">
+          <div style="max-width: 100px" slot="content">{{ item.name }}</div>
+          <span class="folder-button-text">
+            <i class="el-icon-folder"></i>
+            {{ item.name }}
+          </span>
+        </el-tooltip>
       </el-radio-button>
     </el-radio-group>
     <a
@@ -90,7 +93,6 @@ export default {
     },
     selectFolderToCollected() {
       this.$emit("moveFolder", this.select);
-      this.$emit("close");
     },
   },
 };
@@ -146,10 +148,10 @@ export default {
       border-radius: 8px;
       text-align: start;
       .folder-button-text {
-        margin-left: 8px;
-      }
-      .el-icon-folder {
-        font-size: 16px;
+        margin-left: 0px;
+        .el-icon-folder {
+          font-size: 16px;
+        }
       }
     }
     ::v-deep .el-radio-button__inner {

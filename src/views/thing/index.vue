@@ -7,11 +7,18 @@
             <div class="show-header">
               <div class="show-header-left">
                 <div class="show-header-left-thing-name">
-                  {{ user.thingName }}
+                  {{ detail.title }}
                 </div>
-                <div class="flex align-center">
-                  <el-avatar :size="40" :src="user.avatar"></el-avatar>
-                  <span class="user-name">{{ user.name }}</span>
+                <div class="flex">
+                  <el-avatar
+                    :size="40"
+                    :src="detail.creator.avatar"
+                    :fit="'cover'"
+                  ></el-avatar>
+                  <div class="flex flex-column user-name-update-time">
+                    <span class="user-name">{{ detail.creator.name }}</span>
+                    <span class="update-time"> {{ detail.update_time }}</span>
+                  </div>
                 </div>
               </div>
               <div class="flex justify-between" style="width: 424px">
@@ -60,11 +67,11 @@
                       <el-carousel-item
                         v-for="(item, index) in imageList"
                         :name="'' + index"
-                        :key="item.id"
+                        :key="item"
                         indicator-position="outside"
                         autoplay="true"
                       >
-                        <img :src="item.url" />
+                        <img :src="item" />
                       </el-carousel-item>
                     </el-carousel>
                   </div>
@@ -74,14 +81,14 @@
                     <div
                       class="swiper-slide"
                       v-for="(item, index) in imageList"
-                      :key="item.id"
+                      :key="item"
                     >
                       <img
                         @click="changeImg(index)"
                         :class="
                           index === imgActiveIndex ? 'img-activeBorder' : ''
                         "
-                        :src="item.url"
+                        :src="item"
                         alt=""
                       />
                     </div>
@@ -116,17 +123,12 @@
                 :showHeight="showHeight"
                 v-if="activeName == 'description'"
               >
-                xxxxxxxxxxxxxxx xxxxxxxx xxxxxxxxx xxxxxx xxxxxxxxx xxxxxxx
-                xxxxxxxxxxxxxx xxxxxxxxxxxxxx xxxxxxxxxxxx xxxxxxxxxx
-                xxxxxxxxxxx xxxxxxxxx xxxxxxxxxxxxxx xxxxxxxxxxx xxxxxxxxxxxxxxx
-                xxxxxxxx xxxxxxxxx xxxxxx xxxxxxxxx xxxxxxx xxxxxxxxxxxxxx
-                xxxxxxxxxxxxxx xxxxxxxxxxxx xxxxxxxxxx xxxxxxxxxxx xxxxxxxxx
-                xxxxxxxxxxxxxx xxxxxxxxxxx
+                {{ detail.description }}
               </show-more>
             </el-tab-pane>
             <el-tab-pane label="Tutorial" name="steps">
               <show-more :showHeight="showHeight" v-if="activeName == 'steps'">
-                <tutorial></tutorial>
+                <tutorial :step="detail.tutorials"></tutorial>
               </show-more>
             </el-tab-pane>
             <el-tab-pane label="Makes" name="third">
@@ -256,6 +258,9 @@
 // import ElImageViewer from "element-ui/packages/image/src/image-viewer";
 import ElImageViewer from "@/components/ImageViewer";
 import { getUserInfoByThingId } from "@/api/thing";
+import { getResource } from "@/api/resource";
+import { getLikelist } from "@/api/like";
+import { mapGetters } from "vuex";
 import DownLoadButton from "@/components/DownLoadButton.vue";
 import StarButton from "@/components/StarButton.vue";
 import CollectButton from "@/components/CollectButton.vue";
@@ -300,9 +305,9 @@ export default {
       shareLink: {
         // text文本后边可以传要分享的url，注意后期修改
         facebook:
-          "https://www.facebook.com/sharer/sharer.php?u=test.leadiffer.com",
-        twitter: "https://twitter.com/share?url=test.leadiffer.com",
-        whatsapp: "https://web.whatsapp.com/send?text=test.leadiffer.com",
+          `https://www.facebook.com/sharer/sharer.php?u=localhost:8080${this.$route.path}`,
+        twitter: `https://twitter.com/share?url=localhost:8080${this.$route.path}`,
+        whatsapp: `https://web.whatsapp.com/send?text=localhost:8080${this.$route.path}`,
       },
       swiperOptions: {
         loop: true,
@@ -320,12 +325,33 @@ export default {
         },
       },
       mouseEnterCarousel: false,
+      likeList: [],
+      detail: {
+        collect_count: "",
+        creator: {
+          avatar: "",
+          name: "",
+        },
+        description: "",
+        files: "",
+        id: "",
+        images: "",
+        license: "",
+        like_count: "",
+        tags: "",
+        title: "",
+        tutorials: "",
+        update_time: "",
+      },
     };
+  },
+  computed: {
+    ...mapGetters(["isLogin", "userInfo"]),
   },
   methods: {
     openImageView() {
       this.urlList = this.imageList.map((item) => {
-        return item.url;
+        return item;
       });
       this.showViewer = true;
     },
@@ -364,24 +390,28 @@ export default {
     },
     enterCarousel() {
       this.mouseEnterCarousel = true;
-      console.log("enter carousel", this.mouseEnterCarousel);
     },
     leaveCarousel() {
       this.mouseEnterCarousel = false;
-      console.log("leave carousel", this.mouseEnterCarousel);
     },
   },
   created() {
     console.log("token", this.token, this.userId);
-    getUserInfoByThingId({
-      thingId: this.$route.params.thingId,
-      userId: this.$store.getters.userId,
-    }).then((res) => {
-      this.user = res.data.data;
-      this.isLike = this.user.isLike;
-      this.isCollected = this.user.isCollected;
-      this.imageList = this.user.image;
-    });
+    getLikelist({ userId: this.userInfo.user_id })
+      .then((res) => {
+        for (let i = 0; i < res.data.rows.length; i++) {
+          const element = res.data.rows[i];
+          this.likeList.push(element.id);
+        }
+        console.log("like list======", this.likeList);
+      })
+      .then((res) => {
+        getResource(this.$route.params.thingId).then((res) => {
+          this.detail = res.data.data;
+          this.imageList = res.data.data.images;
+          this.isLike = this.likeList.includes(res.data.data.id);
+        });
+      });
   },
 };
 </script>
@@ -399,6 +429,7 @@ export default {
         height: 112px;
         width: 100%;
         cursor: pointer;
+        object-fit: fill;
       }
     }
   }
@@ -463,6 +494,18 @@ a {
   display: flex;
 }
 
+.user-name-update-time {
+  margin-left: 7px;
+}
+.update-time {
+  font-size: 12px;
+  color: #999999;
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
 .justify-between {
   justify-content: space-between;
 }
@@ -477,8 +520,7 @@ a {
 
 .user-name {
   font-size: 16px;
-  color: #999999;
-  margin-left: 7px;
+  color: #1a1a1a;
 }
 
 .bottom-content {
@@ -637,19 +679,6 @@ a {
   margin-top: 15px;
 }
 
-.img-ul {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 496px;
-  padding: 0;
-  overflow-y: auto;
-  overflow-x: hidden;
-  list-style: none;
-  margin: 0;
-}
-
 .img-activeBorder {
   border: 1px solid #248bfb;
 }
@@ -727,7 +756,7 @@ a {
   img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: fill;
   }
 }
 
@@ -782,6 +811,7 @@ a {
 }
 ::v-deep .el-tabs--border-card > .el-tabs__header {
   border: none;
+  background-color: #f5f5f5;
 }
 ::v-deep .el-tabs--border-card {
   background: #f5f5f5;
