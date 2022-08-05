@@ -145,7 +145,7 @@
                     @showMoveMenu="Handler_MoveTo"
                     :thing="item"
                     :showEdit="true"
-                    :showMoreMenuBtn="true"
+                    :showMoreMenuBtn="isYourAccount && true"
                     :showAvatar="false"
                     :showStar="false"
                     :showCollection="false"
@@ -180,6 +180,12 @@
           </el-tab-pane>
           <el-tab-pane label="Collections" name="third">
             <el-row :gutter="20">
+              <RowFolder
+                style="width: 98%; margin-bottom: 20px"
+                :value="folders"
+                :onFolderAdd="onFolderAdd"
+                @clickFolder="handleClickFolder"
+              ></RowFolder>
               <div v-for="item in collections" :key="item.thingId">
                 <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
                   <resource-card
@@ -211,9 +217,10 @@
 import FollowButton from "@/components/FollowButton.vue";
 import SrollTopButton from "@/components/SrollTopButton/index.vue";
 import ResourceCard from "@/components/ResourceCard/index.vue";
-import { getResourceList, getLikesList, updateDiy } from "@/api/design";
 import IndexFollowPanel from "./IndexFollowPanel.vue";
 import CollectedOption from "@/components/CollectedOption";
+import RowFolder from "@/components/RowFolder.vue";
+import { getResourceList, getLikesList, updateDiy } from "@/api/design";
 
 // import { getUserInfo } from "@/api/user";
 import { getToken } from "@/utils/auth";
@@ -227,6 +234,7 @@ export default {
     SrollTopButton,
     ResourceCard,
     CollectedOption,
+    RowFolder,
   },
   data() {
     return {
@@ -235,14 +243,17 @@ export default {
         {
           name: "aa",
           id: 1,
+          showMoreMenu: false,
         },
         {
           name: "bb",
           id: 2,
+          showMoreMenu: false,
         },
         {
           name: "cc",
           id: 3,
+          showMoreMenu: false,
         },
       ],
       headers: {
@@ -251,6 +262,7 @@ export default {
       histories: [],
       collections: [],
       Likes: [],
+      myLikes: [],
       transferIndex: null,
       contextMenuData: {
         menuName: "demo",
@@ -345,6 +357,15 @@ export default {
     ...mapState(["userInfo"]),
   },
   methods: {
+    handleClickFolder(item) {
+      console.log("item: ", item);
+    },
+    onFolderAdd() {
+      return new Promise((resolve) => {
+        return resolve(1);
+      });
+      // this.folder = [...e];
+    },
     closeCollectedOption() {
       this.openCollectedOption = false;
     },
@@ -368,8 +389,35 @@ export default {
       });
     },
     getLikesList() {
-      getLikesList().then((res) => {
+      let userId = "";
+      if (this.isYourAccount) {
+        userId = this.userInfo.user_id;
+      } else {
+        (userId = this.user.userId), this.getMyLikesList();
+      }
+
+      getLikesList({ userId }).then((res) => {
+        res.data.rows.forEach((item) => {
+          if (this.isYourAccount) {
+            item.isLike = true;
+          } else {
+            let myLikesArr = [];
+            for (const like of this.myLikes) {
+              myLikesArr.push(like.id);
+            }
+            if (myLikesArr.includes(item.id)) {
+              item.isLike = true;
+            } else {
+              item.isLike = false;
+            }
+          }
+        });
         this.Likes = res.data.rows;
+      });
+    },
+    getMyLikesList() {
+      getLikesList({ userId: this.userInfo.user_id }).then((res) => {
+        this.myLikes = res.data.rows;
       });
     },
     getCollectionsList() {

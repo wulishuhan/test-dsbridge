@@ -1,6 +1,10 @@
 <template>
   <div>
-    <RowFolder :value="folder" :onFolderAdd="onFolderAdd"></RowFolder>
+    <RowFolder
+      :value="folder"
+      :onFolderAdd="onFolderAdd"
+      @clickFolder="handleClickFolder"
+    ></RowFolder>
     <ShareSocialMedia></ShareSocialMedia>
     <CollectButton @click="onColect" :isCollect="true"></CollectButton>
     <CollectButton></CollectButton>
@@ -44,6 +48,9 @@ export default {
     };
   },
   methods: {
+    handleClickFolder(item) {
+      console.log("item: ", item);
+    },
     onFolderAdd() {
       return new Promise((resolve) => {
         return resolve(1);
