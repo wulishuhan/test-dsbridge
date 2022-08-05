@@ -7,7 +7,6 @@
             <div class="show-header">
               <div class="show-header-left">
                 <div class="show-header-left-thing-name">
-                  <!-- {{ user.thingName }} -->
                   {{ detail.title }}
                 </div>
                 <div class="flex">
@@ -260,6 +259,8 @@
 import ElImageViewer from "@/components/ImageViewer";
 import { getUserInfoByThingId } from "@/api/thing";
 import { getResource } from "@/api/resource";
+import { getLikelist } from "@/api/like";
+import { mapGetters } from "vuex";
 import DownLoadButton from "@/components/DownLoadButton.vue";
 import StarButton from "@/components/StarButton.vue";
 import CollectButton from "@/components/CollectButton.vue";
@@ -304,9 +305,9 @@ export default {
       shareLink: {
         // text文本后边可以传要分享的url，注意后期修改
         facebook:
-          "https://www.facebook.com/sharer/sharer.php?u=test.leadiffer.com",
-        twitter: "https://twitter.com/share?url=test.leadiffer.com",
-        whatsapp: "https://web.whatsapp.com/send?text=test.leadiffer.com",
+          `https://www.facebook.com/sharer/sharer.php?u=localhost:8080${this.$route.path}`,
+        twitter: `https://twitter.com/share?url=localhost:8080${this.$route.path}`,
+        whatsapp: `https://web.whatsapp.com/send?text=localhost:8080${this.$route.path}`,
       },
       swiperOptions: {
         loop: true,
@@ -324,13 +325,12 @@ export default {
         },
       },
       mouseEnterCarousel: false,
+      likeList: [],
       detail: {
         collect_count: "",
         creator: {
-          avatar:
-            "https://orturbucket.s3.amazonaws.com/pic/5f93f983524def3dca464469d2cf9f3e",
-          id: 110,
-          name: "ccc@ccc.cccq",
+          avatar: "",
+          name: "",
         },
         description: "",
         files: "",
@@ -344,6 +344,9 @@ export default {
         update_time: "",
       },
     };
+  },
+  computed: {
+    ...mapGetters(["isLogin", "userInfo"]),
   },
   methods: {
     openImageView() {
@@ -394,21 +397,21 @@ export default {
   },
   created() {
     console.log("token", this.token, this.userId);
-    // getUserInfoByThingId({
-    //   thingId: this.$route.params.thingId,
-    //   userId: this.$store.getters.userId,
-    // }).then((res) => {
-    //   this.user = res.data.data;
-    //   this.isLike = this.user.isLike;
-    //   this.isCollected = this.user.isCollected;
-    //   this.imageList = this.user.image;
-    // });
-    getResource(this.$route.params.thingId).then((res) => {
-      console.log("==========", res);
-      this.detail = res.data.data;
-      this.imageList = res.data.data.images;
-      console.log("---------", this.detail, this.imageList);
-    });
+    getLikelist({ userId: this.userInfo.user_id })
+      .then((res) => {
+        for (let i = 0; i < res.data.rows.length; i++) {
+          const element = res.data.rows[i];
+          this.likeList.push(element.id);
+        }
+        console.log("like list======", this.likeList);
+      })
+      .then((res) => {
+        getResource(this.$route.params.thingId).then((res) => {
+          this.detail = res.data.data;
+          this.imageList = res.data.data.images;
+          this.isLike = this.likeList.includes(res.data.data.id);
+        });
+      });
   },
 };
 </script>
@@ -426,7 +429,7 @@ export default {
         height: 112px;
         width: 100%;
         cursor: pointer;
-        object-fit: contain;
+        object-fit: fill;
       }
     }
   }
@@ -753,7 +756,7 @@ a {
   img {
     width: 100%;
     height: 100%;
-    object-fit: contain;
+    object-fit: fill;
   }
 }
 

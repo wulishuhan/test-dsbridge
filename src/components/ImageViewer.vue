@@ -371,6 +371,6 @@ export default {
   margin-top: 96px;
 }
 .el-image-viewer__img {
-  object-fit: contain;
+  object-fit: fill;
 }
 </style>

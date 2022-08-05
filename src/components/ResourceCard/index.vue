@@ -14,12 +14,12 @@
         class="icon-collect-box"
       >
         <i
-          v-if="isCollected"
+          v-if="!isCollected"
           @click="addCollection"
           class="ortur-icon-add-collect icon-collect"
         ></i>
         <span
-          v-if="!isCollected"
+          v-if="isCollected"
           @click="deleteCollection"
           class="ortur-icon-cancel-collect-strokes icon-collect"
         >
@@ -79,20 +79,31 @@
         :show="openCollectedOption"
         :folders="folders"
         @close="closeCollectedOption"
-        @move="moveCollectedOption"
+        @moveFolder="moveCollectedOption"
         @addFolder="addFolder"
       ></CollectedOption>
     </div>
   </div>
 </template>
 <script>
-import { addLike, deleteLike } from "@/api/like";
 import ShareSocialMedia from "@/components/ShareCard";
 import CollectedOption from "@/components/CollectedOption";
 export default {
   name: "ResourceCard",
   components: { ShareSocialMedia, CollectedOption },
   props: {
+    isCollected: {
+      type: Boolean,
+      default: () => {
+        return false;
+      },
+    },
+    isLike: {
+      type: Boolean,
+      default: () => {
+        return false;
+      },
+    },
     showAvatar: {
       type: Boolean,
       default: () => {
@@ -143,36 +154,37 @@ export default {
         };
       },
     },
+    folders: {
+      type: Array,
+      default: () => {
+        return [
+          {
+            name: "aa",
+            id: 1,
+          },
+          {
+            name: "bb",
+            id: 2,
+          },
+          {
+            name: "cc",
+            id: 3,
+          },
+        ];
+      },
+    },
   },
   data() {
     return {
       likes: 0,
-      isLike: false,
-      isCollected: false,
       isShare: false,
       isCollectIconShow: false,
       folder: true,
       openCollectedOption: false,
-      folders: [
-        {
-          name: "aa",
-          id: 1,
-        },
-        {
-          name: "bb",
-          id: 2,
-        },
-        {
-          name: "cc",
-          id: 3,
-        },
-      ],
     };
   },
   mounted() {
     this.likes = this.thing.like_count;
-    this.isLike = this.thing.isLike;
-    this.isCollected = this.thing.isCollected;
   },
   methods: {
     toUpload(id) {
@@ -184,30 +196,10 @@ export default {
     like() {
       if (this.isLike) {
         this.likes = Number(this.likes) - 1;
-        deleteLike({
-          resId: this.thing.id,
-        }).then(() => {
-          this.$message({
-            message: "delete likes successfully",
-            type: "success",
-          });
-          this.isLike = !this.isLike;
-        });
+        this.$emit("cancelLike", this.thing.id);
       } else {
         this.likes = 1 + Number(this.likes);
-        addLike({
-          resId: this.thing.id,
-        })
-          .then(() => {
-            this.$message({
-              message: "add likes successfully",
-              type: "success",
-            });
-            this.isLike = !this.isLike;
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+        this.$emit("addLike", this.thing.id);
       }
     },
     share() {
@@ -220,23 +212,25 @@ export default {
     },
     addCollection() {
       console.log("add");
-      this.isCollected = !this.isCollected;
       this.openCollectedOption = true;
+      this.$emit("loadCollection");
     },
     deleteCollection() {
       console.log("delete");
-      this.isCollected = !this.isCollected;
       this.openCollectedOption = false;
+      this.$emit("cancelCollected", this.thing.id);
     },
     closeCollectedOption() {
       this.openCollectedOption = false;
     },
-    moveCollectedOption(directionObject) {
-      console.log(directionObject);
+    moveCollectedOption(folderObject) {
+      // this.isCollected = true;
+      this.openCollectedOption = false;
+      folderObject.resourceId = this.thing.id;
+      this.$emit("moveResourceToFolder", folderObject);
     },
     addFolder(folderName) {
-      this.folders.push({ name: folderName });
-      console.log(folderName);
+      this.$emit("addCollectionFolder", folderName);
     },
     enter() {
       this.isCollectIconShow = true;

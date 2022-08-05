@@ -9,7 +9,8 @@
         :label="item"
         :key="item.id"
       >
-        <el-tooltip effect="dark" :content="item.name" placement="left-start">
+        <el-tooltip effect="light" placement="left-start">
+          <div style="max-width: 100px" slot="content">{{ item.name }}</div>
           <span class="folder-button-text">
             <i class="el-icon-folder"></i>
             {{ item.name }}
@@ -92,7 +93,6 @@ export default {
     },
     selectFolderToCollected() {
       this.$emit("moveFolder", this.select);
-      this.$emit("close");
     },
   },
 };
