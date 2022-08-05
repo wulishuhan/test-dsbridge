@@ -185,6 +185,7 @@
                 :value="folders"
                 :onFolderAdd="onFolderAdd"
                 @clickFolder="handleClickFolder"
+                @delFolder="handleDelFolder"
               ></RowFolder>
               <div v-for="item in collections" :key="item.thingId">
                 <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
@@ -358,6 +359,9 @@ export default {
   },
   methods: {
     handleClickFolder(item) {
+      console.log("item: ", item);
+    },
+    handleDelFolder(item) {
       console.log("item: ", item);
     },
     onFolderAdd() {

@@ -1,7 +1,7 @@
 <template>
   <div>
     <RowFolder
-      :value="folder"
+      :value="folders"
       :onFolderAdd="onFolderAdd"
       @clickFolder="handleClickFolder"
     ></RowFolder>
@@ -25,7 +25,7 @@ import DownLoadButton from "@/components/DownLoadButton.vue";
 import BaseButton from "@/components/BaseButton.vue";
 import LabelCard from "@/components/LabelCard.vue";
 import NoticePanel from "@/components/NoticePanel.vue";
-import RowFolder from "@/components/RowFolder.vue";
+import RowFolder from "./RowFolder.vue";
 
 // 用来预览组件
 export default {
@@ -33,16 +33,37 @@ export default {
   name: "hzy",
   data() {
     return {
-      folder: [
+      folders: [
         {
           name: "111",
           id: "1",
           isEdit: false,
+          showMoreMenu: false,
         },
         {
           name: "222",
           id: "2",
           isEdit: false,
+          showMoreMenu: false,
+        },
+        {
+          name: "222",
+          id: "2",
+          isEdit: false,
+          showMoreMenu: false,
+        },
+        {
+          name: "222",
+          id: "2",
+          isEdit: false,
+          showMoreMenu: false,
+        },
+
+        {
+          name: "222",
+          id: "2",
+          isEdit: false,
+          showMoreMenu: false,
         },
       ],
     };

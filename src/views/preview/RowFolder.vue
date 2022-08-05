@@ -1,5 +1,5 @@
 <template>
-  <div class="container" @mouseover="addScrollEvent" id="container">
+  <div class="container">
     <div id="folderWrapper" class="folderWrapper">
       <div
         class="folderContainer"
@@ -95,15 +95,7 @@ export default {
     handleClickFolder(item) {
       this.$emit("clickFolder", item);
     },
-    addScrollEvent() {
-      let element = document.getElementById("container");
-      element.addEventListener("wheel", (event) => {
-        event.preventDefault();
-        element.scrollBy({
-          left: event.deltaY < 0 ? -1 : 1, // >0 是下滑，<0是上滑
-        });
-      });
-    },
+
     handleEdit(item) {
       console.log("item: ", item);
       // return;
@@ -135,29 +127,11 @@ export default {
 
 <style></style>
 <style lang="scss" scoped>
-.container::-webkit-scrollbar {
-  /*滚动条整体样式*/
-  width: 3px; /*高宽分别对应横竖滚动条的尺寸*/
-  height: 2px;
-}
-.container::-webkit-scrollbar-thumb {
-  border-radius: 10px;
-  // box-shadow: inset 0 0 5px red;
-  background: #ccc;
-}
-
-.container::-webkit-scrollbar-track {
-  /*滚动条里面轨道*/
-  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
-  border-radius: 10px;
-  background: #ededed;
-}
 .container {
   width: 400px;
   margin: 0 auto;
   display: flex;
-  overflow-y: visible;
-  overflow-x: auto;
+
   height: 128px;
 
   .plus {
