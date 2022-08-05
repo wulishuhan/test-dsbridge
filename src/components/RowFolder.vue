@@ -22,9 +22,15 @@
             v-else
           />
         </div>
-        <span @click.stop="handleClickMore(item)" class="moreMenuIcon">
+        <span
+          @click.stop="handleClickMore(item)"
+          class="moreMenuIcon"
+          id="moreMenuIcon"
+        >
           <div class="moreMenu" v-if="item.showMoreMenu">
-            <div class="moreMenuItem" @click.stop="handleDelClick">Delete</div>
+            <div class="moreMenuItem" @click.stop="handleDelClick(item)">
+              Delete
+            </div>
           </div>
           ···
         </span>
@@ -68,14 +74,14 @@ export default {
   computed: {
     folders() {
       // debugger;
-      return [...this.value];
+      return this.value;
     },
   },
   data() {
     return {
       showMoreMenu: false,
       isEdit: false,
-      // folders: [...this.value],
+      // folders: this.value,
     };
   },
   mounted() {},
@@ -83,8 +89,8 @@ export default {
     handleClickMore(item) {
       item.showMoreMenu = !item.showMoreMenu;
     },
-    handleDelClick() {
-      this.showMoreMenu = false;
+    handleDelClick(item) {
+      item.showMoreMenu = false;
     },
     handleClickFolder(item) {
       this.$emit("clickFolder", item);
@@ -116,6 +122,7 @@ export default {
         name: this.folders.length + 1,
         id: this.folders.length + 1,
         isEdit: true,
+        showMoreMenu: false,
       });
       this.$nextTick(() => {
         console.log(this.$refs.folderInputs[0].focus());
@@ -149,7 +156,9 @@ export default {
   width: 400px;
   margin: 0 auto;
   display: flex;
-  overflow: auto;
+  overflow-y: visible;
+  overflow-x: auto;
+  height: 128px;
 
   .plus {
     font-size: 26px;
@@ -173,7 +182,6 @@ export default {
         position: absolute;
         right: 0px;
         top: 0px;
-
         .moreMenu {
           position: absolute;
           width: 160px;
@@ -181,8 +189,8 @@ export default {
           background: #ffffff;
           box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.07);
           border-radius: 10px;
-          top: -20px;
-          left: 20px;
+          top: 0px;
+          left: 30px;
           text-align: left;
           z-index: 500;
           .moreMenuItem {
@@ -203,11 +211,8 @@ export default {
         background: #1e78f0;
         opacity: 0.5;
         border-radius: 12px;
-        // .moreMenuIcon {
-        //   display: block;
-        //   opacity: 1;
-        // }
       }
+
       .folder {
         overflow: visible;
         display: flex;
