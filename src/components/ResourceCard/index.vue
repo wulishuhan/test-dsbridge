@@ -41,7 +41,7 @@
         <el-avatar
           v-if="showAvatar"
           :size="35"
-          :src="thing.creator.avatar"
+          :src="thing.creator && thing.creator.avatar"
           :fit="'cover'"
         ></el-avatar>
         <div class="card-box-bottom-left-name">
@@ -49,9 +49,9 @@
           <span
             v-if="showAvatar"
             class="author"
-            @click="viewAuthorInfo(thing.creator.id)"
+            @click="viewAuthorInfo(thing.creator && thing.creator.id)"
           >
-            {{ thing.creator.name }}
+            {{ thing.creator && thing.creator.name }}
           </span>
         </div>
       </div>
@@ -69,6 +69,20 @@
           <i class="el-icon-share icon-share"></i>
           {{ thing.share_count }}
         </div>
+        <span
+          @click="handleClickMore"
+          class="moreMenuIcon"
+          v-if="showMoreMenuBtn"
+        >
+          <div class="moreMenu" v-if="showMoreMenu">
+            <div class="moreMenuItem" @click.stop="handleDelClick">Delete</div>
+            <div class="moreMenuItem" @click.stop="handleMoveClick">MoveTo</div>
+            <div class="moreMenuItem" @click.stop="handleDownClick">
+              DownLoad
+            </div>
+          </div>
+          ···
+        </span>
       </div>
     </div>
     <div class="share-container">
@@ -92,6 +106,12 @@ export default {
   name: "ResourceCard",
   components: { ShareSocialMedia, CollectedOption },
   props: {
+    showMoreMenuBtn: {
+      type: Boolean,
+      default: () => {
+        return false;
+      },
+    },
     isCollected: {
       type: Boolean,
       default: () => {
@@ -176,6 +196,7 @@ export default {
   },
   data() {
     return {
+      showMoreMenu: false,
       likes: 0,
       isShare: false,
       isCollectIconShow: false,
@@ -187,8 +208,21 @@ export default {
     this.likes = this.thing.like_count;
   },
   methods: {
+    handleDownClick() {
+      this.showMoreMenu = false;
+    },
+    handleDelClick() {
+      this.showMoreMenu = false;
+    },
+    handleMoveClick() {
+      this.showMoreMenu = false;
+      this.$emit("showMoveMenu", this.thing);
+    },
+    handleClickMore() {
+      this.showMoreMenu = !this.showMoreMenu;
+    },
     toUpload(id) {
-      this.$router.push({ name: "uploadIndex", params: id });
+      this.$router.push(`/upload/${id}`);
     },
     toDetail(id) {
       this.$router.push(`/thing/${id}`);
@@ -290,6 +324,38 @@ export default {
   align-items: flex-start;
   flex-direction: column;
   margin-left: 5px;
+}
+.moreMenuIcon {
+  text-align: center;
+  width: 32px;
+  height: 24px;
+  line-height: 24px;
+  background: #e8ebf4;
+  border-radius: 4px;
+  display: inline-block;
+  position: relative;
+  .moreMenu {
+    position: absolute;
+    width: 160px;
+    height: 176px;
+    background: #ffffff;
+    box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.07);
+    border-radius: 10px;
+    bottom: 40px;
+    right: 20px;
+    text-align: left;
+    .moreMenuItem {
+      width: 144px;
+      height: 48px;
+      border-radius: 8px;
+      line-height: 48px;
+      margin: 8px auto;
+      padding-left: 25px;
+    }
+    .moreMenuItem:hover {
+      background: #8ab5ef;
+    }
+  }
 }
 .card-box-bottom-right {
   display: flex;

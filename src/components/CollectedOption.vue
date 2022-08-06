@@ -101,6 +101,13 @@ export default {
 <style></style>
 <style lang="scss" scoped>
 .collected-option-box {
+  z-index: 1000;
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
   width: 224px;
   height: 360px;
   background: #ffffff;

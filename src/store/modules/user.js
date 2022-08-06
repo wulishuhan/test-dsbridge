@@ -83,7 +83,9 @@ const actions = {
       getUserInfo()
         .then((res) => {
           if (res.data.code == 0) {
-            res.data.data.avatar = res.data.data.avatar + "?" + Math.random();
+            res.data.data.avatar = res.data.data.avatar
+              ? res.data.data.avatar + "?" + Math.random()
+              : res.data.data.avatar;
             commit("SET_USERINFO", res.data.data);
           }
           resolve(res.data);
