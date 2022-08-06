@@ -126,7 +126,6 @@ export default {
         getCollectionResourceList({
           userId: this.userInfo.user_id,
         }).then((res) => {
-          console.log("allCollectionList", res);
           for (let i = 0; i < res.data.rows.length; i++) {
             const element = res.data.rows[i];
             this.collectedList.push(element.id);
@@ -189,7 +188,7 @@ export default {
           message: "move successfully",
           type: "success",
         });
-        this.collectedList.push(data.collectionId);
+        this.collectedList.push(data.resourceId);
       });
     },
     cancelLike(id) {
@@ -235,6 +234,7 @@ export default {
         });
     },
     moveResourceToFolder(folderObject) {
+      console.log("folderObject-------", folderObject);
       this.addResourceToCollection({
         resourceId: folderObject.resourceId,
         collectionId: folderObject.id,
@@ -251,13 +251,13 @@ export default {
           message: "cancel collected successfully",
           type: "success",
         });
+        for (let i = 0; i < this.collectedList.length; i++) {
+          if (this.collectedList[i] === id) {
+            this.collectedList.splice(i, 1);
+          }
+        }
       });
       console.log("等待删除接口！");
-      for (let i = 0; i < this.collectedList.length; i++) {
-        if (this.collectedList[i] === id) {
-          this.collectedList.splice(i, 1);
-        }
-      }
     },
   },
 };

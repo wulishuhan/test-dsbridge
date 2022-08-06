@@ -11,5 +11,6 @@ const getters = {
   selectorModules: (state) => state.upload.selectorModules,
   searchKeywords: (state) => state.search.userId,
   userInfo: (state) => state.user.userInfo,
+  selectCollectionBox: (state) => state.collection.selectCollectionBox,
 };
 export default getters;

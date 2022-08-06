@@ -63,7 +63,7 @@
         >
           <i v-if="!isLike" class="el-icon-star-off icon-star"></i>
           <i v-else class="ortur-icon-star-border icon-star"></i>
-          {{ thing.like_count }}
+          {{ likes }}
         </div>
         <div @click="share" class="share-box" v-show="showShare">
           <i class="el-icon-share icon-share"></i>
@@ -327,7 +327,7 @@ img:hover {
   position: absolute;
   bottom: 152px;
   right: 21px;
-  z-index: 999;
+  z-index: 1000;
 }
 .thing-name {
   font-size: 14px;
