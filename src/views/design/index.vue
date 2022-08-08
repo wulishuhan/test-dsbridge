@@ -142,6 +142,7 @@
               >
                 <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
                   <resource-card
+                    :key="item.id"
                     @clickMoveMenu="Handler_MoveTo(item)"
                     @clickDelMenu="Handler_Del(thing)"
                     @clickDownMenu="Handler_Down(thing)"
@@ -170,6 +171,7 @@
               <div v-for="item in Likes" :key="item.thingId">
                 <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
                   <resource-card
+                    :key="item.id"
                     :thing="item"
                     :showEdit="false"
                     :showStar="true"
@@ -193,10 +195,15 @@
               <div v-for="item in collections" :key="item.thingId">
                 <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
                   <resource-card
+                    @clickMoveMenu="Handler_MoveTo(item)"
+                    @clickDelMenu="Handler_Del(thing)"
+                    @clickDownMenu="Handler_Down(thing)"
+                    :isCollected="myCollects.includes(item.id)"
                     :thing="item"
                     :showEdit="false"
                     :showStar="false"
                     :showMoreMenuBtn="true"
+                    :key="item.id"
                   >
                   </resource-card>
                 </el-col>
@@ -207,7 +214,7 @@
             <el-row :gutter="20">
               <div v-for="item in histories" :key="item.thingId">
                 <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                  <resource-card :thing="item"> </resource-card>
+                  <resource-card :key="item.id" :thing="item"> </resource-card>
                 </el-col>
               </div>
             </el-row>
@@ -251,6 +258,7 @@ export default {
   },
   data() {
     return {
+      myCollects: [],
       thing: {},
       openCollectedOption: false,
       folders: [
@@ -340,6 +348,7 @@ export default {
         followers: "13",
         desc: "yang 654651",
       },
+      collectionId: "",
     };
   },
   mounted() {
@@ -372,7 +381,8 @@ export default {
   },
   methods: {
     handleClickFolder(item) {
-      this.getCollectResourceList(item.id);
+      this.collectionId = item.id;
+      this.getCollectResourceList();
       console.log("item: ", item);
     },
     handleDelFolder(item) {
@@ -403,6 +413,7 @@ export default {
         collectionId: folderObject.id,
       }).then((res) => {
         console.log(res);
+        this.getCollectList();
         this.$message({
           message: "move successfully",
           type: "success",
@@ -441,18 +452,22 @@ export default {
         this.getMyLikesList();
       } else {
         let userId = this.user.userId;
-        this.getMyLikesList();
-        getLikesList({ userId }).then((res) => {
-          this.Likes = res.data.rows;
+        this.getMyLikesList().then(() => {
+          getLikesList({ userId }).then((res) => {
+            this.Likes = res.data.rows;
+          });
         });
       }
     },
     getMyLikesList() {
-      getLikesList({ userId: this.userInfo.user_id }).then((res) => {
-        this.Likes = res.data.rows;
-        for (const item of this.Likes) {
-          this.myLikes.push(item.id);
-        }
+      return new Promise((resolve) => {
+        getLikesList({ userId: this.userInfo.user_id }).then((res) => {
+          this.Likes = res.data.rows;
+          for (const item of this.Likes) {
+            this.myLikes.push(item.id);
+          }
+          resolve(1);
+        });
       });
     },
     getCollectList() {
@@ -464,12 +479,34 @@ export default {
         });
       });
     },
-    getCollectResourceList(collectionId) {
-      getCollectResourceList({ collectionId: collectionId || 0 }).then(
-        (res) => {
-          this.collections = res.data.data;
-        }
-      );
+    getCollectResourceList() {
+      if (!this.isYourAccount) {
+        let userId = this.user.userId;
+        this.getMyCollectResourceList().then(() => {
+          getCollectResourceList({
+            collectionId: this.collectionId || 0,
+            userId: userId,
+          }).then((res) => {
+            this.collections = res.data.rows;
+          });
+        });
+      } else {
+        this.getMyCollectResourceList();
+      }
+    },
+    getMyCollectResourceList() {
+      return new Promise((resolve) => {
+        getCollectResourceList({
+          collectionId: this.collectionId || 0,
+          userId: this.userInfo.user_id,
+        }).then((res) => {
+          this.collections = res.data.rows;
+          for (const item of this.collections) {
+            this.myCollects.push(item.id);
+          }
+          resolve(1);
+        });
+      });
     },
     getHistoriesList() {
       getResourceList(this.pagination).then((res) => {
@@ -586,6 +623,14 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.collectMenu {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+}
 .img {
   background-color: black;
   width: 100%;
