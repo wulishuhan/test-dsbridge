@@ -7,8 +7,8 @@ const getDefaultState = () => {
 const state = getDefaultState();
 
 const mutations = {
-  SET_SELECTCOLLECTIONBOX: (state, payload) => {
-    state.selectCollectionBox = payload;
+  SET_SELECTCOLLECTIONBOX: (state, id) => {
+    state.selectCollectionBox = id;
   },
 };
 

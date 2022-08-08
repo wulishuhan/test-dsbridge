@@ -2,17 +2,17 @@
   <div v-show="show" class="collected-option-box">
     <span class="collect-to">Collect to</span>
     <el-radio-group class="folder-button-box" v-model="select">
-      <el-radio-button class="folder-button" label="Draft"></el-radio-button>
+      <!-- <el-radio-button class="folder-button" label="Draft"></el-radio-button> -->
       <el-radio-button
         class="folder-button"
-        v-for="item in folders"
+        v-for="item in folder"
         :label="item"
         :key="item.id"
       >
         <el-tooltip effect="light" placement="left-start">
           <div style="max-width: 100px" slot="content">{{ item.name }}</div>
           <span class="folder-button-text">
-            <i class="el-icon-folder"></i>
+            <i class="el-icon-folder" v-show="item.id !== 0"></i>
             {{ item.name }}
           </span>
         </el-tooltip>
@@ -79,6 +79,11 @@ export default {
       newFolderName: "",
     };
   },
+  computed: {
+    folder() {
+      return [{ id: 0, name: "Draft" }, ...this.folders];
+    },
+  },
   methods: {
     addFolder() {
       this.isNewFileLink = true;
@@ -102,11 +107,6 @@ export default {
 <style lang="scss" scoped>
 .collected-option-box {
   z-index: 1000;
-  position: fixed;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
   margin: auto;
   width: 224px;
   height: 360px;

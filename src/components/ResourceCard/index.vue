@@ -200,6 +200,11 @@ export default {
     this.showLikeStar = this.isLike;
     this.showCollectionDeleteButton = this.isCollected;
   },
+  computed: {
+    selected() {
+      return this.$store.getters.selectCollectionBox;
+    },
+  },
   methods: {
     handleDownClick() {
       this.showMoreMenu = false;
@@ -258,11 +263,14 @@ export default {
       this.$router.push(`/design/${userId}`);
     },
     addCollection() {
-      console.log("add");
-      this.openCollectedOption = true;
-      getCollectionList().then((res) => {
-        this.folders = res.data.data;
-      });
+      if (this.selected === "" || this.selected === this.thing.id) {
+        this.$store.commit("collection/SET_SELECTCOLLECTIONBOX", this.thing.id);
+        this.openCollectedOption = true;
+        getCollectionList().then((res) => {
+          console.log("getCollectionList", res);
+          this.folders = res.data.data;
+        });
+      }
     },
     deleteCollection() {
       console.log("delete");
@@ -281,11 +289,13 @@ export default {
     },
     closeCollectedOption() {
       this.openCollectedOption = false;
+      this.$store.commit("collection/SET_SELECTCOLLECTIONBOX", "");
     },
     moveCollectedOption(folderObject) {
       // this.isCollected = true;
       this.showCollectionDeleteButton = true;
       this.openCollectedOption = false;
+      this.$store.commit("collection/SET_SELECTCOLLECTIONBOX", "");
       addResourceToCollection({
         resourceId: this.thing.id,
         collectionId: folderObject.id,
@@ -308,9 +318,7 @@ export default {
         })
         .then(() => {
           getCollectionList().then((res) => {
-            console.log("before add", this.folders);
             this.folders = res.data.data;
-            console.log("after add", this.folders);
           });
         });
     },
