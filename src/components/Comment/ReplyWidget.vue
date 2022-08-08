@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { getCommentList } from "@/api/user";
+import { postComment } from "@/api/user";
 import { createNamespacedHelpers } from "vuex";
 const { mapState } = createNamespacedHelpers("user");
 export default {
@@ -30,6 +30,12 @@ export default {
     return {
       comment: "",
     };
+  },
+  props: {
+    commentId: {
+      type: Number,
+      default: 0,
+    },
   },
   mounted() {},
   computed: {
@@ -40,16 +46,22 @@ export default {
       this.handlePost();
     },
     handlePost() {
-      var that = this;
-      this.$message({
-        message: "发送成功",
-        type: "success",
+      let resId = parseInt(this.$route.params.thingId);
+      postComment({
+        resourceId: resId,
+        parentId: this.commentId,
+        content: this.comment,
+      }).then((res) => {
+        console.log("post comment", res);
+        this.$store.dispatch("comment/getCommentList", { resId: resId });
+        this.$message({
+          message: "发送成功",
+          type: "success",
+        });
       });
+
       this.comment = "";
       this.$emit("closeReplyModal");
-      getCommentList().then(function (res) {
-        that.commentList = res.data.data;
-      });
     },
   },
 };

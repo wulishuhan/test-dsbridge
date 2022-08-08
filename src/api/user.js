@@ -78,8 +78,16 @@ export function register(data) {
 
 export function getCommentList(params) {
   return request({
-    url: "/user/getCommentList",
+    url: "/library/comment/list",
     method: "get",
     params,
+  });
+}
+
+export function postComment(data) {
+  return request({
+    url: "/library/comment",
+    method: "post",
+    data,
   });
 }
