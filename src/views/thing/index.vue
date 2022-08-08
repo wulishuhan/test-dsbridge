@@ -465,7 +465,7 @@ export default {
         height: 112px;
         width: 100%;
         cursor: pointer;
-        object-fit: fill;
+        object-fit: contain;
       }
     }
   }
@@ -694,7 +694,7 @@ a {
 }
 
 .container {
-  background-color: #f5f5f5;
+  /* background-color: #f5f5f5; */
   height: 100%;
   font-family: Source Han Sans CN;
   font-weight: 400;
@@ -792,7 +792,7 @@ a {
   img {
     width: 100%;
     height: 100%;
-    object-fit: fill;
+    object-fit: contain;
   }
 }
 
