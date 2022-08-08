@@ -163,10 +163,10 @@
             </div>
             <div class="flex justify-between more-image-box">
               <el-image
-                v-for="i in 3"
-                :key="i"
+                v-for="item in moreCreateList"
+                :key="item.id"
                 class="more-image"
-                src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
+                :src="item.image"
               ></el-image>
             </div>
           </div>
@@ -240,7 +240,10 @@
     <el-dialog :visible.sync="dialogTabsVisible" width="1136px">
       <el-tabs class="more-dialog" v-model="viewMoreActive" :stretch="true">
         <el-tab-pane label="More by this creator" name="view-creator">
-          <view-more v-if="viewMoreActive === 'view-creator'"></view-more>
+          <view-more
+            v-if="viewMoreActive === 'view-creator'"
+            :creator="detail.creator"
+          ></view-more>
         </el-tab-pane>
         <el-tab-pane label="Similar with this" name="view-similar">
           <view-more v-if="viewMoreActive === 'view-similar'"></view-more>
@@ -258,7 +261,7 @@
 // import ElImageViewer from "element-ui/packages/image/src/image-viewer";
 import ElImageViewer from "@/components/ImageViewer";
 import { getUserInfoByThingId } from "@/api/thing";
-import { getResource } from "@/api/resource";
+import { getResource, getResourceListById } from "@/api/resource";
 import { getLikelist } from "@/api/like";
 import { mapGetters } from "vuex";
 import DownLoadButton from "@/components/DownLoadButton.vue";
@@ -293,7 +296,6 @@ export default {
       showViewer: false, // 显示查看器
       urlList: [], //大图列表
       activeName: "description",
-      user: {},
       imgActiveIndex: 0, // 当前移动图片的索引值
       imageList: [],
       viewModel: false,
@@ -302,10 +304,10 @@ export default {
       showHeight: 50,
       dialogTabsVisible: false,
       viewMoreActive: "view-more",
+      moreCreateList: [],
       shareLink: {
         // text文本后边可以传要分享的url，注意后期修改
-        facebook:
-          `https://www.facebook.com/sharer/sharer.php?u=localhost:8080${this.$route.path}`,
+        facebook: `https://www.facebook.com/sharer/sharer.php?u=localhost:8080${this.$route.path}`,
         twitter: `https://twitter.com/share?url=localhost:8080${this.$route.path}`,
         whatsapp: `https://web.whatsapp.com/send?text=localhost:8080${this.$route.path}`,
       },
@@ -378,7 +380,7 @@ export default {
       this.isCollected = !this.isCollected;
     },
     toUserProfileView() {
-      this.$router.push(`/design/Favorites/${this.user.id}`);
+      this.$router.push(`/design/Favorites/${this.detail.creator.id}`);
     },
     openViewAllDialog(name) {
       this.viewMoreActive = name;
@@ -396,7 +398,6 @@ export default {
     },
   },
   created() {
-    console.log("token", this.token, this.userId);
     getLikelist({ userId: this.userInfo.user_id })
       .then((res) => {
         for (let i = 0; i < res.data.rows.length; i++) {
@@ -405,12 +406,25 @@ export default {
         }
         console.log("like list======", this.likeList);
       })
-      .then((res) => {
-        getResource(this.$route.params.thingId).then((res) => {
-          this.detail = res.data.data;
-          this.imageList = res.data.data.images;
-          this.isLike = this.likeList.includes(res.data.data.id);
-        });
+      .then(() => {
+        getResource(this.$route.params.thingId)
+          .then((res) => {
+            this.detail = res.data.data;
+            this.imageList = res.data.data.images;
+            this.isLike = this.likeList.includes(res.data.data.id);
+            console.log("this.detail", this.detail);
+            return this.detail.creator.id;
+          })
+          .then((id) => {
+            getResourceListById({
+              userId: id,
+              pageSize: 3,
+              pageNum: 1,
+            }).then((res) => {
+              console.log("get more:", res, id);
+              this.moreCreateList = res.data.rows;
+            });
+          });
       });
   },
 };

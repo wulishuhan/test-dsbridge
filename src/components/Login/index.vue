@@ -16,12 +16,20 @@
               <a
                 href="https://sso.leadiffer.com/oauth/thirdParty?from=facebook"
               >
-                <i class="ortur-icon-facebook icon"></i
-              ></a>
-              <i class="ortur-icon-github icon"></i>
-              <i class="ortur-icon-tiktok icon"></i>
-              <i class="ortur-icon-google icon"></i>
-              <i class="ortur-icon-apple icon disabled-icon"></i>
+                <i class="ortur-icon-facebook icon"></i>
+              </a>
+              <a href="https://sso.leadiffer.com/oauth/thirdParty?from=github">
+                <i class="ortur-icon-github icon"></i>
+              </a>
+              <a href="https://sso.leadiffer.com/oauth/thirdParty?from=tiktok">
+                <i class="ortur-icon-tiktok icon"></i>
+              </a>
+              <a href="https://sso.leadiffer.com/oauth/thirdParty?from=google">
+                <i class="ortur-icon-google icon"></i>
+              </a>
+              <a>
+                <i class="ortur-icon-apple icon disabled-icon"></i>
+              </a>
             </div>
           </el-form-item>
           <el-form-item>
@@ -83,12 +91,20 @@
               <a
                 href="https://sso.leadiffer.com/oauth/thirdParty?from=facebook"
               >
-                <i class="ortur-icon-facebook icon"></i
-              ></a>
-              <i class="ortur-icon-github icon"></i>
-              <i class="ortur-icon-tiktok icon"></i>
-              <i class="ortur-icon-google icon"></i>
-              <i class="ortur-icon-apple icon disabled-icon"></i>
+                <i class="ortur-icon-facebook icon"></i>
+              </a>
+              <a href="https://sso.leadiffer.com/oauth/thirdParty?from=github">
+                <i class="ortur-icon-github icon"></i>
+              </a>
+              <a href="https://sso.leadiffer.com/oauth/thirdParty?from=tiktok">
+                <i class="ortur-icon-tiktok icon"></i>
+              </a>
+              <a href="https://sso.leadiffer.com/oauth/thirdParty?from=google">
+                <i class="ortur-icon-google icon"></i>
+              </a>
+              <a>
+                <i class="ortur-icon-apple icon disabled-icon"></i>
+              </a>
             </div>
           </el-form-item>
           <el-form-item>

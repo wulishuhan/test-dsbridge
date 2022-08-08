@@ -26,3 +26,10 @@ export function getResourceList(params) {
     params,
   });
 }
+export function getResourceListById(params) {
+  return request({
+    url: `/library/resource/list`,
+    method: "get",
+    params,
+  });
+}

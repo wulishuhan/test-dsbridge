@@ -55,21 +55,19 @@
           </span>
         </div>
       </div>
-      <div style="display: flex; flex-direction: column; align-items: flex-end">
-        <div class="card-box-bottom-right">
-          <div
-            class="card-box-bottom-right-like-box"
-            @click="like"
-            v-show="showStar"
-          >
-            <i v-if="!isLike" class="el-icon-star-off icon-star"></i>
-            <i v-else class="ortur-icon-star-border icon-star"></i>
-            {{ thing.like_count }}
-          </div>
-          <div @click="share" class="share-box" v-show="showShare">
-            <i class="el-icon-share icon-share"></i>
-            {{ thing.share_count }}
-          </div>
+      <div class="card-box-bottom-right">
+        <div
+          class="card-box-bottom-right-like-box"
+          @click="like"
+          v-show="showStar"
+        >
+          <i v-if="!isLike" class="el-icon-star-off icon-star"></i>
+          <i v-else class="ortur-icon-star-border icon-star"></i>
+          {{ likes }}
+        </div>
+        <div @click="share" class="share-box" v-show="showShare">
+          <i class="el-icon-share icon-share"></i>
+          {{ thing.share_count }}
         </div>
         <span
           @click="handleClickMore"
@@ -395,7 +393,7 @@ img:hover {
   position: absolute;
   bottom: 152px;
   right: 21px;
-  z-index: 999;
+  z-index: 1000;
 }
 .thing-name {
   font-size: 14px;

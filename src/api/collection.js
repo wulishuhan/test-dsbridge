@@ -29,7 +29,7 @@ export function getCollectionResourceList(params) {
 }
 export function deleteCollectionResource(params) {
   return request({
-    url: `/library/collection/${params.collectionId}/resource/${params.resourceId}`,
+    url: `/library/collection/resource/${params.resourceId}`,
     method: "delete",
   });
 }
