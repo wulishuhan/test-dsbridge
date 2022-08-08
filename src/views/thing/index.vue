@@ -262,7 +262,7 @@
 import ElImageViewer from "@/components/ImageViewer";
 import { getUserInfoByThingId } from "@/api/thing";
 import { getResource, getResourceListById } from "@/api/resource";
-import { getLikelist } from "@/api/like";
+import { getLikelist, addLike, deleteLike } from "@/api/like";
 import { mapGetters } from "vuex";
 import DownLoadButton from "@/components/DownLoadButton.vue";
 import StarButton from "@/components/StarButton.vue";
@@ -374,7 +374,31 @@ export default {
       this.imgActiveIndex = index;
     },
     like() {
-      this.isLike = !this.isLike;
+      if (this.isLike) {
+        deleteLike({
+          resId: this.detail.id,
+        }).then(() => {
+          this.$message({
+            message: "delete likes successfully",
+            type: "success",
+          });
+          this.isLike = false;
+        });
+      } else {
+        addLike({
+          resId: this.detail.id,
+        })
+          .then(() => {
+            this.$message({
+              message: "add likes successfully",
+              type: "success",
+            });
+            this.isLike = true;
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
     },
     collect() {
       this.isCollected = !this.isCollected;
@@ -404,7 +428,6 @@ export default {
           const element = res.data.rows[i];
           this.likeList.push(element.id);
         }
-        console.log("like list======", this.likeList);
       })
       .then(() => {
         getResource(this.$route.params.thingId)
@@ -412,7 +435,6 @@ export default {
             this.detail = res.data.data;
             this.imageList = res.data.data.images;
             this.isLike = this.likeList.includes(res.data.data.id);
-            console.log("this.detail", this.detail);
             return this.detail.creator.id;
           })
           .then((id) => {

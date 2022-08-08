@@ -88,8 +88,7 @@
       style="font-size: 40px"
     ></el-avatar>
 
-    <div style="margin-top: 50px">
-    </div>
+    <div style="margin-top: 50px"></div>
     <div v-swiper:mySwiper="swiperOptions">
       <div class="swiper-wrapper">
         <div class="swiper-slide" v-for="(item, index) in urls" :key="item">
@@ -127,9 +126,9 @@
       <p>点击move按钮事件： moveFolder</p>
       <p>添加文件夹事件：addFolder</p>
     </div>
-    <el-button @click="openCollectedOption = !openCollectedOption"
+    <!-- <el-button @click="openCollectedOption = !openCollectedOption"
       >CollectedOption组件点击显示隐藏</el-button
-    >
+    > -->
     <CollectedOption
       :show="openCollectedOption"
       :folders="folders"
@@ -137,6 +136,39 @@
       @moveFolder="moveCollectedOption"
       @addFolder="addFolder"
     ></CollectedOption>
+    <el-popover
+      placement="top"
+      v-model="visible"
+      :visible-arrow="false"
+      popper-class="test"
+    >
+      <CollectedOption
+        :show="openCollectedOption"
+        :folders="folders"
+        @close="closeCollectedOption"
+        @moveFolder="moveCollectedOption"
+        @addFolder="addFolder"
+      ></CollectedOption>
+      <el-button
+        class="icon-collect-box"
+        slot="reference"
+        @click="collectChange"
+        :disabled="visible"
+      >
+        <i
+          v-show="!showCollectionDeleteButton"
+          class="ortur-icon-add-collect icon-collect"
+        ></i>
+        <span
+          v-show="showCollectionDeleteButton"
+          class="ortur-icon-cancel-collect-strokes icon-collect"
+        >
+          <span class="path1"> </span>
+          <span class="path2"> </span>
+          <span class="path3"> </span>
+        </span>
+      </el-button>
+    </el-popover>
   </div>
 </template>
 <script>
@@ -221,7 +253,7 @@ export default {
           },
         },
       },
-      openCollectedOption: false,
+      openCollectedOption: true,
       folders: [
         {
           name: "aa",
@@ -236,6 +268,8 @@ export default {
           id: 3,
         },
       ],
+      visible: false,
+      showCollectionDeleteButton: false,
     };
   },
   methods: {
@@ -264,21 +298,48 @@ export default {
       }
     },
     closeCollectedOption() {
-      this.openCollectedOption = false;
+      // this.openCollectedOption = false;
+      this.showCollectionDeleteButton = false;
+      this.visible = false;
     },
     moveCollectedOption(directionObject) {
       console.log("拿到选择的文件名", directionObject);
+      this.showCollectionDeleteButton = true;
+      this.visible = false;
     },
     addFolder(folderName) {
       console.log("拿到新建的文件名", folderName);
       // 加入组件渲染的文件夹数组之中
       this.folders.push({ name: folderName });
     },
+    collectChange() {
+      this.showCollectionDeleteButton = !this.showCollectionDeleteButton;
+    },
   },
   mounted() {},
 };
 </script>
 <style lang="scss" scoped>
+.icon-collect-box {
+  width: 42px;
+  height: 30px;
+  background: rgba(30, 120, 240, 1);
+  border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* position: absolute;
+  bottom: 12px;
+  right: 12px; */
+  cursor: pointer;
+}
+.icon-collect {
+  font-size: 20px;
+  color: #fff;
+}
+.icon-collect-box:hover {
+  background: rgba(30, 120, 240, 1);
+}
 .swiper-container {
   width: 184px;
   height: 496px;
