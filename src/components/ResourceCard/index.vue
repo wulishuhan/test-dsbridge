@@ -14,12 +14,12 @@
         class="icon-collect-box"
       >
         <i
-          v-if="!isCollected"
+          v-if="!showCollectionDeleteButton"
           @click="addCollection"
           class="ortur-icon-add-collect icon-collect"
         ></i>
         <span
-          v-if="isCollected"
+          v-if="showCollectionDeleteButton"
           @click="deleteCollection"
           class="ortur-icon-cancel-collect-strokes icon-collect"
         >
@@ -61,7 +61,7 @@
           @click="like"
           v-show="showStar"
         >
-          <i v-if="!isLike" class="el-icon-star-off icon-star"></i>
+          <i v-if="!showLikeStar" class="el-icon-star-off icon-star"></i>
           <i v-else class="ortur-icon-star-border icon-star"></i>
           {{ likes }}
         </div>
@@ -102,6 +102,13 @@
 <script>
 import ShareSocialMedia from "@/components/ShareCard";
 import CollectedOption from "@/components/CollectedOption";
+import { addLike, deleteLike } from "@/api/like";
+import {
+  getCollectionList,
+  addCollection,
+  addResourceToCollection,
+  deleteCollectionResource,
+} from "@/api/collection";
 export default {
   name: "ResourceCard",
   components: { ShareSocialMedia, CollectedOption },
@@ -174,25 +181,6 @@ export default {
         };
       },
     },
-    folders: {
-      type: Array,
-      default: () => {
-        return [
-          {
-            name: "aa",
-            id: 1,
-          },
-          {
-            name: "bb",
-            id: 2,
-          },
-          {
-            name: "cc",
-            id: 3,
-          },
-        ];
-      },
-    },
   },
   data() {
     return {
@@ -202,10 +190,15 @@ export default {
       isCollectIconShow: false,
       folder: true,
       openCollectedOption: false,
+      showLikeStar: false,
+      folders: [],
+      showCollectionDeleteButton: false,
     };
   },
   mounted() {
     this.likes = this.thing.like_count;
+    this.showLikeStar = this.isLike;
+    this.showCollectionDeleteButton = this.isCollected;
   },
   methods: {
     handleDownClick() {
@@ -228,12 +221,32 @@ export default {
       this.$router.push(`/thing/${id}`);
     },
     like() {
-      if (this.isLike) {
+      if (this.showLikeStar) {
         this.likes = Number(this.likes) - 1;
-        this.$emit("cancelLike", this.thing.id);
+        deleteLike({
+          resId: this.thing.id,
+        }).then(() => {
+          this.$message({
+            message: "delete likes successfully",
+            type: "success",
+          });
+          this.showLikeStar = false;
+        });
       } else {
         this.likes = 1 + Number(this.likes);
-        this.$emit("addLike", this.thing.id);
+        addLike({
+          resId: this.thing.id,
+        })
+          .then(() => {
+            this.$message({
+              message: "add likes successfully",
+              type: "success",
+            });
+            this.showLikeStar = true;
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       }
     },
     share() {
@@ -247,24 +260,59 @@ export default {
     addCollection() {
       console.log("add");
       this.openCollectedOption = true;
-      this.$emit("loadCollection");
+      getCollectionList().then((res) => {
+        this.folders = res.data.data;
+      });
     },
     deleteCollection() {
       console.log("delete");
       this.openCollectedOption = false;
-      this.$emit("cancelCollected", this.thing.id);
+      deleteCollectionResource({
+        userId: this.$store.getters.userInfo.user_id,
+        resourceId: this.thing.id,
+      }).then((res) => {
+        console.log("cancelCollected", res);
+        this.$message({
+          message: "cancel collected successfully",
+          type: "success",
+        });
+        this.showCollectionDeleteButton = false;
+      });
     },
     closeCollectedOption() {
       this.openCollectedOption = false;
     },
     moveCollectedOption(folderObject) {
       // this.isCollected = true;
+      this.showCollectionDeleteButton = true;
       this.openCollectedOption = false;
-      folderObject.resourceId = this.thing.id;
-      this.$emit("moveResourceToFolder", folderObject);
+      addResourceToCollection({
+        resourceId: this.thing.id,
+        collectionId: folderObject.id,
+      }).then((res) => {
+        console.log(res);
+        this.$message({
+          message: "move successfully",
+          type: "success",
+        });
+        this.showCollectionDeleteButton = true;
+      });
     },
     addFolder(folderName) {
-      this.$emit("addCollectionFolder", folderName);
+      addCollection({ name: folderName })
+        .then(() => {
+          this.$message({
+            message: "add folder successfully",
+            type: "success",
+          });
+        })
+        .then(() => {
+          getCollectionList().then((res) => {
+            console.log("before add", this.folders);
+            this.folders = res.data.data;
+            console.log("after add", this.folders);
+          });
+        });
     },
     enter() {
       this.isCollectIconShow = true;
