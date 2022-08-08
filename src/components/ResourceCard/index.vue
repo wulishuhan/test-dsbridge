@@ -447,7 +447,7 @@ img:hover {
 }
 .collected-option-container {
   position: absolute;
-  bottom: 152px;
+  bottom: 120px;
   right: 21px;
   z-index: 1000;
 }

@@ -95,7 +95,38 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["isLogin", "userInfo"]),
+    ...mapGetters(["userInfo"]),
+  },
+
+  watch: {
+    "$store.getters.isLogin": function () {
+      console.log("change login status");
+      if (this.$store.getters.isLogin) {
+        getLikelist({
+          userId: this.userInfo.user_id,
+        })
+          .then((res) => {
+            for (let i = 0; i < res.data.rows.length; i++) {
+              const element = res.data.rows[i];
+              this.likeList.push(element.id);
+            }
+          })
+          .then(() => {
+            getCollectionResourceList({
+              userId: this.userInfo.user_id,
+            }).then((res) => {
+              for (let i = 0; i < res.data.rows.length; i++) {
+                const element = res.data.rows[i];
+                this.collectedList.push(element.id);
+              }
+            });
+          });
+      } else {
+        this.collectedList = [];
+        this.likeList = [];
+        console.log(this.collectedList, this.likeList);
+      }
+    },
   },
   mounted() {
     getLikelist({
@@ -168,7 +199,7 @@ export default {
 <style lang="scss" scoped>
 .main {
   /* text-align: center; */
-  background-color: #f5f5f5;
+  /* background-color: #f5f5f5; */
 }
 .content {
   width: 1200px;

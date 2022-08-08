@@ -42,6 +42,9 @@ const mutations = {
     state.loginDialogVisible = payload.loginDialogVisible;
     state.isLoginForm = payload.isLoginForm;
   },
+  SET_ISLOGIN: (state, loginStatus) => {
+    state.isLogin = loginStatus;
+  },
 };
 
 const actions = {
@@ -101,6 +104,7 @@ const actions = {
         .then((res) => {
           removeToken(); // must remove  token  first
           commit("RESET_STATE");
+          commit("SET_ISLOGIN", false);
           resolve(res);
         })
         .catch((error) => {
