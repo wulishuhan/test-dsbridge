@@ -7,13 +7,6 @@
             :thing="item"
             :isLike="likeList.includes(item.id)"
             :isCollected="collectedList.includes(item.id)"
-            :folders="folders"
-            @addLike="addLike"
-            @cancelLike="cancelLike"
-            @addCollectionFolder="addCollectionFolder"
-            @moveResourceToFolder="moveResourceToFolder"
-            @cancelCollected="cancelCollected"
-            @loadCollection="getCollectionList"
           ></resource-card>
         </el-col>
       </div>
@@ -25,17 +18,11 @@
 <script>
 import ResourceCard from "@/components/ResourceCard";
 import { throttle } from "@/utils/cache.js";
+import { getLikelist } from "@/api/like";
 // import { getThingList } from "@/api/thing";
 import { getResourceListById } from "@/api/resource";
 import { mapGetters } from "vuex";
-import { addLike, deleteLike, getLikelist } from "@/api/like";
-import {
-  getCollectionList,
-  addCollection,
-  addResourceToCollection,
-  getCollectionResourceList,
-  deleteCollectionResource,
-} from "@/api/collection";
+import { getCollectionResourceList } from "@/api/collection";
 export default {
   name: "ViewMore",
   components: { ResourceCard },
@@ -135,88 +122,6 @@ export default {
           this.loading = false;
           this.noMore = true;
         });
-    },
-    getCollectionList() {
-      getCollectionList().then((res) => {
-        this.folders = res.data.data;
-      });
-    },
-    addResourceToCollection(data) {
-      addResourceToCollection(data).then((res) => {
-        console.log(res);
-        this.$message({
-          message: "move successfully",
-          type: "success",
-        });
-        this.collectedList.push(data.resourceId);
-      });
-    },
-    cancelLike(id) {
-      deleteLike({
-        resId: id,
-      }).then(() => {
-        this.$message({
-          message: "delete likes successfully",
-          type: "success",
-        });
-        for (let i = 0; i < this.likeList.length; i++) {
-          if (this.likeList[i] === id) {
-            this.likeList.splice(i, 1);
-          }
-        }
-      });
-    },
-    addLike(id) {
-      addLike({
-        resId: id,
-      })
-        .then(() => {
-          this.$message({
-            message: "add likes successfully",
-            type: "success",
-          });
-          this.likeList.push(id);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
-    addCollectionFolder(folderName) {
-      addCollection({ name: folderName })
-        .then(() => {
-          this.$message({
-            message: "add folder successfully",
-            type: "success",
-          });
-        })
-        .then(() => {
-          this.getCollectionList();
-        });
-    },
-    moveResourceToFolder(folderObject) {
-      this.addResourceToCollection({
-        resourceId: folderObject.resourceId,
-        collectionId: folderObject.id,
-      });
-    },
-    cancelCollected(id) {
-      deleteCollectionResource({
-        userId: this.userInfo.user_id,
-        collectionId: id,
-        resourceId: id,
-      }).then((res) => {
-        console.log("cancelCollected", res);
-        this.$message({
-          message: "cancel collected successfully",
-          type: "success",
-        });
-        console.log("等待删除接口！");
-        for (let i = 0; i < this.collectedList.length; i++) {
-          if (this.collectedList[i] === id) {
-            this.collectedList.splice(i, 1);
-          }
-        }
-      });
     },
   },
 };
