@@ -142,7 +142,9 @@
               >
                 <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
                   <resource-card
-                    @showMoveMenu="Handler_MoveTo"
+                    @clickMoveMenu="Handler_MoveTo(item)"
+                    @clickDelMenu="Handler_Del(thing)"
+                    @clickDownMenu="Handler_Down(thing)"
                     :thing="item"
                     :showEdit="true"
                     :showMoreMenuBtn="isYourAccount && true"
@@ -172,6 +174,7 @@
                     :showEdit="false"
                     :showStar="true"
                     :showCollection="false"
+                    :isLike="myLikes.includes(item.id)"
                   >
                   </resource-card>
                 </el-col>
@@ -193,6 +196,7 @@
                     :thing="item"
                     :showEdit="false"
                     :showStar="false"
+                    :showMoreMenuBtn="true"
                   >
                   </resource-card>
                 </el-col>
@@ -221,8 +225,16 @@ import ResourceCard from "@/components/ResourceCard/index.vue";
 import IndexFollowPanel from "./IndexFollowPanel.vue";
 import CollectedOption from "@/components/CollectedOption";
 import RowFolder from "@/components/RowFolder.vue";
-import { getResourceList, getLikesList, updateDiy } from "@/api/design";
-
+import {
+  getResourceList,
+  getCollectResourceList,
+  deleteCollection,
+  getLikesList,
+  addCollection,
+  updateDiy,
+  getCollectList,
+} from "@/api/design";
+import { addResourceToCollection } from "@/api/collection";
 // import { getUserInfo } from "@/api/user";
 import { getToken } from "@/utils/auth";
 import { createNamespacedHelpers } from "vuex";
@@ -239,6 +251,7 @@ export default {
   },
   data() {
     return {
+      thing: {},
       openCollectedOption: false,
       folders: [
         {
@@ -359,27 +372,58 @@ export default {
   },
   methods: {
     handleClickFolder(item) {
+      this.getCollectResourceList(item.id);
       console.log("item: ", item);
     },
     handleDelFolder(item) {
-      console.log("item: ", item);
+      deleteCollection({ collectionId: item.id }).then(() => {
+        this.getCollectList();
+      });
     },
-    onFolderAdd() {
+    onFolderAdd(item) {
       return new Promise((resolve) => {
-        return resolve(1);
+        let req = {
+          name: item.name,
+          userId: this.userInfo.user_id,
+        };
+        addCollection(req).then(() => {
+          return resolve(1);
+        });
       });
       // this.folder = [...e];
     },
     closeCollectedOption() {
       this.openCollectedOption = false;
     },
-    moveCollectedOption(directionObject) {
-      console.log("拿到选择的文件名", directionObject);
+    moveCollectedOption(folderObject) {
+      // this.isCollected = true;
+      this.openCollectedOption = false;
+      addResourceToCollection({
+        resourceId: this.thing.id,
+        collectionId: folderObject.id,
+      }).then((res) => {
+        console.log(res);
+        this.$message({
+          message: "move successfully",
+          type: "success",
+        });
+      });
     },
     addFolder(folderName) {
-      console.log("拿到新建的文件名", folderName);
-      // 加入组件渲染的文件夹数组之中
-      this.folders.push({ name: folderName });
+      addCollection({ name: folderName })
+        .then(() => {
+          this.$message({
+            message: "add folder successfully",
+            type: "success",
+          });
+        })
+        .then(() => {
+          getCollectList().then((res) => {
+            console.log("before add", this.folders);
+            this.folders = res.data.data;
+            console.log("after add", this.folders);
+          });
+        });
     },
     handleFollowTapClick() {},
     getResourceList() {
@@ -393,41 +437,39 @@ export default {
       });
     },
     getLikesList() {
-      let userId = "";
       if (this.isYourAccount) {
-        userId = this.userInfo.user_id;
+        this.getMyLikesList();
       } else {
-        (userId = this.user.userId), this.getMyLikesList();
-      }
-
-      getLikesList({ userId }).then((res) => {
-        res.data.rows.forEach((item) => {
-          if (this.isYourAccount) {
-            item.isLike = true;
-          } else {
-            let myLikesArr = [];
-            for (const like of this.myLikes) {
-              myLikesArr.push(like.id);
-            }
-            if (myLikesArr.includes(item.id)) {
-              item.isLike = true;
-            } else {
-              item.isLike = false;
-            }
-          }
+        let userId = this.user.userId;
+        this.getMyLikesList();
+        getLikesList({ userId }).then((res) => {
+          this.Likes = res.data.rows;
         });
-        this.Likes = res.data.rows;
-      });
+      }
     },
     getMyLikesList() {
       getLikesList({ userId: this.userInfo.user_id }).then((res) => {
-        this.myLikes = res.data.rows;
+        this.Likes = res.data.rows;
+        for (const item of this.Likes) {
+          this.myLikes.push(item.id);
+        }
       });
     },
-    getCollectionsList() {
-      getResourceList(this.pagination).then((res) => {
-        this.collections = res.data.rows;
+    getCollectList() {
+      getCollectList().then((params) => {
+        this.folders = params.data.data.map((item) => {
+          item.showMoreMenu = false;
+          item.isEdit = false;
+          return item;
+        });
       });
+    },
+    getCollectResourceList(collectionId) {
+      getCollectResourceList({ collectionId: collectionId || 0 }).then(
+        (res) => {
+          this.collections = res.data.data;
+        }
+      );
     },
     getHistoriesList() {
       getResourceList(this.pagination).then((res) => {
@@ -449,9 +491,12 @@ export default {
     Handler_Del(index) {
       console.log("index:", index, "选项1-1-1绑定事件执行");
     },
-    Handler_MoveTo(index) {
-      console.log("index:", index, "选项1-1-2绑定事件执行");
-      this.openCollectedOption = true;
+    Handler_MoveTo(thing) {
+      this.thing = thing;
+      getCollectList().then((res) => {
+        this.folders = res.data.data;
+        this.openCollectedOption = true;
+      });
     },
     Handler_Down(index) {
       console.log("index:", index, "选项1-2-1绑定事件执行");
@@ -531,7 +576,8 @@ export default {
       } else if (this.activeName == "second") {
         this.getLikesList();
       } else if (this.activeName == "third") {
-        this.getCollectionsList();
+        this.getCollectList();
+        this.getCollectResourceList();
       } else if (this.activeName == "fourth") {
         this.getHistoriesList();
       }

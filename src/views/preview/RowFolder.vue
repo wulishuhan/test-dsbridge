@@ -112,7 +112,6 @@ export default {
       this.isEdit = true;
       this.folders.push({
         name: this.folders.length + 1,
-        id: this.folders.length + 1,
         isEdit: true,
         showMoreMenu: false,
       });

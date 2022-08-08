@@ -23,6 +23,7 @@
           />
         </div>
         <span
+          v-show="item.id !== '0'"
           @click.stop="handleClickMore(item)"
           class="moreMenuIcon"
           id="moreMenuIcon"
@@ -74,7 +75,12 @@ export default {
   computed: {
     folders() {
       // debugger;
-      return this.value;
+      return [
+        {
+          name: "draft",
+          id: "0",
+        },
+      ].concat(this.value);
     },
   },
   data() {
@@ -110,7 +116,7 @@ export default {
       // item.isEdit = true;
     },
     handleEdited(item) {
-      this.onFolderAdd().then(() => {
+      this.onFolderAdd(item).then(() => {
         item.isEdit = false;
         this.isEdit = false;
       });

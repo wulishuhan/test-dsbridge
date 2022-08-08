@@ -70,7 +70,7 @@
           {{ thing.share_count }}
         </div>
         <span
-          @click="handleClickMore"
+          @click="handleClickMore(thing)"
           class="moreMenuIcon"
           v-if="showMoreMenuBtn"
         >
@@ -203,13 +203,15 @@ export default {
   methods: {
     handleDownClick() {
       this.showMoreMenu = false;
+      this.$emit("clickDownMenu", this.thing);
     },
     handleDelClick() {
       this.showMoreMenu = false;
+      this.$emit("clickDelMenu", this.thing);
     },
     handleMoveClick() {
       this.showMoreMenu = false;
-      this.$emit("showMoveMenu", this.thing);
+      this.$emit("clickMoveMenu", this.thing);
     },
     handleClickMore() {
       this.showMoreMenu = !this.showMoreMenu;
