@@ -131,4 +131,8 @@ export default {
   overflow-y: auto;
   height: 672px;
 }
+::v-deep .collected-option-container {
+  top: 0px;
+  right: 0px;
+}
 </style>

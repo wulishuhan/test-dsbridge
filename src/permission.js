@@ -14,7 +14,9 @@ router.beforeEach(async (to, from, next) => {
         next();
       } else {
         try {
+          const res = await store.dispatch("user/getUserInfo");
           next();
+          console.log("user info: ", res);
         } catch (error) {
           Message.error(error || "Has Error");
           next();
