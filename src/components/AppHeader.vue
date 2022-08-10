@@ -38,12 +38,14 @@
                 </el-button>
               </router-link>
             </li>
-            <li @click="handleCollectClick">
-              <el-button
-                style="background: #f5f5f5; border: none; font-size: 20px"
-              >
-                <i class="ortur-icon-collected"></i>
-              </el-button>
+            <li>
+              <router-link to="/design/fromLike">
+                <el-button
+                  style="background: #f5f5f5; border: none; font-size: 20px"
+                >
+                  <i class="ortur-icon-collected"></i>
+                </el-button>
+              </router-link>
             </li>
             <li class="alert">
               <el-button
@@ -170,10 +172,6 @@ export default {
       });
   },
   methods: {
-    handleCollectClick() {
-      this.$router.push({ path: "/design/fromLike" });
-    },
-
     handleSelect(key, keyPath) {
       console.log(key, keyPath);
     },
