@@ -28,10 +28,10 @@ Vue.config.productionTip = false;
 Vue.use(ElementUI);
 const VueAwesomeSwiper = require("vue-awesome-swiper/dist/ssr");
 Vue.use(VueAwesomeSwiper);
-if (process.env.NODE_ENV === "development") {
-  const { mockXHR } = require("../mock");
-  mockXHR();
-}
+// if (process.env.NODE_ENV === "development") {
+//   const { mockXHR } = require("../mock");
+//   mockXHR();
+// }
 moment.locale("en");
 Vue.prototype.$moment = moment;
 // Vue.use(mock);

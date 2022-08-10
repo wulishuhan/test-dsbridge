@@ -38,7 +38,7 @@
                 <h5 class="list-wrapper-title">文件列表</h5>
                 <ul>
                   <li
-                    v-for="(source, sourceIndex) in fileList"
+                    v-for="(source, sourceIndex) in resourceForm.files"
                     :key="sourceIndex"
                   >
                     <div class="fileinfo-wrapper">
@@ -62,9 +62,12 @@
                     <el-progress
                       :percentage="source.percentage"
                       :format="format"
-                      v-if="source.success != true"
+                      v-if="source.progress == true"
                     ></el-progress>
-                    <div v-if="source.success == true">
+                    <div
+                      v-if="source.progress != true"
+                      class="fileinfo-remove-icon"
+                    >
                       <span
                         class="ortur-icon-minus"
                         style="font-size: 24px; cursor: pointer"
@@ -92,10 +95,10 @@
                   >
                     <div
                       class="swiper-slide swiper-no-swiping"
-                      v-for="(coverImageUrl, coverKey) in resourceForm.images"
+                      v-for="(coverImage, coverKey) in resourceForm.images"
                       :key="coverKey"
                     >
-                      <img :src="coverImageUrl" />
+                      <img :src="coverImage.url" />
                       <i
                         class="ortur-icon-minus"
                         @click="handleRemoveCover(coverKey)"
@@ -175,7 +178,7 @@
       </el-form-item>
       <el-form-item label="License" prop="license">
         <el-select
-          v-model="resourceForm.license[0]"
+          v-model="resourceForm.license"
           placeholder="Select license"
           style="width: 100%"
         >
@@ -194,7 +197,23 @@
           v-model="resourceForm.description"
         ></el-input>
       </el-form-item>
-      <el-form-item label="Tutorial">
+      <el-form-item label="Tutorial" style="position: relative">
+        <span
+          v-if="tutorialForm.length == 0"
+          class="ortur-icon-plus tutorial-handle-icon"
+          @click="addTutorialItem(false)"
+        >
+          <span class="path1"></span>
+          <span class="path2"></span>
+        </span>
+        <span
+          v-if="tutorialForm.length > 0"
+          class="ortur-icon-minus tutorial-handle-icon"
+          @click="removeTutorialItem(false)"
+        >
+          <span class="path1"></span>
+          <span class="path2"></span>
+        </span>
         <draggable
           class="tutorial"
           draggable=".tutorial-item"
@@ -231,11 +250,11 @@
                     <div
                       class="swiper-slide swiper-no-swiping"
                       v-for="(
-                        tutorialImageUrl, tutorialImgKey
+                        tutorialImage, tutorialImgKey
                       ) in tutorialItem.images"
                       :key="tutorialImgKey"
                     >
-                      <img :src="tutorialImageUrl" />
+                      <img :src="tutorialImage.url" />
                       <i
                         class="ortur-icon-minus"
                         @click="removeTutorialImg(tutorialKey, tutorialImgKey)"
@@ -366,7 +385,7 @@ export default {
         files: [],
         title: "",
         tags: ["标签一", "标签二", "标签三"],
-        license: ["GNU - LGPL"],
+        license: "GNU - LGPL",
         description: "",
       },
 
@@ -420,13 +439,7 @@ export default {
         title: [{ required: true, message: "标题不能为空" }],
         description: [{ required: true, message: "描述不能为空" }],
       },
-      tutorialForm: [
-        {
-          title: "",
-          description: "",
-          images: [],
-        },
-      ],
+      tutorialForm: [],
       swiperOptions: {
         observer: true,
         slidesPerView: 5,
@@ -530,17 +543,22 @@ export default {
       console.log("handleSourceChange=========", file);
     },
     handleSourceProgress(event, file, fileList) {
+      // file.progress = true;
       console.log("handleSourceProgres========", event, file, fileList);
-      this.fileList = fileList;
+      // this.resourceForm.files = fileList;
     },
     handleSourceSuccess(response, file, fileList) {
-      file.success = true;
-      if (response.code == 0) {
-        this.resourceForm.files.push(response.data.url);
-      }
-      this.fileList = fileList;
+      file.progress = false;
+      let imgInfo = {
+        id: response.data.id,
+        url: response.data.url,
+        name: response.data.name,
+        size: response.data.size,
+      };
+      this.resourceForm.files.push(imgInfo);
+      console.log(fileList);
+      // this.resourceForm.files = fileList;
       //TODO 完成的时候隐藏掉进度条，显示移除
-      console.log("handleSourceSuccess", response, file, fileList);
     },
     handleRemoveSource(sourceIndex) {
       this.resourceForm.files.splice(sourceIndex, 1);
@@ -550,16 +568,22 @@ export default {
       this.resourceForm.images.splice(removeKey, 1);
     },
     handleCoverAddSuccess(response) {
-      console.log("handleCoverAddSuccess", response);
-      this.resourceForm.images.push(response.data.url);
+      let imgInfo = {
+        id: response.data.id,
+        url: response.data.url,
+        name: response.data.name,
+        size: response.data.size,
+      };
+      this.resourceForm.images.push(imgInfo);
     },
-    handleCoverEditSuccess(response, file, fileList) {
-      console.log(response, file, fileList);
-      this.resourceForm.images.splice(
-        this.coverEditIndex,
-        1,
-        response.data.url
-      );
+    handleCoverEditSuccess(response) {
+      let imgInfo = {
+        id: response.data.id,
+        url: response.data.url,
+        name: response.data.name,
+        size: response.data.size,
+      };
+      this.resourceForm.images.splice(this.coverEditIndex, 1, imgInfo);
     },
     currentTutorialEditIndex(tutorialKey, tutorialImgKey) {
       console.log(tutorialKey, tutorialImgKey);
@@ -571,15 +595,26 @@ export default {
       this.tutorialForm[tutorialKey].images.splice(tutorialImgKey, 1);
     },
     handleTutorialAddSuccess(response) {
-      console.log(response);
-      this.tutorialForm[this.currentTutorialKey].images.push(response.data.url);
+      let imgInfo = {
+        id: response.data.id,
+        url: response.data.url,
+        name: response.data.name,
+        size: response.data.size,
+      };
+      this.tutorialForm[this.currentTutorialKey].images.push(imgInfo);
     },
     handleTutorialEditSuccess(response, file, fileList) {
       console.log(response, file, fileList);
+      let imgInfo = {
+        id: response.data.id,
+        url: response.data.url,
+        name: response.data.name,
+        size: response.data.size,
+      };
       this.tutorialForm[this.currentTutorialKey].images.splice(
         this.currentTutorialImgKey,
         1,
-        response.data.url
+        imgInfo
       );
     },
 
@@ -591,7 +626,11 @@ export default {
       console.log(this.tutorialForm);
     },
     addTutorialItem(tutorialKey) {
-      this.tutorialForm.splice(tutorialKey + 1, 0, {
+      var index = tutorialKey;
+      if (tutorialKey != false) {
+        index = 0;
+      }
+      this.tutorialForm.splice(index, 0, {
         id: Date.now(),
         description: "",
         title: "",
@@ -599,7 +638,11 @@ export default {
       });
     },
     removeTutorialItem(tutorialKey) {
-      this.tutorialForm.splice(tutorialKey, 1);
+      if (tutorialKey != false) {
+        this.tutorialForm.splice(tutorialKey, 1);
+      } else {
+        this.tutorialForm = [];
+      }
     },
     callback() {},
     format(percentage) {
@@ -775,10 +818,11 @@ export default {
           align-items: center;
           flex-direction: row;
           .fileinfo-wrapper {
-            width: 40%;
+            width: 12%;
             display: flex;
             align-items: center;
             .fileinfo {
+              width: 100%;
               margin-left: 10px;
               display: flex;
               flex-direction: column;
@@ -816,6 +860,9 @@ export default {
           .el-progress {
             width: 60%;
           }
+          .fileinfo-remove-icon {
+            margin-left: 70px;
+          }
         }
       }
     }
@@ -827,10 +874,17 @@ export default {
     }
   }
 }
-
+.tutorial-handle-icon {
+  position: absolute;
+  right: 0;
+  top: -24px;
+  font-size: 20px;
+  cursor: pointer;
+}
 .tutorial {
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
   padding: 10px;
+
   .tutorial-item {
     position: relative;
     box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);

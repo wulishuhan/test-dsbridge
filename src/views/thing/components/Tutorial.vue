@@ -11,8 +11,8 @@
       </div>
       <div class="images">
         <img
-          v-for="(img, imgIndex) in item.images"
-          :src="img"
+          v-for="(item, imgIndex) in item.images"
+          :src="item.url"
           :key="imgIndex"
           alt=""
         />
