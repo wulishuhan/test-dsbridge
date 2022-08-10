@@ -27,6 +27,13 @@ export function getCollectResourceList(params) {
     params,
   });
 }
+export function cancelCollectResource(params) {
+  return request({
+    url: `/library/collection/${params.collectionId}/resource/${params.resId}`,
+    method: "delete",
+    params,
+  });
+}
 export function getResourceList(params) {
   return request({
     url: `/library/resource/list`,

@@ -87,11 +87,11 @@
                       <span class="email">{{ userInfo.email }}</span>
                     </div>
                   </el-dropdown-item>
-                  <el-dropdown-item>
-                    <i class="el-icon-user-solid"></i>&nbsp; 概况
+                  <el-dropdown-item @click.native="handleProfileClick">
+                    <i class="el-icon-user-solid">&nbsp; 概况</i>
                   </el-dropdown-item>
-                  <el-dropdown-item>
-                    <i class="el-icon-collection-tag"></i>&nbsp; 历史
+                  <el-dropdown-item @click.native="handleHistoryClick">
+                    <i class="el-icon-collection-tag">&nbsp; 历史</i>
                   </el-dropdown-item>
                   <el-dropdown-item>
                     <i class="el-icon-fork-spoon"></i>&nbsp; 设置
@@ -170,6 +170,12 @@ export default {
       });
   },
   methods: {
+    handleHistoryClick() {
+      this.$router.push({ path: "/design/fromHistory" });
+    },
+    handleProfileClick() {
+      this.$router.push({ path: "/design/fromProfile" });
+    },
     handleCollectClick() {
       this.$router.push({ path: "/design/fromLike" });
     },

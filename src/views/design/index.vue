@@ -144,8 +144,8 @@
                   <resource-card
                     :key="item.id"
                     @clickMoveMenu="Handler_MoveTo(item)"
-                    @clickDelMenu="Handler_Del(thing)"
-                    @clickDownMenu="Handler_Down(thing)"
+                    @clickDelMenu="Handler_Del(item)"
+                    @clickDownMenu="Handler_Down(item)"
                     :thing="item"
                     :showEdit="true"
                     :showMoreMenuBtn="isYourAccount && true"
@@ -196,8 +196,8 @@
                 <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
                   <resource-card
                     @clickMoveMenu="Handler_MoveTo(item)"
-                    @clickDelMenu="Handler_Del(thing)"
-                    @clickDownMenu="Handler_Down(thing)"
+                    @clickDelMenu="handleCancelCollect(item)"
+                    @clickDownMenu="Handler_Down(item)"
                     :isCollected="myCollects.includes(item.id)"
                     :thing="item"
                     :showEdit="false"
@@ -238,6 +238,7 @@ import {
   deleteCollection,
   getLikesList,
   addCollection,
+  cancelCollectResource,
   updateDiy,
   getCollectList,
 } from "@/api/design";
@@ -360,6 +361,13 @@ export default {
       this.isYourAccount = true;
       this.getLikesList();
       this.activeName = "second";
+    } else if (userId == "fromProfile") {
+      this.isYourAccount = true;
+      this.getResourceList();
+    } else if (userId == "fromHistory") {
+      this.isYourAccount = true;
+      this.getHistoriesList();
+      this.activeName = "fourth";
     } else if (this.userInfo.user_id == userId) {
       this.isYourAccount = true;
       this.getResourceList();
@@ -380,6 +388,15 @@ export default {
     ...mapState(["userInfo"]),
   },
   methods: {
+    handleCancelCollect(item) {
+      let req = {
+        collectionId: this.collectionId,
+        resId: item.id,
+      };
+      cancelCollectResource(req).then(() => {
+        this.getCollectResourceList();
+      });
+    },
     handleClickFolder(item) {
       this.collectionId = item.id;
       this.getCollectResourceList();
