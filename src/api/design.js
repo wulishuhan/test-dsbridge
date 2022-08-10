@@ -7,6 +7,24 @@ export function addCollection(data) {
     data,
   });
 }
+export function deleteResource(params) {
+  return request({
+    url: `/library/resource/${params.resId}`,
+    method: "delete",
+  });
+}
+export function moveResourceToCollection(params) {
+  return request({
+    url: `/library/collection/${params.collectionId}/resource/${params.resourceId}`,
+    method: "put",
+  });
+}
+export function addResourceToCollection(params) {
+  return request({
+    url: `/library/collection/${params.collectionId}/resource/${params.resourceId}`,
+    method: "post",
+  });
+}
 export function deleteCollection(params) {
   return request({
     url: `/library/collection/${params.collectionId}`,

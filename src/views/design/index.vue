@@ -152,6 +152,7 @@
                     :showAvatar="false"
                     :showStar="false"
                     :showCollection="false"
+                    :isYourAccount="isYourAccount"
                   >
                   </resource-card>
                 </el-col>
@@ -186,6 +187,7 @@
           <el-tab-pane label="Collections" name="third">
             <el-row :gutter="20">
               <RowFolder
+                :isYourAccount="isYourAccount"
                 style="width: 98%; margin-bottom: 20px"
                 :value="folders"
                 :onFolderAdd="onFolderAdd"
@@ -204,6 +206,7 @@
                     :showStar="false"
                     :showMoreMenuBtn="true"
                     :key="item.id"
+                    :isYourAccount="isYourAccount"
                   >
                   </resource-card>
                 </el-col>
@@ -237,12 +240,14 @@ import {
   getCollectResourceList,
   deleteCollection,
   getLikesList,
+  deleteResource,
   addCollection,
   cancelCollectResource,
   updateDiy,
   getCollectList,
+  moveResourceToCollection,
+  addResourceToCollection,
 } from "@/api/design";
-import { addResourceToCollection } from "@/api/collection";
 // import { getUserInfo } from "@/api/user";
 import { getToken } from "@/utils/auth";
 import { createNamespacedHelpers } from "vuex";
@@ -259,6 +264,8 @@ export default {
   },
   data() {
     return {
+      isYourAccount: true,
+
       myCollects: [],
       thing: {},
       openCollectedOption: false,
@@ -297,6 +304,7 @@ export default {
           {
             btnName: "Delete",
             fnHandler: "Handler1",
+            disabled: !this.isYourAccount,
           },
           {
             btnName: "Move to",
@@ -323,7 +331,6 @@ export default {
       resources: [],
       activeTab: "first",
       activeName: "first",
-      isYourAccount: true,
       isDescEdit: false,
       pagination: {
         pageSize: 10,
@@ -350,6 +357,7 @@ export default {
         desc: "yang 654651",
       },
       collectionId: "",
+      userId: "",
     };
   },
   mounted() {
@@ -377,12 +385,7 @@ export default {
       this.user.userId = userId;
       this.getResourceList();
     }
-    // getUserInfo({}).then((res) => {
-    //   Object.assign(this.user, res.data.data);
-    // });
-    // this.$store.dispatch("user/getUserInfo").catch((e) => {
-    //   console.log(e);
-    // });
+    this.userId = this.isYourAccount ? this.userInfo.user_id : this.user.userId;
   },
   computed: {
     ...mapState(["userInfo"]),
@@ -424,18 +427,31 @@ export default {
     },
     moveCollectedOption(folderObject) {
       // this.isCollected = true;
-      this.openCollectedOption = false;
-      addResourceToCollection({
-        resourceId: this.thing.id,
-        collectionId: folderObject.id,
-      }).then((res) => {
-        console.log(res);
-        this.getCollectList();
-        this.$message({
-          message: "move successfully",
-          type: "success",
+      if (this.activeName == "first") {
+        this.openCollectedOption = false;
+        addResourceToCollection({
+          resourceId: this.thing.id,
+          collectionId: folderObject.id,
+        }).then(() => {
+          this.$message({
+            message: "move successfully",
+            type: "success",
+          });
         });
-      });
+      } else if (this.activeName == "third") {
+        this.openCollectedOption = false;
+        moveResourceToCollection({
+          resourceId: this.thing.id,
+          collectionId: folderObject.id,
+        }).then((res) => {
+          console.log(res);
+          this.getCollectResourceList();
+          this.$message({
+            message: "move successfully",
+            type: "success",
+          });
+        });
+      }
     },
     addFolder(folderName) {
       addCollection({ name: folderName })
@@ -446,20 +462,14 @@ export default {
           });
         })
         .then(() => {
-          getCollectList().then((res) => {
-            console.log("before add", this.folders);
+          getCollectList({ userId: this.userId }).then((res) => {
             this.folders = res.data.data;
-            console.log("after add", this.folders);
           });
         });
     },
     handleFollowTapClick() {},
     getResourceList() {
-      let userId = "";
-      this.isYourAccount
-        ? (userId = this.userInfo.user_id)
-        : (userId = this.user.userId);
-      getResourceList({ userId }).then((res) => {
+      getResourceList({ userId: this.userId }).then((res) => {
         this.resources = res.data.rows;
         // this.resources.push(...res.data.rows);
       });
@@ -479,16 +489,18 @@ export default {
     getMyLikesList() {
       return new Promise((resolve) => {
         getLikesList({ userId: this.userInfo.user_id }).then((res) => {
-          this.Likes = res.data.rows;
-          for (const item of this.Likes) {
+          if (this.isYourAccount) {
+            this.Likes = res.data.rows;
+          }
+          for (const item of res.data.rows) {
             this.myLikes.push(item.id);
           }
           resolve(1);
         });
       });
     },
-    getCollectList() {
-      getCollectList().then((params) => {
+    getCollectList(myUserId) {
+      getCollectList({ userId: myUserId || this.userId }).then((params) => {
         this.folders = params.data.data.map((item) => {
           item.showMoreMenu = false;
           item.isEdit = false;
@@ -517,8 +529,10 @@ export default {
           collectionId: this.collectionId || 0,
           userId: this.userInfo.user_id,
         }).then((res) => {
-          this.collections = res.data.rows;
-          for (const item of this.collections) {
+          if (this.isYourAccount) {
+            this.collections = res.data.rows;
+          }
+          for (const item of res.data.rows) {
             this.myCollects.push(item.id);
           }
           resolve(1);
@@ -542,12 +556,14 @@ export default {
         y,
       };
     },
-    Handler_Del(index) {
-      console.log("index:", index, "选项1-1-1绑定事件执行");
+    Handler_Del(item) {
+      deleteResource({ resId: item.id }).then(() => {
+        this.getResourceList();
+      });
     },
     Handler_MoveTo(thing) {
       this.thing = thing;
-      getCollectList().then((res) => {
+      getCollectList({ userId: this.userInfo.user_id }).then((res) => {
         this.folders = res.data.data;
         this.openCollectedOption = true;
       });

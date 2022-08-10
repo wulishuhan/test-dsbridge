@@ -23,7 +23,7 @@
           />
         </div>
         <span
-          v-show="item.id !== '0'"
+          v-show="isYourAccount && item.id !== '0'"
           @click.stop="handleClickMore(item)"
           class="moreMenuIcon"
           id="moreMenuIcon"
@@ -37,7 +37,9 @@
         </span>
       </div>
     </div>
-    <div class="plus" @click="addFolder" v-show="!isEdit">+</div>
+    <div class="plus" @click="addFolder" v-show="isYourAccount && !isEdit">
+      +
+    </div>
   </div>
 </template>
 
@@ -55,6 +57,12 @@ export default {
             showMoreMenu: false,
           },
         ];
+      },
+    },
+    isYourAccount: {
+      type: Boolean,
+      default: () => {
+        return true;
       },
     },
     onFolderAdd: {

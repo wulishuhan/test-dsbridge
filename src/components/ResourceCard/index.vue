@@ -75,7 +75,13 @@
           v-if="showMoreMenuBtn"
         >
           <div class="moreMenu" v-if="showMoreMenu">
-            <div class="moreMenuItem" @click.stop="handleDelClick">Delete</div>
+            <div
+              v-show="isYourAccount"
+              class="moreMenuItem"
+              @click.stop="handleDelClick"
+            >
+              Delete
+            </div>
             <div class="moreMenuItem" @click.stop="handleMoveClick">MoveTo</div>
             <div class="moreMenuItem" @click.stop="handleDownClick">
               DownLoad
@@ -113,6 +119,12 @@ export default {
   name: "ResourceCard",
   components: { ShareSocialMedia, CollectedOption },
   props: {
+    isYourAccount: {
+      type: Boolean,
+      default: () => {
+        return false;
+      },
+    },
     showMoreMenuBtn: {
       type: Boolean,
       default: () => {
@@ -395,7 +407,7 @@ export default {
   .moreMenu {
     position: absolute;
     width: 160px;
-    height: 176px;
+    // height: 176px;
     background: #ffffff;
     box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.07);
     border-radius: 10px;
