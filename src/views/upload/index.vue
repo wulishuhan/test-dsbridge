@@ -937,6 +937,7 @@ export default {
     .el-button {
       position: absolute;
       border: none;
+      background: none;
     }
     .drag-btn {
       left: -80px;

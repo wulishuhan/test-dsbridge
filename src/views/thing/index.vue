@@ -194,7 +194,7 @@
           </div>
         </div>
         <div class="bottom-content-right">
-          <label-card></label-card>
+          <label-card :LabelArr="detail.tags"></label-card>
           <div class="share-content">
             <div class="bottom-content-right-box-title">Share</div>
             <div class="share">
