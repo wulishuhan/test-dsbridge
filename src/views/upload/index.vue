@@ -24,6 +24,7 @@
               :headers="headers"
               :accept="acceptType"
               :before-upload="beforeUpload"
+              ref="uploadFile"
             >
               <i class="ortur-icon-file" style="font-size: 60px"></i>
               <span>Drag your file & photo here (&lt;12MB)</span>
@@ -60,12 +61,12 @@
                       </div>
                     </div>
                     <el-progress
-                      :percentage="source.percentage"
+                      :percentage="source.percent"
                       :format="format"
-                      v-if="source.progress == true"
+                      v-if="source.percent != 100"
                     ></el-progress>
                     <div
-                      v-if="source.progress != true"
+                      v-if="source.percent == 100"
                       class="fileinfo-remove-icon"
                     >
                       <span
@@ -75,6 +76,17 @@
                       >
                         <span class="path1"></span>
                         <span class="path2"></span>
+                      </span>
+                    </div>
+                    <div
+                      v-if="source.percent != 100"
+                      class="fileinfo-abort-icon"
+                    >
+                      <span
+                        class="el-icon-close"
+                        style="font-size: 24px; cursor: pointer"
+                        @click="handleabortUpload(sourceIndex)"
+                      >
                       </span>
                     </div>
                   </li>
@@ -483,6 +495,9 @@ export default {
         this.resourceForm.description = detail.description;
         this.resourceForm.title = detail.title;
         this.resourceForm.files = detail.files;
+        this.resourceForm.files.forEach((item) => {
+          item.percent = 100;
+        });
         this.resourceForm.images = detail.images;
         this.resourceForm.tags = detail.tags;
         this.resourceForm.license = detail.license;
@@ -504,6 +519,7 @@ export default {
           type: "warning",
         });
       }
+      accept = true;
       return accept;
     },
     resetForm() {
@@ -540,27 +556,54 @@ export default {
       return filesize.toFixed(2) + units;
     },
     handleSourceChange(file) {
+      //检查当前队列里是否已经有该元素
+      for (const index in this.resourceForm.files) {
+        var item = this.resourceForm.files[index];
+        if (file.uid == item.uid) {
+          return;
+        }
+      }
+
+      let fileInfo = {
+        uid: file.uid,
+        url: "",
+        id: 0,
+        name: file.name,
+        size: file.size,
+        percent: 0,
+        file: file,
+      };
+      this.resourceForm.files.push(fileInfo);
       console.log("handleSourceChange=========", file);
     },
-    handleSourceProgress(event, file, fileList) {
-      // file.progress = true;
-      console.log("handleSourceProgres========", event, file, fileList);
-      // this.resourceForm.files = fileList;
+    handleSourceProgress(event, file) {
+      for (const index in this.resourceForm.files) {
+        var item = this.resourceForm.files[index];
+        if (file.uid == item.uid) {
+          item.percent = parseInt(event.percent.toFixed(0));
+          return;
+        }
+      }
     },
-    handleSourceSuccess(response, file, fileList) {
-      file.progress = false;
-      let imgInfo = {
-        id: response.data.id,
-        url: response.data.url,
-        name: response.data.name,
-        size: response.data.size,
-      };
-      this.resourceForm.files.push(imgInfo);
-      console.log(fileList);
-      // this.resourceForm.files = fileList;
+    handleSourceSuccess(response, file) {
+      for (const index in this.resourceForm.files) {
+        var item = this.resourceForm.files[index];
+        if (file.uid == item.uid) {
+          item.url = response.data.url;
+          item.percent = 100;
+          item.id = response.data.id;
+          break;
+        }
+      }
+
       //TODO 完成的时候隐藏掉进度条，显示移除
     },
     handleRemoveSource(sourceIndex) {
+      this.resourceForm.files.splice(sourceIndex, 1);
+    },
+    //中止上传
+    handleabortUpload(sourceIndex) {
+      this.$refs.uploadFile.abort(this.resourceForm.files[sourceIndex].file);
       this.resourceForm.files.splice(sourceIndex, 1);
     },
     handleRemoveCover(removeKey) {
@@ -859,6 +902,7 @@ export default {
 
           .el-progress {
             width: 60%;
+            margin-left: 70px;
           }
           .fileinfo-remove-icon {
             margin-left: 70px;

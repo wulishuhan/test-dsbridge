@@ -71,7 +71,7 @@
                         indicator-position="outside"
                         autoplay="true"
                       >
-                        <img :src="item" />
+                        <img :src="item.url" />
                       </el-carousel-item>
                     </el-carousel>
                   </div>
@@ -88,7 +88,7 @@
                         :class="
                           index === imgActiveIndex ? 'img-activeBorder' : ''
                         "
-                        :src="item"
+                        :src="item.url"
                         alt=""
                       />
                     </div>
