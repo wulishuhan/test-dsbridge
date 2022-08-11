@@ -27,9 +27,11 @@
               ref="uploadFile"
             >
               <i class="ortur-icon-file" style="font-size: 60px"></i>
-              <span>Drag your file & photo here (&lt;12MB)</span>
-              <span>Or</span>
-              <el-button size="small" type="primary">Select file</el-button>
+              <span>{{ $t("upload.dragFileTip") }} (&lt;12MB)</span>
+              <span>{{ $t("upload.or") }}</span>
+              <el-button size="small" type="primary">
+                {{ $t("upload.selectFile") }}
+              </el-button>
             </el-upload>
           </div>
           <el-form-item prop="files">
@@ -100,7 +102,9 @@
             <div class="list-area">
               <el-divider></el-divider>
               <div class="list-wrapper">
-                <h5 class="list-wrapper-title">封面</h5>
+                <h5 class="list-wrapper-title">
+                  {{ $t("upload.resourceCover") }}
+                </h5>
                 <div v-swiper:coverSwiper="swiperOptions">
                   <draggable
                     class="swiper-wrapper"
@@ -377,7 +381,6 @@ export default {
     return {
       previewDialogVisible: false,
       sourceId: 0,
-      headerTitle: "Create project",
       fileList: [],
       acceptType: ".jpg,.png,.svg,.dxf,.gc,.nc,.jpeg",
       tutorialValidateResult: true,
@@ -478,6 +481,13 @@ export default {
         Authorization: "Bearer " + getToken(),
       };
     },
+    headerTitle() {
+      if (this.sourceId != undefined) {
+        return this.$t("upload.editProject");
+      } else {
+        return this.$t("upload.createProject");
+      }
+    },
     previewData() {
       return {
         ...this.resourceForm,
@@ -489,7 +499,6 @@ export default {
   mounted() {
     this.sourceId = this.$route.params.sourceId;
     if (this.sourceId != undefined) {
-      this.headerTitle = "Edit Project";
       //调用详解接口
       getResource(parseInt(this.sourceId)).then((res) => {
         let detail = res.data.data;
@@ -681,9 +690,12 @@ export default {
     },
     addTutorialItem(tutorialKey) {
       var index = tutorialKey;
-      if (tutorialKey != false) {
+      if (tutorialKey === false) {
         index = 0;
+      } else {
+        index += 1;
       }
+
       this.tutorialForm.splice(index, 0, {
         id: Date.now(),
         description: "",
@@ -692,7 +704,7 @@ export default {
       });
     },
     removeTutorialItem(tutorialKey) {
-      if (tutorialKey != false) {
+      if (tutorialKey !== false) {
         this.tutorialForm.splice(tutorialKey, 1);
       } else {
         this.tutorialForm = [];
@@ -718,7 +730,6 @@ export default {
         }
         if (valid && this.tutorialValidateResult) {
           if (this.sourceId != undefined) {
-            this.headerTitle = "Edit Project";
             //调用详解接口
             updateResource({
               id: this.sourceId,

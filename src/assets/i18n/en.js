@@ -8,5 +8,11 @@ module.exports = {
     title: "title",
     resourceList: "The resource list",
     description: "Description",
+    resourceCover: "The resource cover",
+    createProject: "Create project",
+    editProject: "Edit project",
+    dragFileTip: "Drag your file & photo here",
+    or: "Or",
+    selectFile: "Select file",
   },
 };
