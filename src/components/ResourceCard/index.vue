@@ -266,7 +266,9 @@ export default {
       if (this.selected === "" || this.selected === this.thing.id) {
         this.$store.commit("collection/SET_SELECTCOLLECTIONBOX", this.thing.id);
         this.openCollectedOption = true;
-        getCollectionList().then((res) => {
+        getCollectionList({
+          userId: this.$store.getters.userInfo.user_id,
+        }).then((res) => {
           console.log("getCollectionList", res);
           this.folders = res.data.data;
         });
@@ -309,15 +311,21 @@ export default {
       });
     },
     addFolder(folderName) {
-      addCollection({ name: folderName })
-        .then(() => {
+      addCollection({
+        name: folderName,
+        userId: this.$store.getters.userInfo.user_id,
+      })
+        .then((res) => {
+          console.log("addCollection", res);
           this.$message({
             message: "add folder successfully",
             type: "success",
           });
         })
         .then(() => {
-          getCollectionList().then((res) => {
+          getCollectionList({
+            userId: this.$store.getters.userInfo.user_id,
+          }).then((res) => {
             this.folders = res.data.data;
           });
         });

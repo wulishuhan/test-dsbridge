@@ -6,7 +6,7 @@
       @click="click"
     >
       <i :class="isStar ? 'el-icon-star-on' : 'el-icon-star-off'"></i>
-      <span class="num">{{ downLoadNum }}k</span>
+      <span class="num">{{ numText }}</span>
     </el-button>
   </span>
 </template>
@@ -19,13 +19,26 @@ export default {
     },
   },
   props: {
-    downLoadNum: {
+    starNum: {
       type: Number,
       default: 0,
     },
     isStar: {
       type: Boolean,
       default: false,
+    },
+  },
+  computed: {
+    numText() {
+      let numText = "";
+      if (this.starNum < 0) {
+        numText = "0";
+      } else if (this.starNum < 1000) {
+        numText = "" + this.starNum;
+      } else {
+        numText = Math.floor(this.starNum / 1000) + "k";
+      }
+      return numText;
     },
   },
 };

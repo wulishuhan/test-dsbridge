@@ -122,9 +122,7 @@ export default {
             });
           });
       } else {
-        this.collectedList = [];
-        this.likeList = [];
-        console.log(this.collectedList, this.likeList);
+        this.$router.go(0);
       }
     },
   },
@@ -142,6 +140,7 @@ export default {
         getCollectionResourceList({
           userId: this.userInfo.user_id,
         }).then((res) => {
+          console.log("collection list", res);
           for (let i = 0; i < res.data.rows.length; i++) {
             const element = res.data.rows[i];
             this.collectedList.push(element.id);
@@ -200,6 +199,7 @@ export default {
 .main {
   /* text-align: center; */
   /* background-color: #f5f5f5; */
+  background: #f0f3fa;
 }
 .content {
   width: 1200px;
@@ -219,7 +219,7 @@ p {
   width: 1200px;
   height: 300px;
   margin: 0 auto;
-  color: #f5f5f5;
+  color: #f0f3fa;
   position: relative;
   img {
     width: 100%;
@@ -281,7 +281,7 @@ p {
   left: 0px;
 }
 ::v-deep .el-input__inner {
-  background: #f5f5f5;
+  background: #f0f3fa;
 }
 .select:hover {
   border: 1px solid #c2c4cc;
