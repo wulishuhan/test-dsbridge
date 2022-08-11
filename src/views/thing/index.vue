@@ -359,7 +359,7 @@ export default {
   methods: {
     openImageView() {
       this.urlList = this.imageList.map((item) => {
-        return item.url;
+        return item;
       });
       this.showViewer = true;
     },
