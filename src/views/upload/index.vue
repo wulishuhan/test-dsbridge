@@ -173,7 +173,7 @@
           v-for="(tag, index) in resourceForm.tags"
           closable
           :disable-transitions="true"
-          @close="handleClose(tag)"
+          @close="handleCloseTag(tag)"
         >
           {{ tag }}
         </el-tag>
@@ -526,11 +526,20 @@ export default {
       this.resourceForm = this.$options.data().resourceForm;
       this.tutorialForm = this.$options.data().tutorialForm;
     },
-    handleClose(tag) {
+    handleCloseTag(tag) {
       this.resourceForm.tags.splice(this.resourceForm.tags.indexOf(tag), 1);
     },
     handleInputConfirm() {
       let inputValue = this.inputValue;
+      if (this.resourceForm.tags.length >= 12) {
+        this.$message.error("标签至多1个");
+        return;
+      }
+
+      if (inputValue.length > 32) {
+        this.$message.error("至多32个字符");
+        return;
+      }
       if (inputValue) {
         this.resourceForm.tags.push(inputValue);
       }
@@ -698,14 +707,13 @@ export default {
     },
     handleSave() {
       this.$refs["resourceForm"].validate((valid) => {
-        const tutorialFormList = this.$refs["tutorialForm"];
+        const tutorialFormList = this.$refs["tutorialForm"] ?? [];
         this.tutorialValidateResult = true;
         for (let i = 0; i < tutorialFormList.length; i++) {
           tutorialFormList[i].validate((valid) => {
             this.tutorialValidateResult &&= valid;
           });
         }
-
         if (valid && this.tutorialValidateResult) {
           if (this.sourceId != undefined) {
             this.headerTitle = "Edit Project";
@@ -738,7 +746,6 @@ export default {
                 console.log("save========", e);
               });
           }
-
           console.log("表单验证成功");
         } else {
           this.$message.error("验证失败!");
