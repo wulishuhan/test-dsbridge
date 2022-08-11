@@ -36,7 +36,9 @@
             <div class="list-area">
               <el-divider></el-divider>
               <div class="list-wrapper">
-                <h5 class="list-wrapper-title">文件列表</h5>
+                <h5 class="list-wrapper-title">
+                  {{ $t("upload.resourceList") }}
+                </h5>
                 <ul>
                   <li
                     v-for="(source, sourceIndex) in resourceForm.files"
@@ -202,7 +204,7 @@
           ></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="Description" prop="description">
+      <el-form-item :label="$t('upload.description')" prop="description">
         <el-input
           type="textarea"
           autosize
