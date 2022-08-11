@@ -41,7 +41,7 @@ const dateTimeFormats = {
 };
 // 最后 export default，这一步肯定要写的。
 export default new VueI18n({
-  locale: "zh", // set locale 默认显示英文
+  locale: "en", // set locale 默认显示英文
   messages, // set locale messages
   dateTimeFormats,
 });

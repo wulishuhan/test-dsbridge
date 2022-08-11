@@ -11,6 +11,8 @@ module.exports = {
     history: "历史",
     setting: "设置",
     logout: "退出",
+    search: "请输入搜索关键词",
+    searchSelect: "请选择",
   },
   upload: {
     title: "标题",

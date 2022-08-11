@@ -11,6 +11,8 @@ module.exports = {
     history: "History",
     setting: "Setting",
     logout: "Logout",
+    search: "Please enter your search keyword",
+    searchSelect: "Select",
   },
   upload: {
     title: "Title",

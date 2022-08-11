@@ -10,7 +10,7 @@
           </div>
           <div class="app-header__search">
             <el-input
-              placeholder="请输入搜索关键词"
+              :placeholder="$t('header.search')"
               prefix-icon="el-icon-search"
               v-model="keywords"
               class="el-input-search input-with-select"
@@ -19,7 +19,7 @@
             <el-select
               v-model="select"
               class="el-select-search"
-              placeholder="请选择"
+              :placeholder="$t('header.searchSelect')"
             >
               <el-option label="Author" value="1"></el-option>
               <el-option label="Content" value="2"></el-option>
