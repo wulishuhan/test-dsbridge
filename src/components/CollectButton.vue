@@ -23,7 +23,7 @@
         ><span class="path1"></span><span class="path2"></span
         ><span class="path3"></span
       ></span>
-      <span class="num">{{ downLoadNum }}k</span>
+      <span class="num">{{ numText }}</span>
     </el-button>
   </span>
 </template>
@@ -36,13 +36,26 @@ export default {
     },
   },
   props: {
-    downLoadNum: {
+    collectionNum: {
       type: Number,
       default: 0,
     },
     isCollect: {
       type: Boolean,
       default: false,
+    },
+  },
+  computed: {
+    numText() {
+      let numText = "";
+      if (this.collectionNum < 0) {
+        numText = "0";
+      } else if (this.collectionNum < 1000) {
+        numText = "" + this.collectionNum;
+      } else {
+        numText = Math.floor(this.collectionNum / 1000) + "k";
+      }
+      return numText;
     },
   },
 };

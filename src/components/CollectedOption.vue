@@ -206,7 +206,6 @@ export default {
 ::-webkit-scrollbar {
   width: 1px;
   height: 16px;
-  background-color: #f5f5f5;
   position: absolute;
   right: 0px;
 }
@@ -215,7 +214,6 @@ export default {
 ::-webkit-scrollbar-track {
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
   border-radius: 10px;
-  background-color: #f5f5f5;
 }
 /*定义滑块
  内阴影+圆角*/

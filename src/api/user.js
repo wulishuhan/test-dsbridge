@@ -16,8 +16,8 @@ export function Login(data) {
 
 export function Logout(data) {
   return request({
-    url: "/user/logout",
-    method: "post",
+    url: "/auth/user/logout",
+    method: "delete",
     data,
   });
 }

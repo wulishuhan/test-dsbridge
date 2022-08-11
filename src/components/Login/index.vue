@@ -13,18 +13,16 @@
           <el-form-item>
             <div class="continue-with">Continue with</div>
             <div class="icon-box">
-              <a
-                href="https://sso.leadiffer.com/oauth/thirdParty?from=facebook"
-              >
+              <a @click="thirdPartyLogin('facebook')">
                 <i class="ortur-icon-facebook icon"></i>
               </a>
-              <a href="https://sso.leadiffer.com/oauth/thirdParty?from=github">
+              <a @click="thirdPartyLogin('github')">
                 <i class="ortur-icon-github icon"></i>
               </a>
-              <a href="https://sso.leadiffer.com/oauth/thirdParty?from=tiktok">
+              <a @click="thirdPartyLogin('tiktok')">
                 <i class="ortur-icon-tiktok icon"></i>
               </a>
-              <a href="https://sso.leadiffer.com/oauth/thirdParty?from=google">
+              <a @click="thirdPartyLogin('google')">
                 <i class="ortur-icon-google icon"></i>
               </a>
               <a>
@@ -88,18 +86,16 @@
           <el-form-item>
             <div class="continue-with">Continue with</div>
             <div class="icon-box">
-              <a
-                href="https://sso.leadiffer.com/oauth/thirdParty?from=facebook"
-              >
+              <a @click="thirdPartyLogin('facebook')">
                 <i class="ortur-icon-facebook icon"></i>
               </a>
-              <a href="https://sso.leadiffer.com/oauth/thirdParty?from=github">
+              <a @click="thirdPartyLogin('github')">
                 <i class="ortur-icon-github icon"></i>
               </a>
-              <a href="https://sso.leadiffer.com/oauth/thirdParty?from=tiktok">
+              <a @click="thirdPartyLogin('tiktok')">
                 <i class="ortur-icon-tiktok icon"></i>
               </a>
-              <a href="https://sso.leadiffer.com/oauth/thirdParty?from=google">
+              <a @click="thirdPartyLogin('google')">
                 <i class="ortur-icon-google icon"></i>
               </a>
               <a>
@@ -294,6 +290,11 @@ export default {
     },
     handleClose() {
       this.$emit("handleClose");
+    },
+    thirdPartyLogin(from) {
+      let redirectUrl = window.location.href.split("?")[0];
+      console.log("redirectUrl:", redirectUrl);
+      window.location.href = `https://test.leadiffer.com/oauth/thirdParty?from=${from}&redirect_url=${redirectUrl}`;
     },
   },
 };

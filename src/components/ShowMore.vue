@@ -96,7 +96,7 @@ export default {
   background-image: linear-gradient(
     -180deg,
     rgba(255, 255, 255, 0) 0%,
-    #f5f5f5 70%
+    #f0f3fa 70%
   );
 }
 .show-more {
