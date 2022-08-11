@@ -22,9 +22,14 @@
                 </div>
               </div>
               <div class="flex justify-between" style="width: 424px">
-                <StarButton :isStar="isLike" @click="like"></StarButton>
+                <StarButton
+                  :starNum="detail.like_count"
+                  :isStar="isLike"
+                  @click="like"
+                ></StarButton>
                 <CollectButton
                   :isCollect="isCollected"
+                  :collectionNum="detail.collect_count"
                   @click="collect"
                 ></CollectButton>
                 <DownLoadButton></DownLoadButton>
@@ -67,11 +72,11 @@
                       <el-carousel-item
                         v-for="(item, index) in imageList"
                         :name="'' + index"
-                        :key="item"
+                        :key="item.id"
                         indicator-position="outside"
                         autoplay="true"
                       >
-                        <img :src="item" />
+                        <img :src="item.url" />
                       </el-carousel-item>
                     </el-carousel>
                   </div>
@@ -81,14 +86,14 @@
                     <div
                       class="swiper-slide"
                       v-for="(item, index) in imageList"
-                      :key="item"
+                      :key="item.id"
                     >
                       <img
                         @click="changeImg(index)"
                         :class="
                           index === imgActiveIndex ? 'img-activeBorder' : ''
                         "
-                        :src="item"
+                        :src="item.url"
                         alt=""
                       />
                     </div>
@@ -194,7 +199,7 @@
           </div>
         </div>
         <div class="bottom-content-right">
-          <label-card></label-card>
+          <label-card :LabelArr="detail.tags"></label-card>
           <div class="share-content">
             <div class="bottom-content-right-box-title">Share</div>
             <div class="share">
@@ -307,9 +312,9 @@ export default {
       moreCreateList: [],
       shareLink: {
         // text文本后边可以传要分享的url，注意后期修改
-        facebook: `https://www.facebook.com/sharer/sharer.php?u=localhost:8080${this.$route.path}`,
-        twitter: `https://twitter.com/share?url=localhost:8080${this.$route.path}`,
-        whatsapp: `https://web.whatsapp.com/send?text=localhost:8080${this.$route.path}`,
+        facebook: `https://www.facebook.com/sharer/sharer.php?u=${window.location.href}`,
+        twitter: `https://twitter.com/share?url=${window.location.href}`,
+        whatsapp: `https://web.whatsapp.com/send?text=${window.location.href}`,
       },
       swiperOptions: {
         loop: true,
@@ -339,7 +344,8 @@ export default {
         id: "",
         images: "",
         license: "",
-        like_count: "",
+        like_count: 0,
+        collect_count: 0,
         tags: "",
         title: "",
         tutorials: "",
@@ -353,7 +359,7 @@ export default {
   methods: {
     openImageView() {
       this.urlList = this.imageList.map((item) => {
-        return item;
+        return item.url;
       });
       this.showViewer = true;
     },
@@ -383,6 +389,7 @@ export default {
             type: "success",
           });
           this.isLike = false;
+          this.detail.like_count = this.detail.like_count - 1;
         });
       } else {
         addLike({
@@ -394,6 +401,7 @@ export default {
               type: "success",
             });
             this.isLike = true;
+            this.detail.like_count = this.detail.like_count + 1;
           })
           .catch((err) => {
             console.log(err);
@@ -432,6 +440,7 @@ export default {
       .then(() => {
         getResource(this.$route.params.thingId)
           .then((res) => {
+            console.log("getResource", res);
             this.detail = res.data.data;
             this.imageList = res.data.data.images;
             this.isLike = this.likeList.includes(res.data.data.id);
@@ -806,12 +815,12 @@ a {
 
 .description-tutorial-makes {
   width: 100%;
-  background-color: #f5f5f5;
+  background-color: #f0f3fa;
   margin-top: 0px;
 }
 
 .el-tabs--border-card {
-  background: #f5f5f5;
+  background: #f0f3fa;
   border: none;
   box-shadow: none;
 }
@@ -837,9 +846,9 @@ a {
 }
 ::v-deep .el-tabs--border-card > .el-tabs__header .el-tabs__item.is-active {
   color: #fff;
-  background-color: #f5f5f5;
-  border-right-color: #f5f5f5;
-  border-left-color: #f5f5f5;
+  background-color: #f0f3fa;
+  border-right-color: #f0f3fa;
+  border-left-color: #f0f3fa;
   width: 120px;
   height: 40px;
   background: #1e78f0;
@@ -847,10 +856,10 @@ a {
 }
 ::v-deep .el-tabs--border-card > .el-tabs__header {
   border: none;
-  background-color: #f5f5f5;
+  background: #f0f3fa;
 }
 ::v-deep .el-tabs--border-card {
-  background: #f5f5f5;
+  background: #f0f3fa;
   border: none;
 }
 ::v-deep .el-tabs__header .is-top {

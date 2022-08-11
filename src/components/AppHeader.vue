@@ -40,14 +40,14 @@
             </li>
             <li @click="handleCollectClick">
               <el-button
-                style="background: #f5f5f5; border: none; font-size: 20px"
+                style="background: #f0f3fa; border: none; font-size: 20px"
               >
                 <i class="ortur-icon-collected"></i>
               </el-button>
             </li>
             <li class="alert">
               <el-button
-                style="background: #f5f5f5; border: none; font-size: 20px"
+                style="background: #f0f3fa; border: none; font-size: 20px"
               >
                 <i class="ortur-icon-alert"></i>
               </el-button>
@@ -107,7 +107,7 @@
           <ul class="app-header-nologin" v-else>
             <li>
               <el-button
-                style="background: #f5f5f5; border: none; font-size: 20px"
+                style="background: #f0f3fa; border: none; font-size: 20px"
                 @click="showLoginDialog('login')"
               >
                 Log in
@@ -115,7 +115,7 @@
             </li>
             <li>
               <el-button
-                style="background: #f5f5f5; border: none; font-size: 20px"
+                style="background: #f0f3fa; border: none; font-size: 20px"
                 @click="showLoginDialog('register')"
               >
                 Sign up
@@ -203,7 +203,7 @@ export default {
   height: 60px;
 }
 .app-header {
-  background: #f5f5f5;
+  background: #f0f3fa;
   width: 100%;
   height: 60px;
   display: flex;
@@ -217,7 +217,7 @@ export default {
     display: flex;
     flex-direction: row;
     align-items: center;
-    background: #f5f5f5;
+    background: #f0f3fa;
     width: 1640px;
     height: 100%;
     margin: 0px auto;
@@ -277,7 +277,7 @@ export default {
         justify-content: space-between;
         .el-dropdown {
           .el-button {
-            background: #f5f5f5;
+            background: #f0f3fa;
             border: none;
           }
           span {
@@ -330,7 +330,7 @@ export default {
   }
   li:hover {
     background: #8ab5ef;
-    color: #f5f5f5;
+    color: #f0f3fa;
   }
   .header-userinfo {
     width: 100%;
