@@ -31,5 +31,6 @@ module.exports = {
     save: "Save",
     preview: "Preview",
     reset: "Reset",
+    editOn: "Editd on ",
   },
 };

@@ -31,5 +31,6 @@ module.exports = {
     save: "保存",
     preview: "预览",
     reset: "重置",
+    editOn: "编辑 ",
   },
 };

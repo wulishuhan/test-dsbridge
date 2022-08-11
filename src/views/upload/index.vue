@@ -500,11 +500,12 @@ export default {
       return {
         ...this.resourceForm,
         tutorials: this.tutorialForm,
-        editDatetime: "Editd on " + this.$moment().format("ll"),
+        editDatetime: this.$t("upload.editOn") + this.$d(new Date(), "short"),
       };
     },
   },
   mounted() {
+    console.log(this.$d(new Date(), "long"));
     this.sourceId = this.$route.params.sourceId;
     if (this.sourceId != undefined) {
       //调用详解接口

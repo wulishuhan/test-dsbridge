@@ -7,8 +7,41 @@ const messages = {
   zh: require("../assets/i18n/zh"), // 中文语言包
   en: require("../assets/i18n/en"), // 英文语言包
 };
+const dateTimeFormats = {
+  en: {
+    short: {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    },
+    long: {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "numeric",
+      minute: "numeric",
+      hour12: true,
+    },
+  },
+  zh: {
+    short: {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    },
+    long: {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "numeric",
+      minute: "numeric",
+      second: "numeric",
+    },
+  },
+};
 // 最后 export default，这一步肯定要写的。
 export default new VueI18n({
   locale: "zh", // set locale 默认显示英文
-  messages: messages, // set locale messages
+  messages, // set locale messages
+  dateTimeFormats,
 });
