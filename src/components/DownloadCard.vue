@@ -19,7 +19,7 @@
             <span v-else class="type">other</span>
           </div>
           <div class="time">
-            <span>updated {{ file.createTime }} </span>
+            <span>updated {{ $d(new Date(file.createTime), "short") }} </span>
           </div>
         </div>
       </div>
