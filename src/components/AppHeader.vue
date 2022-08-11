@@ -32,7 +32,7 @@
             <li>
               <router-link to="/upload">
                 <el-button class="el-btn-upload">
-                  <span>上传</span>
+                  <span style="font-size: 12px">{{ $t("header.upload") }}</span>
                   &nbsp;
                   <i class="el-icon-upload el-icon--right"></i>
                 </el-button>
@@ -56,6 +56,18 @@
               <div class="noticePanel"></div>
             </li>
 
+            <li>
+              <el-dropdown @command="selectLanguage">
+                <span class="el-dropdown-link">
+                  {{ $t("header.language") }}
+                  <i class="el-icon-arrow-down el-icon--right"></i>
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item command="en">English</el-dropdown-item>
+                  <el-dropdown-item command="zh">中文</el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </li>
             <li>
               <el-dropdown class="el-dropdown-userinfo">
                 <el-button>
@@ -90,16 +102,19 @@
                     </div>
                   </el-dropdown-item>
                   <el-dropdown-item>
-                    <i class="el-icon-user-solid"></i>&nbsp; 概况
+                    <i class="el-icon-user-solid"></i>&nbsp;
+                    {{ $t("header.profile") }}
                   </el-dropdown-item>
                   <el-dropdown-item>
-                    <i class="el-icon-collection-tag"></i>&nbsp; 历史
+                    <i class="el-icon-collection-tag"></i>&nbsp;
+                    {{ $t("header.history") }}
                   </el-dropdown-item>
                   <el-dropdown-item>
-                    <i class="el-icon-fork-spoon"></i>&nbsp; 设置
+                    <i class="el-icon-fork-spoon"></i>&nbsp;
+                    {{ $t("header.setting") }}
                   </el-dropdown-item>
                   <el-dropdown-item @click.native="logout">
-                    <i class="el-icon-back"></i>&nbsp; 退出
+                    <i class="el-icon-back"></i>&nbsp; {{ $t("header.logout") }}
                   </el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
@@ -172,9 +187,10 @@ export default {
       });
   },
   methods: {
-    handleSelect(key, keyPath) {
-      console.log(key, keyPath);
+    selectLanguage(lang) {
+      this.$i18n.locale = lang;
     },
+
     showLoginDialog(view) {
       let payload = { loginDialogVisible: true, isLoginForm: false };
       if (view == "login") {
@@ -264,10 +280,13 @@ export default {
       margin-left: auto;
       padding: 0 1.5rem 0 0;
       ul.app-header-dots {
+        .el-dropdown-link {
+          cursor: pointer;
+        }
         .alert {
           position: relative;
         }
-        width: 400px;
+        width: 550px;
         list-style-type: none;
         display: flex;
         flex-direction: row;

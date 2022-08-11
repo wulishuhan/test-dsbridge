@@ -165,15 +165,17 @@
           <div class="support-file-area">
             <el-divider></el-divider>
             <div class="support-file-area__text">
-              <span>Supported Files: jpg、png、svg、dxf、.gc、.nc</span>
+              <span>
+                {{ $t("upload.supportedFiles") }}: jpg、png、svg、dxf、.gc、.nc
+              </span>
             </div>
           </div>
         </div>
       </el-form-item>
-      <el-form-item label="Title" prop="title">
+      <el-form-item :label="$t('upload.title')" prop="title">
         <el-input v-model="resourceForm.title"></el-input>
       </el-form-item>
-      <el-form-item label="Tags" prop="tags">
+      <el-form-item :label="$t('upload.tags')" prop="tags">
         <el-tag
           :key="index"
           v-for="(tag, index) in resourceForm.tags"
@@ -194,7 +196,7 @@
         >
         </el-input>
       </el-form-item>
-      <el-form-item label="License" prop="license">
+      <el-form-item :label="$t('upload.license')" prop="license">
         <el-select
           v-model="resourceForm.license"
           placeholder="Select license"
@@ -215,7 +217,7 @@
           v-model="resourceForm.description"
         ></el-input>
       </el-form-item>
-      <el-form-item label="Tutorial" style="position: relative">
+      <el-form-item :label="$t('upload.tutorial')" style="position: relative">
         <span
           v-if="tutorialForm.length == 0"
           class="ortur-icon-plus tutorial-handle-icon"
@@ -252,7 +254,7 @@
               <el-form-item prop="title" style="margin-bottom: 20px">
                 <el-input
                   v-model="tutorialItem.title"
-                  placeholder="添加步骤标题"
+                  :placeholder="$t('upload.addStepTitle')"
                 ></el-input>
               </el-form-item>
               <el-form-item style="margin: 20px auto">
@@ -329,7 +331,7 @@
                   type="textarea"
                   autosize
                   v-model="tutorialItem.description"
-                  placeholder="添加步骤说明"
+                  :placeholder="$t('upload.addStepDesc')"
                 ></el-input>
               </el-form-item>
               <el-button class="drag-btn"
@@ -351,9 +353,15 @@
       </el-form-item>
       <el-form-item>
         <div class="action-btn">
-          <el-button type="primary" @click="handleSave()">Save</el-button>
-          <el-button @click="previewDialogVisible = true">Preview</el-button>
-          <el-button @click="resetForm()">Reset</el-button>
+          <el-button type="primary" @click="handleSave()">
+            {{ $t("upload.save") }}
+          </el-button>
+          <el-button @click="previewDialogVisible = true">
+            {{ $t("upload.preview") }}
+          </el-button>
+          <el-button @click="resetForm()">
+            {{ $t("upload.reset") }}
+          </el-button>
         </div>
       </el-form-item>
     </el-form>

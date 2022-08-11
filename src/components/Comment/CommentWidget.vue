@@ -274,7 +274,7 @@ export default {
         }
       }
       .reply-item {
-        padding: 20px;
+        padding: 5px 10px;
         .reply-detail {
           margin: 10px 54px;
         }
