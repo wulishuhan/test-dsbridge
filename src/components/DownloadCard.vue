@@ -4,22 +4,26 @@
       <div class="left">
         <img :src="file.url" alt="" />
         <div>
-          <div class="name">{{ file.name }}</div>
+          <el-tooltip effect="dark" placement="bottom">
+            <div style="max-width: 270px" slot="content">{{ file.name }}</div>
+            <div class="name">{{ file.name }}</div>
+          </el-tooltip>
+          <!-- <div class="name">{{ file.name }}</div> -->
           <div>
-            <span>{{ file.size }}kb</span>
-            <span v-if="file.type == 'stl'" class="type">stl</span>
-            <span v-else-if="file.type == 'png'" class="type">png</span>
-            <span v-else-if="file.type == 'jpg'" class="type">jpg</span>
-            <span v-else-if="file.type == 'obj'" class="type">obj</span>
-            <span v-else-if="file.type == 'code'" class="type">code</span>
+            <span>{{ Math.floor(file.size / 1000) }}kb</span>
+            <span v-if="type == 'stl'" class="type">stl</span>
+            <span v-else-if="type == 'png'" class="type">png</span>
+            <span v-else-if="type == 'jpg'" class="type">jpg</span>
+            <span v-else-if="type == 'obj'" class="type">obj</span>
+            <span v-else-if="type == 'code'" class="type">code</span>
             <span v-else class="type">other</span>
           </div>
           <div class="time">
-            <span>updated {{ file.updatedTime }} </span>
+            <span>updated {{ $d(new Date(file.createTime), "short") }} </span>
           </div>
         </div>
       </div>
-      <el-button @click.prevent="download" type="primary">
+      <el-button @click.prevent="fileDownload" type="primary">
         Download <span>{{ file.downloadNumber }} </span>
       </el-button>
     </div>
@@ -27,7 +31,6 @@
 </template>
 <script>
 import request from "@/utils/request";
-
 export default {
   name: "DownloadCard",
   props: {
@@ -44,7 +47,14 @@ export default {
     },
   },
   data() {
-    return {};
+    return {
+      type: "",
+    };
+  },
+  mounted() {
+    let arr = this.file.name.split(".");
+    this.type = arr[arr.length - 1];
+    console.log(this.file.updatedTime);
   },
   methods: {
     download() {
@@ -69,7 +79,7 @@ export default {
 <style lang="scss" scoped>
 .download-card {
   background-color: #fff;
-  width: 92%;
+  width: 544px;
   padding: 10px 1px;
   text-align: left;
   margin: 0 auto;
@@ -82,6 +92,8 @@ export default {
     display: flex;
   }
   .name {
+    width: 288px;
+    overflow: hidden;
     font-size: 16px;
     font-family: Source Han Sans CN;
     font-weight: 400;

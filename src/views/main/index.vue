@@ -162,7 +162,7 @@ export default {
             this.pagination.pageNum++;
             if (
               this.pagination.pageNum <=
-              this.resourcesTotal / this.pagination.pageSize + 1
+              Math.ceil(this.resourcesTotal / this.pagination.pageSize)
             ) {
               this.getResourceList();
             }
@@ -179,8 +179,14 @@ export default {
   },
   methods: {
     getResourceList() {
+      console.log(
+        "==================",
+        this.pagination.pageNum,
+        this.pagination.pageSize
+      );
       getResourceList(this.pagination)
         .then((res) => {
+          console.log("getResourceList:", res);
           let resource = res.data.rows;
           this.resources.push(...resource);
           this.resourcesTotal = res.data.total;

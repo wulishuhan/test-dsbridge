@@ -34,7 +34,7 @@
                   :collectionNum="detail.collect_count"
                   @click="collect"
                 ></CollectButton>
-                <DownLoadButton></DownLoadButton>
+                <DownLoadButton :fileList="detail.files"></DownLoadButton>
               </div>
             </div>
             <div class="show-thing">
@@ -227,8 +227,9 @@
               <i class="ortur-icon-user-info"></i>
             </div>
             <div class="license-info">
-              OpenRC F1 car - 1:10 RC Car by barspin is licensed under the
-              <a href=""> xxxxxxxxx </a>
+              {{ detail.title }} by {{ detail.creator.name }} is licensed under
+              the
+              <a href=""> {{ detail.license }} </a>
               license
             </div>
           </div>
@@ -342,7 +343,7 @@ export default {
           name: "UNKNOW",
         },
         description: "",
-        files: "",
+        files: [],
         id: "",
         images: "",
         license: "",
@@ -455,7 +456,12 @@ export default {
               pageNum: 1,
             }).then((res) => {
               console.log("get more:", res, id);
-              this.moreCreateList = res.data.rows;
+              let more = res.data.rows;
+              for (let i = 0; i < more.length; i++) {
+                if (more[i].id !== this.detail.id) {
+                  this.moreCreateList.push(more[i]);
+                }
+              }
             });
           });
       });
