@@ -15,16 +15,23 @@ import "@/permission";
 import "@/style/index.scss";
 import "@/assets/css/icon.css";
 import VueContextMenu from "vue-contextmenu";
+import Ads from "vue-google-adsense";
+
+Vue.use(require("vue-script2"));
+Vue.use(Ads.Adsense);
+Vue.use(Ads.InArticleAdsense);
+Vue.use(Ads.InFeedAdsense);
+
 Vue.prototype.baseURL = baseURL;
 Vue.use(VueContextMenu);
 Vue.config.productionTip = false;
 Vue.use(ElementUI);
 const VueAwesomeSwiper = require("vue-awesome-swiper/dist/ssr");
 Vue.use(VueAwesomeSwiper);
-if (process.env.NODE_ENV === "development") {
-  const { mockXHR } = require("../mock");
-  mockXHR();
-}
+// if (process.env.NODE_ENV === "development") {
+//   const { mockXHR } = require("../mock");
+//   mockXHR();
+// }
 moment.locale("en");
 Vue.prototype.$moment = moment;
 // Vue.use(mock);

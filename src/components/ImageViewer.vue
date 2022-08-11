@@ -49,12 +49,12 @@
       <!-- CANVAS -->
       <div class="el-image-viewer__canvas">
         <!-- eslint-disable-next-line -->
-        <div v-for="(url, i) in urlList">
+        <div v-for="(item, i) in urlList">
           <img
             v-if="i === index"
             ref="img"
             class="el-image-viewer__img"
-            :key="url"
+            :key="item.url"
             :src="currentImg"
             :style="imgStyle"
             @load="handleImgLoad"
@@ -162,7 +162,7 @@ export default {
       return this.index === this.urlList.length - 1;
     },
     currentImg() {
-      return this.urlList[this.index];
+      return this.urlList[this.index].url;
     },
     imgStyle() {
       const { scale, deg, offsetX, offsetY, enableTransition } = this.transform;

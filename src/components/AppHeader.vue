@@ -38,16 +38,18 @@
                 </el-button>
               </router-link>
             </li>
-            <li @click="handleCollectClick">
-              <el-button
-                style="background: #f5f5f5; border: none; font-size: 20px"
-              >
-                <i class="ortur-icon-collected"></i>
-              </el-button>
+            <li>
+              <router-link to="/design/fromLike">
+                <el-button
+                  style="background: #f0f3fa; border: none; font-size: 20px"
+                >
+                  <i class="ortur-icon-collected"></i>
+                </el-button>
+              </router-link>
             </li>
             <li class="alert">
               <el-button
-                style="background: #f5f5f5; border: none; font-size: 20px"
+                style="background: #f0f3fa; border: none; font-size: 20px"
               >
                 <i class="ortur-icon-alert"></i>
               </el-button>
@@ -107,7 +109,7 @@
           <ul class="app-header-nologin" v-else>
             <li>
               <el-button
-                style="background: #f5f5f5; border: none; font-size: 20px"
+                style="background: #f0f3fa; border: none; font-size: 20px"
                 @click="showLoginDialog('login')"
               >
                 Log in
@@ -115,7 +117,7 @@
             </li>
             <li>
               <el-button
-                style="background: #f5f5f5; border: none; font-size: 20px"
+                style="background: #f0f3fa; border: none; font-size: 20px"
                 @click="showLoginDialog('register')"
               >
                 Sign up
@@ -209,7 +211,7 @@ export default {
   height: 60px;
 }
 .app-header {
-  background: #f5f5f5;
+  background: #f0f3fa;
   width: 100%;
   height: 60px;
   display: flex;
@@ -223,7 +225,7 @@ export default {
     display: flex;
     flex-direction: row;
     align-items: center;
-    background: #f5f5f5;
+    background: #f0f3fa;
     width: 1640px;
     height: 100%;
     margin: 0px auto;
@@ -243,9 +245,9 @@ export default {
         .el-input-search {
           width: 400px;
           ::v-deep .el-input__inner {
-            border: 1px solid #88bbf3 !important;
+            border: 1px solid #999 !important;
             border-right: transparent !important;
-            border-radius: 4px 0px 0px 4px;
+            border-radius: 6px 0px 0px 6px;
             background: none;
           }
         }
@@ -253,9 +255,9 @@ export default {
         .el-select-search {
           max-width: 120px;
           ::v-deep .el-input__inner {
-            border: 1px solid #88bbf3 !important;
+            border: 1px solid #999 !important;
             border-left: transparent !important;
-            border-radius: 0px 4px 4px 0px;
+            border-radius: 0px 6px 6px 0px;
             margin-left: -1px;
             background: none;
           }
@@ -283,7 +285,7 @@ export default {
         justify-content: space-between;
         .el-dropdown {
           .el-button {
-            background: #f5f5f5;
+            background: #f0f3fa;
             border: none;
           }
           span {
@@ -336,7 +338,7 @@ export default {
   }
   li:hover {
     background: #8ab5ef;
-    color: #f5f5f5;
+    color: #f0f3fa;
   }
   .header-userinfo {
     width: 100%;

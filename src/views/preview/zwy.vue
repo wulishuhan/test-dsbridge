@@ -4,6 +4,9 @@
     <!-- <reply-widget style="margin-top: 50px"></reply-widget> -->
     <!-- <comment-widget></comment-widget> -->
     <canvas class="myCanvas"></canvas>
+
+    <Adsense data-ad-client="ca-pub-8955820679883171" data-ad-slot="7648853051">
+    </Adsense>
   </div>
 </template>
 <script>
