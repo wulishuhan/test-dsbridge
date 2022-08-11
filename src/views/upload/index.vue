@@ -27,9 +27,11 @@
               ref="uploadFile"
             >
               <i class="ortur-icon-file" style="font-size: 60px"></i>
-              <span>Drag your file & photo here (&lt;12MB)</span>
-              <span>Or</span>
-              <el-button size="small" type="primary">Select file</el-button>
+              <span>{{ $t("upload.dragFileTip") }} (&lt;12MB)</span>
+              <span>{{ $t("upload.or") }}</span>
+              <el-button size="small" type="primary">
+                {{ $t("upload.selectFile") }}
+              </el-button>
             </el-upload>
           </div>
           <el-form-item prop="files">
@@ -100,7 +102,9 @@
             <div class="list-area">
               <el-divider></el-divider>
               <div class="list-wrapper">
-                <h5 class="list-wrapper-title">封面</h5>
+                <h5 class="list-wrapper-title">
+                  {{ $t("upload.resourceCover") }}
+                </h5>
                 <div v-swiper:coverSwiper="swiperOptions">
                   <draggable
                     class="swiper-wrapper"
@@ -161,15 +165,17 @@
           <div class="support-file-area">
             <el-divider></el-divider>
             <div class="support-file-area__text">
-              <span>Supported Files: jpg、png、svg、dxf、.gc、.nc</span>
+              <span>
+                {{ $t("upload.supportedFiles") }}: jpg、png、svg、dxf、.gc、.nc
+              </span>
             </div>
           </div>
         </div>
       </el-form-item>
-      <el-form-item label="Title" prop="title">
+      <el-form-item :label="$t('upload.title')" prop="title">
         <el-input v-model="resourceForm.title"></el-input>
       </el-form-item>
-      <el-form-item label="Tags" prop="tags">
+      <el-form-item :label="$t('upload.tags')" prop="tags">
         <el-tag
           :key="index"
           v-for="(tag, index) in resourceForm.tags"
@@ -190,7 +196,7 @@
         >
         </el-input>
       </el-form-item>
-      <el-form-item label="License" prop="license">
+      <el-form-item :label="$t('upload.license')" prop="license">
         <el-select
           v-model="resourceForm.license"
           placeholder="Select license"
@@ -211,7 +217,7 @@
           v-model="resourceForm.description"
         ></el-input>
       </el-form-item>
-      <el-form-item label="Tutorial" style="position: relative">
+      <el-form-item :label="$t('upload.tutorial')" style="position: relative">
         <span
           v-if="tutorialForm.length == 0"
           class="ortur-icon-plus tutorial-handle-icon"
@@ -248,7 +254,7 @@
               <el-form-item prop="title" style="margin-bottom: 20px">
                 <el-input
                   v-model="tutorialItem.title"
-                  placeholder="添加步骤标题"
+                  :placeholder="$t('upload.addStepTitle')"
                 ></el-input>
               </el-form-item>
               <el-form-item style="margin: 20px auto">
@@ -325,7 +331,7 @@
                   type="textarea"
                   autosize
                   v-model="tutorialItem.description"
-                  placeholder="添加步骤说明"
+                  :placeholder="$t('upload.addStepDesc')"
                 ></el-input>
               </el-form-item>
               <el-button class="drag-btn"
@@ -347,9 +353,15 @@
       </el-form-item>
       <el-form-item>
         <div class="action-btn">
-          <el-button type="primary" @click="handleSave()">Save</el-button>
-          <el-button @click="previewDialogVisible = true">Preview</el-button>
-          <el-button @click="resetForm()">Reset</el-button>
+          <el-button type="primary" @click="handleSave()">
+            {{ $t("upload.save") }}
+          </el-button>
+          <el-button @click="previewDialogVisible = true">
+            {{ $t("upload.preview") }}
+          </el-button>
+          <el-button @click="resetForm()">
+            {{ $t("upload.reset") }}
+          </el-button>
         </div>
       </el-form-item>
     </el-form>
@@ -377,7 +389,6 @@ export default {
     return {
       previewDialogVisible: false,
       sourceId: 0,
-      headerTitle: "Create project",
       fileList: [],
       acceptType: ".jpg,.png,.svg,.dxf,.gc,.nc,.jpeg",
       tutorialValidateResult: true,
@@ -478,6 +489,13 @@ export default {
         Authorization: "Bearer " + getToken(),
       };
     },
+    headerTitle() {
+      if (this.sourceId != undefined) {
+        return this.$t("upload.editProject");
+      } else {
+        return this.$t("upload.createProject");
+      }
+    },
     previewData() {
       return {
         ...this.resourceForm,
@@ -489,7 +507,6 @@ export default {
   mounted() {
     this.sourceId = this.$route.params.sourceId;
     if (this.sourceId != undefined) {
-      this.headerTitle = "Edit Project";
       //调用详解接口
       getResource(parseInt(this.sourceId)).then((res) => {
         let detail = res.data.data;
@@ -681,9 +698,12 @@ export default {
     },
     addTutorialItem(tutorialKey) {
       var index = tutorialKey;
-      if (tutorialKey != false) {
+      if (tutorialKey === false) {
         index = 0;
+      } else {
+        index += 1;
       }
+
       this.tutorialForm.splice(index, 0, {
         id: Date.now(),
         description: "",
@@ -692,7 +712,7 @@ export default {
       });
     },
     removeTutorialItem(tutorialKey) {
-      if (tutorialKey != false) {
+      if (tutorialKey !== false) {
         this.tutorialForm.splice(tutorialKey, 1);
       } else {
         this.tutorialForm = [];
@@ -718,7 +738,6 @@ export default {
         }
         if (valid && this.tutorialValidateResult) {
           if (this.sourceId != undefined) {
-            this.headerTitle = "Edit Project";
             //调用详解接口
             updateResource({
               id: this.sourceId,
