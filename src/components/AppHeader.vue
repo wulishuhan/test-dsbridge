@@ -49,11 +49,14 @@
             </li>
             <li class="alert">
               <el-button
+                @click="handleShowNotice"
                 style="background: #f0f3fa; border: none; font-size: 20px"
               >
                 <i class="ortur-icon-alert"></i>
               </el-button>
-              <div class="noticePanel"></div>
+              <div class="noticePanel">
+                <NoticePanel ref="NoticePanel"></NoticePanel>
+              </div>
             </li>
 
             <li>
@@ -138,6 +141,7 @@
 
 <script>
 import Login from "@/components/Login";
+import NoticePanel from "@/components/NoticePanel";
 import { createNamespacedHelpers } from "vuex";
 const { mapState } = createNamespacedHelpers("user");
 export default {
@@ -149,6 +153,7 @@ export default {
   },
   components: {
     Login,
+    NoticePanel,
   },
   computed: {
     ...mapState([
@@ -172,6 +177,9 @@ export default {
       });
   },
   methods: {
+    handleShowNotice() {
+      this.$refs.NoticePanel.showPanel();
+    },
     handleHistoryClick() {
       this.$router.push({ path: "/design/fromHistory" });
     },
@@ -220,7 +228,7 @@ export default {
   z-index: 10;
   transition: all 0.2s;
   position: fixed;
-  overflow: hidden;
+  // overflow: hidden;
   .app-header__content {
     display: flex;
     flex-direction: row;
@@ -276,6 +284,11 @@ export default {
       ul.app-header-dots {
         .alert {
           position: relative;
+          .noticePanel {
+            position: absolute;
+            top: 57px;
+            right: 0;
+          }
         }
         width: 400px;
         list-style-type: none;

@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper" v-show="isShowPanel">
+  <div class="wrapper" v-if="isShowPanel">
     <span class="ortur-icon-cancel" @click="handleCloseClick"></span>
     <div class="read" @click="handleReadClick">标记为已读</div>
     <el-tabs v-model="activeName" @tab-click="handleTabClick">
@@ -52,7 +52,7 @@ export default {
   },
   data() {
     return {
-      isShowPanel: true,
+      isShowPanel: false,
       activeName: "first",
       noticeArr: [
         {
@@ -155,10 +155,9 @@ export default {
       //console.log(e)
     },
     showPanel() {
-      this.isShowPanel = true;
+      this.isShowPanel = !this.isShowPanel;
     },
     handleCloseClick() {
-      //console.log(e)
       this.isShowPanel = false;
     },
     handleReadClick() {
@@ -184,7 +183,7 @@ export default {
 <style lang="scss" scoped>
 .wrapper {
   width: 712px;
-  height: 888px;
+  height: 750px;
   background: #ffffff;
   box-shadow: 0px 3px 7px 0px rgba(0, 0, 0, 0.2);
   border-radius: 12px;
@@ -208,7 +207,7 @@ export default {
   .scroll {
     overflow-y: scroll;
     overflow-x: hidden;
-    height: 750px;
+    height: 600px;
     width: 100%;
   }
 }
