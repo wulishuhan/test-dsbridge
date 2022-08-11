@@ -38,12 +38,14 @@
                 </el-button>
               </router-link>
             </li>
-            <li @click="handleCollectClick">
-              <el-button
-                style="background: #f0f3fa; border: none; font-size: 20px"
-              >
-                <i class="ortur-icon-collected"></i>
-              </el-button>
+            <li>
+              <router-link to="/design/fromLike">
+                <el-button
+                  style="background: #f0f3fa; border: none; font-size: 20px"
+                >
+                  <i class="ortur-icon-collected"></i>
+                </el-button>
+              </router-link>
             </li>
             <li class="alert">
               <el-button
@@ -170,10 +172,6 @@ export default {
       });
   },
   methods: {
-    handleCollectClick() {
-      this.$router.push({ path: "/design/fromLike" });
-    },
-
     handleSelect(key, keyPath) {
       console.log(key, keyPath);
     },
@@ -237,9 +235,9 @@ export default {
         .el-input-search {
           width: 400px;
           ::v-deep .el-input__inner {
-            border: 1px solid #88bbf3 !important;
+            border: 1px solid #999 !important;
             border-right: transparent !important;
-            border-radius: 4px 0px 0px 4px;
+            border-radius: 6px 0px 0px 6px;
             background: none;
           }
         }
@@ -247,9 +245,9 @@ export default {
         .el-select-search {
           max-width: 120px;
           ::v-deep .el-input__inner {
-            border: 1px solid #88bbf3 !important;
+            border: 1px solid #999 !important;
             border-left: transparent !important;
-            border-radius: 0px 4px 4px 0px;
+            border-radius: 0px 6px 6px 0px;
             margin-left: -1px;
             background: none;
           }

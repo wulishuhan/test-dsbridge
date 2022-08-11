@@ -346,7 +346,7 @@ export default {
         license: "",
         like_count: 0,
         collect_count: 0,
-        tags: "",
+        tags: [],
         title: "",
         tutorials: "",
         update_time: "",
