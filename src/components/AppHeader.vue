@@ -10,7 +10,7 @@
           </div>
           <div class="app-header__search">
             <el-input
-              placeholder="请输入搜索关键词"
+              :placeholder="$t('header.search')"
               prefix-icon="el-icon-search"
               v-model="keywords"
               class="el-input-search input-with-select"
@@ -19,7 +19,7 @@
             <el-select
               v-model="select"
               class="el-select-search"
-              placeholder="请选择"
+              :placeholder="$t('header.searchSelect')"
             >
               <el-option label="Author" value="1"></el-option>
               <el-option label="Content" value="2"></el-option>
@@ -32,7 +32,7 @@
             <li>
               <router-link to="/upload">
                 <el-button class="el-btn-upload">
-                  <span>上传</span>
+                  <span style="font-size: 12px">{{ $t("header.upload") }}</span>
                   &nbsp;
                   <i class="el-icon-upload el-icon--right"></i>
                 </el-button>
@@ -59,6 +59,18 @@
               </div>
             </li>
 
+            <li>
+              <el-dropdown @command="selectLanguage">
+                <span class="el-dropdown-link">
+                  {{ $t("header.language") }}
+                  <i class="el-icon-arrow-down el-icon--right"></i>
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item command="en">English</el-dropdown-item>
+                  <el-dropdown-item command="zh">中文</el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </li>
             <li>
               <el-dropdown class="el-dropdown-userinfo">
                 <el-button>
@@ -93,16 +105,19 @@
                     </div>
                   </el-dropdown-item>
                   <el-dropdown-item @click.native="handleProfileClick">
-                    <i class="el-icon-user-solid">&nbsp; 概况</i>
+                    <i class="el-icon-user-solid"></i>&nbsp;
+                    {{ $t("header.profile") }}
                   </el-dropdown-item>
                   <el-dropdown-item @click.native="handleHistoryClick">
-                    <i class="el-icon-collection-tag">&nbsp; 历史</i>
+                    <i class="el-icon-collection-tag"></i>&nbsp;
+                    {{ $t("header.history") }}
                   </el-dropdown-item>
                   <el-dropdown-item>
-                    <i class="el-icon-fork-spoon"></i>&nbsp; 设置
+                    <i class="el-icon-fork-spoon"></i>&nbsp;
+                    {{ $t("header.setting") }}
                   </el-dropdown-item>
                   <el-dropdown-item @click.native="logout">
-                    <i class="el-icon-back"></i>&nbsp; 退出
+                    <i class="el-icon-back"></i>&nbsp; {{ $t("header.logout") }}
                   </el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
@@ -193,6 +208,10 @@ export default {
     handleSelect(key, keyPath) {
       console.log(key, keyPath);
     },
+    selectLanguage(lang) {
+      this.$i18n.locale = lang;
+    },
+
     showLoginDialog(view) {
       let payload = { loginDialogVisible: true, isLoginForm: false };
       if (view == "login") {
@@ -282,6 +301,9 @@ export default {
       margin-left: auto;
       padding: 0 1.5rem 0 0;
       ul.app-header-dots {
+        .el-dropdown-link {
+          cursor: pointer;
+        }
         .alert {
           position: relative;
           .noticePanel {
@@ -290,7 +312,7 @@ export default {
             right: 0;
           }
         }
-        width: 400px;
+        width: 550px;
         list-style-type: none;
         display: flex;
         flex-direction: row;

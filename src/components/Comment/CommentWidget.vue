@@ -11,7 +11,9 @@
             ><img :src="commentItem.user.avatar"
           /></span>
           <span class="nickname">{{ commentItem.user.name }}</span>
-          <span class="release-date">{{ commentItem.create_time }}</span>
+          <span class="release-date">
+            {{ $d(new Date(commentItem.create_time), "long") }}
+          </span>
         </div>
         <div class="message-btn" @click="showReplyOuterDialog(commentIndex)">
           <el-button><i class="ortur-icon-message"></i></el-button>
@@ -31,7 +33,9 @@
                   <img :src="replyItem.user.avatar" />
                 </span>
                 <span class="nickname">{{ replyItem.user.name }}</span>
-                <span class="release-date">{{ "3分钟前" }}</span>
+                <span class="release-date">
+                  {{ $d(new Date(replyItem.create_time), "long") }}
+                </span>
               </div>
               <div
                 class="message-btn"
@@ -63,12 +67,14 @@
       <div class="userinfo-wrapper">
         <div class="profile">
           <span class="user-avatar">
-            <img :src="currentComment.user ? currentComment.user.avatar : ''" />
+            <img :src="currentComment.user.avatar" />
           </span>
           <span class="nickname">
-            {{ currentComment.user ? currentComment.user.name : "" }}
+            {{ currentComment.user.name }}
           </span>
-          <span class="release-date">{{ currentComment.create_time }}</span>
+          <span class="release-date">
+            {{ $d(new Date(currentComment.create_time), "long") }}
+          </span>
         </div>
         <div class="message-btn" @click="showCommentInnerDialog()">
           <el-button><i class="ortur-icon-message"></i></el-button>
@@ -83,7 +89,9 @@
                 ><img :src="replyRow.user.avatar"
               /></span>
               <span class="nickname">{{ replyRow.user.name }}</span>
-              <span class="release-date">{{ replyRow.create_time }}</span>
+              <span class="release-date">
+                {{ $d(new Date(replyRow.create_time), "long") }}
+              </span>
             </div>
             <div class="message-btn" @click="showReplyInnerDialog(id)">
               <el-button><i class="ortur-icon-message"></i></el-button>
@@ -135,7 +143,17 @@ export default {
       outerVisible: false,
       innerVisible: false,
       replyListDialog: false,
-      currentComment: {},
+      currentComment: {
+        id: 0,
+        content: "",
+        create_time: "1990-01-01",
+        user: {
+          id: 0,
+          avatar: "",
+          name: "UNKNOW",
+        },
+        replies: [],
+      },
       currentCommentId: 0,
       replyTotalRows: "0条回复",
       replyTo: "reply to xxxx",
@@ -274,7 +292,7 @@ export default {
         }
       }
       .reply-item {
-        padding: 20px;
+        padding: 5px 10px;
         .reply-detail {
           margin: 10px 54px;
         }
