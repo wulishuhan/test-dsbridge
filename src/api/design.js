@@ -66,6 +66,27 @@ export function getLikesList(params) {
     params,
   });
 }
+export function getFollowingList(params) {
+  return request({
+    url: `/library/like/list`,
+    method: "get",
+    params,
+  });
+}
+export function getFollowerList(params) {
+  return request({
+    url: `/library/like/list`,
+    method: "get",
+    params,
+  });
+}
+export function getUserInfo(params) {
+  return request({
+    url: `/library/like/list`,
+    method: "get",
+    params,
+  });
+}
 
 export function updateDiy(params) {
   return request({

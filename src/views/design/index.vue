@@ -15,10 +15,10 @@
         class="tabsContent"
       >
         <el-tab-pane label="followers" name="first" class="followTapPanel">
-          <IndexFollowPanel></IndexFollowPanel>
+          <IndexFollowPanel :userList="followerList"></IndexFollowPanel>
         </el-tab-pane>
         <el-tab-pane label="following" name="second" class="followTapPanel">
-          <IndexFollowPanel></IndexFollowPanel>
+          <IndexFollowPanel :userList="followingList"></IndexFollowPanel>
         </el-tab-pane>
       </el-tabs>
     </el-dialog>
@@ -244,6 +244,9 @@ import {
   addCollection,
   cancelCollectResource,
   updateDiy,
+  getFollowerList,
+  getFollowingList,
+  getUserInfo,
   getCollectList,
   moveResourceToCollection,
   addResourceToCollection,
@@ -264,6 +267,8 @@ export default {
   },
   data() {
     return {
+      followerList: [],
+      followingList: [],
       isYourAccount: true,
 
       myCollects: [],
@@ -386,6 +391,7 @@ export default {
       this.getResourceList();
     }
     this.userId = this.isYourAccount ? this.userInfo.user_id : this.user.userId;
+    getUserInfo({ userId: this.userId }).then(() => {});
   },
   computed: {
     ...mapState(["userInfo"]),
@@ -467,7 +473,17 @@ export default {
           });
         });
     },
-    handleFollowTapClick() {},
+    handleFollowTapClick() {
+      if (this.activeTab == "first") {
+        getFollowerList().then((res) => {
+          this.followerList = res;
+        });
+      } else {
+        getFollowingList().then((res) => {
+          this.followingList = res;
+        });
+      }
+    },
     getResourceList() {
       getResourceList({ userId: this.userId }).then((res) => {
         this.resources = res.data.rows;
@@ -607,11 +623,23 @@ export default {
     openFollowDialog(index) {
       //console.log(e)
       this.activeTab = index;
-      this.dialogFollowersVisible = true;
+      if (index == "first") {
+        getFollowerList().then((res) => {
+          this.followerList = res;
+          this.dialogFollowersVisible = true;
+        });
+      } else {
+        getFollowingList().then((res) => {
+          this.followingList = res;
+          this.dialogFollowersVisible = true;
+        });
+      }
     },
-    descChange(e) {
-      console.log(e);
-      this.isDescEdit = false;
+    descChange(item) {
+      console.log(item);
+      updateDiy({ item }).then(() => {
+        this.isDescEdit = false;
+      });
     },
     editChange(item) {
       updateDiy({ item }).then(() => {

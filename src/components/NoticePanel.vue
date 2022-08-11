@@ -194,6 +194,7 @@ export default {
     top: 23px;
     right: 23px;
     z-index: 100;
+    cursor: pointer;
   }
   .read {
     font-size: 16px;
@@ -203,6 +204,7 @@ export default {
     bottom: 23px;
     right: 23px;
     position: absolute;
+    cursor: pointer;
   }
   .scroll {
     overflow-y: scroll;

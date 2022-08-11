@@ -41,6 +41,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.wrapper {
+  height: 350px;
+  overflow: auto;
+}
 .container {
   width: 100%;
   padding: 16px 16px;
