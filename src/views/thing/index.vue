@@ -17,7 +17,9 @@
                   ></el-avatar>
                   <div class="flex flex-column user-name-update-time">
                     <span class="user-name">{{ detail.creator.name }}</span>
-                    <span class="update-time"> {{ detail.update_time }}</span>
+                    <span class="update-time">
+                      {{ $d(new Date(detail.update_time), "long") }}</span
+                    >
                   </div>
                 </div>
               </div>
@@ -338,7 +340,7 @@ export default {
         collect_count: "",
         creator: {
           avatar: "",
-          name: "",
+          name: "UNKNOW",
         },
         description: "",
         files: [],
@@ -349,8 +351,8 @@ export default {
         collect_count: 0,
         tags: [],
         title: "",
-        tutorials: "",
-        update_time: "",
+        tutorials: [],
+        update_time: "1990-01-01",
       },
     };
   },
