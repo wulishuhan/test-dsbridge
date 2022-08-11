@@ -294,7 +294,7 @@ export default {
     thirdPartyLogin(from) {
       let redirectUrl = window.location.href.split("?")[0];
       console.log("redirectUrl:", redirectUrl);
-      window.location.href = `https://test.leadiffer.com/oauth/thirdParty?from=${from}&redirect_url=${redirectUrl}`;
+      window.location.href = `https://sso.leadiffer.com/oauth/thirdParty?from=${from}&redirect_url=${redirectUrl}`;
     },
   },
 };
