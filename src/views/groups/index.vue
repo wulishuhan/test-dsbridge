@@ -43,7 +43,7 @@
       </el-col>
       <el-col :xs="24" :sm="12" :md="6" :lg="6" :xl="6">
         <el-input
-          placeholder="请输入搜索关键词"
+          :placeholder="$t('header.search')"
           suffix-icon="el-icon-search"
           v-model="keywords"
         ></el-input>
