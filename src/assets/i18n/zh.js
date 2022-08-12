@@ -35,4 +35,9 @@ module.exports = {
     reset: "重置",
     editOn: "编辑 ",
   },
+  download: {
+    fileNum: "个文件",
+    downloadAll: "下载全部",
+    download: "下载",
+  },
 };
