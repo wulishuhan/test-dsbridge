@@ -35,4 +35,9 @@ module.exports = {
     reset: "Reset",
     editOn: "Editd on ",
   },
+  download: {
+    fileNum: "files",
+    downloadAll: "downloadAll",
+    download: "download",
+  },
 };
