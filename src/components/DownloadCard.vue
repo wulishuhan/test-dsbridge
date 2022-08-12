@@ -23,7 +23,7 @@
           </div>
         </div>
       </div>
-      <el-button @click.prevent="fileDownload" type="primary">
+      <el-button @click.prevent="download" type="primary">
         {{ $t("download.download") }} <span>{{ file.downloadNumber }} </span>
       </el-button>
     </div>

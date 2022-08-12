@@ -80,11 +80,13 @@
               class="moreMenuItem"
               @click.stop="handleDelClick"
             >
-              Delete
+              {{ $t("design.Delete") }}
             </div>
-            <div class="moreMenuItem" @click.stop="handleMoveClick">MoveTo</div>
+            <div class="moreMenuItem" @click.stop="handleMoveClick">
+              {{ $t("design.moveTo") }}
+            </div>
             <div class="moreMenuItem" @click.stop="handleDownClick">
-              DownLoad
+              {{ $t("design.download") }}
             </div>
           </div>
           ···

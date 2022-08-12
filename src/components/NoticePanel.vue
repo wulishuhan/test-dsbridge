@@ -1,9 +1,9 @@
 <template>
   <div class="wrapper" v-if="isShowPanel">
     <span class="ortur-icon-cancel" @click="handleCloseClick"></span>
-    <div class="read" @click="handleReadClick">标记为已读</div>
+    <div class="read" @click="handleReadClick">{{ $t("notice.markRead") }}</div>
     <el-tabs v-model="activeName" @tab-click="handleTabClick">
-      <el-tab-pane label="全部" name="first">
+      <el-tab-pane :label="$t('notice.all')" name="first">
         <div class="scroll">
           <NoticeItem
             v-for="item in noticeArr"
@@ -12,7 +12,7 @@
           ></NoticeItem>
         </div>
       </el-tab-pane>
-      <el-tab-pane label="系统" name="second">
+      <el-tab-pane :label="$t('notice.system')" name="second">
         <div class="scroll">
           <NoticeItem
             v-for="item in noticeArr"
@@ -21,7 +21,7 @@
           ></NoticeItem>
         </div>
       </el-tab-pane>
-      <el-tab-pane label="评论" name="third">
+      <el-tab-pane :label="$t('notice.comment')" name="third">
         <div class="scroll">
           <NoticeItem
             v-for="item in noticeArr"
@@ -30,7 +30,7 @@
           ></NoticeItem>
         </div>
       </el-tab-pane>
-      <el-tab-pane label="关注你的人" name="fourth">
+      <el-tab-pane :label="$t('notice.following')" name="fourth">
         <div class="scroll">
           <NoticeItem
             v-for="item in noticeArr"

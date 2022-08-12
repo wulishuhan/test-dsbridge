@@ -2,13 +2,17 @@
   <div class="wrapper">
     <div class="container" v-for="item in userList" :key="item.userId">
       <div class="left">
-        <img class="img" :src="item.imgUrl" alt="" />
+        <img class="img" :src="item.avatar" alt="" />
         <div class="center">
-          <div class="name">{{ item.userName }}</div>
+          <div class="name">{{ item.name }}</div>
         </div>
       </div>
       <div class="right">
-        <FollowButton :follow="item.isFollow" ref="followBtn"></FollowButton>
+        <FollowButton
+          :follow="isFollow"
+          ref="followBtn"
+          :userId="item.id"
+        ></FollowButton>
       </div>
     </div>
   </div>
@@ -24,13 +28,16 @@ export default {
   mounted() {},
   methods: {},
   props: {
+    isFollow: {
+      type: Boolean,
+      default: () => {
+        return true;
+      },
+    },
     userList: {
       type: Array,
       default: () => {
-        return [
-          { userName: "yang", userId: "111", imgUrl: "", isFollow: true },
-          { userName: "yang", userId: "111", imgUrl: "", isFollow: false },
-        ];
+        return [];
       },
     },
   },

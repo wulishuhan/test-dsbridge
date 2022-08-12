@@ -14,11 +14,25 @@
         @tab-click="handleFollowTapClick"
         class="tabsContent"
       >
-        <el-tab-pane label="followers" name="first" class="followTapPanel">
-          <IndexFollowPanel :userList="followerList"></IndexFollowPanel>
+        <el-tab-pane
+          :label="$t('design.follower')"
+          name="first"
+          class="followTapPanel"
+        >
+          <IndexFollowPanel
+            :userList="followerList"
+            :isFollow="false"
+          ></IndexFollowPanel>
         </el-tab-pane>
-        <el-tab-pane label="following" name="second" class="followTapPanel">
-          <IndexFollowPanel :userList="followingList"></IndexFollowPanel>
+        <el-tab-pane
+          :label="$t('design.following')"
+          name="second"
+          class="followTapPanel"
+        >
+          <IndexFollowPanel
+            :userList="followingList"
+            :isFollow="true"
+          ></IndexFollowPanel>
         </el-tab-pane>
       </el-tabs>
     </el-dialog>
@@ -74,7 +88,11 @@
         <div class="name">
           {{ isYourAccount ? userInfo.nick_name : user.nick_name }}
         </div>
-        <FollowButton class="followBtn" v-show="!isYourAccount"></FollowButton>
+        <FollowButton
+          class="followBtn"
+          v-show="!isYourAccount"
+          :user-id="userId"
+        ></FollowButton>
         <div
           class="desc"
           @click="editDesc"
@@ -95,10 +113,12 @@
         ></el-input>
         <div class="follow">
           <span class="followers" @click="openFollowDialog('first')"
-            >{{ user.followers }} <span style="color: #ccc"> followers</span>
+            >{{ user.followers }}
+            <span style="color: #ccc">{{ $t("design.follower") }}</span>
           </span>
           <span class="following" @click="openFollowDialog('second')"
-            >{{ user.following }}<span style="color: #ccc"> following</span>
+            >{{ user.following
+            }}<span style="color: #ccc"> {{ $t("design.following") }}</span>
           </span>
         </div>
         <div v-for="(item, index) in diyArr" :key="item.id">
@@ -132,7 +152,7 @@
           @tab-click="handleResourceClick"
           class="tabsContent"
         >
-          <el-tab-pane label="Resource" name="first">
+          <el-tab-pane :label="$t('design.resources')" name="first">
             <el-row :gutter="20">
               <div
                 class="resourceWrapper"
@@ -167,7 +187,7 @@
               </div>
             </el-row>
           </el-tab-pane>
-          <el-tab-pane label="Likes" name="second">
+          <el-tab-pane :label="$t('design.likes')" name="second">
             <el-row :gutter="20">
               <div v-for="item in Likes" :key="item.thingId">
                 <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
@@ -184,12 +204,12 @@
               </div>
             </el-row>
           </el-tab-pane>
-          <el-tab-pane label="Collections" name="third">
+          <el-tab-pane :label="$t('design.collection')" name="third">
             <el-row :gutter="20">
               <RowFolder
                 :isYourAccount="isYourAccount"
                 style="width: 98%; margin-bottom: 20px"
-                :value="folders"
+                :value="rowFolders"
                 :onFolderAdd="onFolderAdd"
                 @clickFolder="handleClickFolder"
                 @delFolder="handleDelFolder"
@@ -213,7 +233,7 @@
               </div>
             </el-row>
           </el-tab-pane>
-          <el-tab-pane label="History" name="fourth">
+          <el-tab-pane :label="$t('design.histories')" name="fourth">
             <el-row :gutter="20">
               <div v-for="item in histories" :key="item.thingId">
                 <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
@@ -274,23 +294,8 @@ export default {
       myCollects: [],
       thing: {},
       openCollectedOption: false,
-      folders: [
-        {
-          name: "aa",
-          id: 1,
-          showMoreMenu: false,
-        },
-        {
-          name: "bb",
-          id: 2,
-          showMoreMenu: false,
-        },
-        {
-          name: "cc",
-          id: 3,
-          showMoreMenu: false,
-        },
-      ],
+      folders: [],
+      rowFolders: [],
       headers: {
         Authorization: getToken(),
       },
@@ -307,12 +312,12 @@ export default {
         },
         menulists: [
           {
-            btnName: "Delete",
+            btnName: this.$t("design.Delete"),
             fnHandler: "Handler1",
             disabled: !this.isYourAccount,
           },
           {
-            btnName: "Move to",
+            btnName: this.$t("design.moveTo"),
             fnHandler: "Handler2",
 
             // children: [
@@ -326,9 +331,8 @@ export default {
             //   },
             // ],
           },
-
           {
-            btnName: "Download",
+            btnName: this.$t("design.download"),
             fnHandler: "Handler3",
           },
         ],
@@ -423,7 +427,9 @@ export default {
           userId: this.userInfo.user_id,
         };
         addCollection(req).then(() => {
-          return resolve(1);
+          this.getCollectList().then(() => {
+            return resolve(1);
+          });
         });
       });
       // this.folder = [...e];
@@ -475,12 +481,12 @@ export default {
     },
     handleFollowTapClick() {
       if (this.activeTab == "first") {
-        getFollowerList().then((res) => {
-          this.followerList = res;
+        getFollowerList({ userId: this.userId }).then((res) => {
+          this.followerList = res.data.data;
         });
       } else {
-        getFollowingList().then((res) => {
-          this.followingList = res;
+        getFollowingList({ userId: this.userId }).then((res) => {
+          this.followingList = res.data.data;
         });
       }
     },
@@ -516,11 +522,14 @@ export default {
       });
     },
     getCollectList(myUserId) {
-      getCollectList({ userId: myUserId || this.userId }).then((params) => {
-        this.folders = params.data.data.map((item) => {
-          item.showMoreMenu = false;
-          item.isEdit = false;
-          return item;
+      return new Promise((resolve) => {
+        getCollectList({ userId: myUserId || this.userId }).then((params) => {
+          this.rowFolders = params.data.data.map((item) => {
+            item.showMoreMenu = false;
+            item.isEdit = false;
+            return item;
+          });
+          resolve(1);
         });
       });
     },
@@ -598,7 +607,6 @@ export default {
     async handleBeforeImgUpload(file) {
       // const isJPG = file.type === "image/jpeg";
       const isLt1M = file.size / 1024 / 1024 < 1;
-      // // debugger;
 
       // if (!isJPG) {
       //   this.$message.error("上传头像图片只能是 JPG 格式!");
@@ -624,13 +632,13 @@ export default {
       //console.log(e)
       this.activeTab = index;
       if (index == "first") {
-        getFollowerList().then((res) => {
-          this.followerList = res;
+        getFollowerList({ userId: this.userId }).then((res) => {
+          this.followerList = res.data.data;
           this.dialogFollowersVisible = true;
         });
       } else {
-        getFollowingList().then((res) => {
-          this.followingList = res;
+        getFollowingList({ userId: this.userId }).then((res) => {
+          this.followingList = res.data.data;
           this.dialogFollowersVisible = true;
         });
       }
