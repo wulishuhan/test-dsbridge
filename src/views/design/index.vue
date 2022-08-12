@@ -19,14 +19,20 @@
           name="first"
           class="followTapPanel"
         >
-          <IndexFollowPanel :userList="followerList"></IndexFollowPanel>
+          <IndexFollowPanel
+            :userList="followerList"
+            :isFollow="false"
+          ></IndexFollowPanel>
         </el-tab-pane>
         <el-tab-pane
           :label="$t('design.following')"
           name="second"
           class="followTapPanel"
         >
-          <IndexFollowPanel :userList="followingList"></IndexFollowPanel>
+          <IndexFollowPanel
+            :userList="followingList"
+            :isFollow="true"
+          ></IndexFollowPanel>
         </el-tab-pane>
       </el-tabs>
     </el-dialog>
@@ -82,7 +88,11 @@
         <div class="name">
           {{ isYourAccount ? userInfo.nick_name : user.nick_name }}
         </div>
-        <FollowButton class="followBtn" v-show="!isYourAccount"></FollowButton>
+        <FollowButton
+          class="followBtn"
+          v-show="!isYourAccount"
+          :user-id="userId"
+        ></FollowButton>
         <div
           class="desc"
           @click="editDesc"
@@ -471,12 +481,12 @@ export default {
     },
     handleFollowTapClick() {
       if (this.activeTab == "first") {
-        getFollowerList().then((res) => {
-          this.followerList = res;
+        getFollowerList({ userId: this.userId }).then((res) => {
+          this.followerList = res.data.data;
         });
       } else {
-        getFollowingList().then((res) => {
-          this.followingList = res;
+        getFollowingList({ userId: this.userId }).then((res) => {
+          this.followingList = res.data.data;
         });
       }
     },
@@ -597,7 +607,6 @@ export default {
     async handleBeforeImgUpload(file) {
       // const isJPG = file.type === "image/jpeg";
       const isLt1M = file.size / 1024 / 1024 < 1;
-      // // debugger;
 
       // if (!isJPG) {
       //   this.$message.error("上传头像图片只能是 JPG 格式!");
@@ -623,13 +632,13 @@ export default {
       //console.log(e)
       this.activeTab = index;
       if (index == "first") {
-        getFollowerList().then((res) => {
-          this.followerList = res;
+        getFollowerList({ userId: this.userId }).then((res) => {
+          this.followerList = res.data.data;
           this.dialogFollowersVisible = true;
         });
       } else {
-        getFollowingList().then((res) => {
-          this.followingList = res;
+        getFollowingList({ userId: this.userId }).then((res) => {
+          this.followingList = res.data.data;
           this.dialogFollowersVisible = true;
         });
       }
