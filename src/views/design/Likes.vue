@@ -16,7 +16,7 @@
 </template>
 <script>
 import ResourceCard from "@/components/ResourceCard";
-import { getUserInfoByUserId } from "@/api/user";
+import { ByUserId } from "@/api/user";
 export default {
   // eslint-disable-next-line
   name: "Likes",
@@ -27,7 +27,7 @@ export default {
     };
   },
   mounted() {
-    getUserInfoByUserId({ id: this.$route.params.userId }).then((res) => {
+    ByUserId({ id: this.$route.params.userId }).then((res) => {
       this.users = res.data.data.likes;
       for (let i = 0; i < this.users.length; i++)
         this.users[i].avatar = res.data.data.avatar;

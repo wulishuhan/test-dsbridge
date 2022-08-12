@@ -179,11 +179,6 @@ export default {
   },
   methods: {
     getResourceList() {
-      console.log(
-        "==================",
-        this.pagination.pageNum,
-        this.pagination.pageSize
-      );
       getResourceList(this.pagination)
         .then((res) => {
           console.log("getResourceList:", res);
