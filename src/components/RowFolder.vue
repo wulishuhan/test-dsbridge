@@ -14,7 +14,6 @@
           </div>
           <input
             ref="folderInputs"
-            @blur="handleEdited(item)"
             @change="handleEdited(item)"
             class="editInput"
             type="text"
@@ -49,14 +48,7 @@ export default {
     value: {
       type: Array,
       default: () => {
-        return [
-          {
-            name: "111",
-            id: "1",
-            isEdit: false,
-            showMoreMenu: false,
-          },
-        ];
+        return [];
       },
     },
     isYourAccount: {
@@ -70,35 +62,56 @@ export default {
       default: () => {},
     },
   },
-  // computed: {
-  //   folders: {
-  //     get() {
-  //       return [...this.value];
-  //     },
-  //     set(val) {
-  //       this.$emit("input", [...val]);
-  //     },
-  //   },
-  // },
   computed: {
     folders() {
-      // debugger;
       return [
         {
           name: "draft",
           id: "0",
+          showMoreMenu: false,
         },
-      ].concat(this.value);
+        ...this.value,
+      ];
     },
   },
+  // computed: {
+  //   folders() {
+  //     let res = this.value;
+  //     let flag = false;
+  //     for (const item of res) {
+  //       if (item.id == 0) {
+  //         flag = true;
+  //       }
+  //     }
+  //     if (flag) {
+  //       return res;
+  //     } else {
+  //       res.unshift({
+  //         name: "draft",
+  //         id: "0",
+  //         showMoreMenu: false,
+  //       });
+  //       return res;
+  //     }
+  //   },
+  // },
   data() {
     return {
       isEdit: false,
-      // folders: this.value,
     };
   },
   mounted() {},
   methods: {
+    // computedFolder() {
+    //   let res = this.value;
+    //   res.unshift({
+    //     name: "draft",
+    //     id: "0",
+    //     showMoreMenu: false,
+    //   });
+    //   // debugger;
+    //   return res;
+    // },
     handleClickMore(item) {
       item.showMoreMenu = !item.showMoreMenu;
     },
