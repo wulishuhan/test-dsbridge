@@ -129,8 +129,8 @@
               <show-more
                 :showHeight="showHeight"
                 v-if="activeName == 'description'"
+                :content="contentText"
               >
-                {{ detail.description }}
               </show-more>
             </el-tab-pane>
             <el-tab-pane label="Tutorial" name="steps">
@@ -174,6 +174,7 @@
                 :key="item.id"
                 class="more-image"
                 :src="item.image"
+                @click="toMore(item.id)"
               ></el-image>
             </div>
           </div>
@@ -205,16 +206,16 @@
           <div class="share-content">
             <div class="bottom-content-right-box-title">Share</div>
             <div class="share">
-              <a class="share-icon" :href="shareLink.facebook">
+              <a class="share-icon" @click="share(shareLink.facebook)">
                 <i class="ortur-icon-facebook ortur-icon"></i>
               </a>
-              <a class="share-icon" :href="shareLink.twitter">
+              <a class="share-icon" @click="share(shareLink.twitter)">
                 <i class="ortur-icon-twitter ortur-icon"></i>
               </a>
-              <a class="share-icon" :href="shareLink.whatsapp">
+              <a class="share-icon" @click="share(shareLink.whatsapp)">
                 <i class="ortur-icon-whats-app ortur-icon"></i>
               </a>
-              <a class="share-icon" href="mailto:nowhere@mozilla.org">
+              <a class="share-icon" @click="share(shareLink.instagram)">
                 <i class="ortur-icon-ins ortur-icon"></i>
               </a>
             </div>
@@ -229,7 +230,7 @@
             <div class="license-info">
               {{ detail.title }} by {{ detail.creator.name }} is licensed under
               the
-              <a href=""> {{ detail.license }} </a>
+              <a :href="licenseUrl" target="_blank"> {{ detail.license }} </a>
               license
             </div>
           </div>
@@ -318,6 +319,7 @@ export default {
         facebook: `https://www.facebook.com/sharer/sharer.php?u=${window.location.href}`,
         twitter: `https://twitter.com/share?url=${window.location.href}`,
         whatsapp: `https://web.whatsapp.com/send?text=${window.location.href}`,
+        instagram: `https://www.instagram.com/`,
       },
       swiperOptions: {
         loop: true,
@@ -354,10 +356,48 @@ export default {
         tutorials: [],
         update_time: "1990-01-01",
       },
+      contentText: "",
     };
   },
   computed: {
     ...mapGetters(["isLogin", "userInfo"]),
+    licenseUrl() {
+      let license = this.detail.license;
+      let licenseUrl = "";
+      if (license === "Creative Commons - Attribution") {
+        licenseUrl = "https://creativecommons.org/licenses/by/4.0/";
+      } else if (license === "Creative Commons - Attribution - Share Alike") {
+        licenseUrl = "https://creativecommons.org/licenses/by-sa/4.0/";
+      } else if (
+        license === "Creative Commons - Attribution - No Derivatives"
+      ) {
+        licenseUrl = "https://creativecommons.org/licenses/by-nd/4.0/";
+      } else if (
+        license === "Creative Commons - Attribution - Non-Commercial"
+      ) {
+        licenseUrl = "https://creativecommons.org/licenses/by-nc/4.0/";
+      } else if (
+        license ===
+        "Creative Commons - Attribution - Non-Commercial - Share Alike"
+      ) {
+        licenseUrl = "https://creativecommons.org/licenses/by-nc-sa/4.0/";
+      } else if (
+        license ===
+        "Creative Commons - Attribution - Non-Commercial - No Derivatives "
+      ) {
+        licenseUrl = "https://creativecommons.org/licenses/by-nc-nd/4.0/";
+      } else if (license === "Creative Commons - Public Domain Dedication") {
+        licenseUrl =
+          "https://creativecommons.org/share-your-work/public-domain/cc0/";
+      } else if (license === "GNU - GPL") {
+        licenseUrl = "https://www.gnu.org/licenses/gpl-3.0.html";
+      } else if (license === "GNU - LGPL") {
+        licenseUrl = "https://www.gnu.org/licenses/lgpl-3.0.html";
+      } else {
+        licenseUrl = "https://opensource.org/licenses/BSD-3-Clause";
+      }
+      return licenseUrl;
+    },
   },
   methods: {
     openImageView() {
@@ -431,6 +471,19 @@ export default {
     leaveCarousel() {
       this.mouseEnterCarousel = false;
     },
+    share(url) {
+      let name = ""; //网页名称，可为空;
+      let iWidth = 500; //弹出窗口的宽度;
+      let iHeight = 670; //弹出窗口的高度;
+      //window.screen.height获得屏幕的高，window.screen.width获得屏幕的宽
+      let iTop = (window.screen.height - iHeight) / 2; //获得窗口的垂直位置;
+      let iLeft = (window.screen.width - iWidth) / 2; //获得窗口的水平位置;
+      let strWindowFeatures = `top=${iTop},left=${iLeft},height= ${iHeight} ,innerHeight= ${iHeight} ,width= ${iWidth} ,innerWidth=${iWidth} ,toolbar=no,menubar=no,scrollbars=auto,resizable=no,location=no,status=no`;
+      window.open(url, name, strWindowFeatures);
+    },
+    toMore(id) {
+      this.$router.push(`/thing/${id}`);
+    },
   },
   created() {
     getLikelist({ userId: this.userInfo.user_id })
@@ -447,12 +500,13 @@ export default {
             this.detail = res.data.data;
             this.imageList = res.data.data.images;
             this.isLike = this.likeList.includes(res.data.data.id);
+            this.contentText = this.detail.description;
             return this.detail.creator.id;
           })
           .then((id) => {
             getResourceListById({
               userId: id,
-              pageSize: 3,
+              pageSize: 4,
               pageNum: 1,
             }).then((res) => {
               console.log("get more:", res, id);
@@ -461,6 +515,9 @@ export default {
                 if (more[i].id !== this.detail.id) {
                   this.moreCreateList.push(more[i]);
                 }
+              }
+              if (this.moreCreateList.length > 3) {
+                this.moreCreateList.pop();
               }
             });
           });
@@ -532,6 +589,7 @@ export default {
   width: 56px;
   height: 56px;
   text-align: center;
+  cursor: pointer;
 }
 
 .share {
@@ -603,6 +661,7 @@ a {
 
 .more-image-box {
   margin-top: 31px;
+  cursor: pointer;
 }
 
 .more-image {

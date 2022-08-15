@@ -2,7 +2,21 @@
   <div class="share-thing">
     <span>Share this thing</span>
     <div class="social-icon">
-      <a :href="shareLink.facebook">
+      <!-- <a :href="shareLink.facebook" target="_blank">
+        <svg
+          width="32"
+          height="32"
+          viewBox="0 0 32 32"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M28.9622 7.82986C24.4021 0.799817 15.0921 -1.2902 7.87204 3.07983C0.842001 7.44986 -1.43801 16.9499 3.12202 23.98L3.50202 24.55L1.98201 30.25L7.68204 28.73L8.25205 29.11C10.7221 30.44 13.3821 31.2 16.0421 31.2C18.8921 31.2 21.7421 30.44 24.2121 28.92C31.2422 24.36 33.3322 15.0499 28.9622 7.82986ZM24.9721 22.4599C24.2121 23.6 23.2621 24.36 21.9321 24.55C21.1721 24.55 20.2221 24.93 16.4221 23.41C13.1921 21.8899 10.5321 19.4199 8.63205 16.5699C7.49204 15.2399 6.92204 13.5299 6.73204 11.8199C6.73204 10.2999 7.30204 8.96987 8.25205 8.01986C8.63205 7.63986 8.96012 7.52649 9.39205 7.44986C9.73676 7.3887 9.87538 7.40138 10.3231 7.40138C10.7709 7.40138 10.9881 7.44986 11.2921 8.20986C11.6721 9.15987 12.5197 11.0557 12.6221 11.6299C12.7244 12.204 12.9887 12.7833 12.4321 13.3399C11.8755 13.8965 11.211 14.5077 11.4821 15.0499C12.2421 16.1899 13.1921 17.3299 14.1421 18.2799C15.2821 19.2299 16.4221 19.9899 17.7521 20.5599C18.1321 20.7499 18.5121 20.7499 18.7021 20.3699C18.8921 19.9899 19.8421 19.0399 20.2221 18.6599C20.6021 18.2799 20.7921 18.2799 21.1721 18.4699L24.2121 19.9899C24.5921 20.1799 24.9721 20.3699 25.1621 20.5599C25.3521 21.1299 25.3521 21.8899 24.9721 22.4599Z"
+            fill="black"
+          />
+        </svg>
+      </a> -->
+      <a @click="test">
         <svg
           width="32"
           height="32"
@@ -16,7 +30,7 @@
           />
         </svg>
       </a>
-      <a :href="shareLink.twitter">
+      <a :href="shareLink.twitter" target="_blank">
         <svg
           width="32"
           height="32"
@@ -31,7 +45,7 @@
         </svg>
       </a>
 
-      <a href="mailto:nowhere@mozilla.org">
+      <a href="mailto:nowhere@mozilla.org" target="_blank">
         <svg
           width="30"
           height="30"
@@ -45,7 +59,7 @@
           />
         </svg>
       </a>
-      <a href="mailto:nowhere@mozilla.org">
+      <a href="mailto:nowhere@mozilla.org" target="_blank">
         <svg
           width="32"
           height="32"
@@ -61,7 +75,7 @@
           />
         </svg>
       </a>
-      <a :href="shareLink.whatsapp">
+      <a :href="shareLink.whatsapp" target="_blank">
         <svg
           width="32"
           height="32"
@@ -82,6 +96,7 @@
 </template>
 
 <script>
+/* eslint-disable */
 export default {
   name: "ShareSocialMedia",
   data() {
@@ -92,7 +107,48 @@ export default {
         twitter: "https://twitter.com/share?url=test.leadiffer.com",
         whatsapp: "https://web.whatsapp.com/send?text=test.leadiffer.com",
       },
+      FB: {},
     };
+  },
+  mounted() {
+    console.log("log");
+    window.fbAsyncInit = function () {
+      FB.init({
+        appId: "207684688193434",
+        cookie: true,
+        xfbml: true,
+      });
+      // FB.AppEvents.logPageView();
+      console.log("fbbb:", FB);
+      this.FB = FB;
+    };
+
+    (function (d, s, id) {
+      var js,
+        fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) {
+        return;
+      }
+      js = d.createElement(s);
+      js.id = id;
+      js.src = "https://connect.facebook.net/en_US/sdk.js";
+      fjs.parentNode.insertBefore(js, fjs);
+    })(document, "script", "facebook-jssdk");
+  },
+  methods: {
+    test() {
+      console.log("FB:", this.FB);
+      THIS.FB.ui(
+        {
+          display: "popup",
+          method: "share",
+          href: "https://developers.facebook.com/docs/",
+        },
+        function (res) {
+          console.log(res);
+        }
+      );
+    },
   },
 };
 </script>
