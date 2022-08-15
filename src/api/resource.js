@@ -33,3 +33,10 @@ export function getResourceListById(params) {
     params,
   });
 }
+export function getResourceTags(params) {
+  return request({
+    url: `/library/tag/list`,
+    method: "get",
+    params,
+  });
+}

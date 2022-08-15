@@ -32,10 +32,6 @@ export default {
       required: true,
       default: 200,
     },
-    contentHeight: {
-      type: Number,
-      default: 200,
-    },
     content: {
       type: String,
       default: null,
@@ -51,8 +47,8 @@ export default {
       isLongContent: false,
     };
   },
-  mounted() {
-    this.calculateHeight(this.name);
+  created() {
+    this.calculateHeight();
   },
   watch: {
     // 每当内容变化时都重新计算一次高度

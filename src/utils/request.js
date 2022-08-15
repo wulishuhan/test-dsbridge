@@ -117,7 +117,7 @@ service.interceptors.response.use((res) => {
           loginDialogVisible: true,
           isLoginForm: true,
         });
-        store.dispatch("user/logout");
+        // store.dispatch("user/logout");
       }
 
       return Promise.reject({

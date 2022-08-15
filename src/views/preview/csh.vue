@@ -315,6 +315,15 @@ export default {
     collectChange() {
       this.showCollectionDeleteButton = !this.showCollectionDeleteButton;
     },
+    open() {
+      console.log("open", arguments);
+    },
+    close() {
+      console.log("close", arguments);
+    },
+    change() {
+      console.log("change", arguments);
+    },
   },
   mounted() {},
 };
