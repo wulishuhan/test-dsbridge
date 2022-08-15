@@ -7,8 +7,31 @@
         :key="item.id"
         @click="handleClickFolder(item)"
       >
+        <div style="text-align: right; height: 25px">
+          <span
+            v-show="isYourAccount && item.id !== '0'"
+            @click.stop="handleClickMore(item)"
+            class="moreMenuIcon"
+            id="moreMenuIcon"
+          >
+            <div class="moreMenu" v-if="item.showMoreMenu">
+              <div class="moreMenuItem" @click.stop="handleDelClick(item)">
+                Delete
+              </div>
+            </div>
+            ···
+          </span>
+        </div>
         <div class="folder">
-          <span class="ortur-icon-file"></span>
+          <div class="imgArr">
+            <div
+              class="imgArrItem"
+              v-for="(item, index) in imgArr"
+              :key="index"
+            >
+              <img :src="item" alt="" />
+            </div>
+          </div>
           <div class="title" v-if="!item.isEdit" @click="handleEdit(item)">
             {{ item.name }}
           </div>
@@ -21,19 +44,6 @@
             v-else
           />
         </div>
-        <span
-          v-show="isYourAccount && item.id !== '0'"
-          @click.stop="handleClickMore(item)"
-          class="moreMenuIcon"
-          id="moreMenuIcon"
-        >
-          <div class="moreMenu" v-if="item.showMoreMenu">
-            <div class="moreMenuItem" @click.stop="handleDelClick(item)">
-              Delete
-            </div>
-          </div>
-          ···
-        </span>
       </div>
     </div>
     <div class="plus" @click="addFolder" v-show="isYourAccount && !isEdit">
@@ -45,6 +55,18 @@
 <script>
 export default {
   props: {
+    imgArr: {
+      type: Array,
+      default: () => {
+        return [
+          "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.jj20.com%2Fup%2Fallimg%2Ftp09%2F210F2130512J47-0-lp.jpg&refer=http%3A%2F%2Fimg.jj20.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1663124045&t=d288c47a19560c2971d5541c585dea56",
+          "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.jj20.com%2Fup%2Fallimg%2Ftp09%2F210F2130512J47-0-lp.jpg&refer=http%3A%2F%2Fimg.jj20.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1663124045&t=d288c47a19560c2971d5541c585dea56",
+          "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.jj20.com%2Fup%2Fallimg%2Ftp09%2F210F2130512J47-0-lp.jpg&refer=http%3A%2F%2Fimg.jj20.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1663124045&t=d288c47a19560c2971d5541c585dea56",
+          "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.jj20.com%2Fup%2Fallimg%2Ftp09%2F210F2130512J47-0-lp.jpg&refer=http%3A%2F%2Fimg.jj20.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1663124045&t=d288c47a19560c2971d5541c585dea56",
+          "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.jj20.com%2Fup%2Fallimg%2Ftp09%2F210F2130512J47-0-lp.jpg&refer=http%3A%2F%2Fimg.jj20.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1663124045&t=d288c47a19560c2971d5541c585dea56",
+        ];
+      },
+    },
     value: {
       type: Array,
       default: () => {
@@ -64,14 +86,7 @@ export default {
   },
   computed: {
     folders() {
-      return [
-        {
-          name: "draft",
-          id: "0",
-          showMoreMenu: false,
-        },
-        ...this.value,
-      ];
+      return [...this.value];
     },
   },
   // computed: {
@@ -112,8 +127,15 @@ export default {
     //   // debugger;
     //   return res;
     // },
-    handleClickMore(item) {
-      item.showMoreMenu = !item.showMoreMenu;
+    handleClickMore(target) {
+      if (target.showMoreMenu) {
+        target.showMoreMenu = false;
+        return;
+      }
+      for (const item of this.folders) {
+        item.showMoreMenu = false;
+      }
+      target.showMoreMenu = !target.showMoreMenu;
     },
     handleDelClick(item) {
       this.$emit("delFolder", item);
@@ -185,7 +207,7 @@ export default {
   display: flex;
   overflow-y: visible;
   overflow-x: auto;
-  height: 128px;
+  height: 168px;
 
   .plus {
     font-size: 26px;
@@ -197,18 +219,25 @@ export default {
     display: flex;
     align-items: center;
     margin-right: 32px;
+    .folderContainer:hover .moreMenuIcon {
+      text-align: right;
+      display: inline;
+    }
     .folderContainer {
       position: relative;
       .moreMenuIcon {
+        display: none;
         text-align: center;
         width: 32px;
-        height: 24px;
-        line-height: 24px;
+        // height: 24px;
+        // line-height: 24px;
         background: #e8ebf4;
         border-radius: 4px;
-        position: absolute;
-        right: 0px;
-        top: 0px;
+        text-align: right;
+        padding: 0 5px;
+        // position: absolute;
+        // right: 0px;
+        // top: 0px;
         .moreMenu {
           position: absolute;
           width: 160px;
@@ -216,7 +245,7 @@ export default {
           background: #ffffff;
           box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.07);
           border-radius: 10px;
-          top: 0px;
+          top: 30px;
           left: 30px;
           text-align: left;
           z-index: 500;
@@ -248,9 +277,17 @@ export default {
         align-items: center;
         margin-right: 5px;
         height: 128px;
-        .ortur-icon-file {
-          margin-bottom: 12px;
-          font-size: 60px;
+        .imgArr {
+          display: flex;
+          flex-wrap: wrap;
+          width: 126px;
+          .imgArrItem {
+            margin: 1px;
+            img {
+              width: 40px;
+              height: 40px;
+            }
+          }
         }
         .editInput {
           width: 112px;

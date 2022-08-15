@@ -319,6 +319,8 @@ export default {
         collectionId: folderObject.id,
       }).then((res) => {
         console.log(res);
+        this.$emit("moveCollectionComplete");
+
         this.$message({
           message: "move successfully",
           type: "success",
