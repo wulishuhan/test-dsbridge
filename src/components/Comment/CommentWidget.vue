@@ -50,7 +50,7 @@
             @click="showReplyList(commentIndex)"
             class="reply-list-fold"
           >
-            <span>View all replies </span>
+            <span style="font-size: 12px">View all replies </span>
             <span style="margin-right: 6px; color: #999">{{
               commentItem.replies ? commentItem.replies.length : 0
             }}</span>
@@ -222,6 +222,7 @@ export default {
     display: flex;
     justify-content: space-between;
     align-content: center;
+    font-size: 12px;
     .profile {
       display: flex;
       justify-content: space-between;
@@ -257,15 +258,15 @@ export default {
     }
   }
   .reply-wrapper {
-    padding: 10px;
+    padding: 0px 10px;
     margin-left: 52px;
     .comment-detail {
       margin-bottom: 10px;
-      font-size: 16px;
+      font-size: 12px;
       color: #1a1a1a;
     }
     .reply-ref-detail {
-      font-size: 14px;
+      font-size: 12px;
       color: #1a1a1a;
       background: #f5f5f5;
       border-radius: 8px;
@@ -279,8 +280,9 @@ export default {
     }
     .reply-list-wrapper {
       background: #e8ebf4;
-      padding: 10px;
+      padding: 5px;
       border-radius: 8px;
+      font-size: 12px;
       .reply-list-fold {
         color: #1e78f0;
         background: none;
@@ -292,18 +294,18 @@ export default {
         }
       }
       .reply-item {
-        padding: 5px 10px;
+        padding: 0px 10px;
         .reply-detail {
-          margin: 10px 54px;
+          margin: 0px 54px;
         }
       }
     }
   }
   .comment {
     width: 95%;
-    margin: 20px auto;
     color: #1a1a1a;
     margin-left: 50px;
+    font-size: 12px;
   }
 
   .reply-list {

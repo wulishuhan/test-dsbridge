@@ -185,16 +185,18 @@
         >
           {{ tag }}
         </el-tag>
-        <el-input
-          placeholder="添加标签"
-          class="input-new-tag"
+        <el-autocomplete
+          class="inline-input"
+          ref="autoInput"
           v-model="inputValue"
-          ref="saveTagInput"
+          :fetch-suggestions="querySearch"
+          value-key="name"
+          placeholder="请输入内容"
           size="small"
+          :trigger-on-focus="false"
+          @select="handleSelect"
           @keyup.enter.native="handleInputConfirm"
-          @blur="handleInputConfirm"
-        >
-        </el-input>
+        ></el-autocomplete>
       </el-form-item>
       <el-form-item :label="$t('upload.license')" prop="license">
         <el-select
@@ -377,7 +379,12 @@
 import draggable from "vuedraggable";
 import Preview from "@/components/Preview";
 import { getToken } from "@/utils/auth";
-import { saveResource, getResource, updateResource } from "@/api/resource";
+import {
+  saveResource,
+  getResource,
+  updateResource,
+  getResourceTags,
+} from "@/api/resource";
 export default {
   // eslint-disable-next-line
   name: "upload",
@@ -396,6 +403,7 @@ export default {
       showFile: false,
       dialogImageUrl: "",
       inputValue: "",
+      searchSuggestions: "",
       dialogVisible: false,
       resourceFormRules: {
         files: [{ required: true, message: "资源不能为空" }],
@@ -505,7 +513,6 @@ export default {
     },
   },
   mounted() {
-    console.log(this.$d(new Date(), "long"));
     this.sourceId = this.$route.params.sourceId;
     if (this.sourceId != undefined) {
       //调用详解接口
@@ -527,6 +534,16 @@ export default {
     //更新标题
   },
   methods: {
+    handleSelect(item) {
+      this.$refs["autoInput"].focus();
+      console.log(item);
+    },
+    querySearch(queryString, cb) {
+      getResourceTags({ name: queryString }).then((res) => {
+        var restaurants = res.data.data;
+        cb(restaurants);
+      });
+    },
     closePreviewDialog() {
       this.previewDialogVisible = false;
     },
@@ -552,7 +569,7 @@ export default {
     handleInputConfirm() {
       let inputValue = this.inputValue;
       if (this.resourceForm.tags.length >= 12) {
-        this.$message.error("标签至多1个");
+        this.$message.error("标签至多12个");
         return;
       }
 
@@ -765,7 +782,7 @@ export default {
                 }
               })
               .catch((e) => {
-                console.log("save========", e);
+                console.log(e);
               });
           }
           console.log("表单验证成功");

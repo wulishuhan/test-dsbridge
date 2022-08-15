@@ -1,5 +1,19 @@
 import request from "@/utils/request";
 
+export function follow(params) {
+  return request({
+    url: `/library/follower`,
+    method: "post",
+    params,
+  });
+}
+export function unFollow(params) {
+  return request({
+    url: `/library/follower`,
+    method: "delete",
+    params,
+  });
+}
 export function addCollection(data) {
   return request({
     url: `/library/collection`,
@@ -68,14 +82,14 @@ export function getLikesList(params) {
 }
 export function getFollowingList(params) {
   return request({
-    url: `/library/like/list`,
+    url: `/library/follower/followings`,
     method: "get",
     params,
   });
 }
 export function getFollowerList(params) {
   return request({
-    url: `/library/like/list`,
+    url: `/library/follower/followers`,
     method: "get",
     params,
   });

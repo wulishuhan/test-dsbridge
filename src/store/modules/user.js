@@ -124,6 +124,7 @@ const actions = {
     });
   },
   switchLoginRegisteForm({ commit }, payload) {
+    commit("RESET_STATE");
     commit("SWITCH_LOGIN_REGISTER_FORM", payload);
   },
 };

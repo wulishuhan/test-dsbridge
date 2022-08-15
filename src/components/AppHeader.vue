@@ -181,15 +181,10 @@ export default {
     ]),
   },
   mounted() {
-    this.$store
-      .dispatch("user/getUserInfo")
-      .then(() => {
-        console.log("执行成功");
-        console.log(this.userInfo);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+    console.log(222222222222);
+    this.$store.dispatch("user/getUserInfo").catch((e) => {
+      console.log(e);
+    });
   },
   methods: {
     handleShowNotice() {
