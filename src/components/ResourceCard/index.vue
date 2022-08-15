@@ -207,6 +207,7 @@ export default {
       showLikeStar: false,
       folders: [],
       showCollectionDeleteButton: false,
+      loadLike: false,
     };
   },
   mounted() {
@@ -242,8 +243,12 @@ export default {
       this.$router.push(`/thing/${id}`);
     },
     like() {
+      if (this.loadLike) {
+        return;
+      }
       if (this.showLikeStar) {
         this.showLikeStar = false;
+        this.loadLike = true;
         deleteLike({
           resId: this.thing.id,
         })
@@ -253,16 +258,19 @@ export default {
               type: "success",
             });
             this.likes = Number(this.likes) - 1;
+            this.loadLike = false;
             if (this.likes < 0) {
               this.likes = 0;
             }
           })
           .catch((err) => {
             this.showLikeStar = true;
+            this.loadLike = false;
             console.log(err);
           });
       } else {
         this.showLikeStar = true;
+        this.loadLike = true;
         addLike({
           resId: this.thing.id,
         })
@@ -271,10 +279,12 @@ export default {
               message: "add likes successfully",
               type: "success",
             });
+            this.loadLike = false;
             this.likes = 1 + Number(this.likes);
           })
           .catch((err) => {
             console.log(err);
+            this.loadLike = false;
             this.showLikeStar = false;
           });
       }
@@ -454,6 +464,7 @@ export default {
 }
 .card-box-bottom-right-like-box {
   margin-right: 8px;
+  user-select: none;
 }
 .icon-share,
 .icon-star {

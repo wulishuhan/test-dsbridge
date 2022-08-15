@@ -29,12 +29,28 @@
                   :isStar="isLike"
                   @click="like"
                 ></StarButton>
-                <CollectButton
-                  :isCollect="isCollected"
-                  :collectionNum="detail.collect_count"
-                  @click="collect"
-                ></CollectButton>
-                <DownLoadButton :fileList="detail.files"></DownLoadButton>
+                <div class="collected-box">
+                  <CollectButton
+                    :isCollect="isCollected"
+                    :collectionNum="detail.collect_count"
+                    @click="collect"
+                  ></CollectButton>
+                  <CollectedOption
+                    :show="openCollectedOption"
+                    :folders="folders"
+                    @close="closeCollectedOption"
+                    @moveFolder="moveCollectedOption"
+                    @addFolder="addFolder"
+                    class="collected-option"
+                  ></CollectedOption>
+                </div>
+                <DownLoadButton
+                  :isShowDownPanel="isShowDownPanel"
+                  :fileList="detail.files"
+                  :fileNum="detail.files.length"
+                  :downLoadNum="5000"
+                  @click="openShowDownPanel"
+                ></DownLoadButton>
               </div>
             </div>
             <div class="show-thing">
@@ -273,6 +289,13 @@ import { getUserInfoByThingId } from "@/api/thing";
 import { getResource, getResourceListById } from "@/api/resource";
 import { getLikelist, addLike, deleteLike } from "@/api/like";
 import { mapGetters } from "vuex";
+import {
+  getCollectionResourceList,
+  getCollectionList,
+  addCollection,
+  addResourceToCollection,
+  deleteCollectionResource,
+} from "@/api/collection";
 import DownLoadButton from "@/components/DownLoadButton.vue";
 import StarButton from "@/components/StarButton.vue";
 import CollectButton from "@/components/CollectButton.vue";
@@ -284,6 +307,7 @@ import Reply from "@/components/Comment/ReplyWidget.vue";
 import ViewMore from "./ViewMore.vue";
 import SrollTopButton from "@/components/SrollTopButton";
 import Tutorial from "./components/Tutorial.vue";
+import CollectedOption from "@/components/CollectedOption";
 export default {
   name: "Thing",
   components: {
@@ -299,6 +323,7 @@ export default {
     ViewMore,
     SrollTopButton,
     Tutorial,
+    CollectedOption,
   },
   data() {
     return {
@@ -357,6 +382,11 @@ export default {
         update_time: "1990-01-01",
       },
       contentText: "",
+      collectedList: [],
+      openCollectedOption: false,
+      folders: [],
+      likeDisabled: false,
+      isShowDownPanel: false,
     };
   },
   computed: {
@@ -423,17 +453,27 @@ export default {
       this.imgActiveIndex = index;
     },
     like() {
+      if (this.likeDisabled) {
+        return;
+      }
+      this.likeDisabled = true;
       if (this.isLike) {
         deleteLike({
           resId: this.detail.id,
-        }).then(() => {
-          this.$message({
-            message: "delete likes successfully",
-            type: "success",
+        })
+          .then(() => {
+            this.$message({
+              message: "delete likes successfully",
+              type: "success",
+            });
+            this.likeDisabled = false;
+            this.isLike = false;
+            this.detail.like_count = this.detail.like_count - 1;
+          })
+          .catch((err) => {
+            this.likeDisabled = false;
+            console.log(err);
           });
-          this.isLike = false;
-          this.detail.like_count = this.detail.like_count - 1;
-        });
       } else {
         addLike({
           resId: this.detail.id,
@@ -443,16 +483,26 @@ export default {
               message: "add likes successfully",
               type: "success",
             });
+            this.likeDisabled = false;
             this.isLike = true;
             this.detail.like_count = this.detail.like_count + 1;
           })
           .catch((err) => {
+            this.likeDisabled = false;
             console.log(err);
           });
       }
     },
     collect() {
-      this.isCollected = !this.isCollected;
+      if (this.isCollected) {
+        this.deleteCollection();
+      } else {
+        if (this.openCollectedOption) {
+          this.openCollectedOption = false;
+          return;
+        }
+        this.addCollection();
+      }
     },
     toUserProfileView() {
       this.$router.push(`/design/Favorites/${this.detail.creator.id}`);
@@ -484,6 +534,73 @@ export default {
     toMore(id) {
       this.$router.push(`/thing/${id}`);
     },
+    addCollection() {
+      this.openCollectedOption = true;
+      this.isShowDownPanel = false;
+      getCollectionList({
+        userId: this.$store.getters.userInfo.user_id,
+      }).then((res) => {
+        console.log("getCollectionList", res);
+        this.folders = res.data.data;
+      });
+    },
+    deleteCollection() {
+      this.openCollectedOption = false;
+      deleteCollectionResource({
+        userId: this.$store.getters.userInfo.user_id,
+        resourceId: this.detail.id,
+      }).then((res) => {
+        this.$message({
+          message: "cancel collected successfully",
+          type: "success",
+        });
+        this.isCollected = false;
+      });
+    },
+    closeCollectedOption() {
+      this.openCollectedOption = false;
+    },
+    moveCollectedOption(folderObject) {
+      // this.isCollected = true;
+      this.openCollectedOption = false;
+      addResourceToCollection({
+        resourceId: this.detail.id,
+        collectionId: folderObject.id,
+      }).then((res) => {
+        console.log(res);
+        this.$message({
+          message: "move successfully",
+          type: "success",
+        });
+        this.isCollected = true;
+      });
+    },
+    addFolder(folderName) {
+      addCollection({
+        name: folderName,
+        userId: this.$store.getters.userInfo.user_id,
+      })
+        .then((res) => {
+          console.log("addCollection", res);
+          this.$message({
+            message: "add folder successfully",
+            type: "success",
+          });
+        })
+        .then(() => {
+          getCollectionList({
+            userId: this.$store.getters.userInfo.user_id,
+          }).then((res) => {
+            this.folders = res.data.data;
+          });
+        });
+    },
+    openShowDownPanel() {
+      if (!this.isShowDownPanel) {
+        this.openCollectedOption = false;
+      }
+      this.isShowDownPanel = !this.isShowDownPanel;
+    },
   },
   created() {
     getLikelist({ userId: this.userInfo.user_id })
@@ -494,6 +611,16 @@ export default {
         }
       })
       .then(() => {
+        getCollectionResourceList({
+          userId: this.userInfo.user_id,
+        }).then((res) => {
+          for (let i = 0; i < res.data.rows.length; i++) {
+            const element = res.data.rows[i];
+            this.collectedList.push(element.id);
+          }
+        });
+      })
+      .then(() => {
         getResource(this.$route.params.thingId)
           .then((res) => {
             console.log("getResource", res);
@@ -501,6 +628,7 @@ export default {
             this.imageList = res.data.data.images;
             this.isLike = this.likeList.includes(res.data.data.id);
             this.contentText = this.detail.description;
+            this.isCollected = this.collectedList.includes(res.data.data.id);
             return this.detail.creator.id;
           })
           .then((id) => {
@@ -768,7 +896,9 @@ a {
     height: 660px;
   }
 }
-
+::v-deep .el-button.is-disabled {
+  background-color: none;
+}
 .container {
   /* background-color: #f5f5f5; */
   height: 100%;
@@ -956,5 +1086,13 @@ a {
 .show-header-left-thing-name {
   font-size: 24px;
   color: #1a1a1a;
+}
+
+.collected-box {
+  position: relative;
+  .collected-option {
+    position: absolute;
+    right: 0px;
+  }
 }
 </style>

@@ -3,6 +3,7 @@
     <el-button
       :style="{ color: isStar ? 'red' : 'black' }"
       class="baseButton button"
+      :disabled="disabled"
       @click="click"
     >
       <i :class="isStar ? 'el-icon-star-on' : 'el-icon-star-off'"></i>
@@ -24,6 +25,10 @@ export default {
       default: 0,
     },
     isStar: {
+      type: Boolean,
+      default: false,
+    },
+    disabled: {
       type: Boolean,
       default: false,
     },
