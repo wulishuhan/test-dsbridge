@@ -38,12 +38,29 @@
     </div>
     <div class="card-box-bottom">
       <div class="card-box-bottom-left">
-        <el-avatar
+        <!-- <el-avatar
           v-if="showAvatar"
           :size="35"
           :src="thing.creator && thing.creator.avatar"
           :fit="'cover'"
-        ></el-avatar>
+        ></el-avatar> -->
+        <el-popover
+          popper-class="user-popover"
+          placement="bottom-start"
+          trigger="hover"
+        >
+          <UserRecommendation
+            :creator="thing.creator"
+            :currentResourceId="thing.id"
+          ></UserRecommendation>
+          <el-avatar
+            v-if="showAvatar"
+            :size="35"
+            :src="thing.creator && thing.creator.avatar"
+            :fit="'cover'"
+            slot="reference"
+          ></el-avatar>
+        </el-popover>
         <div class="card-box-bottom-left-name">
           <div class="thing-name">{{ thing.title }}</div>
           <span
@@ -110,6 +127,7 @@
 <script>
 import ShareSocialMedia from "@/components/ShareCard";
 import CollectedOption from "@/components/CollectedOption";
+import UserRecommendation from "@/components/UserRecommendation";
 import { addLike, deleteLike } from "@/api/like";
 import {
   getCollectionList,
@@ -119,7 +137,7 @@ import {
 } from "@/api/collection";
 export default {
   name: "ResourceCard",
-  components: { ShareSocialMedia, CollectedOption },
+  components: { ShareSocialMedia, CollectedOption, UserRecommendation },
   props: {
     isYourAccount: {
       type: Boolean,

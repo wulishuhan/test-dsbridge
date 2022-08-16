@@ -169,6 +169,10 @@
         </span>
       </el-button>
     </el-popover>
+    <el-popover popper-class="user-popover" placement="bottom" trigger="click">
+      <UserRecommendation></UserRecommendation>
+      <el-avatar :size="60" slot="reference"></el-avatar>
+    </el-popover>
   </div>
 </template>
 <script>
@@ -177,6 +181,7 @@ import ShowMore from "@/components/ShowMore.vue";
 // import Preview from "@/components/Preview.vue";
 import ResourceCard from "@/components/ResourceCard";
 import CollectedOption from "@/components/CollectedOption";
+import UserRecommendation from "@/components/UserRecommendation";
 // more module style...
 // 用来预览组件
 export default {
@@ -187,6 +192,7 @@ export default {
     // Preview
     ResourceCard,
     CollectedOption,
+    UserRecommendation,
   },
   data() {
     return {
