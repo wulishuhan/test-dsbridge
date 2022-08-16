@@ -42,6 +42,10 @@ const mutations = {
     state.loginDialogVisible = payload.loginDialogVisible;
     state.isLoginForm = payload.isLoginForm;
   },
+  CLOSE_LOGIN_REGISTER_FORM: (state) => {
+    state.loginDialogVisible = false;
+  },
+  //eslint-disable-next-line
   SET_ISLOGIN: (state, loginStatus) => {
     state.isLogin = loginStatus;
   },
@@ -124,8 +128,10 @@ const actions = {
     });
   },
   switchLoginRegisteForm({ commit }, payload) {
-    commit("RESET_STATE");
     commit("SWITCH_LOGIN_REGISTER_FORM", payload);
+  },
+  closeLoginRegisteForm({ commit }) {
+    commit("CLOSE_LOGIN_REGISTER_FORM");
   },
 };
 
