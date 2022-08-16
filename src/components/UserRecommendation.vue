@@ -5,13 +5,10 @@
         <el-avatar :src="creator.avatar" :size="40"></el-avatar>
         <span class="name">{{ creator.name }}</span>
       </div>
-      <el-button
-        v-if="!followers.includes(creator.id)"
-        type="primary"
-        @click="follow"
-        >Follow</el-button
-      >
-      <el-button v-else type="primary" @click="unFollow">Unfollow</el-button>
+      <el-button v-if="!followings.includes(creator.id)" @click="follow">
+        Follow
+      </el-button>
+      <el-button v-else @click="unFollow">Unfollow</el-button>
     </div>
     <div class="recommend-resources">
       <el-image
@@ -25,7 +22,7 @@
 </template>
 <script>
 import { getResourceListById } from "@/api/resource";
-import { follow, unFollow, getFollowerList } from "@/api/design";
+import { follow, unFollow, getFollowingList } from "@/api/design";
 export default {
   name: "UserRecommendation",
   props: {
@@ -61,37 +58,42 @@ export default {
         this.moreCreateList.pop();
       }
     });
-    getFollowerList({
+    getFollowingList({
       userId: this.$store.getters.userInfo.user_id,
     }).then((res) => {
-      console.log("getFollowerList:", res);
       let list = res.data.data;
       for (let i = 0; i < list.length; i++) {
-        this.followers.push(list[i].id);
+        this.followings.push(list[i].id);
       }
+      console.log("getFollowingList: ", this.followings);
     });
   },
   data() {
     return {
       moreCreateList: [],
-      followers: [],
+      followings: [],
     };
   },
   methods: {
     follow() {
+      console.log(
+        "following",
+        this.$store.getters.userInfo.user_id,
+        this.creator.id
+      );
       follow({
         userId: this.creator.id,
       }).then(() => {
-        this.followers.push(this.creator.id);
+        this.followings.push(this.creator.id);
       });
     },
     unFollow() {
       unFollow({
         userId: this.creator.id,
       }).then(() => {
-        for (let i = 0; i < this.followers.length; i++) {
-          if (this.followers[i] === this.creator.id) {
-            this.followers.splice(i, 1);
+        for (let i = 0; i < this.followings.length; i++) {
+          if (this.followings[i] === this.creator.id) {
+            this.followings.splice(i, 1);
             break;
           }
         }
@@ -127,19 +129,26 @@ export default {
       }
     }
     .el-button {
-      width: 80px;
-      height: 30px;
+      width: 96px;
+      height: 38px;
       background: #1e78f0;
       border-radius: 8px;
-      line-height: 6px;
+      color: #ffffff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: 400;
+      font-family: Source Han Sans CN;
+      font-size: 12px;
     }
   }
   .recommend-resources {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(3, 90px);
     justify-content: space-between;
     margin-top: 17px;
     .el-image {
-      width: 80px;
+      width: 90px;
       height: 59px;
       border-radius: 5px;
       cursor: pointer;

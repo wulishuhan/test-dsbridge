@@ -138,9 +138,9 @@
     ></CollectedOption>
     <el-popover
       placement="top"
-      v-model="visible"
       :visible-arrow="false"
-      popper-class="test"
+      popper-class="user-popover"
+      offset="500"
     >
       <CollectedOption
         :show="openCollectedOption"

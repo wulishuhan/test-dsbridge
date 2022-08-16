@@ -48,8 +48,10 @@
           popper-class="user-popover"
           placement="bottom-start"
           trigger="hover"
+          @show="userRecommendation"
         >
           <UserRecommendation
+            v-if="showUserRecommendation"
             :creator="thing.creator"
             :currentResourceId="thing.id"
           ></UserRecommendation>
@@ -226,6 +228,7 @@ export default {
       folders: [],
       showCollectionDeleteButton: false,
       loadLike: false,
+      showUserRecommendation: false,
     };
   },
   mounted() {
@@ -389,6 +392,9 @@ export default {
     },
     leave() {
       this.isCollectIconShow = false;
+    },
+    userRecommendation() {
+      this.showUserRecommendation = true;
     },
   },
 };

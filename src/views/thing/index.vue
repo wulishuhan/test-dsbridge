@@ -184,7 +184,7 @@
                 View all
               </a>
             </div>
-            <div class="flex justify-between more-image-box">
+            <div class="more-image-box">
               <el-image
                 v-for="item in moreCreateList"
                 :key="item.id"
@@ -202,7 +202,7 @@
                 View all
               </a>
             </div>
-            <div class="flex justify-between more-image-box">
+            <div class="more-image-box">
               <el-image
                 v-for="i in 3"
                 :key="i"
@@ -790,6 +790,9 @@ a {
 .more-image-box {
   margin-top: 31px;
   cursor: pointer;
+  display: grid;
+  grid-template-columns: repeat(3, 184px); 
+  justify-content: space-between;
 }
 
 .more-image {
