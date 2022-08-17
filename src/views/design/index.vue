@@ -21,7 +21,8 @@
         >
           <IndexFollowPanel
             :userList="followerList"
-            :isFollow="false"
+            :myFollowList="myFollowList"
+            :myUserId="userInfo.user_id"
           ></IndexFollowPanel>
         </el-tab-pane>
         <el-tab-pane
@@ -31,7 +32,8 @@
         >
           <IndexFollowPanel
             :userList="followingList"
-            :isFollow="true"
+            :myUserId="userInfo.user_id"
+            :myFollowList="myFollowList"
           ></IndexFollowPanel>
         </el-tab-pane>
       </el-tabs>
@@ -266,7 +268,12 @@
             <el-row :gutter="20">
               <div v-for="item in histories" :key="item.thingId">
                 <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                  <resource-card :key="item.id" :thing="item"> </resource-card>
+                  <resource-card
+                    :key="item.id"
+                    :thing="item"
+                    :isLike="myLikes.includes(item.id)"
+                  >
+                  </resource-card>
                 </el-col>
               </div>
             </el-row>
@@ -287,6 +294,7 @@ import RowFolder from "@/components/RowFolder.vue";
 import {
   getResourceList,
   getCollectResourceList,
+  getHistoriesList,
   deleteCollection,
   getLikesList,
   deleteResource,
@@ -295,7 +303,7 @@ import {
   updateDiy,
   getFollowerList,
   getFollowingList,
-  getUserInfo,
+  // getUserInfo,
   getCollectList,
   moveResourceToCollection,
   addResourceToCollection,
@@ -317,6 +325,7 @@ export default {
   data() {
     return {
       collectionName: "",
+      myFollowList: [],
       myFolderCollects: [],
       folderCollection: [],
       followerList: [],
@@ -390,6 +399,7 @@ export default {
         },
       ],
       user: {
+        // 自己或他人的用户信息
         userId: "",
         nick_name: "",
         avatar: "",
@@ -399,7 +409,7 @@ export default {
         desc: "yang 654651",
       },
       collectionId: "",
-      userId: "",
+      userId: "", //自己或他人的主页
     };
   },
   mounted() {
@@ -414,6 +424,7 @@ export default {
     } else if (userId == "fromProfile") {
       this.isYourAccount = true;
       this.getResourceList();
+      // this.getResourceList(this.userInfo.user_id);
     } else if (userId == "fromHistory") {
       this.isYourAccount = true;
       this.getHistoriesList();
@@ -428,7 +439,7 @@ export default {
       this.getResourceList();
     }
     this.userId = this.isYourAccount ? this.userInfo.user_id : this.user.userId;
-    getUserInfo({ userId: this.userId }).then(() => {});
+    // getUserInfo({ userId: this.userId }).then(() => {});
   },
   computed: {
     ...mapState(["userInfo"]),
@@ -534,21 +545,32 @@ export default {
         });
     },
     handleFollowTapClick() {
+      this.getMyFollowList();
       if (this.activeTab == "first") {
+        this.followerList = [];
+
         getFollowerList({ userId: this.userId }).then((res) => {
           this.followerList = res.data.data;
         });
       } else {
+        this.followingList = [];
+
         getFollowingList({ userId: this.userId }).then((res) => {
           this.followingList = res.data.data;
         });
       }
     },
     getResourceList() {
-      getResourceList({ userId: this.userId }).then((res) => {
-        this.resources = res.data.rows;
-        // this.resources.push(...res.data.rows);
-      });
+      if (this.isYourAccount) {
+        getResourceList({ userId: this.userInfo.user_id }).then((res) => {
+          this.resources = res.data.rows;
+        });
+      } else {
+        let userId = this.user.userId;
+        getResourceList({ userId }).then((res) => {
+          this.resources = res.data.rows;
+        });
+      }
     },
     getLikesList() {
       if (this.isYourAccount) {
@@ -596,7 +618,6 @@ export default {
             userId: userId,
           }).then((res) => {
             this.collections = res.data.rows;
-            debugger;
           });
         });
       } else {
@@ -654,9 +675,17 @@ export default {
       });
     },
     getHistoriesList() {
-      getResourceList(this.pagination).then((res) => {
-        this.histories = res.data.rows;
-      });
+      this.getMyLikesList();
+      if (this.isYourAccount) {
+        getHistoriesList({ userId: this.userInfo.user_id }).then((res) => {
+          this.histories = res.data.rows;
+        });
+      } else {
+        let userId = this.user.userId;
+        getHistoriesList({ userId }).then((res) => {
+          this.histories = res.data.rows;
+        });
+      }
     },
     showMenu(index, item) {
       console.log("item: ", item);
@@ -717,9 +746,19 @@ export default {
       });
       this.$message.success("上传成功");
     },
+    getMyFollowList() {
+      getFollowingList({ userId: this.userInfo.user_id }).then((result) => {
+        let res = [];
+        for (const item of result.data.data) {
+          res.push(item.id);
+        }
+        this.myFollowList = res;
+      });
+    },
     openFollowDialog(index) {
       //console.log(e)
       this.activeTab = index;
+      this.getMyFollowList();
       if (index == "first") {
         getFollowerList({ userId: this.userId }).then((res) => {
           this.followerList = res.data.data;
@@ -819,6 +858,9 @@ export default {
       font-size: 20px;
       font-family: Source Han Sans CN;
       font-weight: 400;
+      color: #999999;
+    }
+    ::v-deep .el-tabs__item.is-active {
       color: #1e78f0;
     }
     .contextMenu {

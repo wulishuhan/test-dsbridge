@@ -52,6 +52,13 @@ export function getCollectList(params) {
     params,
   });
 }
+export function getHistoriesList(params) {
+  return request({
+    url: `/library/history/list`,
+    method: "get",
+    params,
+  });
+}
 export function getCollectResourceList(params) {
   return request({
     url: `/library/collection/${params.collectionId}/resource/list`,

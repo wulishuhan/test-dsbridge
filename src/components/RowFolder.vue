@@ -187,7 +187,7 @@ export default {
 .container::-webkit-scrollbar {
   /*滚动条整体样式*/
   width: 3px; /*高宽分别对应横竖滚动条的尺寸*/
-  height: 2px;
+  height: 0px;
 }
 .container::-webkit-scrollbar-thumb {
   border-radius: 10px;
@@ -207,7 +207,7 @@ export default {
   display: flex;
   overflow-y: visible;
   overflow-x: auto;
-  height: 168px;
+  // height: 168px;
 
   .plus {
     font-size: 26px;
@@ -222,6 +222,7 @@ export default {
     .folderContainer:hover .moreMenuIcon {
       text-align: right;
       display: inline;
+      margin-right: 5px;
     }
     .folderContainer {
       position: relative;
@@ -231,10 +232,11 @@ export default {
         width: 32px;
         // height: 24px;
         // line-height: 24px;
-        background: #e8ebf4;
         border-radius: 4px;
         text-align: right;
         padding: 0 5px;
+        background: #e8ebf4;
+
         // position: absolute;
         // right: 0px;
         // top: 0px;
@@ -263,11 +265,11 @@ export default {
           }
         }
       }
-      .folder:hover {
-        background: #1e78f0;
-        opacity: 0.5;
-        border-radius: 12px;
-      }
+      // .folder:hover {
+      //   background: #1e78f0;
+      //   opacity: 0.5;
+      //   border-radius: 12px;
+      // }
 
       .folder {
         overflow: visible;
@@ -276,16 +278,20 @@ export default {
         justify-content: center;
         align-items: center;
         margin-right: 5px;
-        height: 128px;
+
         .imgArr {
           display: flex;
           flex-wrap: wrap;
-          width: 126px;
+          width: 256px;
+          border-radius: 12px;
+          padding: 5px;
+          background: #e8ebf4;
+
           .imgArrItem {
-            margin: 1px;
+            margin: 8px;
             img {
-              width: 40px;
-              height: 40px;
+              width: 64px;
+              height: 39px;
             }
           }
         }
@@ -305,6 +311,8 @@ export default {
           font-family: Source Han Sans CN;
           font-weight: 400;
           color: #999999;
+          margin-top: 10px;
+
           /* 1.溢出隐藏 */
           overflow: hidden;
           /* 2.用省略号来代替超出文本 */
