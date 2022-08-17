@@ -9,9 +9,11 @@
       </div>
       <div class="right">
         <FollowButton
-          :follow="isFollow"
+          :follow="myFollowList.includes(item.id)"
           ref="followBtn"
           :userId="item.id"
+          :key="item.id"
+          v-show="myUserId !== item.id"
         ></FollowButton>
       </div>
     </div>
@@ -28,13 +30,14 @@ export default {
   mounted() {},
   methods: {},
   props: {
-    isFollow: {
-      type: Boolean,
+    myUserId: [String, Number],
+    userList: {
+      type: Array,
       default: () => {
-        return true;
+        return [];
       },
     },
-    userList: {
+    myFollowList: {
       type: Array,
       default: () => {
         return [];
