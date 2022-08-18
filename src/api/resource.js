@@ -40,3 +40,24 @@ export function getResourceTags(params) {
     params,
   });
 }
+
+export function downloadResourceFile(fileId) {
+  return request({
+    url: `/library/resource/download/${fileId}`,
+    responseType: "blob",
+    method: "get",
+    headers: {
+      Referer:
+        "https://api.leadiffer.cn/swagger-ui/index.html?urls.primaryName=ortur-library",
+      origin: "*",
+      "Access-Control-Allow-Origin": "*",
+    },
+  });
+}
+
+export function testDownload() {
+  return request({
+    url: `/test/download`,
+    method: "get",
+  });
+}

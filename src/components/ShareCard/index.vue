@@ -67,4 +67,18 @@ export default {
 .share-icon-box {
   text-decoration: none;
 }
+.ortur-icon-ins:hover {
+  background: linear-gradient(to left bottom, #8c3aaa, #d82d7e, #fa8f21);
+  -webkit-background-clip: text;
+  color: transparent;
+}
+.ortur-icon-whats-app:hover {
+  color: #45d354;
+}
+.ortur-icon-facebook:hover {
+  color: #1976d2;
+}
+.ortur-icon-twitter:hover {
+  color: #0a93e2;
+}
 </style>
