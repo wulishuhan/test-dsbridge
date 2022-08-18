@@ -14,9 +14,10 @@
               prefix-icon="el-icon-search"
               v-model="keywords"
               class="el-input-search input-with-select"
+              @keyup.enter.native="search"
             >
             </el-input>
-            <el-select
+            <!-- <el-select
               v-model="select"
               class="el-select-search"
               :placeholder="$t('header.searchSelect')"
@@ -24,7 +25,7 @@
               <el-option label="Author" value="1"></el-option>
               <el-option label="Content" value="2"></el-option>
               <el-option label="All" value="3"></el-option>
-            </el-select>
+            </el-select> -->
           </div>
         </div>
         <div class="app-header-right">
@@ -193,6 +194,17 @@ export default {
     handleSettingClick() {
       this.$refs.settingPanel.showPanel();
     },
+    search() {
+      this.$router
+        .push({
+          path: "/search/index",
+          query: { keywords: this.keywords },
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      this.keywords = "";
+    },
     handleShowNotice() {
       this.$refs.NoticePanel.showPanel();
     },
@@ -271,8 +283,9 @@ export default {
           width: 400px;
           ::v-deep .el-input__inner {
             border: 1px solid #999 !important;
-            border-right: transparent !important;
-            border-radius: 6px 0px 0px 6px;
+            // border-right: transparent !important;
+            // border-radius: 6px 0px 0px 6px;
+            border-radius: 6px;
             background: none;
           }
         }

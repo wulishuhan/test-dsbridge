@@ -222,7 +222,7 @@ export default {
     display: flex;
     justify-content: space-between;
     align-content: center;
-    font-size: 12px;
+    font-size: 14px;
     .profile {
       display: flex;
       justify-content: space-between;
@@ -262,11 +262,11 @@ export default {
     margin-left: 52px;
     .comment-detail {
       margin-bottom: 10px;
-      font-size: 12px;
+      font-size: 14px;
       color: #1a1a1a;
     }
     .reply-ref-detail {
-      font-size: 12px;
+      font-size: 14px;
       color: #1a1a1a;
       background: #f5f5f5;
       border-radius: 8px;
@@ -282,7 +282,7 @@ export default {
       background: #e8ebf4;
       padding: 5px;
       border-radius: 8px;
-      font-size: 12px;
+      font-size: 14px;
       .reply-list-fold {
         color: #1e78f0;
         background: none;
@@ -294,7 +294,7 @@ export default {
         }
       }
       .reply-item {
-        padding: 0px 10px;
+        padding: 5px 10px;
         .reply-detail {
           margin: 0px 54px;
         }
@@ -305,7 +305,7 @@ export default {
     width: 95%;
     color: #1a1a1a;
     margin-left: 50px;
-    font-size: 12px;
+    font-size: 14px;
   }
 
   .reply-list {
