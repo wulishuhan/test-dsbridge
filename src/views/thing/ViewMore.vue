@@ -93,7 +93,7 @@ export default {
             this.pagination.pageNum++;
             if (
               this.pagination.pageNum <=
-              this.resourcesTotal / this.pagination.pageSize + 1
+              Math.ceil(this.resourcesTotal / this.pagination.pageSize)
             ) {
               this.getResourceList();
             }

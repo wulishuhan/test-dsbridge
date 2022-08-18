@@ -80,11 +80,13 @@
               class="moreMenuItem"
               @click.stop="handleDelClick"
             >
-              Delete
+              {{ $t("design.Delete") }}
             </div>
-            <div class="moreMenuItem" @click.stop="handleMoveClick">MoveTo</div>
+            <div class="moreMenuItem" @click.stop="handleMoveClick">
+              {{ $t("design.moveTo") }}
+            </div>
             <div class="moreMenuItem" @click.stop="handleDownClick">
-              DownLoad
+              {{ $t("design.download") }}
             </div>
           </div>
           ···
@@ -92,7 +94,7 @@
       </div>
     </div>
     <div class="share-container">
-      <share-social-media v-if="isShare"></share-social-media>
+      <share-social-media :id="thing.id" v-show="isShare"></share-social-media>
     </div>
     <div class="collected-option-container">
       <CollectedOption
@@ -241,18 +243,26 @@ export default {
     },
     like() {
       if (this.showLikeStar) {
-        this.likes = Number(this.likes) - 1;
+        this.showLikeStar = false;
         deleteLike({
           resId: this.thing.id,
-        }).then(() => {
-          this.$message({
-            message: "delete likes successfully",
-            type: "success",
+        })
+          .then(() => {
+            this.$message({
+              message: "delete likes successfully",
+              type: "success",
+            });
+            this.likes = Number(this.likes) - 1;
+            if (this.likes < 0) {
+              this.likes = 0;
+            }
+          })
+          .catch((err) => {
+            this.showLikeStar = true;
+            console.log(err);
           });
-          this.showLikeStar = false;
-        });
       } else {
-        this.likes = 1 + Number(this.likes);
+        this.showLikeStar = true;
         addLike({
           resId: this.thing.id,
         })
@@ -261,16 +271,16 @@ export default {
               message: "add likes successfully",
               type: "success",
             });
-            this.showLikeStar = true;
+            this.likes = 1 + Number(this.likes);
           })
           .catch((err) => {
             console.log(err);
+            this.showLikeStar = false;
           });
       }
     },
     share() {
       this.isShare = !this.isShare;
-      console.log("share!");
     },
     viewAuthorInfo(userId) {
       this.$store.commit("filterCard/SET_SELECTPROFILE", "Designs");
@@ -317,6 +327,8 @@ export default {
         collectionId: folderObject.id,
       }).then((res) => {
         console.log(res);
+        this.$emit("moveCollectionComplete");
+
         this.$message({
           message: "move successfully",
           type: "success",

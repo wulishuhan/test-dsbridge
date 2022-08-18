@@ -1,6 +1,6 @@
 import router from "./router";
 import store from "./store";
-import { Message } from "element-ui";
+// import { Message } from "element-ui";
 // import { getToken } from "@/utils/auth"; // get token from cookie
 router.beforeEach(async (to, from, next) => {
   document.title = to.meta.title;
@@ -31,7 +31,7 @@ router.beforeEach(async (to, from, next) => {
       next();
       console.log("user info: ", res);
     } catch (error) {
-      Message.error(error || "Has Error");
+      // Message.error(error || "Has Error");
       next();
     }
   }

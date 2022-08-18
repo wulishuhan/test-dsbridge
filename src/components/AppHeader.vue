@@ -218,10 +218,7 @@ export default {
       this.$store.dispatch("user/logout");
     },
     handleCloseDialog() {
-      this.$store.dispatch("user/switchLoginRegisteForm", {
-        loginDialogVisible: false,
-        isLoginForm: false,
-      });
+      this.$store.dispatch("user/closeLoginRegisteForm");
     },
   },
 };

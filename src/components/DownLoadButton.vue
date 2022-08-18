@@ -3,8 +3,12 @@
     <el-button class="baseButton button" @click.stop="showDownPanel">
       <div class="downPanel" v-show="isShowDownPanel">
         <div class="downLoadAll">
-          <span class="fileNum"> {{ fileNum }}个文件 </span>
-          <a style="color: #1e78f0" @click="downLoadAll">download all</a>
+          <span class="fileNum">
+            {{ fileNum }}{{ $t("download.fileNum") }}
+          </span>
+          <a style="color: #1e78f0" @click="downLoadAll">{{
+            $t("download.downloadAll")
+          }}</a>
         </div>
         <download-card
           v-for="item in fileList"

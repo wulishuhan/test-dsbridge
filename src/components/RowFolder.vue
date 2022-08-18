@@ -7,14 +7,36 @@
         :key="item.id"
         @click="handleClickFolder(item)"
       >
+        <div style="text-align: right; height: 25px">
+          <span
+            v-show="isYourAccount && item.id !== '0'"
+            @click.stop="handleClickMore(item)"
+            class="moreMenuIcon"
+            id="moreMenuIcon"
+          >
+            <div class="moreMenu" v-if="item.showMoreMenu">
+              <div class="moreMenuItem" @click.stop="handleDelClick(item)">
+                Delete
+              </div>
+            </div>
+            ···
+          </span>
+        </div>
         <div class="folder">
-          <span class="ortur-icon-file"></span>
+          <div class="imgArr">
+            <div
+              class="imgArrItem"
+              v-for="(item, index) in imgArr"
+              :key="index"
+            >
+              <img :src="item" alt="" />
+            </div>
+          </div>
           <div class="title" v-if="!item.isEdit" @click="handleEdit(item)">
             {{ item.name }}
           </div>
           <input
             ref="folderInputs"
-            @blur="handleEdited(item)"
             @change="handleEdited(item)"
             class="editInput"
             type="text"
@@ -22,19 +44,6 @@
             v-else
           />
         </div>
-        <span
-          v-show="isYourAccount && item.id !== '0'"
-          @click.stop="handleClickMore(item)"
-          class="moreMenuIcon"
-          id="moreMenuIcon"
-        >
-          <div class="moreMenu" v-if="item.showMoreMenu">
-            <div class="moreMenuItem" @click.stop="handleDelClick(item)">
-              Delete
-            </div>
-          </div>
-          ···
-        </span>
       </div>
     </div>
     <div class="plus" @click="addFolder" v-show="isYourAccount && !isEdit">
@@ -46,17 +55,22 @@
 <script>
 export default {
   props: {
-    value: {
+    imgArr: {
       type: Array,
       default: () => {
         return [
-          {
-            name: "111",
-            id: "1",
-            isEdit: false,
-            showMoreMenu: false,
-          },
+          "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.jj20.com%2Fup%2Fallimg%2Ftp09%2F210F2130512J47-0-lp.jpg&refer=http%3A%2F%2Fimg.jj20.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1663124045&t=d288c47a19560c2971d5541c585dea56",
+          "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.jj20.com%2Fup%2Fallimg%2Ftp09%2F210F2130512J47-0-lp.jpg&refer=http%3A%2F%2Fimg.jj20.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1663124045&t=d288c47a19560c2971d5541c585dea56",
+          "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.jj20.com%2Fup%2Fallimg%2Ftp09%2F210F2130512J47-0-lp.jpg&refer=http%3A%2F%2Fimg.jj20.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1663124045&t=d288c47a19560c2971d5541c585dea56",
+          "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.jj20.com%2Fup%2Fallimg%2Ftp09%2F210F2130512J47-0-lp.jpg&refer=http%3A%2F%2Fimg.jj20.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1663124045&t=d288c47a19560c2971d5541c585dea56",
+          "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.jj20.com%2Fup%2Fallimg%2Ftp09%2F210F2130512J47-0-lp.jpg&refer=http%3A%2F%2Fimg.jj20.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1663124045&t=d288c47a19560c2971d5541c585dea56",
         ];
+      },
+    },
+    value: {
+      type: Array,
+      default: () => {
+        return [];
       },
     },
     isYourAccount: {
@@ -70,37 +84,58 @@ export default {
       default: () => {},
     },
   },
-  // computed: {
-  //   folders: {
-  //     get() {
-  //       return [...this.value];
-  //     },
-  //     set(val) {
-  //       this.$emit("input", [...val]);
-  //     },
-  //   },
-  // },
   computed: {
     folders() {
-      // debugger;
-      return [
-        {
-          name: "draft",
-          id: "0",
-        },
-      ].concat(this.value);
+      return [...this.value];
     },
   },
+  // computed: {
+  //   folders() {
+  //     let res = this.value;
+  //     let flag = false;
+  //     for (const item of res) {
+  //       if (item.id == 0) {
+  //         flag = true;
+  //       }
+  //     }
+  //     if (flag) {
+  //       return res;
+  //     } else {
+  //       res.unshift({
+  //         name: "draft",
+  //         id: "0",
+  //         showMoreMenu: false,
+  //       });
+  //       return res;
+  //     }
+  //   },
+  // },
   data() {
     return {
       isEdit: false,
-      // folders: this.value,
     };
   },
   mounted() {},
   methods: {
-    handleClickMore(item) {
-      item.showMoreMenu = !item.showMoreMenu;
+    // computedFolder() {
+    //   let res = this.value;
+    //   res.unshift({
+    //     name: "draft",
+    //     id: "0",
+    //     showMoreMenu: false,
+    //   });
+    //   // debugger;
+    //   return res;
+    // },
+    handleClickMore(target) {
+      if (target.showMoreMenu) {
+        target.showMoreMenu = false;
+        return;
+      }
+      for (const item of this.folders) {
+        item.showMoreMenu = false;
+      }
+      target.showMoreMenu = !target.showMoreMenu;
     },
     handleDelClick(item) {
       this.$emit("delFolder", item);
@@ -152,7 +187,7 @@ export default {
 .container::-webkit-scrollbar {
   /*滚动条整体样式*/
   width: 3px; /*高宽分别对应横竖滚动条的尺寸*/
-  height: 2px;
+  height: 0px;
 }
 .container::-webkit-scrollbar-thumb {
   border-radius: 10px;
@@ -172,7 +207,7 @@ export default {
   display: flex;
   overflow-y: visible;
   overflow-x: auto;
-  height: 128px;
+  // height: 168px;
 
   .plus {
     font-size: 26px;
@@ -184,18 +219,27 @@ export default {
     display: flex;
     align-items: center;
     margin-right: 32px;
+    .folderContainer:hover .moreMenuIcon {
+      text-align: right;
+      display: inline;
+      margin-right: 5px;
+    }
     .folderContainer {
       position: relative;
       .moreMenuIcon {
+        display: none;
         text-align: center;
         width: 32px;
-        height: 24px;
-        line-height: 24px;
-        background: #e8ebf4;
+        // height: 24px;
+        // line-height: 24px;
         border-radius: 4px;
-        position: absolute;
-        right: 0px;
-        top: 0px;
+        text-align: right;
+        padding: 0 5px;
+        background: #e8ebf4;
+
+        // position: absolute;
+        // right: 0px;
+        // top: 0px;
         .moreMenu {
           position: absolute;
           width: 160px;
@@ -203,7 +247,7 @@ export default {
           background: #ffffff;
           box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.07);
           border-radius: 10px;
-          top: 0px;
+          top: 30px;
           left: 30px;
           text-align: left;
           z-index: 500;
@@ -221,11 +265,11 @@ export default {
           }
         }
       }
-      .folder:hover {
-        background: #1e78f0;
-        opacity: 0.5;
-        border-radius: 12px;
-      }
+      // .folder:hover {
+      //   background: #1e78f0;
+      //   opacity: 0.5;
+      //   border-radius: 12px;
+      // }
 
       .folder {
         overflow: visible;
@@ -234,10 +278,22 @@ export default {
         justify-content: center;
         align-items: center;
         margin-right: 5px;
-        height: 128px;
-        .ortur-icon-file {
-          margin-bottom: 12px;
-          font-size: 60px;
+
+        .imgArr {
+          display: flex;
+          flex-wrap: wrap;
+          width: 256px;
+          border-radius: 12px;
+          padding: 5px;
+          background: #e8ebf4;
+
+          .imgArrItem {
+            margin: 8px;
+            img {
+              width: 64px;
+              height: 39px;
+            }
+          }
         }
         .editInput {
           width: 112px;
@@ -255,6 +311,8 @@ export default {
           font-family: Source Han Sans CN;
           font-weight: 400;
           color: #999999;
+          margin-top: 10px;
+
           /* 1.溢出隐藏 */
           overflow: hidden;
           /* 2.用省略号来代替超出文本 */

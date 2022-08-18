@@ -15,7 +15,7 @@
               {{ noticeInfo.userName }}
             </router-link>
           </span>
-          <span class="info"> left a comment to you on </span>
+          <span class="info"> {{ $t("notice.leftComment") }} </span>
           <span class="thing">
             <router-link :to="'/thing/' + noticeInfo.thingId">
               {{ noticeInfo.thing }}
@@ -43,7 +43,7 @@
               {{ noticeInfo.userName }}
             </router-link>
           </span>
-          <span class="info"> {{ noticeInfo.type }} you </span>
+          <span class="info"> {{ $t("notice.msg") }} </span>
         </div>
         <div class="time">
           <span>updated {{ noticeInfo.time }} </span>
@@ -61,11 +61,11 @@
       <div class="right">
         <div class="name">
           <span class="username">
-            <router-link :to="'/design/' + noticeInfo.userId">
+            <!-- <router-link :to="'/design/' + noticeInfo.userId">
               {{ noticeInfo.userName }}
-            </router-link>
+            </router-link> -->
           </span>
-          <span class="info"> {{ noticeInfo.type }} you </span>
+          <span class="info"> {{ $t("notice.systemMsg") }} </span>
         </div>
         <div class="time">
           <span>updated {{ noticeInfo.time }} </span>
@@ -89,7 +89,13 @@
               {{ noticeInfo.userName }}
             </router-link>
           </span>
-          <span class="info"> {{ noticeInfo.type }} you </span>
+          <span class="info">
+            {{
+              noticeInfo.type == "follow"
+                ? $t("notice.followYou")
+                : $t("notice.unFollowYou")
+            }}
+          </span>
         </div>
         <div class="time">
           <span>updated {{ noticeInfo.time }} </span>

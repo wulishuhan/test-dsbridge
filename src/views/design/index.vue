@@ -1,5 +1,5 @@
 <template>
-  <div class="container-profile">
+  <div class="container-profile" id="top">
     <CollectedOption
       class="collectMenu"
       :show="openCollectedOption"
@@ -8,19 +8,62 @@
       @moveFolder="moveCollectedOption"
       @addFolder="addFolder"
     ></CollectedOption>
-    <el-dialog :visible.sync="dialogFollowersVisible">
+    <el-dialog :visible.sync="dialogFollowersVisible" class="followDialog">
       <el-tabs
         v-model="activeTab"
         @tab-click="handleFollowTapClick"
         class="tabsContent"
       >
-        <el-tab-pane label="followers" name="first" class="followTapPanel">
-          <IndexFollowPanel :userList="followerList"></IndexFollowPanel>
+        <el-tab-pane
+          :label="$t('design.follower')"
+          name="first"
+          class="followTapPanel"
+        >
+          <IndexFollowPanel
+            :userList="followerList"
+            :myFollowList="myFollowList"
+            :myUserId="userInfo.user_id"
+          ></IndexFollowPanel>
         </el-tab-pane>
-        <el-tab-pane label="following" name="second" class="followTapPanel">
-          <IndexFollowPanel :userList="followingList"></IndexFollowPanel>
+        <el-tab-pane
+          :label="$t('design.following')"
+          name="second"
+          class="followTapPanel"
+        >
+          <IndexFollowPanel
+            :userList="followingList"
+            :myUserId="userInfo.user_id"
+            :myFollowList="myFollowList"
+          ></IndexFollowPanel>
         </el-tab-pane>
       </el-tabs>
+    </el-dialog>
+    <el-dialog :visible.sync="dialogCollectionVisible" :title="collectionName">
+      <div class="collectionDialog">
+        <div
+          v-for="item in folderCollection"
+          :key="item.thingId"
+          class="collectionDialogItem"
+        >
+          <resource-card
+            @clickMoveMenu="Handler_MoveTo(item)"
+            @clickDelMenu="handleCancelCollect(item)"
+            @clickDownMenu="Handler_Down(item)"
+            @moveCollectionComplete="handleMoveCollectionComplete"
+            :isCollected="myFolderCollects.includes(item.id)"
+            :thing="item"
+            :showEdit="false"
+            :showStar="false"
+            :showMoreMenuBtn="true"
+            :key="item.id"
+            :isYourAccount="isYourAccount"
+          >
+          </resource-card>
+        </div>
+        <div class="noCollection" v-show="folderCollection.length == 0">
+          无收藏文件
+        </div>
+      </div>
     </el-dialog>
     <div class="bg">
       <span v-if="isYourAccount" class="ortur-icon-pen">
@@ -74,7 +117,11 @@
         <div class="name">
           {{ isYourAccount ? userInfo.nick_name : user.nick_name }}
         </div>
-        <FollowButton class="followBtn" v-show="!isYourAccount"></FollowButton>
+        <FollowButton
+          class="followBtn"
+          v-show="!isYourAccount"
+          :user-id="userId"
+        ></FollowButton>
         <div
           class="desc"
           @click="editDesc"
@@ -95,10 +142,12 @@
         ></el-input>
         <div class="follow">
           <span class="followers" @click="openFollowDialog('first')"
-            >{{ user.followers }} <span style="color: #ccc"> followers</span>
+            >{{ user.followers }}
+            <span style="color: #ccc">{{ $t("design.follower") }}</span>
           </span>
           <span class="following" @click="openFollowDialog('second')"
-            >{{ user.following }}<span style="color: #ccc"> following</span>
+            >{{ user.following
+            }}<span style="color: #ccc"> {{ $t("design.following") }}</span>
           </span>
         </div>
         <div v-for="(item, index) in diyArr" :key="item.id">
@@ -132,7 +181,7 @@
           @tab-click="handleResourceClick"
           class="tabsContent"
         >
-          <el-tab-pane label="Resource" name="first">
+          <el-tab-pane :label="$t('design.resources')" name="first">
             <el-row :gutter="20">
               <div
                 class="resourceWrapper"
@@ -167,7 +216,7 @@
               </div>
             </el-row>
           </el-tab-pane>
-          <el-tab-pane label="Likes" name="second">
+          <el-tab-pane :label="$t('design.likes')" name="second">
             <el-row :gutter="20">
               <div v-for="item in Likes" :key="item.thingId">
                 <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
@@ -184,22 +233,24 @@
               </div>
             </el-row>
           </el-tab-pane>
-          <el-tab-pane label="Collections" name="third">
+          <el-tab-pane :label="$t('design.collection')" name="third">
             <el-row :gutter="20">
               <RowFolder
                 :isYourAccount="isYourAccount"
                 style="width: 98%; margin-bottom: 20px"
-                :value="folders"
+                :value="rowFolders"
                 :onFolderAdd="onFolderAdd"
                 @clickFolder="handleClickFolder"
                 @delFolder="handleDelFolder"
               ></RowFolder>
+              <div class="draft">Draft</div>
               <div v-for="item in collections" :key="item.thingId">
                 <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
                   <resource-card
                     @clickMoveMenu="Handler_MoveTo(item)"
                     @clickDelMenu="handleCancelCollect(item)"
                     @clickDownMenu="Handler_Down(item)"
+                    @moveCollectionComplete="handleMoveCollectionComplete"
                     :isCollected="myCollects.includes(item.id)"
                     :thing="item"
                     :showEdit="false"
@@ -213,11 +264,16 @@
               </div>
             </el-row>
           </el-tab-pane>
-          <el-tab-pane label="History" name="fourth">
+          <el-tab-pane :label="$t('design.histories')" name="fourth">
             <el-row :gutter="20">
               <div v-for="item in histories" :key="item.thingId">
                 <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                  <resource-card :key="item.id" :thing="item"> </resource-card>
+                  <resource-card
+                    :key="item.id"
+                    :thing="item"
+                    :isLike="myLikes.includes(item.id)"
+                  >
+                  </resource-card>
                 </el-col>
               </div>
             </el-row>
@@ -225,7 +281,7 @@
         </el-tabs>
       </div>
     </div>
-    <SrollTopButton></SrollTopButton>
+    <SrollTopButton :to="'#top'"></SrollTopButton>
   </div>
 </template>
 <script>
@@ -238,6 +294,7 @@ import RowFolder from "@/components/RowFolder.vue";
 import {
   getResourceList,
   getCollectResourceList,
+  getHistoriesList,
   deleteCollection,
   getLikesList,
   deleteResource,
@@ -246,7 +303,7 @@ import {
   updateDiy,
   getFollowerList,
   getFollowingList,
-  getUserInfo,
+  // getUserInfo,
   getCollectList,
   moveResourceToCollection,
   addResourceToCollection,
@@ -267,30 +324,20 @@ export default {
   },
   data() {
     return {
+      collectionName: "",
+      myFollowList: [],
+      myFolderCollects: [],
+      folderCollection: [],
       followerList: [],
       followingList: [],
+      dialogCollectionVisible: false,
       isYourAccount: true,
 
       myCollects: [],
       thing: {},
       openCollectedOption: false,
-      folders: [
-        {
-          name: "aa",
-          id: 1,
-          showMoreMenu: false,
-        },
-        {
-          name: "bb",
-          id: 2,
-          showMoreMenu: false,
-        },
-        {
-          name: "cc",
-          id: 3,
-          showMoreMenu: false,
-        },
-      ],
+      folders: [],
+      rowFolders: [],
       headers: {
         Authorization: getToken(),
       },
@@ -307,12 +354,12 @@ export default {
         },
         menulists: [
           {
-            btnName: "Delete",
+            btnName: this.$t("design.Delete"),
             fnHandler: "Handler1",
             disabled: !this.isYourAccount,
           },
           {
-            btnName: "Move to",
+            btnName: this.$t("design.moveTo"),
             fnHandler: "Handler2",
 
             // children: [
@@ -326,9 +373,8 @@ export default {
             //   },
             // ],
           },
-
           {
-            btnName: "Download",
+            btnName: this.$t("design.download"),
             fnHandler: "Handler3",
           },
         ],
@@ -353,6 +399,7 @@ export default {
         },
       ],
       user: {
+        // 自己或他人的用户信息
         userId: "",
         nick_name: "",
         avatar: "",
@@ -362,7 +409,7 @@ export default {
         desc: "yang 654651",
       },
       collectionId: "",
-      userId: "",
+      userId: "", //自己或他人的主页
     };
   },
   mounted() {
@@ -377,6 +424,7 @@ export default {
     } else if (userId == "fromProfile") {
       this.isYourAccount = true;
       this.getResourceList();
+      // this.getResourceList(this.userInfo.user_id);
     } else if (userId == "fromHistory") {
       this.isYourAccount = true;
       this.getHistoriesList();
@@ -391,24 +439,33 @@ export default {
       this.getResourceList();
     }
     this.userId = this.isYourAccount ? this.userInfo.user_id : this.user.userId;
-    getUserInfo({ userId: this.userId }).then(() => {});
+    // getUserInfo({ userId: this.userId }).then(() => {});
   },
   computed: {
     ...mapState(["userInfo"]),
   },
   methods: {
     handleCancelCollect(item) {
-      let req = {
-        collectionId: this.collectionId,
-        resId: item.id,
-      };
-      cancelCollectResource(req).then(() => {
-        this.getCollectResourceList();
-      });
+      if (this.dialogCollectionVisible) {
+        cancelCollectResource({
+          collectionId: this.collectionId,
+          resId: item.id,
+        }).then(() => {
+          this.getCollectFolderResourceList();
+        });
+      } else {
+        cancelCollectResource({
+          collectionId: 0,
+          resId: item.id,
+        }).then(() => {
+          this.getCollectResourceList();
+        });
+      }
     },
     handleClickFolder(item) {
       this.collectionId = item.id;
-      this.getCollectResourceList();
+      this.collectionName = item.name;
+      this.getCollectFolderResourceList();
       console.log("item: ", item);
     },
     handleDelFolder(item) {
@@ -423,13 +480,23 @@ export default {
           userId: this.userInfo.user_id,
         };
         addCollection(req).then(() => {
-          return resolve(1);
+          this.getCollectList().then(() => {
+            return resolve(1);
+          });
         });
       });
       // this.folder = [...e];
     },
     closeCollectedOption() {
       this.openCollectedOption = false;
+    },
+    handleMoveCollectionComplete() {
+      if (this.dialogCollectionVisible) {
+        this.getCollectResourceList();
+        this.getCollectFolderResourceList();
+      } else {
+        this.getCollectResourceList();
+      }
     },
     moveCollectedOption(folderObject) {
       // this.isCollected = true;
@@ -452,6 +519,10 @@ export default {
         }).then((res) => {
           console.log(res);
           this.getCollectResourceList();
+          if (this.dialogCollectionVisible) {
+            this.getCollectFolderResourceList();
+          }
+
           this.$message({
             message: "move successfully",
             type: "success",
@@ -474,21 +545,32 @@ export default {
         });
     },
     handleFollowTapClick() {
+      this.getMyFollowList();
       if (this.activeTab == "first") {
-        getFollowerList().then((res) => {
-          this.followerList = res;
+        this.followerList = [];
+
+        getFollowerList({ userId: this.userId }).then((res) => {
+          this.followerList = res.data.data;
         });
       } else {
-        getFollowingList().then((res) => {
-          this.followingList = res;
+        this.followingList = [];
+
+        getFollowingList({ userId: this.userId }).then((res) => {
+          this.followingList = res.data.data;
         });
       }
     },
     getResourceList() {
-      getResourceList({ userId: this.userId }).then((res) => {
-        this.resources = res.data.rows;
-        // this.resources.push(...res.data.rows);
-      });
+      if (this.isYourAccount) {
+        getResourceList({ userId: this.userInfo.user_id }).then((res) => {
+          this.resources = res.data.rows;
+        });
+      } else {
+        let userId = this.user.userId;
+        getResourceList({ userId }).then((res) => {
+          this.resources = res.data.rows;
+        });
+      }
     },
     getLikesList() {
       if (this.isYourAccount) {
@@ -516,11 +598,14 @@ export default {
       });
     },
     getCollectList(myUserId) {
-      getCollectList({ userId: myUserId || this.userId }).then((params) => {
-        this.folders = params.data.data.map((item) => {
-          item.showMoreMenu = false;
-          item.isEdit = false;
-          return item;
+      return new Promise((resolve) => {
+        getCollectList({ userId: myUserId || this.userId }).then((params) => {
+          this.rowFolders = params.data.data.map((item) => {
+            item.showMoreMenu = false;
+            item.isEdit = false;
+            return item;
+          });
+          resolve(1);
         });
       });
     },
@@ -529,7 +614,7 @@ export default {
         let userId = this.user.userId;
         this.getMyCollectResourceList().then(() => {
           getCollectResourceList({
-            collectionId: this.collectionId || 0,
+            collectionId: 0,
             userId: userId,
           }).then((res) => {
             this.collections = res.data.rows;
@@ -542,7 +627,7 @@ export default {
     getMyCollectResourceList() {
       return new Promise((resolve) => {
         getCollectResourceList({
-          collectionId: this.collectionId || 0,
+          collectionId: 0,
           userId: this.userInfo.user_id,
         }).then((res) => {
           if (this.isYourAccount) {
@@ -555,10 +640,52 @@ export default {
         });
       });
     },
-    getHistoriesList() {
-      getResourceList(this.pagination).then((res) => {
-        this.histories = res.data.rows;
+    getCollectFolderResourceList() {
+      if (!this.isYourAccount) {
+        let userId = this.user.userId;
+        this.getMyCollectFolderResourceList().then(() => {
+          getCollectResourceList({
+            collectionId: this.collectionId || 0,
+            userId: userId,
+          }).then((res) => {
+            this.folderCollection = res.data.rows;
+            this.dialogCollectionVisible = true;
+          });
+        });
+      } else {
+        this.getMyCollectFolderResourceList().then(() => {
+          this.dialogCollectionVisible = true;
+        });
+      }
+    },
+    getMyCollectFolderResourceList() {
+      return new Promise((resolve) => {
+        getCollectResourceList({
+          collectionId: this.collectionId || 0,
+          userId: this.userInfo.user_id,
+        }).then((res) => {
+          if (this.isYourAccount) {
+            this.folderCollection = res.data.rows;
+          }
+          for (const item of res.data.rows) {
+            this.myFolderCollects.push(item.id);
+          }
+          resolve(1);
+        });
       });
+    },
+    getHistoriesList() {
+      this.getMyLikesList();
+      if (this.isYourAccount) {
+        getHistoriesList({ userId: this.userInfo.user_id }).then((res) => {
+          this.histories = res.data.rows;
+        });
+      } else {
+        let userId = this.user.userId;
+        getHistoriesList({ userId }).then((res) => {
+          this.histories = res.data.rows;
+        });
+      }
     },
     showMenu(index, item) {
       console.log("item: ", item);
@@ -598,7 +725,6 @@ export default {
     async handleBeforeImgUpload(file) {
       // const isJPG = file.type === "image/jpeg";
       const isLt1M = file.size / 1024 / 1024 < 1;
-      // // debugger;
 
       // if (!isJPG) {
       //   this.$message.error("上传头像图片只能是 JPG 格式!");
@@ -620,17 +746,27 @@ export default {
       });
       this.$message.success("上传成功");
     },
+    getMyFollowList() {
+      getFollowingList({ userId: this.userInfo.user_id }).then((result) => {
+        let res = [];
+        for (const item of result.data.data) {
+          res.push(item.id);
+        }
+        this.myFollowList = res;
+      });
+    },
     openFollowDialog(index) {
       //console.log(e)
       this.activeTab = index;
+      this.getMyFollowList();
       if (index == "first") {
-        getFollowerList().then((res) => {
-          this.followerList = res;
+        getFollowerList({ userId: this.userId }).then((res) => {
+          this.followerList = res.data.data;
           this.dialogFollowersVisible = true;
         });
       } else {
-        getFollowingList().then((res) => {
-          this.followingList = res;
+        getFollowingList({ userId: this.userId }).then((res) => {
+          this.followingList = res.data.data;
           this.dialogFollowersVisible = true;
         });
       }
@@ -691,6 +827,7 @@ export default {
   top: 0;
   bottom: 0;
   margin: auto;
+  z-index: 9999;
 }
 .img {
   background-color: black;
@@ -701,18 +838,29 @@ export default {
   width: 1440px;
   margin: 0 auto;
   padding-bottom: 100px;
-
-  ::v-deep .el-dialog {
-    width: 488px;
-    height: 472px;
-    background: #ffffff;
-    border-radius: 20px;
+  .collectionDialog {
+    display: flex;
+    flex-wrap: wrap;
+    .collectionDialogItem {
+      margin: 1px;
+    }
+  }
+  .followDialog {
+    ::v-deep .el-dialog {
+      width: 488px;
+      height: 472px;
+      background: #ffffff;
+      border-radius: 20px;
+    }
   }
   .tabsContent {
     ::v-deep .el-tabs__item {
       font-size: 20px;
       font-family: Source Han Sans CN;
       font-weight: 400;
+      color: #999999;
+    }
+    ::v-deep .el-tabs__item.is-active {
       color: #1e78f0;
     }
     .contextMenu {
@@ -775,6 +923,15 @@ export default {
       .el-tabs__content {
         overflow: visible;
       }
+    }
+    .draft {
+      font-size: 14px;
+      font-family: Source Han Sans CN;
+      font-weight: 400;
+      color: #cccccc;
+      border-top: 1px solid #999999;
+      padding: 10px;
+      margin: 0 15px;
     }
   }
   .bg {

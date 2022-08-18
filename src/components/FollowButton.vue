@@ -6,9 +6,11 @@
   </div>
 </template>
 <script>
+import { follow, unFollow } from "@/api/design";
 export default {
   name: "FollowButton",
   props: {
+    userId: [String, Number],
     follow: {
       type: Boolean,
       default: false,
@@ -34,7 +36,15 @@ export default {
   },
   methods: {
     changeFollowState() {
-      this.isFollow = !this.isFollow;
+      if (!this.isFollow) {
+        follow({ userId: this.userId }).then(() => {
+          this.isFollow = !this.isFollow;
+        });
+      } else {
+        unFollow({ userId: this.userId }).then(() => {
+          this.isFollow = !this.isFollow;
+        });
+      }
     },
     enterFollowing() {
       if (this.isFollow) this.isEnterFollowingBox = true;

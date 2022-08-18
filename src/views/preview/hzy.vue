@@ -1,10 +1,5 @@
 <template>
   <div>
-    <RowFolder
-      :value="folders"
-      :onFolderAdd="onFolderAdd"
-      @clickFolder="handleClickFolder"
-    ></RowFolder>
     <ShareSocialMedia></ShareSocialMedia>
     <CollectButton @click="onColect" :isCollect="true"></CollectButton>
     <CollectButton></CollectButton>
@@ -25,7 +20,6 @@ import DownLoadButton from "@/components/DownLoadButton.vue";
 import BaseButton from "@/components/BaseButton.vue";
 import LabelCard from "@/components/LabelCard.vue";
 import NoticePanel from "@/components/NoticePanel.vue";
-import RowFolder from "./RowFolder.vue";
 
 // 用来预览组件
 export default {
@@ -98,7 +92,6 @@ export default {
     BaseButton,
     LabelCard,
     NoticePanel,
-    RowFolder,
   },
 };
 </script>
