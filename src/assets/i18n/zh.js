@@ -62,5 +62,10 @@ module.exports = {
     Delete: "删除",
     moveTo: "移动到",
     download: "下载",
+    delFolderTip: "删除此文件夹？",
+    delFileTip: "删除此文件？",
+    confirm: "确认",
+    cancel: "取消",
+    delSuccess: "删除成功",
   },
 };

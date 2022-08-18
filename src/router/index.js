@@ -28,6 +28,13 @@ const routes = [
         },
         component: () => import("@/views/upload/index"),
       },
+      {
+        path: "/search/index",
+        meta: {
+          title: "search",
+        },
+        component: () => import("@/views/search/index"),
+      },
     ],
   },
   {
