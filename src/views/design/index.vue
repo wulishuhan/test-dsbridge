@@ -331,7 +331,7 @@ export default {
       followerList: [],
       followingList: [],
       dialogCollectionVisible: false,
-      isYourAccount: true,
+      isYourAccount: false,
 
       myCollects: [],
       thing: {},
@@ -439,6 +439,7 @@ export default {
       this.getResourceList();
     }
     this.userId = this.isYourAccount ? this.userInfo.user_id : this.user.userId;
+    this.contextMenuData.menulists[0].disabled = !this.isYourAccount;
     // getUserInfo({ userId: this.userId }).then(() => {});
   },
   computed: {
@@ -469,8 +470,18 @@ export default {
       console.log("item: ", item);
     },
     handleDelFolder(item) {
-      deleteCollection({ collectionId: item.id }).then(() => {
-        this.getCollectList();
+      this.$confirm(this.$t("design.delFolderTip"), "提示", {
+        confirmButtonText: this.$t("design.confirm"),
+        cancelButtonText: this.$t("design.cancel"),
+        type: "warning",
+      }).then(() => {
+        deleteCollection({ collectionId: item.id }).then(() => {
+          this.getCollectList();
+          this.$message({
+            type: "success",
+            message: this.$t("design.delSuccess"),
+          });
+        });
       });
     },
     onFolderAdd(item) {
@@ -700,8 +711,18 @@ export default {
       };
     },
     Handler_Del(item) {
-      deleteResource({ resId: item.id }).then(() => {
-        this.getResourceList();
+      this.$confirm(this.$t("design.delFileTip"), "提示", {
+        confirmButtonText: this.$t("design.confirm"),
+        cancelButtonText: this.$t("design.cancel"),
+        type: "warning",
+      }).then(() => {
+        deleteResource({ resId: item.id }).then(() => {
+          this.$message({
+            type: "success",
+            message: this.$t("design.delSuccess"),
+          });
+          this.getResourceList();
+        });
       });
     },
     Handler_MoveTo(thing) {

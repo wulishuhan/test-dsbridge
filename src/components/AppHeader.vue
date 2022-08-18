@@ -112,7 +112,7 @@
                     <i class="el-icon-collection-tag"></i>&nbsp;
                     {{ $t("header.history") }}
                   </el-dropdown-item>
-                  <el-dropdown-item>
+                  <el-dropdown-item @click.native="handleSettingClick">
                     <i class="el-icon-fork-spoon"></i>&nbsp;
                     {{ $t("header.setting") }}
                   </el-dropdown-item>
@@ -151,12 +151,14 @@
       @handleClose="handleCloseDialog"
       @changeView="showLoginDialog"
     ></login>
+    <settingPanel ref="settingPanel"></settingPanel>
   </div>
 </template>
 
 <script>
 import Login from "@/components/Login";
 import NoticePanel from "@/components/NoticePanel";
+import settingPanel from "@/components/settingPanel";
 import { createNamespacedHelpers } from "vuex";
 const { mapState } = createNamespacedHelpers("user");
 export default {
@@ -169,6 +171,7 @@ export default {
   components: {
     Login,
     NoticePanel,
+    settingPanel,
   },
   computed: {
     ...mapState([
@@ -187,6 +190,9 @@ export default {
     });
   },
   methods: {
+    handleSettingClick() {
+      this.$refs.settingPanel.showPanel();
+    },
     handleShowNotice() {
       this.$refs.NoticePanel.showPanel();
     },
