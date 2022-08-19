@@ -30,10 +30,8 @@
   </div>
 </template>
 <script>
-// import request from "@/utils/request";
-// import { downloadResourceFile } from "@/api/resource";
+import axios from "axios";
 import { saveAs } from "file-saver";
-// import { testDownload } from "@/api/resource";
 export default {
   name: "DownloadCard",
   props: {
@@ -60,34 +58,19 @@ export default {
   },
   methods: {
     download() {
-      let imageType = ["jpg", "png", "jpeg", "gif"];
-      if (imageType.includes(this.type)) {
-        this.downloadUsingCanvas();
-      } else if (this.type === "svg") {
-        console.log("svg!");
-        // let image = new Image();
-        // image.src = this.file.url;
-        // var that = this;
-        // image.crossOrigin = "anonymous";
-        // image.onload = function () {
-        //   let c = document.createElement("canvas");
-        //   let ctx = c.getContext("2d");
-        //   c.width = this.width;
-        //   c.height = this.height;
-        //   ctx.clearRect(0, 0, c.width, c.height);
-        //   ctx.drawImage(image, 0, 0, c.width, c.height);
-        //   c.toBlob(function (blob) {
-        //     saveAs(blob, that.file.name + ".jpg");
-        //   });
-        // };
-        this.baseDownload(
-          this.file.url + "?" + new Date().getTime(),
-          this.file.name
-        );
-      } else {
-        window.open(this.file.url);
-      }
+      axios
+        .get(`/dev-api/library/resource/download/${this.file.id}`, {
+          responseType: "blob",
+          method: "get",
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+          },
+        })
+        .then((res) => {
+          saveAs(res.data, this.file.name);
+        });
     },
+    // 使用canvas下载跨域图片文件的方法， 可以使用window.open()下载非浏览器直接可以预览的文件
     downloadUsingCanvas() {
       console.log("图片!");
       let image = new Image();
@@ -105,26 +88,6 @@ export default {
           saveAs(blob, that.file.name);
         });
       };
-    },
-    baseDownload(imgUrl, name) {
-      console.log("baseDownload", imgUrl, name);
-      // 如果浏览器支持msSaveOrOpenBlob方法（也就是使用IE浏览器的时候），那么调用该方法去下载图片
-      if (window.navigator.msSaveOrOpenBlob) {
-        var bstr = atob(imgUrl.split(",")[1]);
-        var n = bstr.length;
-        var u8arr = new Uint8Array(n);
-        while (n--) {
-          u8arr[n] = bstr.charCodeAt(n);
-        }
-        var blob = new Blob([u8arr]);
-        window.navigator.msSaveOrOpenBlob(blob, name);
-      } else {
-        let a = document.createElement("a"); // 生成一个a元素
-        let event = new MouseEvent("click"); // 创建一个单击事件
-        a.download = name || "photo"; // 设置图片名称
-        a.href = imgUrl; // 将生成的URL设置为a.href属性
-        a.dispatchEvent(event); // 触发a的单击事件
-      }
     },
   },
 };
