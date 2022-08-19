@@ -66,7 +66,7 @@ export default {
   computed: {
     ...mapGetters(["userInfo"]),
     searchText() {
-      return "Result for " + this.$route.query.keywords;
+      return 'Result for "' + this.$route.query.keywords + '"';
     },
   },
   mounted() {},

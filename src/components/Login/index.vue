@@ -249,20 +249,22 @@ export default {
         this.loginForm.username = this.loginForm.email;
         if (valid) {
           this.innerVisible = true;
-          this.$store.dispatch("user/login", {
-            loginForm: this.loginForm,
-            loginSuccess: this.loginSuccess,
-          });
+          this.$store
+            .dispatch("user/login", {
+              loginForm: this.loginForm,
+            })
+            .then(() => {
+              this.innerVisible = false;
+              this.handleClose();
+            })
+            .catch((error) => {
+              this.$message.error(error.msg);
+            });
         } else {
           console.log("error submit!!");
           return false;
         }
       });
-    },
-    loginSuccess(data) {
-      console.log(data);
-      this.innerVisible = false;
-      this.handleClose();
     },
     createAccount(formName) {
       this.$refs[formName].validate((valid) => {
