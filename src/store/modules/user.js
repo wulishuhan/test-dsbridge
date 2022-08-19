@@ -66,7 +66,6 @@ const actions = {
           let data = res.data.data;
           commit("SET_LOGININFO", data);
           setToken(data.access_token);
-          console.log("loginsuccess");
           resolve();
         })
         .catch((error) => {

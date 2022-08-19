@@ -259,6 +259,7 @@ export default {
             })
             .catch((error) => {
               this.$message.error(error.msg);
+              this.innerVisible = false;
             });
         } else {
           console.log("error submit!!");
