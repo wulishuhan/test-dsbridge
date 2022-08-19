@@ -57,6 +57,17 @@ export default {
       noticeArr: [
         {
           url: "https://cdn.thingiverse.com/assets/a0/23/4c/6f/68/medium_thumb_Headset_Holder_v1.png",
+          img: "https://cdn.thingiverse.com/assets/a0/23/4c/6f/68/medium_thumb_Headset_Holder_v1.png",
+          userName: "yang",
+          userId: "111",
+          time: "20220708",
+          thing: "3d 裸眼",
+          thingId: "5453",
+          type: "upload",
+          isRead: true,
+        },
+        {
+          url: "https://cdn.thingiverse.com/assets/a0/23/4c/6f/68/medium_thumb_Headset_Holder_v1.png",
           userName: "yang",
           userId: "111",
           time: "20220708",

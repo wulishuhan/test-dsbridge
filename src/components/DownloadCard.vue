@@ -62,9 +62,9 @@ export default {
         .get(`/dev-api/library/resource/download/${this.file.id}`, {
           responseType: "blob",
           method: "get",
-          headers: {
-            "Access-Control-Allow-Origin": "*",
-          },
+          // headers: {
+          //   "Access-Control-Allow-Origin": "*",
+          // },
         })
         .then((res) => {
           saveAs(res.data, this.file.name);
