@@ -54,22 +54,25 @@ const mutations = {
 const actions = {
   // eslint-disable-next-line
   login({ commit }, payload) {
-    const { loginForm, loginSuccess } = payload;
-    Login({
-      client_subtype: "Windows",
-      client_type: "pc",
-      password: loginForm.password,
-      username: loginForm.username,
-    })
-      .then((res) => {
-        let data = res.data.data;
-        commit("SET_LOGININFO", data);
-        setToken(data.access_token);
-        loginSuccess(data);
+    const { loginForm } = payload;
+    return new Promise((resolve, reject) => {
+      Login({
+        client_subtype: "Windows",
+        client_type: "pc",
+        password: loginForm.password,
+        username: loginForm.username,
       })
-      .catch((error) => {
-        console.log(error);
-      });
+        .then((res) => {
+          let data = res.data.data;
+          commit("SET_LOGININFO", data);
+          setToken(data.access_token);
+          resolve();
+        })
+        .catch((error) => {
+          console.log(error);
+          reject(error);
+        });
+    });
   },
   register({ commit }, payload) {
     return new Promise((resolve, reject) => {
