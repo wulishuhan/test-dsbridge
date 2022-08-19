@@ -6,7 +6,7 @@
       class="tabsContent"
     >
       <el-tab-pane
-        :label="$t('design.follower')"
+        :label="$t('design.Account')"
         name="first"
         class="followTapPanel"
       >
@@ -24,22 +24,24 @@
               :auto-upload="true"
               :show-file-list="false"
             >
-              <span slot="trigger" class="choose"> 选取文件 </span>
+              <span slot="trigger" class="choose">
+                {{ $t("design.chooseImg") }}
+              </span>
             </el-upload>
           </div>
           <div class="right">
             <div class="top">
-              <div class="title">姓名</div>
+              <div class="title">{{ $t("design.name") }}</div>
               <div class="name">{{ userInfo.nick_name }}</div>
               <div class="action" @click="handleActionClick">changeName</div>
             </div>
             <div class="center">
-              <div class="title">邮箱</div>
+              <div class="title">{{ $t("design.email") }}</div>
               <div class="name">{{ userInfo.email }}</div>
               <div class="action" @click="handleActionClick">changeName</div>
             </div>
             <div class="bottom">
-              <div class="title">密码</div>
+              <div class="title">{{ $t("design.password") }}</div>
               <div class="name">{{ userInfo.nick_name }}</div>
               <div class="action" @click="handleActionClick">changeName</div>
             </div>
@@ -56,7 +58,7 @@
         </div>
       </el-tab-pane>
       <el-tab-pane
-        :label="$t('design.following')"
+        :label="$t('design.private')"
         name="second"
         class="followTapPanel"
       >
