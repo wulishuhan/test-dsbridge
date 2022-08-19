@@ -49,6 +49,7 @@
                   :fileList="detail.files"
                   :fileNum="detail.files.length"
                   :downLoadNum="5000"
+                  :resourceName="detail.title"
                   @click="openShowDownPanel"
                 ></DownLoadButton>
               </div>
@@ -1025,7 +1026,7 @@ a {
   box-shadow: none;
 }
 
-::v-deep .ortur-icon {
+.ortur-icon {
   color: #000;
 }
 
