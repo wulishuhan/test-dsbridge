@@ -28,7 +28,7 @@
       </el-tabs>
     </div>
     <div>
-      <div style="width: 486px; border: solid">
+      <!-- <div style="width: 486px; border: solid">
         <div style="display: flex; justify-content: space-between">
           <span
             style="
@@ -69,7 +69,7 @@
             src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
           ></el-image>
         </div>
-      </div>
+      </div> -->
     </div>
     <div>
       <h1>login组件</h1>
@@ -82,13 +82,29 @@
       ></login>
       注册拟态框：<a href="#" @click="showDialog('register')"> register</a>
     </div>
-    <el-avatar
-      class="ortur-icon-user-info"
-      :size="30"
-      style="font-size: 40px"
-    ></el-avatar>
+    <h1>ResourceCard 用法:</h1>
+    <ul>
+      <li>@openCollection，回调参数：资源的id“resId”、收藏框计算后的left位置“left”、收藏框计算后的top位置“top”</li>
+      <li>@closeCollection，回调参数：资源的id“resId”</li>
+      <li>:isCollectd,传入 Boolean类型，用于确定是否已收藏</li>
+      <li>:isLike,传入 Boolean类型，用于确定是否已喜欢</li>
+    </ul>
+    <ResourceCard
+      @openCollection="openCollection"
+      @closeCollection="closeCollection"
+      :isCollected="false"
+      :isLike="true"
+    ></ResourceCard>
+    <CollectedOption
+      :style="collectionStyle"
+      :show="openCollectedOption"
+      :folders="folders"
+      @close="closeCollectedOption"
+      @moveFolder="moveCollectedOption"
+      @addFolder="addFolder"
+    ></CollectedOption>
 
-    <div style="margin-top: 50px"></div>
+    <!-- <div style="margin-top: 50px"></div>
     <div v-swiper:mySwiper="swiperOptions">
       <div class="swiper-wrapper">
         <div class="swiper-slide" v-for="(item, index) in urls" :key="item">
@@ -102,7 +118,7 @@
       <div class="down">
         <i class="ortur-icon-arrow-down"></i>
       </div>
-    </div>
+    </div> -->
     <el-tabs type="border-card" :stretch="true" style="width: 360px">
       <el-tab-pane>
         <div class="tab-items" slot="label">aaa</div>
@@ -117,61 +133,27 @@
         ddd
       </el-tab-pane>
     </el-tabs>
-    <ResourceCard></ResourceCard>
     <div>
       <h1>CollectedOption组件</h1>
-      <p>控制收藏框显示隐藏属性： show</p>
-      <p>传入文件夹数据属性： folders</p>
-      <p>关闭框事件： close</p>
-      <p>点击move按钮事件： moveFolder</p>
-      <p>添加文件夹事件：addFolder</p>
+      <p>控制收藏框显示隐藏属性： show 类型:boolean</p>
+      <p>传入文件夹数据属性： folders 类型:array</p>
+      <p>关闭框事件： close 类型:function</p>
+      <p>点击move按钮事件： moveFolder 类型:function</p>
+      <p>添加文件夹事件：addFolder 类型:function</p>
     </div>
     <!-- <el-button @click="openCollectedOption = !openCollectedOption"
       >CollectedOption组件点击显示隐藏</el-button
     > -->
-    <CollectedOption
+    <!-- <CollectedOption
       :show="openCollectedOption"
       :folders="folders"
       @close="closeCollectedOption"
       @moveFolder="moveCollectedOption"
       @addFolder="addFolder"
-    ></CollectedOption>
-    <el-popover
-      placement="top"
-      :visible-arrow="false"
-      popper-class="user-popover"
-      offset="500"
-    >
-      <CollectedOption
-        :show="openCollectedOption"
-        :folders="folders"
-        @close="closeCollectedOption"
-        @moveFolder="moveCollectedOption"
-        @addFolder="addFolder"
-      ></CollectedOption>
-      <el-button
-        class="icon-collect-box"
-        slot="reference"
-        @click="collectChange"
-        :disabled="visible"
-      >
-        <i
-          v-show="!showCollectionDeleteButton"
-          class="ortur-icon-add-collect icon-collect"
-        ></i>
-        <span
-          v-show="showCollectionDeleteButton"
-          class="ortur-icon-cancel-collect-strokes icon-collect"
-        >
-          <span class="path1"> </span>
-          <span class="path2"> </span>
-          <span class="path3"> </span>
-        </span>
-      </el-button>
-    </el-popover>
+    ></CollectedOption> -->
     <el-popover popper-class="user-popover" placement="bottom" trigger="click">
       <UserRecommendation></UserRecommendation>
-      <el-avatar :size="60" slot="reference"></el-avatar>
+      <el-avatar :size="40" slot="reference"></el-avatar>
     </el-popover>
   </div>
 </template>
@@ -198,10 +180,10 @@ export default {
     return {
       dialogVisible: false,
       isLoginForm: true,
+      isCollected: false,
       test: {
         avatar: "http://dummyimage.com/300x200/f27982/FFF&text=vknro",
         id: "620000197009121720",
-        isCollected: true,
         isLike: false,
         likes: 737,
         publicTime: "1976 02 23",
@@ -259,7 +241,7 @@ export default {
           },
         },
       },
-      openCollectedOption: true,
+      openCollectedOption: false,
       folders: [
         {
           name: "aa",
@@ -276,6 +258,11 @@ export default {
       ],
       visible: false,
       showCollectionDeleteButton: false,
+      collectionStyle: {
+        position: "absolute",
+        left: "0px",
+        top: "0px",
+      },
     };
   },
   methods: {
@@ -304,22 +291,18 @@ export default {
       }
     },
     closeCollectedOption() {
-      // this.openCollectedOption = false;
-      this.showCollectionDeleteButton = false;
-      this.visible = false;
+      this.openCollectedOption = false;
+      this.isCollected = false;
     },
     moveCollectedOption(directionObject) {
       console.log("拿到选择的文件名", directionObject);
-      this.showCollectionDeleteButton = true;
-      this.visible = false;
+      this.openCollectedOption = false;
+      this.isCollected = true;
     },
     addFolder(folderName) {
       console.log("拿到新建的文件名", folderName);
       // 加入组件渲染的文件夹数组之中
       this.folders.push({ name: folderName });
-    },
-    collectChange() {
-      this.showCollectionDeleteButton = !this.showCollectionDeleteButton;
     },
     open() {
       console.log("open", arguments);
@@ -329,6 +312,19 @@ export default {
     },
     change() {
       console.log("change", arguments);
+    },
+    openCollection(id, left, top) {
+      this.openCollectedOption = true;
+      this.collectionStyle.left = left + 49 + "px";
+      if (top - 240 >= 0) {
+        this.collectionStyle.top = top - 240 + "px";
+      } else {
+        this.collectionStyle.top = top + 180 + "px";
+      }
+    },
+    closeCollection() {
+      console.log("closeCollection");
+      this.isCollected = false;
     },
   },
   mounted() {},

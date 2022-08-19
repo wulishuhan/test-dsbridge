@@ -38,6 +38,8 @@
               :thing="item"
               :isLike="likeList.includes(item.id)"
               :isCollected="collectedList.includes(item.id)"
+              @openCollection="openCollection"
+              @deleteCollection="deleteCollection"
             ></resource-card>
           </el-col>
         </div>
@@ -46,10 +48,19 @@
       <p v-if="noMore">no more</p>
       <sroll-top-button :to="'#top'"></sroll-top-button>
     </div>
+    <CollectedOption
+      :style="collectionStyle"
+      :show="openCollectedOption"
+      :folders="folders"
+      @close="closeCollectedOption"
+      @moveFolder="moveCollectedOption"
+      @addFolder="addFolder"
+    ></CollectedOption>
   </div>
 </template>
 <script>
 import ResourceCard from "@/components/ResourceCard";
+import CollectedOption from "@/components/CollectedOption";
 import SrollTopButton from "@/components/SrollTopButton";
 import { throttle } from "@/utils/cache.js";
 // import { getThingList } from "@/api/thing";
@@ -57,11 +68,17 @@ import { getResourceList } from "@/api/resource";
 import { getBanner } from "@/api/banner";
 import { getLikelist } from "@/api/like";
 import { mapGetters } from "vuex";
-import { getCollectionResourceList } from "@/api/collection";
+import {
+  getCollectionResourceList,
+  getCollectionList,
+  addCollection,
+  addResourceToCollection,
+  deleteCollectionResource,
+} from "@/api/collection";
 export default {
   // eslint-disable-next-line
   name: "Main",
-  components: { ResourceCard, SrollTopButton },
+  components: { ResourceCard, SrollTopButton, CollectedOption },
   data() {
     return {
       total: 0,
@@ -92,6 +109,14 @@ export default {
       bannerImages: [],
       likeList: [],
       collectedList: [],
+      openCollectedOption: false,
+      collectionStyle: {
+        position: "absolute",
+        left: "0px",
+        top: "0px",
+      },
+      folders: [],
+      prepareCollectedResId: 0,
     };
   },
   computed: {
@@ -140,7 +165,6 @@ export default {
         getCollectionResourceList({
           userId: this.userInfo.user_id,
         }).then((res) => {
-          console.log("collection list", res);
           for (let i = 0; i < res.data.rows.length; i++) {
             const element = res.data.rows[i];
             this.collectedList.push(element.id);
@@ -190,6 +214,69 @@ export default {
         .catch(() => {
           this.loading = false;
           this.noMore = true;
+        });
+    },
+    openCollection(id, left, top) {
+      this.openCollectedOption = true;
+      this.collectionStyle.left = left + "px";
+      this.collectionStyle.top = top + "px";
+      this.prepareCollectedResId = id;
+      getCollectionList({
+        userId: this.$store.getters.userInfo.user_id,
+      }).then((res) => {
+        this.folders = res.data.data;
+      });
+    },
+    deleteCollection(id) {
+      this.openCollectedOption = false;
+      deleteCollectionResource({
+        userId: this.$store.getters.userInfo.user_id,
+        resourceId: id,
+      }).then(() => {
+        this.$message({
+          message: "cancel collected successfully",
+          type: "success",
+        });
+        for (let i = 0; i < this.collectedList.length; i++) {
+          if (this.collectedList[i] === id) {
+            this.collectedList.splice(i, 1);
+          }
+        }
+      });
+    },
+    closeCollectedOption() {
+      this.openCollectedOption = false;
+    },
+    moveCollectedOption(folderObject) {
+      this.openCollectedOption = false;
+      addResourceToCollection({
+        resourceId: this.prepareCollectedResId,
+        collectionId: folderObject.id,
+      }).then(() => {
+        this.$message({
+          message: "move successfully",
+          type: "success",
+        });
+        this.collectedList.push(this.prepareCollectedResId);
+      });
+    },
+    addFolder(folderName) {
+      addCollection({
+        name: folderName,
+        userId: this.$store.getters.userInfo.user_id,
+      })
+        .then(() => {
+          this.$message({
+            message: "add folder successfully",
+            type: "success",
+          });
+        })
+        .then(() => {
+          getCollectionList({
+            userId: this.$store.getters.userInfo.user_id,
+          }).then((res) => {
+            this.folders = res.data.data;
+          });
         });
     },
   },

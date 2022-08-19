@@ -7,12 +7,22 @@
             :thing="item"
             :isLike="likeList.includes(item.id)"
             :isCollected="collectedList.includes(item.id)"
+            @openCollection="openCollection"
+            @deleteCollection="deleteCollection"
           ></resource-card>
         </el-col>
       </div>
     </el-row>
     <p v-if="loading">loading...</p>
     <p v-if="noMore">no more</p>
+    <CollectedOption
+      :style="collectionStyle"
+      :show="openCollectedOption"
+      :folders="folders"
+      @close="closeCollectedOption"
+      @moveFolder="moveCollectedOption"
+      @addFolder="addFolder"
+    ></CollectedOption>
   </div>
 </template>
 <script>
@@ -21,11 +31,18 @@ import { throttle } from "@/utils/cache.js";
 import { getLikelist } from "@/api/like";
 // import { getThingList } from "@/api/thing";
 import { getResourceListById } from "@/api/resource";
+import CollectedOption from "@/components/CollectedOption";
 import { mapGetters } from "vuex";
-import { getCollectionResourceList } from "@/api/collection";
+import {
+  getCollectionResourceList,
+  getCollectionList,
+  addCollection,
+  addResourceToCollection,
+  deleteCollectionResource,
+} from "@/api/collection";
 export default {
   name: "ViewMore",
-  components: { ResourceCard },
+  components: { ResourceCard, CollectedOption },
   props: {
     creator: {
       type: Object,
@@ -51,7 +68,14 @@ export default {
       noMore: false,
       likeList: [],
       collectedList: [],
+      openCollectedOption: false,
+      collectionStyle: {
+        position: "absolute",
+        left: "0px",
+        top: "0px",
+      },
       folders: [],
+      prepareCollectedResId: 0,
     };
   },
   computed: {
@@ -123,6 +147,69 @@ export default {
           this.noMore = true;
         });
     },
+    openCollection(id, left, top) {
+      this.openCollectedOption = true;
+      this.collectionStyle.left = left + "px";
+      this.collectionStyle.top = top + "px";
+      this.prepareCollectedResId = id;
+      getCollectionList({
+        userId: this.$store.getters.userInfo.user_id,
+      }).then((res) => {
+        this.folders = res.data.data;
+      });
+    },
+    deleteCollection(id) {
+      this.openCollectedOption = false;
+      deleteCollectionResource({
+        userId: this.$store.getters.userInfo.user_id,
+        resourceId: id,
+      }).then(() => {
+        this.$message({
+          message: "cancel collected successfully",
+          type: "success",
+        });
+        for (let i = 0; i < this.collectedList.length; i++) {
+          if (this.collectedList[i] === id) {
+            this.collectedList.splice(i, 1);
+          }
+        }
+      });
+    },
+    closeCollectedOption() {
+      this.openCollectedOption = false;
+    },
+    moveCollectedOption(folderObject) {
+      this.openCollectedOption = false;
+      addResourceToCollection({
+        resourceId: this.prepareCollectedResId,
+        collectionId: folderObject.id,
+      }).then(() => {
+        this.$message({
+          message: "move successfully",
+          type: "success",
+        });
+        this.collectedList.push(this.prepareCollectedResId);
+      });
+    },
+    addFolder(folderName) {
+      addCollection({
+        name: folderName,
+        userId: this.$store.getters.userInfo.user_id,
+      })
+        .then(() => {
+          this.$message({
+            message: "add folder successfully",
+            type: "success",
+          });
+        })
+        .then(() => {
+          getCollectionList({
+            userId: this.$store.getters.userInfo.user_id,
+          }).then((res) => {
+            this.folders = res.data.data;
+          });
+        });
+    },
   },
 };
 </script>
@@ -130,9 +217,5 @@ export default {
 .more-container {
   overflow-y: auto;
   height: 672px;
-}
-::v-deep .collected-option-container {
-  top: 0px;
-  right: 0px;
 }
 </style>
