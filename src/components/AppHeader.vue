@@ -185,7 +185,6 @@ export default {
     ]),
   },
   mounted() {
-    console.log(222222222222);
     this.$store.dispatch("user/getUserInfo").catch((e) => {
       console.log(e);
     });
