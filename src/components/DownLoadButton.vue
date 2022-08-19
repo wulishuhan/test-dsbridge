@@ -19,7 +19,7 @@
       <span class="el-icon--left ortur-icon-file-download">
         <span class="path1"></span><span class="path2"> </span>
       </span>
-      <span class="num">{{ downLoadNum }}k</span>
+      <span class="num">{{ numText }}</span>
       <i class="el-icon-arrow-down el-icon--right"></i>
     </el-button>
   </span>
@@ -33,18 +33,30 @@ export default {
     DownloadCard,
   },
   data() {
-    return {
-      isShowDownPanel: false,
-    };
+    return {};
+  },
+  computed: {
+    numText() {
+      let numText = "";
+      if (this.downLoadNum < 0) {
+        numText = "0";
+      } else if (this.downLoadNum < 1000) {
+        numText = "" + this.downLoadNum;
+      } else {
+        numText = Math.floor(this.downLoadNum / 1000) + "k";
+      }
+      return numText;
+    },
   },
   methods: {
     downLoadAll() {},
     closeDownPanel() {
       //console.log(e)
-      this.isShowDownPanel = false;
+      // this.isShowDownPanel = false;
     },
     showDownPanel() {
-      this.isShowDownPanel = !this.isShowDownPanel;
+      this.$emit("click");
+      // this.isShowDownPanel = !this.isShowDownPanel;
     },
   },
   props: {
@@ -79,11 +91,14 @@ export default {
       type: Number,
       default: 12,
     },
+    isShowDownPanel: {
+      type: Boolean,
+      default: false,
+    },
   },
 };
 </script>
 
-<style></style>
 <style lang="scss" scoped>
 .button {
   width: 120px;

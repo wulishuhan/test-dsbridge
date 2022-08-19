@@ -7,12 +7,17 @@ body {
   background: #e8ebf4;
   border-radius: 6px;
   color: #000;
-  padding:12px 15px;
+  padding: 12px 15px;
 }
 .baseButton:hover {
   // background-color: red;
   color: #000;
 }
 .el-button--primary {
-  background: #1E78F0;
+  background: #1e78f0;
+}
+.user-popover {
+  border: none;
+  padding: 0;
+  margin-left: -18px;
 }

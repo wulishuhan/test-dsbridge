@@ -38,12 +38,31 @@
     </div>
     <div class="card-box-bottom">
       <div class="card-box-bottom-left">
-        <el-avatar
+        <!-- <el-avatar
           v-if="showAvatar"
           :size="35"
           :src="thing.creator && thing.creator.avatar"
           :fit="'cover'"
-        ></el-avatar>
+        ></el-avatar> -->
+        <el-popover
+          popper-class="user-popover"
+          placement="bottom-start"
+          trigger="hover"
+          @show="userRecommendation"
+        >
+          <UserRecommendation
+            v-if="showUserRecommendation"
+            :creator="thing.creator"
+            :currentResourceId="thing.id"
+          ></UserRecommendation>
+          <el-avatar
+            v-if="showAvatar"
+            :size="35"
+            :src="thing.creator && thing.creator.avatar"
+            :fit="'cover'"
+            slot="reference"
+          ></el-avatar>
+        </el-popover>
         <div class="card-box-bottom-left-name">
           <div class="thing-name">{{ thing.title }}</div>
           <span
@@ -110,6 +129,7 @@
 <script>
 import ShareSocialMedia from "@/components/ShareCard";
 import CollectedOption from "@/components/CollectedOption";
+import UserRecommendation from "@/components/UserRecommendation";
 import { addLike, deleteLike } from "@/api/like";
 import {
   getCollectionList,
@@ -119,7 +139,7 @@ import {
 } from "@/api/collection";
 export default {
   name: "ResourceCard",
-  components: { ShareSocialMedia, CollectedOption },
+  components: { ShareSocialMedia, CollectedOption, UserRecommendation },
   props: {
     isYourAccount: {
       type: Boolean,
@@ -207,6 +227,8 @@ export default {
       showLikeStar: false,
       folders: [],
       showCollectionDeleteButton: false,
+      loadLike: false,
+      showUserRecommendation: false,
     };
   },
   mounted() {
@@ -242,8 +264,12 @@ export default {
       this.$router.push(`/thing/${id}`);
     },
     like() {
+      if (this.loadLike) {
+        return;
+      }
       if (this.showLikeStar) {
         this.showLikeStar = false;
+        this.loadLike = true;
         deleteLike({
           resId: this.thing.id,
         })
@@ -253,16 +279,19 @@ export default {
               type: "success",
             });
             this.likes = Number(this.likes) - 1;
+            this.loadLike = false;
             if (this.likes < 0) {
               this.likes = 0;
             }
           })
           .catch((err) => {
             this.showLikeStar = true;
+            this.loadLike = false;
             console.log(err);
           });
       } else {
         this.showLikeStar = true;
+        this.loadLike = true;
         addLike({
           resId: this.thing.id,
         })
@@ -271,10 +300,12 @@ export default {
               message: "add likes successfully",
               type: "success",
             });
+            this.loadLike = false;
             this.likes = 1 + Number(this.likes);
           })
           .catch((err) => {
             console.log(err);
+            this.loadLike = false;
             this.showLikeStar = false;
           });
       }
@@ -361,6 +392,9 @@ export default {
     },
     leave() {
       this.isCollectIconShow = false;
+    },
+    userRecommendation() {
+      this.showUserRecommendation = true;
     },
   },
 };
@@ -456,6 +490,7 @@ export default {
 }
 .card-box-bottom-right-like-box {
   margin-right: 8px;
+  user-select: none;
 }
 .icon-share,
 .icon-star {

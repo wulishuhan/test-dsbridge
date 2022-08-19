@@ -2,7 +2,7 @@
   <div>
     <div class="download-card">
       <div class="left">
-        <img :src="file.url" alt="" />
+        <img :id="'file-' + file.id" :src="file.url" alt="" />
         <div>
           <el-tooltip effect="dark" placement="bottom">
             <div style="max-width: 270px" slot="content">{{ file.name }}</div>
@@ -30,7 +30,8 @@
   </div>
 </template>
 <script>
-import request from "@/utils/request";
+import axios from "axios";
+import { saveAs } from "file-saver";
 export default {
   name: "DownloadCard",
   props: {
@@ -53,25 +54,40 @@ export default {
   },
   mounted() {
     let arr = this.file.name.split(".");
-    this.type = arr[arr.length - 1];
-    console.log(this.file.updatedTime);
+    this.type = arr[arr.length - 1].toLocaleLowerCase();
   },
   methods: {
     download() {
-      request({
-        url: this.file.url,
-        method: "get",
-      }).then((res) => {
-        console.log("res: ", res);
-        const blob = new Blob([res.data]);
-        let link = document.createElement("a");
-        link.style.display = "none";
-        link.href = URL.createObjectURL(blob);
-        link.download = res.headers.filename;
-        link.click();
-        URL.revokeObjectURL(link.href);
-        document.body.appendChild(link);
-      });
+      axios
+        .get(`/dev-api/library/resource/download/${this.file.id}`, {
+          responseType: "blob",
+          method: "get",
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+          },
+        })
+        .then((res) => {
+          saveAs(res.data, this.file.name);
+        });
+    },
+    // 使用canvas下载跨域图片文件的方法， 可以使用window.open()下载非浏览器直接可以预览的文件
+    downloadUsingCanvas() {
+      console.log("图片!");
+      let image = new Image();
+      image.src = this.file.url;
+      var that = this;
+      image.crossOrigin = "anonymous";
+      image.onload = function () {
+        let c = document.createElement("canvas");
+        let ctx = c.getContext("2d");
+        c.width = this.width;
+        c.height = this.height;
+        ctx.clearRect(0, 0, c.width, c.height);
+        ctx.drawImage(image, 0, 0, c.width, c.height);
+        c.toBlob(function (blob) {
+          saveAs(blob, that.file.name);
+        });
+      };
     },
   },
 };

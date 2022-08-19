@@ -1,7 +1,7 @@
 <template>
   <span>
-    <el-button @click="click" class="baseButton button">
-      <i class="el-icon--left" v-show="isCollect">
+    <el-button @click="click" class="baseButton button" :disabled="disabled">
+      <i class="el-icon--left" v-show="!isCollect">
         <!-- <svg
           width="15"
           height="15"
@@ -18,7 +18,7 @@
         <i class="ortur-icon-add-collect"></i>
       </i>
       <span
-        v-show="!isCollect"
+        v-show="isCollect"
         class="ortur-icon-cancel-collect-fill el-icon--left"
         ><span class="path1"></span><span class="path2"></span
         ><span class="path3"></span
@@ -41,6 +41,10 @@ export default {
       default: 0,
     },
     isCollect: {
+      type: Boolean,
+      default: false,
+    },
+    disabled: {
       type: Boolean,
       default: false,
     },
