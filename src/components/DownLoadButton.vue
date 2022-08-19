@@ -27,7 +27,9 @@
 
 <script>
 import DownloadCard from "./DownloadCard";
-
+import { getFileData } from "@/utils/exportZip.js";
+import { saveAs } from "file-saver";
+import JSZip from "jszip";
 export default {
   components: {
     DownloadCard,
@@ -49,7 +51,18 @@ export default {
     },
   },
   methods: {
-    downLoadAll() {},
+    async downLoadAll() {
+      let zip = new JSZip();
+      for (let i = 0; i < this.fileList.length; i++) {
+        const element = this.fileList[i];
+        let res = await getFileData(element.id);
+        zip.file(element.name, res);
+      }
+      zip.generateAsync({ type: "blob" }).then((content) => {
+        // see FileSaver.js
+        saveAs(content, this.resourceName + ".zip");
+      });
+    },
     closeDownPanel() {
       //console.log(e)
       // this.isShowDownPanel = false;
@@ -94,6 +107,10 @@ export default {
     isShowDownPanel: {
       type: Boolean,
       default: false,
+    },
+    resourceName: {
+      type: String,
+      default: "",
     },
   },
 };
