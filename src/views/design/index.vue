@@ -42,6 +42,7 @@
       :visible.sync="dialogCollectionVisible"
       :title="collectionName"
       @close="handleCollectDialogClose"
+      class="DialogCollection"
     >
       <div class="collectionDialog">
         <div
@@ -239,36 +240,38 @@
             </el-row>
           </el-tab-pane>
           <el-tab-pane :label="$t('design.collection')" name="third">
-            <el-row :gutter="20">
-              <RowFolder
-                :isYourAccount="isYourAccount"
-                style="width: 98%; margin-bottom: 20px"
-                :value="rowFolders"
-                :onFolderAdd="onFolderAdd"
-                @clickFolder="handleClickFolder"
-                @delFolder="handleDelFolder"
-              ></RowFolder>
-              <div class="draft">Draft</div>
-              <div v-for="item in collections" :key="item.thingId">
-                <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                  <resource-card
-                    @clickMoveMenu="Handler_MoveTo(item)"
-                    @clickDelMenu="handleCancelCollect(item)"
-                    @clickDownMenu="Handler_Down(item)"
-                    @moveCollectionComplete="handleMoveCollectionComplete"
-                    :isCollected="myCollects.includes(item.id)"
-                    :thing="item"
-                    :showEdit="false"
-                    :showStar="true"
-                    :showMoreMenuBtn="true"
-                    :key="item.id"
-                    :isYourAccount="isYourAccount"
-                    :isLike="myLikes.includes(item.id)"
-                  >
-                  </resource-card>
-                </el-col>
+            <RowFolder
+              :isYourAccount="isYourAccount"
+              style="width: 98%; margin-bottom: 20px"
+              :value="rowFolders"
+              :onFolderAdd="onFolderAdd"
+              @clickFolder="handleClickFolder"
+              @delFolder="handleDelFolder"
+            ></RowFolder>
+            <div class="draft">Draft</div>
+            <div style="display: flex; flex-wrap: wrap">
+              <div
+                v-for="item in collections"
+                :key="item.thingId"
+                style="width: 33.3%"
+              >
+                <resource-card
+                  @clickMoveMenu="Handler_MoveTo(item)"
+                  @clickDelMenu="handleCancelCollect(item)"
+                  @clickDownMenu="Handler_Down(item)"
+                  @moveCollectionComplete="handleMoveCollectionComplete"
+                  :isCollected="myCollects.includes(item.id)"
+                  :thing="item"
+                  :showEdit="false"
+                  :showStar="true"
+                  :showMoreMenuBtn="true"
+                  :key="item.id"
+                  :isYourAccount="isYourAccount"
+                  :isLike="myLikes.includes(item.id)"
+                >
+                </resource-card>
               </div>
-            </el-row>
+            </div>
           </el-tab-pane>
           <el-tab-pane :label="$t('design.histories')" name="fourth">
             <el-row :gutter="20">
@@ -871,11 +874,17 @@ export default {
   width: 1440px;
   margin: 0 auto;
   padding-bottom: 100px;
+  .DialogCollection {
+    ::v-deep .el-dialog {
+      width: 1000px;
+    }
+  }
   .collectionDialog {
     display: flex;
     flex-wrap: wrap;
     .collectionDialogItem {
-      margin: 1px;
+      margin: 10px;
+      // width: 33.3%;
     }
   }
   .followDialog {
