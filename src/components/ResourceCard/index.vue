@@ -224,6 +224,7 @@ export default {
       folders: [],
       loadLike: false,
       showUserRecommendation: false,
+      isViewMorePage: false,
     };
   },
   mounted() {
@@ -318,14 +319,20 @@ export default {
         return;
       }
       let collectBox = document.querySelector("#collect-box-" + this.thing.id);
-      let displayTop = collectBox.getBoundingClientRect().top - 360 > 0;
       let left = this.getElementLeft(collectBox) - collectBox.offsetLeft + 49;
-      let top = this.getElementTop(collectBox) - collectBox.offsetTop;
-      if (displayTop) {
-        top = top - 240;
+      let top = this.getElementTop(collectBox);
+      let displayTop = false;
+      if (this.isViewMorePage) {
+        displayTop = top - 360 > 0;
       } else {
-        top = top + 180;
+        displayTop = collectBox.getBoundingClientRect().top - 360 > 0;
       }
+      if (displayTop) {
+        top = top - 240 - collectBox.offsetTop;
+      } else {
+        top = top + 180 - collectBox.offsetTop;
+      }
+      console.log("top:", top);
       this.$emit("openCollection", this.thing.id, left, top);
     },
     deleteCollection() {
@@ -345,6 +352,7 @@ export default {
       var current = element.offsetParent;
       while (current !== null) {
         if (current.className === "el-tabs__content") {
+          this.isViewMorePage = true;
           break;
         }
         actualLeft += current.offsetLeft + current.clientLeft;
@@ -357,6 +365,7 @@ export default {
       var current = element.offsetParent;
       while (current !== null) {
         if (current.className === "el-tabs__content") {
+          this.isViewMorePage = true;
           break;
         }
         actualTop += current.offsetTop + current.clientTop;
