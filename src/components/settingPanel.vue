@@ -223,7 +223,7 @@ export default {
         switch7: true,
         switch8: true,
       },
-      dialogFollowersVisible: true,
+      dialogFollowersVisible: false,
       activeTab: "first",
       headers: {
         Authorization: getToken(),
