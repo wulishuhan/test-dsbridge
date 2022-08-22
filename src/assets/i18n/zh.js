@@ -74,5 +74,6 @@ module.exports = {
     email: "邮箱",
     password: "密码",
     private: "隐私",
+    accountBinding: "账号绑定",
   },
 };

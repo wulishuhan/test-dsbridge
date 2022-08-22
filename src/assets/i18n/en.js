@@ -74,5 +74,6 @@ module.exports = {
     email: "email",
     password: "password",
     private: "private",
+    accountBinding: "accountBinding",
   },
 };
