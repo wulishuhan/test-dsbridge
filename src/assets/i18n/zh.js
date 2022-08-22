@@ -75,5 +75,6 @@ module.exports = {
     password: "密码",
     private: "隐私",
     accountBinding: "账号绑定",
+    tips: "提示",
   },
 };

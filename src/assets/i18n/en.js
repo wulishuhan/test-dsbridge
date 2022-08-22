@@ -75,5 +75,6 @@ module.exports = {
     password: "password",
     private: "private",
     accountBinding: "accountBinding",
+    tips: "tips",
   },
 };

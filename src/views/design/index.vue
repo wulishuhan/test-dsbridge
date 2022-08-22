@@ -482,7 +482,7 @@ export default {
       console.log("item: ", item);
     },
     handleDelFolder(item) {
-      this.$confirm(this.$t("design.delFolderTip"), "提示", {
+      this.$confirm(this.$t("design.delFolderTip"), this.$t("design.tips"), {
         confirmButtonText: this.$t("design.confirm"),
         cancelButtonText: this.$t("design.cancel"),
         type: "warning",
@@ -726,7 +726,7 @@ export default {
       };
     },
     Handler_Del(item) {
-      this.$confirm(this.$t("design.delFileTip"), "提示", {
+      this.$confirm(this.$t("design.delFileTip"), this.$t("design.tips"), {
         confirmButtonText: this.$t("design.confirm"),
         cancelButtonText: this.$t("design.cancel"),
         type: "warning",
