@@ -332,7 +332,6 @@ export default {
       } else {
         top = top + 180 - collectBox.offsetTop;
       }
-      console.log("top:", top);
       this.$emit("openCollection", this.thing.id, left, top);
     },
     deleteCollection() {

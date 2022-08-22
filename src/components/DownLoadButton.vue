@@ -1,5 +1,5 @@
 <template>
-  <span @click="closeDownPanel">
+  <div @click="closeDownPanel">
     <el-button class="baseButton button" @click.stop="showDownPanel">
       <div class="downPanel" v-show="isShowDownPanel">
         <div class="downLoadAll">
@@ -16,13 +16,14 @@
           :key="item.id"
         ></download-card>
       </div>
-      <span class="el-icon--left ortur-icon-file-download">
+      <span class="el-icon--left ortur-icon-file-download" style="color: #fff">
         <span class="path1"></span><span class="path2"> </span>
       </span>
+      <span class="download-text"> Download </span>
       <span class="num">{{ numText }}</span>
       <i class="el-icon-arrow-down el-icon--right"></i>
     </el-button>
-  </span>
+  </div>
 </template>
 
 <script>
@@ -118,11 +119,15 @@ export default {
 
 <style lang="scss" scoped>
 .button {
-  width: 120px;
+  width: 248px;
   position: relative;
-  color: #000;
+  background-color: #1e78f0;
+  color: #fff;
+  padding: 0px 5px;
   .num {
-    color: #000;
+    color: #fff;
+    opacity: 0.5;
+    padding: 0px 10px;
   }
   .downPanel {
     position: absolute;
@@ -165,10 +170,19 @@ export default {
     background: #ededed;
   }
 }
-// .button:hover .downPanel {
-//   display: block;
-// }
+/* .button:hover .downPanel { */
+/* display: block; */
+/* } */
 .ortur-icon-file-download {
   font-size: 18px;
+  color: #fff;
+}
+.path1::before,
+.path2::before {
+  color: #fff;
+  font-size: 18px;
+}
+.download-text {
+  font-size: 16px;
 }
 </style>
