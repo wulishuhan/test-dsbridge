@@ -56,6 +56,7 @@
             @clickDownMenu="Handler_Down(item)"
             @moveCollectionComplete="handleMoveCollectionComplete"
             :isCollected="myFolderCollects.includes(item.id)"
+            @deleteCollection="deleteCollection"
             :thing="item"
             :showEdit="false"
             :showStar="true"
@@ -268,6 +269,7 @@
                   :key="item.id"
                   :isYourAccount="isYourAccount"
                   :isLike="myLikes.includes(item.id)"
+                  @deleteCollection="deleteCollection"
                 >
                 </resource-card>
               </div>
@@ -300,6 +302,7 @@ import ResourceCard from "@/components/ResourceCard/index.vue";
 import IndexFollowPanel from "./IndexFollowPanel.vue";
 import CollectedOption from "@/components/CollectedOption";
 import RowFolder from "@/components/RowFolder.vue";
+import { deleteCollectionResource } from "@/api/collection";
 import {
   getResourceList,
   getCollectResourceList,
@@ -455,6 +458,30 @@ export default {
     ...mapState(["userInfo"]),
   },
   methods: {
+    deleteCollection(id) {
+      deleteCollectionResource({
+        userId: this.$store.getters.userInfo.user_id,
+        resourceId: id,
+      }).then(() => {
+        this.$message({
+          message: "cancel collected successfully",
+          type: "success",
+        });
+        if (!this.dialogCollectionVisible) {
+          for (let i = 0; i < this.myCollects.length; i++) {
+            if (this.myCollects[i] === id) {
+              this.myCollects.splice(i, 1);
+            }
+          }
+        } else {
+          for (let i = 0; i < this.myFolderCollects.length; i++) {
+            if (this.myFolderCollects[i] === id) {
+              this.myFolderCollects.splice(i, 1);
+            }
+          }
+        }
+      });
+    },
     handleCollectDialogClose() {
       // this.getMyLikesList();
     },
