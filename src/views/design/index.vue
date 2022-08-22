@@ -38,7 +38,11 @@
         </el-tab-pane>
       </el-tabs>
     </el-dialog>
-    <el-dialog :visible.sync="dialogCollectionVisible" :title="collectionName">
+    <el-dialog
+      :visible.sync="dialogCollectionVisible"
+      :title="collectionName"
+      @close="handleCollectDialogClose"
+    >
       <div class="collectionDialog">
         <div
           v-for="item in folderCollection"
@@ -53,10 +57,11 @@
             :isCollected="myFolderCollects.includes(item.id)"
             :thing="item"
             :showEdit="false"
-            :showStar="false"
+            :showStar="true"
             :showMoreMenuBtn="true"
             :key="item.id"
             :isYourAccount="isYourAccount"
+            :isLike="myLikes.includes(item.id)"
           >
           </resource-card>
         </div>
@@ -254,10 +259,11 @@
                     :isCollected="myCollects.includes(item.id)"
                     :thing="item"
                     :showEdit="false"
-                    :showStar="false"
+                    :showStar="true"
                     :showMoreMenuBtn="true"
                     :key="item.id"
                     :isYourAccount="isYourAccount"
+                    :isLike="myLikes.includes(item.id)"
                   >
                   </resource-card>
                 </el-col>
@@ -446,6 +452,9 @@ export default {
     ...mapState(["userInfo"]),
   },
   methods: {
+    handleCollectDialogClose() {
+      // this.getMyLikesList();
+    },
     handleCancelCollect(item) {
       if (this.dialogCollectionVisible) {
         cancelCollectResource({
@@ -598,6 +607,8 @@ export default {
     getMyLikesList() {
       return new Promise((resolve) => {
         getLikesList({ userId: this.userInfo.user_id }).then((res) => {
+          this.myLikes = [];
+
           if (this.isYourAccount) {
             this.Likes = res.data.rows;
           }
@@ -621,6 +632,7 @@ export default {
       });
     },
     getCollectResourceList() {
+      this.getMyLikesList();
       if (!this.isYourAccount) {
         let userId = this.user.userId;
         this.getMyCollectResourceList().then(() => {
