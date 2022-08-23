@@ -1,5 +1,5 @@
 <template>
-  <div class="upload-container">
+  <div class="upload-container" id="upload-container">
     <h1 class="header-title">{{ headerTitle }}</h1>
     <el-form
       ref="resourceForm"
@@ -384,6 +384,7 @@ import {
   getResource,
   updateResource,
   getResourceTags,
+  uploadFile,
 } from "@/api/resource";
 export default {
   // eslint-disable-next-line
@@ -417,7 +418,7 @@ export default {
         images: [],
         files: [],
         title: "",
-        tags: ["标签一", "标签二", "标签三"],
+        tags: ["标签一"],
         license: "GNU - LGPL",
         description: "",
       },
@@ -531,9 +532,63 @@ export default {
         this.tutorialForm = detail.tutorials;
       });
     }
-    //更新标题
   },
   methods: {
+    genThumb(srcFile) {
+      //判断文件类型，如果是图片，则生成截图
+      if (srcFile.raw.type.indexOf("image") < 0) {
+        return;
+      }
+      //
+      return new Promise((resolve, reject) => {
+        const image = new Image();
+        image.src = URL.createObjectURL(srcFile.raw);
+        image.setAttribute("crossOrigin", "Anonymous");
+
+        image.onload = () => {
+          var canvas = document.createElement("canvas");
+          var ctx = canvas.getContext("2d");
+          var maxw = 400;
+          var maxh = 400;
+
+          var cw = image.width;
+          var ch = image.height;
+          var w = image.width;
+          var h = image.height;
+          canvas.width = w;
+          canvas.height = h;
+          if (cw > maxw && cw > ch) {
+            w = maxw;
+            h = (maxw * ch) / cw;
+            canvas.width = w;
+            canvas.height = h;
+          }
+          if (ch > maxh && ch > cw) {
+            h = maxh;
+            w = (maxh * cw) / ch;
+            canvas.width = w;
+            canvas.height = h;
+          }
+          ctx.drawImage(image, 0, 0, w, h);
+
+          canvas.toBlob((blob) => {
+            var file = new File([blob], srcFile.raw.name, {
+              type: "image/jpeg",
+            });
+            //TODO:调用上传接口获取缩略图地址
+            let formData = new FormData();
+            formData.append("file", file);
+            uploadFile(formData)
+              .then((res) => {
+                resolve(res);
+              })
+              .catch((error) => {
+                reject(error);
+              });
+          }, srcFile.raw.type);
+        };
+      });
+    },
     handleSelect(item) {
       this.$refs["autoInput"].focus();
       console.log(item);
@@ -618,8 +673,15 @@ export default {
         size: file.size,
         percent: 0,
         file: file,
+        thumbnail: "",
       };
-      this.resourceForm.files.push(fileInfo);
+      //获取缩略图
+      this.genThumb(file).then((res) => {
+        fileInfo.thumbnail = res.data.data.url;
+        console.log("fileInfo===", fileInfo);
+        this.resourceForm.files.push(fileInfo);
+      });
+
       console.log("handleSourceChange=========", file);
     },
     handleSourceProgress(event, file) {
@@ -632,12 +694,14 @@ export default {
       }
     },
     handleSourceSuccess(response, file) {
+      console.log("file", file);
       for (const index in this.resourceForm.files) {
         var item = this.resourceForm.files[index];
         if (file.uid == item.uid) {
           item.url = response.data.url;
           item.percent = 100;
           item.id = response.data.id;
+          // this.genThumb().then(() => {});
           break;
         }
       }
