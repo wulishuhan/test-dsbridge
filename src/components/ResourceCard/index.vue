@@ -350,7 +350,7 @@ export default {
     },
     getElementLeft(element) {
       let actualLeft = element.offsetLeft;
-      let current = element.offsetParent;
+      let current = element.parentElement;
       while (current !== null) {
         console.log(current.className);
         if (current.className.includes("view-more-row")) {
@@ -365,7 +365,7 @@ export default {
     },
     getElementTop(element) {
       let actualTop = element.offsetTop;
-      let current = element.offsetParent;
+      let current = element.parentElement;
       while (current !== null) {
         if (current.className.includes("view-more-row")) {
           this.isViewMorePage = true;
