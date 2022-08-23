@@ -51,6 +51,7 @@ module.exports = {
     following: "关注的人",
     markRead: "标记为已读",
     leftComment: "评论了你的作品：",
+    upload: "上传了作品",
   },
   design: {
     follower: "粉丝",
@@ -67,5 +68,13 @@ module.exports = {
     confirm: "确认",
     cancel: "取消",
     delSuccess: "删除成功",
+    Account: "账号",
+    chooseImg: "更换照片",
+    name: "姓名",
+    email: "邮箱",
+    password: "密码",
+    private: "隐私",
+    accountBinding: "账号绑定",
+    tips: "提示",
   },
 };

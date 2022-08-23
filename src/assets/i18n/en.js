@@ -51,6 +51,7 @@ module.exports = {
     following: "following",
     markRead: "Mark as read",
     leftComment: "Comments your work:",
+    upload: "has upload a thing",
   },
   design: {
     follower: "follower",
@@ -67,5 +68,13 @@ module.exports = {
     confirm: "confirm",
     cancel: "Cancel",
     delSuccess: "successfully deleted",
+    Account: "Account",
+    chooseImg: "chooseImg",
+    name: "name",
+    email: "email",
+    password: "password",
+    private: "private",
+    accountBinding: "accountBinding",
+    tips: "tips",
   },
 };

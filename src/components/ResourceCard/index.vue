@@ -13,6 +13,7 @@
         v-show="showCollection && isCollectIconShow"
         class="icon-collect-box"
         :id="'collect-box-' + thing.id"
+        ref="collect-button"
       >
         <i
           v-if="!isCollected"
@@ -245,9 +246,9 @@ export default {
       this.showMoreMenu = false;
       this.$emit("clickDelMenu", this.thing);
     },
-    handleMoveClick() {
+    handleMoveClick(e) {
       this.showMoreMenu = false;
-      this.$emit("clickMoveMenu", this.thing);
+      this.$emit("clickMoveMenu", this.thing, { x: e.x - 170, y: e.y - 300 });
     },
     handleClickMore() {
       this.showMoreMenu = !this.showMoreMenu;
@@ -318,9 +319,11 @@ export default {
         this.$store.dispatch("user/switchLoginRegisteForm", payload);
         return;
       }
-      let collectBox = document.querySelector("#collect-box-" + this.thing.id);
+      let collectBox = this.$refs["collect-button"];
+      // let left = this.getElementLeft(collectBox);
       let left = this.getElementLeft(collectBox) - collectBox.offsetLeft + 49;
       let top = this.getElementTop(collectBox);
+      debugger;
       let displayTop = false;
       if (this.isViewMorePage) {
         displayTop = top - 360 > 0;
@@ -347,10 +350,10 @@ export default {
       this.showUserRecommendation = true;
     },
     getElementLeft(element) {
-      var actualLeft = element.offsetLeft;
-      var current = element.offsetParent;
+      let actualLeft = element.offsetLeft;
+      let current = element.offsetParent;
       while (current !== null) {
-        if (current.className === "el-tabs__content") {
+        if (current.className === "more-container") {
           this.isViewMorePage = true;
           break;
         }
@@ -360,10 +363,10 @@ export default {
       return actualLeft;
     },
     getElementTop(element) {
-      var actualTop = element.offsetTop;
-      var current = element.offsetParent;
+      let actualTop = element.offsetTop;
+      let current = element.offsetParent;
       while (current !== null) {
-        if (current.className === "el-tabs__content") {
+        if (current.className === "more-container") {
           this.isViewMorePage = true;
           break;
         }

@@ -1,9 +1,9 @@
 <template>
   <div class="container-profile" id="top">
     <CollectedOption
-      class="collectMenu"
       :show="openCollectedOption"
       :folders="folders"
+      :style="collectionStyle"
       @close="closeCollectedOption"
       @moveFolder="moveCollectedOption"
       @addFolder="addFolder"
@@ -38,7 +38,12 @@
         </el-tab-pane>
       </el-tabs>
     </el-dialog>
-    <el-dialog :visible.sync="dialogCollectionVisible" :title="collectionName">
+    <el-dialog
+      :visible.sync="dialogCollectionVisible"
+      :title="collectionName"
+      @close="handleCollectDialogClose"
+      class="DialogCollection"
+    >
       <div class="collectionDialog">
         <div
           v-for="item in folderCollection"
@@ -51,12 +56,15 @@
             @clickDownMenu="Handler_Down(item)"
             @moveCollectionComplete="handleMoveCollectionComplete"
             :isCollected="myFolderCollects.includes(item.id)"
+            @deleteCollection="deleteCollection"
+            @openCollection="openCollection"
             :thing="item"
             :showEdit="false"
-            :showStar="false"
+            :showStar="true"
             :showMoreMenuBtn="true"
             :key="item.id"
             :isYourAccount="isYourAccount"
+            :isLike="myLikes.includes(item.id)"
           >
           </resource-card>
         </div>
@@ -234,35 +242,40 @@
             </el-row>
           </el-tab-pane>
           <el-tab-pane :label="$t('design.collection')" name="third">
-            <el-row :gutter="20">
-              <RowFolder
-                :isYourAccount="isYourAccount"
-                style="width: 98%; margin-bottom: 20px"
-                :value="rowFolders"
-                :onFolderAdd="onFolderAdd"
-                @clickFolder="handleClickFolder"
-                @delFolder="handleDelFolder"
-              ></RowFolder>
-              <div class="draft">Draft</div>
-              <div v-for="item in collections" :key="item.thingId">
-                <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                  <resource-card
-                    @clickMoveMenu="Handler_MoveTo(item)"
-                    @clickDelMenu="handleCancelCollect(item)"
-                    @clickDownMenu="Handler_Down(item)"
-                    @moveCollectionComplete="handleMoveCollectionComplete"
-                    :isCollected="myCollects.includes(item.id)"
-                    :thing="item"
-                    :showEdit="false"
-                    :showStar="false"
-                    :showMoreMenuBtn="true"
-                    :key="item.id"
-                    :isYourAccount="isYourAccount"
-                  >
-                  </resource-card>
-                </el-col>
+            <RowFolder
+              :isYourAccount="isYourAccount"
+              style="width: 98%; margin-bottom: 20px"
+              :value="rowFolders"
+              :onFolderAdd="onFolderAdd"
+              @clickFolder="handleClickFolder"
+              @delFolder="handleDelFolder"
+            ></RowFolder>
+            <div class="draft">Draft</div>
+            <div style="display: flex; flex-wrap: wrap">
+              <div
+                v-for="item in collections"
+                :key="item.thingId"
+                style="width: 33.3%"
+              >
+                <resource-card
+                  @clickMoveMenu="Handler_MoveTo(item)"
+                  @clickDelMenu="handleCancelCollect(item)"
+                  @clickDownMenu="Handler_Down(item)"
+                  @moveCollectionComplete="handleMoveCollectionComplete"
+                  @openCollection="openCollection"
+                  :isCollected="myCollects.includes(item.id)"
+                  :thing="item"
+                  :showEdit="false"
+                  :showStar="true"
+                  :showMoreMenuBtn="true"
+                  :key="item.id"
+                  :isYourAccount="isYourAccount"
+                  :isLike="myLikes.includes(item.id)"
+                  @deleteCollection="deleteCollection"
+                >
+                </resource-card>
               </div>
-            </el-row>
+            </div>
           </el-tab-pane>
           <el-tab-pane :label="$t('design.histories')" name="fourth">
             <el-row :gutter="20">
@@ -272,6 +285,8 @@
                     :key="item.id"
                     :thing="item"
                     :isLike="myLikes.includes(item.id)"
+                    @openCollection="openCollection"
+                    :isCollected="myCollects.includes(item.id)"
                   >
                   </resource-card>
                 </el-col>
@@ -291,6 +306,7 @@ import ResourceCard from "@/components/ResourceCard/index.vue";
 import IndexFollowPanel from "./IndexFollowPanel.vue";
 import CollectedOption from "@/components/CollectedOption";
 import RowFolder from "@/components/RowFolder.vue";
+import { deleteCollectionResource } from "@/api/collection";
 import {
   getResourceList,
   getCollectResourceList,
@@ -379,6 +395,11 @@ export default {
           },
         ],
       },
+      collectionStyle: {
+        position: "absolute",
+        left: "0px",
+        top: "0px",
+      },
       resources: [],
       activeTab: "first",
       activeName: "first",
@@ -410,6 +431,7 @@ export default {
       },
       collectionId: "",
       userId: "", //自己或他人的主页
+      prepareCollectedResId: "", //收藏的资源id
     };
   },
   mounted() {
@@ -446,6 +468,45 @@ export default {
     ...mapState(["userInfo"]),
   },
   methods: {
+    openCollection(id, left, top) {
+      this.openCollectedOption = true;
+
+      this.collectionStyle.left = left + "px";
+      this.collectionStyle.top = top + "px";
+      this.prepareCollectedResId = id;
+      getCollectList({
+        userId: this.$store.getters.userInfo.user_id,
+      }).then((res) => {
+        this.folders = res.data.data;
+      });
+    },
+    deleteCollection(id) {
+      deleteCollectionResource({
+        userId: this.$store.getters.userInfo.user_id,
+        resourceId: id,
+      }).then(() => {
+        this.$message({
+          message: "cancel collected successfully",
+          type: "success",
+        });
+        if (!this.dialogCollectionVisible) {
+          for (let i = 0; i < this.myCollects.length; i++) {
+            if (this.myCollects[i] === id) {
+              this.myCollects.splice(i, 1);
+            }
+          }
+        } else {
+          for (let i = 0; i < this.myFolderCollects.length; i++) {
+            if (this.myFolderCollects[i] === id) {
+              this.myFolderCollects.splice(i, 1);
+            }
+          }
+        }
+      });
+    },
+    handleCollectDialogClose() {
+      // this.getMyLikesList();
+    },
     handleCancelCollect(item) {
       if (this.dialogCollectionVisible) {
         cancelCollectResource({
@@ -470,7 +531,7 @@ export default {
       console.log("item: ", item);
     },
     handleDelFolder(item) {
-      this.$confirm(this.$t("design.delFolderTip"), "提示", {
+      this.$confirm(this.$t("design.delFolderTip"), this.$t("design.tips"), {
         confirmButtonText: this.$t("design.confirm"),
         cancelButtonText: this.$t("design.cancel"),
         type: "warning",
@@ -598,6 +659,8 @@ export default {
     getMyLikesList() {
       return new Promise((resolve) => {
         getLikesList({ userId: this.userInfo.user_id }).then((res) => {
+          this.myLikes = [];
+
           if (this.isYourAccount) {
             this.Likes = res.data.rows;
           }
@@ -621,6 +684,7 @@ export default {
       });
     },
     getCollectResourceList() {
+      this.getMyLikesList();
       if (!this.isYourAccount) {
         let userId = this.user.userId;
         this.getMyCollectResourceList().then(() => {
@@ -711,7 +775,7 @@ export default {
       };
     },
     Handler_Del(item) {
-      this.$confirm(this.$t("design.delFileTip"), "提示", {
+      this.$confirm(this.$t("design.delFileTip"), this.$t("design.tips"), {
         confirmButtonText: this.$t("design.confirm"),
         cancelButtonText: this.$t("design.cancel"),
         type: "warning",
@@ -859,11 +923,17 @@ export default {
   width: 1440px;
   margin: 0 auto;
   padding-bottom: 100px;
+  .DialogCollection {
+    ::v-deep .el-dialog {
+      width: 1000px;
+    }
+  }
   .collectionDialog {
     display: flex;
     flex-wrap: wrap;
     .collectionDialogItem {
-      margin: 1px;
+      margin: 10px;
+      // width: 33.3%;
     }
   }
   .followDialog {

@@ -51,6 +51,41 @@
         <div>{{ noticeInfo.message }}</div>
       </div>
     </div>
+    <div
+      class="container"
+      style="justify-content: space-between"
+      v-if="noticeInfo.type == 'upload'"
+    >
+      <div v-show="noticeInfo.isRead" class="dot"></div>
+      <div style="display: flex">
+        <div class="left">
+          <router-link :to="'/design/' + noticeInfo.userId">
+            <img :src="noticeInfo.url" class="img" alt="" />
+          </router-link>
+        </div>
+        <div class="right">
+          <div class="name">
+            <span class="username">
+              <router-link :to="'/design/' + noticeInfo.userId">
+                {{ noticeInfo.userName }}
+              </router-link>
+            </span>
+            <span class="info"> {{ $t("notice.upload") }} </span>
+          </div>
+          <div class="time">
+            <span>updated {{ noticeInfo.time }} </span>
+          </div>
+          <div>{{ noticeInfo.message }}</div>
+        </div>
+      </div>
+      <div>
+        <img
+          style="width: 40px; height: 40px; margin-right: 20px"
+          :src="noticeInfo.img"
+          alt=""
+        />
+      </div>
+    </div>
     <div class="container" v-if="noticeInfo.type == 'system'">
       <div v-show="noticeInfo.isRead" class="dot"></div>
       <div class="left">

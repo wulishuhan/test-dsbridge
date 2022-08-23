@@ -23,7 +23,7 @@
           </div>
         </div>
       </div>
-      <el-button @click.prevent="download" type="primary">
+      <el-button @click.prevent.stop="download" type="primary">
         {{ $t("download.download") }} <span>{{ file.downloadNumber }} </span>
       </el-button>
     </div>
@@ -62,9 +62,9 @@ export default {
         .get(`/dev-api/library/resource/download/${this.file.id}`, {
           responseType: "blob",
           method: "get",
-          headers: {
-            "Access-Control-Allow-Origin": "*",
-          },
+          // headers: {
+          //   "Access-Control-Allow-Origin": "*",
+          // },
         })
         .then((res) => {
           saveAs(res.data, this.file.name);
