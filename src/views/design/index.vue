@@ -474,7 +474,6 @@ export default {
       this.collectionStyle.left = left + "px";
       this.collectionStyle.top = top + "px";
       this.prepareCollectedResId = id;
-      console.log(id);
       getCollectList({
         userId: this.$store.getters.userInfo.user_id,
       }).then((res) => {
