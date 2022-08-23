@@ -495,18 +495,23 @@ export default {
           type: "success",
         });
         if (!this.dialogCollectionVisible) {
-          for (let i = 0; i < this.myCollects.length; i++) {
-            if (this.myCollects[i] === id) {
-              this.myCollects.splice(i, 1);
-            }
-          }
+          this.getMyCollectResourceList();
         } else {
-          for (let i = 0; i < this.myFolderCollects.length; i++) {
-            if (this.myFolderCollects[i] === id) {
-              this.myFolderCollects.splice(i, 1);
-            }
-          }
+          this.getMyCollectFolderResourceList();
         }
+        // if (!this.dialogCollectionVisible) {
+        //   for (let i = 0; i < this.myCollects.length; i++) {
+        //     if (this.myCollects[i] === id) {
+        //       this.myCollects.splice(i, 1);
+        //     }
+        //   }
+        // } else {
+        //   for (let i = 0; i < this.myFolderCollects.length; i++) {
+        //     if (this.myFolderCollects[i] === id) {
+        //       this.myFolderCollects.splice(i, 1);
+        //     }
+        //   }
+        // }
       });
     },
     handleCollectDialogClose() {
