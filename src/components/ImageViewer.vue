@@ -79,7 +79,8 @@
           </span>
         </template>
         <span class="el-image-viewer__btn el-image-viewer__close" @click="hide">
-          <i class="el-icon-close"></i>
+          <!-- <i class="el-icon-close"></i> -->
+          <i class="ortur-icon-cancel"></i>
         </span>
       </div>
     </div>

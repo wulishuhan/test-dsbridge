@@ -248,10 +248,13 @@
           </div>
           <div style="margin-top: 32px">
             <div class="bottom-content-right-box-title">License</div>
-            <div class="flex justify-between license-box">
-              <i class="ortur-icon-cc"></i>
-              <i class="ortur-icon-reload"></i>
-              <i class="ortur-icon-user-info"></i>
+            <div class="flex license-box">
+              <div v-if="licenseIcon.length > 0">
+                <i v-for="item in licenseIcon" :key="item" :class="item"></i>
+              </div>
+              <div v-else>
+                <img v-for="item in licenseImg" :key="item" :src="item" />
+              </div>
             </div>
             <div class="license-info">
               {{ detail.title }} by {{ detail.creator.name }} is licensed under
@@ -397,6 +400,13 @@ export default {
       folders: [],
       likeDisabled: false,
       isShowDownPanel: false,
+      licenseImg: [],
+      licenseIcon: [],
+      CCLicenseStyle: {
+        width: "35px",
+        height: "35px",
+        marginLeft: "26px",
+      },
     };
   },
   computed: {
@@ -408,38 +418,73 @@ export default {
     },
     licenseUrl() {
       let license = this.detail.license;
+      console.log(license);
       let licenseUrl = "";
       if (license === "Creative Commons - Attribution") {
         licenseUrl = "https://creativecommons.org/licenses/by/4.0/";
+        this.licenseIcon = ["ortur-icon-cc", "ortur-icon-user-info"];
       } else if (license === "Creative Commons - Attribution - Share Alike") {
         licenseUrl = "https://creativecommons.org/licenses/by-sa/4.0/";
+        this.licenseIcon = [
+          "ortur-icon-cc",
+          "ortur-icon-user-info",
+          "ortur-icon-reload",
+        ];
       } else if (
         license === "Creative Commons - Attribution - No Derivatives"
       ) {
         licenseUrl = "https://creativecommons.org/licenses/by-nd/4.0/";
+        this.licenseIcon = [
+          "ortur-icon-cc",
+          "ortur-icon-user-info",
+          "ortur-icon-no-derivatives",
+        ];
       } else if (
         license === "Creative Commons - Attribution - Non-Commercial"
       ) {
         licenseUrl = "https://creativecommons.org/licenses/by-nc/4.0/";
+        this.licenseIcon = [
+          "ortur-icon-cc",
+          "ortur-icon-user-info",
+          "ortur-icon-no-money",
+        ];
       } else if (
         license ===
         "Creative Commons - Attribution - Non-Commercial - Share Alike"
       ) {
         licenseUrl = "https://creativecommons.org/licenses/by-nc-sa/4.0/";
+        this.licenseIcon = [
+          "ortur-icon-cc",
+          "ortur-icon-user-info",
+          "ortur-icon-no-money",
+          "ortur-icon-reload",
+        ];
       } else if (
         license ===
         "Creative Commons - Attribution - Non-Commercial - No Derivatives "
       ) {
         licenseUrl = "https://creativecommons.org/licenses/by-nc-nd/4.0/";
+        this.licenseIcon = [
+          "ortur-icon-cc",
+          "ortur-icon-user-info",
+          "ortur-icon-no-money",
+          "ortur-icon-no-derivatives",
+        ];
       } else if (license === "Creative Commons - Public Domain Dedication") {
         licenseUrl =
           "https://creativecommons.org/share-your-work/public-domain/cc0/";
+        this.licenseImg = [
+          "/license-img/Creative Commons - Public Domain Dedication.png",
+        ];
       } else if (license === "GNU - GPL") {
         licenseUrl = "https://www.gnu.org/licenses/gpl-3.0.html";
-      } else if (license === "GNU - LGPL") {
+        this.licenseImg = ["/license-img/GNU - GPL.png"];
+      } else if (license === "GNU - LGPL ") {
         licenseUrl = "https://www.gnu.org/licenses/lgpl-3.0.html";
-      } else {
+        this.licenseImg = ["/license-img/GNU - LGPL.png"];
+      } else if ((license = "BSD License")) {
         licenseUrl = "https://opensource.org/licenses/BSD-3-Clause";
+        this.licenseImg = ["/license-img/BSD.png"];
       }
       return licenseUrl;
     },
