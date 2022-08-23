@@ -13,6 +13,7 @@
         v-show="showCollection && isCollectIconShow"
         class="icon-collect-box"
         :id="'collect-box-' + thing.id"
+        ref="collect-button"
       >
         <i
           v-if="!isCollected"
@@ -318,7 +319,8 @@ export default {
         this.$store.dispatch("user/switchLoginRegisteForm", payload);
         return;
       }
-      let collectBox = document.querySelector("#collect-box-" + this.thing.id);
+      let collectBox = this.$refs["collect-button"];
+      // let left = this.getElementLeft(collectBox);
       let left = this.getElementLeft(collectBox) - collectBox.offsetLeft + 49;
       let top = this.getElementTop(collectBox);
       let displayTop = false;
@@ -332,7 +334,6 @@ export default {
       } else {
         top = top + 180 - collectBox.offsetTop;
       }
-      console.log("top:", top);
       this.$emit("openCollection", this.thing.id, left, top);
     },
     deleteCollection() {
@@ -348,10 +349,10 @@ export default {
       this.showUserRecommendation = true;
     },
     getElementLeft(element) {
-      var actualLeft = element.offsetLeft;
-      var current = element.offsetParent;
+      let actualLeft = element.offsetLeft;
+      let current = element.offsetParent;
       while (current !== null) {
-        if (current.className === "el-tabs__content") {
+        if (current.className === "more-container") {
           this.isViewMorePage = true;
           break;
         }
@@ -361,10 +362,10 @@ export default {
       return actualLeft;
     },
     getElementTop(element) {
-      var actualTop = element.offsetTop;
-      var current = element.offsetParent;
+      let actualTop = element.offsetTop;
+      let current = element.offsetParent;
       while (current !== null) {
-        if (current.className === "el-tabs__content") {
+        if (current.className === "more-container") {
           this.isViewMorePage = true;
           break;
         }
