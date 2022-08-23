@@ -323,7 +323,6 @@ export default {
       // let left = this.getElementLeft(collectBox);
       let left = this.getElementLeft(collectBox) - collectBox.offsetLeft + 49;
       let top = this.getElementTop(collectBox);
-      debugger;
       let displayTop = false;
       if (this.isViewMorePage) {
         displayTop = top - 360 > 0;
@@ -353,7 +352,9 @@ export default {
       let actualLeft = element.offsetLeft;
       let current = element.offsetParent;
       while (current !== null) {
-        if (current.className === "more-container") {
+        console.log(current.className);
+        if (current.className.includes("view-more-row")) {
+          console.log("命中");
           this.isViewMorePage = true;
           break;
         }
@@ -366,8 +367,9 @@ export default {
       let actualTop = element.offsetTop;
       let current = element.offsetParent;
       while (current !== null) {
-        if (current.className === "more-container") {
+        if (current.className.includes("view-more-row")) {
           this.isViewMorePage = true;
+          console.log("命中");
           break;
         }
         actualTop += current.offsetTop + current.clientTop;
