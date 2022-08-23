@@ -1,9 +1,9 @@
 <template>
   <div class="container-profile" id="top">
     <CollectedOption
-      class="collectMenu"
       :show="openCollectedOption"
       :folders="folders"
+      :style="collectionStyle"
       @close="closeCollectedOption"
       @moveFolder="moveCollectedOption"
       @addFolder="addFolder"
@@ -57,6 +57,7 @@
             @moveCollectionComplete="handleMoveCollectionComplete"
             :isCollected="myFolderCollects.includes(item.id)"
             @deleteCollection="deleteCollection"
+            @openCollection="openCollection"
             :thing="item"
             :showEdit="false"
             :showStar="true"
@@ -261,6 +262,7 @@
                   @clickDelMenu="handleCancelCollect(item)"
                   @clickDownMenu="Handler_Down(item)"
                   @moveCollectionComplete="handleMoveCollectionComplete"
+                  @openCollection="openCollection"
                   :isCollected="myCollects.includes(item.id)"
                   :thing="item"
                   :showEdit="false"
@@ -283,6 +285,8 @@
                     :key="item.id"
                     :thing="item"
                     :isLike="myLikes.includes(item.id)"
+                    @openCollection="openCollection"
+                    :isCollected="myCollects.includes(item.id)"
                   >
                   </resource-card>
                 </el-col>
@@ -391,6 +395,11 @@ export default {
           },
         ],
       },
+      collectionStyle: {
+        position: "absolute",
+        left: "0px",
+        top: "0px",
+      },
       resources: [],
       activeTab: "first",
       activeName: "first",
@@ -422,6 +431,7 @@ export default {
       },
       collectionId: "",
       userId: "", //自己或他人的主页
+      prepareCollectedResId: "", //收藏的资源id
     };
   },
   mounted() {
@@ -458,6 +468,19 @@ export default {
     ...mapState(["userInfo"]),
   },
   methods: {
+    openCollection(id, left, top) {
+      this.openCollectedOption = true;
+
+      this.collectionStyle.left = left + "px";
+      this.collectionStyle.top = top + "px";
+      this.prepareCollectedResId = id;
+      console.log(id);
+      getCollectList({
+        userId: this.$store.getters.userInfo.user_id,
+      }).then((res) => {
+        this.folders = res.data.data;
+      });
+    },
     deleteCollection(id) {
       deleteCollectionResource({
         userId: this.$store.getters.userInfo.user_id,
