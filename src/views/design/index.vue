@@ -203,6 +203,7 @@
                     @clickMoveMenu="Handler_MoveTo(item)"
                     @clickDelMenu="Handler_Del(item)"
                     @clickDownMenu="Handler_Down(item)"
+                    @openCollection="openCollection"
                     :thing="item"
                     :showEdit="true"
                     :showMoreMenuBtn="isYourAccount && true"
@@ -286,6 +287,11 @@
                     :thing="item"
                     :isLike="myLikes.includes(item.id)"
                     @openCollection="openCollection"
+                    @clickMoveMenu="Handler_MoveTo(item)"
+                    @clickDelMenu="handleCancelCollect(item)"
+                    @clickDownMenu="Handler_Down(item)"
+                    @moveCollectionComplete="handleMoveCollectionComplete"
+                    @deleteCollection="deleteCollection"
                     :isCollected="myCollects.includes(item.id)"
                   >
                   </resource-card>
@@ -470,7 +476,6 @@ export default {
   methods: {
     openCollection(id, left, top) {
       this.openCollectedOption = true;
-
       this.collectionStyle.left = left + "px";
       this.collectionStyle.top = top + "px";
       this.prepareCollectedResId = id;
@@ -575,7 +580,7 @@ export default {
       if (this.activeName == "first") {
         this.openCollectedOption = false;
         addResourceToCollection({
-          resourceId: this.thing.id,
+          resourceId: this.prepareCollectedResId,
           collectionId: folderObject.id,
         }).then(() => {
           this.$message({
@@ -586,7 +591,7 @@ export default {
       } else if (this.activeName == "third") {
         this.openCollectedOption = false;
         moveResourceToCollection({
-          resourceId: this.thing.id,
+          resourceId: this.prepareCollectedResId,
           collectionId: folderObject.id,
         }).then((res) => {
           console.log(res);
@@ -595,6 +600,18 @@ export default {
             this.getCollectFolderResourceList();
           }
 
+          this.$message({
+            message: "move successfully",
+            type: "success",
+          });
+        });
+      } else if (this.activeName == "fourth") {
+        this.openCollectedOption = false;
+        addResourceToCollection({
+          resourceId: this.prepareCollectedResId,
+          collectionId: folderObject.id,
+        }).then(() => {
+          this.myCollects.push(this.prepareCollectedResId);
           this.$message({
             message: "move successfully",
             type: "success",
@@ -705,6 +722,7 @@ export default {
           collectionId: 0,
           userId: this.userInfo.user_id,
         }).then((res) => {
+          this.myCollects = [];
           if (this.isYourAccount) {
             this.collections = res.data.rows;
           }
@@ -898,6 +916,7 @@ export default {
         this.getCollectList();
         this.getCollectResourceList();
       } else if (this.activeName == "fourth") {
+        this.getMyCollectResourceList();
         this.getHistoriesList();
       }
     },

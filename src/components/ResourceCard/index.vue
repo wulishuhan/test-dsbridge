@@ -246,9 +246,9 @@ export default {
       this.showMoreMenu = false;
       this.$emit("clickDelMenu", this.thing);
     },
-    handleMoveClick(e) {
+    handleMoveClick() {
       this.showMoreMenu = false;
-      this.$emit("clickMoveMenu", this.thing, { x: e.x - 170, y: e.y - 300 });
+      this.addCollection();
     },
     handleClickMore() {
       this.showMoreMenu = !this.showMoreMenu;
@@ -323,7 +323,6 @@ export default {
       // let left = this.getElementLeft(collectBox);
       let left = this.getElementLeft(collectBox) - collectBox.offsetLeft + 49;
       let top = this.getElementTop(collectBox);
-      debugger;
       let displayTop = false;
       if (this.isViewMorePage) {
         displayTop = top - 360 > 0;
