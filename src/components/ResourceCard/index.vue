@@ -350,9 +350,11 @@ export default {
     },
     getElementLeft(element) {
       let actualLeft = element.offsetLeft;
-      let current = element.offsetParent;
+      let current = element.parentElement;
       while (current !== null) {
-        if (current.className === "more-container") {
+        console.log(current.className);
+        if (current.className.includes("view-more-row")) {
+          console.log("命中");
           this.isViewMorePage = true;
           break;
         }
@@ -363,10 +365,11 @@ export default {
     },
     getElementTop(element) {
       let actualTop = element.offsetTop;
-      let current = element.offsetParent;
+      let current = element.parentElement;
       while (current !== null) {
-        if (current.className === "more-container") {
+        if (current.className.includes("view-more-row")) {
           this.isViewMorePage = true;
+          console.log("命中");
           break;
         }
         actualTop += current.offsetTop + current.clientTop;
