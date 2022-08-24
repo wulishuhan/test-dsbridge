@@ -964,6 +964,10 @@ a {
   width: 145px;
   margin-top: 17px;
   font-size: 35px;
+  i {
+    font-size: 46px;
+    margin-left: 5px;
+  }
 }
 
 .license-info {
