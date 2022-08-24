@@ -56,13 +56,13 @@
             @clickDelMenu="handleCancelCollect(item)"
             @clickDownMenu="Handler_Down(item)"
             @moveCollectionComplete="handleMoveCollectionComplete"
-            :isCollected="myFolderCollects.includes(item.id)"
+            :isCollected="myCollects.includes(item.id)"
             @deleteCollection="deleteCollection"
             @openCollection="openCollection"
             :thing="item"
             :showEdit="false"
             :showStar="true"
-            :showMoreMenuBtn="true"
+            :showMoreMenuBtn="isYourAccount"
             :key="item.id"
             :isYourAccount="isYourAccount"
             :isLike="myLikes.includes(item.id)"
@@ -205,13 +205,16 @@
                     @clickDelMenu="Handler_Del(item)"
                     @clickDownMenu="Handler_Down(item)"
                     @openCollection="openCollection"
+                    @deleteCollection="deleteCollection"
+                    :isCollected="myCollects.includes(item.id)"
                     :thing="item"
-                    :showEdit="true"
+                    :showEdit="isLogin && isYourAccount"
                     :showMoreMenuBtn="isYourAccount && true"
                     :showAvatar="false"
-                    :showStar="false"
-                    :showCollection="false"
+                    :showCollection="!isLogin || !isYourAccount"
                     :isYourAccount="isYourAccount"
+                    :isLike="myLikes.includes(item.id)"
+                    :showStar="true"
                   >
                   </resource-card>
                 </el-col>
@@ -235,8 +238,11 @@
                     :thing="item"
                     :showEdit="false"
                     :showStar="true"
-                    :showCollection="false"
+                    @openCollection="openCollection"
+                    :showCollection="!isLogin || !isYourAccount"
                     :isLike="myLikes.includes(item.id)"
+                    :isCollected="myCollects.includes(item.id)"
+                    @deleteCollection="deleteCollection"
                   >
                   </resource-card>
                 </el-col>
@@ -269,7 +275,7 @@
                   :thing="item"
                   :showEdit="false"
                   :showStar="true"
-                  :showMoreMenuBtn="true"
+                  :showMoreMenuBtn="isYourAccount"
                   :key="item.id"
                   :isYourAccount="isYourAccount"
                   :isLike="myLikes.includes(item.id)"
@@ -313,7 +319,10 @@ import ResourceCard from "@/components/ResourceCard/index.vue";
 import IndexFollowPanel from "./IndexFollowPanel.vue";
 import CollectedOption from "@/components/CollectedOption";
 import RowFolder from "@/components/RowFolder.vue";
-import { deleteCollectionResource } from "@/api/collection";
+import {
+  deleteCollectionResource,
+  getCollectionResourceList,
+} from "@/api/collection";
 import {
   getResourceList,
   getCollectResourceList,
@@ -349,7 +358,6 @@ export default {
     return {
       collectionName: "",
       myFollowList: [],
-      myFolderCollects: [],
       folderCollection: [],
       followerList: [],
       followingList: [],
@@ -441,8 +449,33 @@ export default {
       prepareCollectedResId: "", //收藏的资源id
     };
   },
+  watch: {
+    "$store.getters.isLogin": function () {
+      console.log("change login status");
+      if (this.$store.getters.isLogin) {
+        this.getAllMyCollectList();
+        this.getMyLikesList().then(() => {
+          if (this.activeName == "first") {
+            console.log(1);
+            this.getResourceList();
+          } else if (this.activeName == "second") {
+            console.log(1);
+          } else if (this.activeName == "third") {
+            console.log(1);
+            this.getCollectResourceList();
+          } else if (this.activeName == "fourth") {
+            console.log(1);
+            this.getHistoriesList();
+          }
+        });
+      } else {
+        this.$router.push("/");
+      }
+    },
+  },
   mounted() {
     console.log(this.userInfo);
+    console.log(this.isLogin);
 
     let userId = this.$route.params.userId;
 
@@ -465,14 +498,22 @@ export default {
       this.isYourAccount = false;
       this.user.nick_name = "test";
       this.user.userId = userId;
-      this.getResourceList();
+      if (this.isLogin) {
+        this.getMyLikesList().then(() => {
+          this.getResourceList();
+        });
+      } else {
+        this.getResourceList();
+      }
     }
     this.userId = this.isYourAccount ? this.userInfo.user_id : this.user.userId;
     this.contextMenuData.menulists[0].disabled = !this.isYourAccount;
+    this.isLogin ? this.getAllMyCollectList() : "";
     // getUserInfo({ userId: this.userId }).then(() => {});
   },
   computed: {
     ...mapState(["userInfo"]),
+    ...mapState(["isLogin"]),
   },
   methods: {
     openCollection(id, left, top) {
@@ -496,24 +537,7 @@ export default {
           message: "cancel collected successfully",
           type: "success",
         });
-        if (!this.dialogCollectionVisible) {
-          this.getMyCollectResourceList();
-        } else {
-          this.getMyCollectFolderResourceList();
-        }
-        // if (!this.dialogCollectionVisible) {
-        //   for (let i = 0; i < this.myCollects.length; i++) {
-        //     if (this.myCollects[i] === id) {
-        //       this.myCollects.splice(i, 1);
-        //     }
-        //   }
-        // } else {
-        //   for (let i = 0; i < this.myFolderCollects.length; i++) {
-        //     if (this.myFolderCollects[i] === id) {
-        //       this.myFolderCollects.splice(i, 1);
-        //     }
-        //   }
-        // }
+        this.getAllMyCollectList();
       });
     },
     handleCollectDialogClose() {
@@ -590,6 +614,19 @@ export default {
           resourceId: this.prepareCollectedResId,
           collectionId: folderObject.id,
         }).then(() => {
+          this.getAllMyCollectList();
+          this.$message({
+            message: "move successfully",
+            type: "success",
+          });
+        });
+      } else if (this.activeName == "second") {
+        this.openCollectedOption = false;
+        addResourceToCollection({
+          resourceId: this.prepareCollectedResId,
+          collectionId: folderObject.id,
+        }).then(() => {
+          this.getAllMyCollectList();
           this.$message({
             message: "move successfully",
             type: "success",
@@ -597,28 +634,49 @@ export default {
         });
       } else if (this.activeName == "third") {
         this.openCollectedOption = false;
-        moveResourceToCollection({
-          resourceId: this.prepareCollectedResId,
-          collectionId: folderObject.id,
-        }).then((res) => {
-          console.log(res);
-          this.getCollectResourceList();
-          if (this.dialogCollectionVisible) {
-            this.getCollectFolderResourceList();
-          }
+        // console.log(this.myCollects.includes(this.prepareCollectedResId));
+        if (this.myCollects.includes(this.prepareCollectedResId)) {
+          moveResourceToCollection({
+            resourceId: this.prepareCollectedResId,
+            collectionId: folderObject.id,
+          }).then((res) => {
+            console.log(res);
+            this.isYourAccount && this.getCollectResourceList();
+            if (this.isYourAccount && this.dialogCollectionVisible) {
+              this.getCollectFolderResourceList();
+            }
+            this.getAllMyCollectList();
 
-          this.$message({
-            message: "move successfully",
-            type: "success",
+            this.$message({
+              message: "move successfully",
+              type: "success",
+            });
           });
-        });
+        } else {
+          addResourceToCollection({
+            resourceId: this.prepareCollectedResId,
+            collectionId: folderObject.id,
+          }).then((res) => {
+            console.log(res);
+            this.isYourAccount && this.getCollectResourceList();
+            if (this.isYourAccount && this.dialogCollectionVisible) {
+              this.getCollectFolderResourceList();
+            }
+            this.getAllMyCollectList();
+
+            this.$message({
+              message: "move successfully",
+              type: "success",
+            });
+          });
+        }
       } else if (this.activeName == "fourth") {
         this.openCollectedOption = false;
         addResourceToCollection({
           resourceId: this.prepareCollectedResId,
           collectionId: folderObject.id,
         }).then(() => {
-          this.myCollects.push(this.prepareCollectedResId);
+          this.getAllMyCollectList();
           this.$message({
             message: "move successfully",
             type: "success",
@@ -665,6 +723,7 @@ export default {
         let userId = this.user.userId;
         getResourceList({ userId }).then((res) => {
           this.resources = res.data.rows;
+          debugger;
         });
       }
     },
@@ -673,10 +732,11 @@ export default {
         this.getMyLikesList();
       } else {
         let userId = this.user.userId;
-        this.getMyLikesList().then(() => {
-          getLikesList({ userId }).then((res) => {
-            this.Likes = res.data.rows;
-          });
+        getLikesList({ userId }).then((res) => {
+          this.Likes = res.data.rows;
+          if (this.isLogin) {
+            this.getMyLikesList();
+          }
         });
       }
     },
@@ -691,6 +751,7 @@ export default {
           for (const item of res.data.rows) {
             this.myLikes.push(item.id);
           }
+          debugger;
           resolve(1);
         });
       });
@@ -708,49 +769,51 @@ export default {
       });
     },
     getCollectResourceList() {
-      this.getMyLikesList();
+      this.isLogin && this.getMyLikesList();
       if (!this.isYourAccount) {
         let userId = this.user.userId;
-        this.getMyCollectResourceList().then(() => {
-          getCollectResourceList({
-            collectionId: 0,
-            userId: userId,
-          }).then((res) => {
-            this.collections = res.data.rows;
-          });
+        getCollectResourceList({
+          collectionId: 0,
+          userId: userId,
+        }).then((res) => {
+          this.collections = res.data.rows;
+          this.isLogin && this.getAllMyCollectList();
         });
       } else {
         this.getMyCollectResourceList();
       }
     },
     getMyCollectResourceList() {
+      this.myCollects = [];
+
       return new Promise((resolve) => {
         getCollectResourceList({
           collectionId: 0,
           userId: this.userInfo.user_id,
         }).then((res) => {
-          this.myCollects = [];
           if (this.isYourAccount) {
             this.collections = res.data.rows;
+            for (const item of res.data.rows) {
+              this.myCollects.push(item.id);
+            }
           }
-          for (const item of res.data.rows) {
-            this.myCollects.push(item.id);
-          }
+
           resolve(1);
         });
       });
     },
-    getCollectFolderResourceList() {
+    async getCollectFolderResourceList() {
+      this.isLogin && this.getAllMyCollectList();
+      this.isLogin && !this.isYourAccount && (await this.getMyLikesList());
+
       if (!this.isYourAccount) {
         let userId = this.user.userId;
-        this.getMyCollectFolderResourceList().then(() => {
-          getCollectResourceList({
-            collectionId: this.collectionId || 0,
-            userId: userId,
-          }).then((res) => {
-            this.folderCollection = res.data.rows;
-            this.dialogCollectionVisible = true;
-          });
+        getCollectResourceList({
+          collectionId: this.collectionId || 0,
+          userId: userId,
+        }).then((res) => {
+          this.folderCollection = res.data.rows;
+          this.dialogCollectionVisible = true;
         });
       } else {
         this.getMyCollectFolderResourceList().then(() => {
@@ -767,15 +830,12 @@ export default {
           if (this.isYourAccount) {
             this.folderCollection = res.data.rows;
           }
-          for (const item of res.data.rows) {
-            this.myFolderCollects.push(item.id);
-          }
+
           resolve(1);
         });
       });
     },
     getHistoriesList() {
-      this.getMyLikesList();
       if (this.isYourAccount) {
         getHistoriesList({ userId: this.userInfo.user_id }).then((res) => {
           this.histories = res.data.rows;
@@ -786,6 +846,7 @@ export default {
           this.histories = res.data.rows;
         });
       }
+      this.isLogin && this.getMyLikesList();
     },
     showMenu(index, item) {
       console.log("item: ", item);
@@ -819,7 +880,6 @@ export default {
       this.collectionStyle.left = "41%";
       this.collectionStyle.top = "33%";
       this.collectionStyle.position = "fixed";
-
       getCollectList({ userId: this.userInfo.user_id }).then((res) => {
         this.folders = res.data.data;
         this.openCollectedOption = true;
@@ -917,9 +977,21 @@ export default {
         this.$refs.diyRef[index].focus();
       }, 0);
     },
-
-    handleResourceClick() {
+    getAllMyCollectList() {
+      getCollectionResourceList({
+        userId: this.userInfo.user_id,
+      }).then((res) => {
+        this.myCollects = [];
+        for (let i = 0; i < res.data.rows.length; i++) {
+          const element = res.data.rows[i];
+          this.myCollects.push(element.id);
+        }
+      });
+    },
+    async handleResourceClick() {
       if (this.activeName == "first") {
+        this.isLogin && !this.isYourAccount && (await this.getMyLikesList());
+
         this.getResourceList();
       } else if (this.activeName == "second") {
         this.getLikesList();
@@ -927,8 +999,9 @@ export default {
         this.getCollectList();
         this.getCollectResourceList();
       } else if (this.activeName == "fourth") {
-        this.getMyCollectResourceList();
         this.getHistoriesList();
+        this.isLogin && this.getAllMyCollectList();
+        // this.isLogin && !this.isYourAccount && this.getMyLikesList();
       }
     },
   },
