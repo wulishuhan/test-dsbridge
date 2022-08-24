@@ -1,6 +1,7 @@
 <template>
   <div class="container-profile" id="top">
     <CollectedOption
+      style="z-index: 9999"
       :show="openCollectedOption"
       :folders="folders"
       :style="collectionStyle"
@@ -476,6 +477,7 @@ export default {
   methods: {
     openCollection(id, left, top) {
       this.openCollectedOption = true;
+      this.collectionStyle.position = "absolute";
       this.collectionStyle.left = left + "px";
       this.collectionStyle.top = top + "px";
       this.prepareCollectedResId = id;
@@ -813,7 +815,11 @@ export default {
       });
     },
     Handler_MoveTo(thing) {
-      this.thing = thing;
+      this.prepareCollectedResId = thing.id;
+      this.collectionStyle.left = "41%";
+      this.collectionStyle.top = "33%";
+      this.collectionStyle.position = "fixed";
+
       getCollectList({ userId: this.userInfo.user_id }).then((res) => {
         this.folders = res.data.data;
         this.openCollectedOption = true;
