@@ -4,7 +4,7 @@
     <div class="labelCard">
       <BaseButton
         class="button"
-        @click="onBaseButtonClick(index)"
+        @click="onBaseButtonClick(tag)"
         v-for="(tag, index) in LabelArr"
         :key="index"
       >
@@ -29,8 +29,8 @@ export default {
     BaseButton,
   },
   methods: {
-    onBaseButtonClick(id) {
-      this.$router.push({ path: "", query: id });
+    onBaseButtonClick(tag) {
+      this.$router.push("/search/index?keywords=" + tag);
     },
   },
 };

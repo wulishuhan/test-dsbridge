@@ -15,7 +15,7 @@
         <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="8">
           <div class="select-box">
             <i class="ortur-icon-hourglass icon-hourglass"></i>
-            <el-select v-model="value" placeholder="The Popular" class="select">
+            <el-select v-model="value" @change="selectChange" class="select">
               <el-option
                 v-for="item in options"
                 :key="item.value"
@@ -95,12 +95,12 @@ export default {
           value: "newest",
           label: "The newest",
         },
-        {
-          value: "folowing",
-          label: "Only folowing",
-        },
+        // {
+        //   value: "folowing",
+        //   label: "Only folowing",
+        // },
       ],
-      value: "",
+      value: "popular",
       load: () => {},
       resources: [],
       loading: false,
@@ -203,7 +203,7 @@ export default {
   },
   methods: {
     getResourceList() {
-      getResourceList(this.pagination)
+      getResourceList({ ...this.pagination, sort: this.value })
         .then((res) => {
           console.log("getResourceList:", res);
           let resource = res.data.rows;
@@ -279,6 +279,12 @@ export default {
           });
         });
     },
+    selectChange(value) {
+      this.value = value;
+      this.resources = [];
+      this.pagination.pageNum = 1;
+      this.getResourceList();
+    },
   },
 };
 </script>
@@ -343,8 +349,11 @@ p {
 ::v-deep .el-input__inner:hover {
   border: none;
 }
+::v-deep .el-input__inner::before {
+  content: "\e93f";
+}
 ::v-deep .el-input__inner::placeholder {
-  text-align: right;
+  text-align: center;
   color: #1a1a1a;
   font-size: 11px;
 }
@@ -354,13 +363,13 @@ p {
 }
 .icon-hourglass {
   position: absolute;
-  top: 12px;
-  left: 2px;
+  top: 10px;
+  left: 14px;
   z-index: 2;
   font-size: 15px;
 }
 .select {
-  width: 120px;
+  width: 160px;
   height: 36px;
   border-radius: 5px;
   font-size: 12px;
@@ -370,12 +379,13 @@ p {
 }
 ::v-deep .el-input__inner {
   background: #f0f3fa;
+  text-align: center;
 }
 .select:hover {
   border: 1px solid #c2c4cc;
 }
 .option {
-  width: 108px;
+  width: 150px;
   height: 42px;
   margin: 0 auto;
   border-radius: 6px;
@@ -386,6 +396,7 @@ p {
   text-align: center;
   padding: 0px;
   overflow: visible;
+  line-height: 42px;
 }
 .option:hover {
   background: #8ab5ef;

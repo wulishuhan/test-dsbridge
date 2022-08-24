@@ -34,7 +34,8 @@
                     :isCollect="isCollected"
                     :collectionNum="detail.collect_count"
                     @click="collect"
-                  ></CollectButton>
+                  >
+                  </CollectButton>
                   <CollectedOption
                     :show="openCollectedOption"
                     :folders="folders"
@@ -124,7 +125,7 @@
                         <i class="ortur-icon-arrow-up"></i>
                       </div>
                       <div class="down swiper-container-button">
-                        <i class="ortur-icon-arrow-down"></i>
+                        <i class="ortur-icon-arrow-bottom"></i>
                       </div>
                     </div>
                   </transition>
@@ -155,18 +156,35 @@
                 <tutorial :step="detail.tutorials"></tutorial>
               </show-more>
             </el-tab-pane>
-            <el-tab-pane label="Remix" name="third"> </el-tab-pane>
-            <el-tab-pane label="Makes" name="fourth">
+            <el-tab-pane label="Remix" name="third">
               <div>
                 <div class="flex justify-between">
-                  <a class="more-font">
+                  <a class="more-font" @click="dialogPostMake = true">
                     <i class="el-icon-plus"></i>
-                    Post a make
+                    Post a Remix
                   </a>
                   <a class="view-more" @click="openViewAllDialog('view-makes')">
                     View all
                   </a>
                 </div>
+                <el-dialog
+                  title="Post your make"
+                  :visible.sync="dialogPostMake"
+                >
+                  <el-form>
+                    <el-form-item
+                      ><el-input placeholder="add a step title"></el-input
+                    ></el-form-item>
+                    <el-form-item
+                      ><el-input
+                        placeholder="Add Photo (Bulk add supported)"
+                      ></el-input
+                    ></el-form-item>
+                    <el-form-item
+                      ><el-input placeholder="Add a description"></el-input
+                    ></el-form-item>
+                  </el-form>
+                </el-dialog>
                 <div class="flex justify-between" style="flex-wrap: wrap">
                   <div style="position: relative" v-for="i in 6" :key="i">
                     <el-image
@@ -174,7 +192,54 @@
                       src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
                     >
                     </el-image>
-                    <div class="makes-mask">
+                  </div>
+                </div>
+              </div>
+            </el-tab-pane>
+            <el-tab-pane label="Makes" name="fourth">
+              <div>
+                <div class="flex justify-between">
+                  <a class="more-font" @click="dialogPostMake = true">
+                    <i class="el-icon-plus"></i>
+                    Post a make
+                  </a>
+                  <a class="view-more" @click="openViewAllDialog('view-makes')">
+                    View all
+                  </a>
+                </div>
+                <el-dialog
+                  title="Post your make"
+                  :visible.sync="dialogPostMake"
+                >
+                  <el-form>
+                    <el-form-item
+                      ><el-input placeholder="add a step title"></el-input
+                    ></el-form-item>
+                    <el-form-item
+                      ><el-input
+                        placeholder="Add Photo (Bulk add supported)"
+                      ></el-input
+                    ></el-form-item>
+                    <el-form-item
+                      ><el-input placeholder="Add a description"></el-input
+                    ></el-form-item>
+                  </el-form>
+                </el-dialog>
+                <ElImageViewer
+                  class="imageViewer"
+                  v-if="showMake"
+                  :on-close="closeMake"
+                  :url-list="makeUrl"
+                  :isMake="true"
+                ></ElImageViewer>
+                <div class="flex justify-between" style="flex-wrap: wrap">
+                  <div style="position: relative" v-for="i in 6" :key="i">
+                    <el-image
+                      class="more-image"
+                      src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
+                    >
+                    </el-image>
+                    <div class="makes-mask" @click="openMake">
                       <div class="makes-mask-font-container">
                         <span class="ortur-icon-message"></span>
                         12
@@ -340,6 +405,13 @@ export default {
   },
   data() {
     return {
+      dialogPostMake: false,
+      showMake: false,
+      makeUrl: [
+        {
+          url: "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
+        },
+      ],
       showViewer: false, // 显示查看器
       urlList: [], //大图列表
       activeName: "description",
@@ -490,6 +562,14 @@ export default {
     },
   },
   methods: {
+    openMake() {
+      this.showMake = true;
+      document.documentElement.style.overflowY = "hidden";
+    },
+    closeMake() {
+      this.showMake = false;
+      document.documentElement.style.overflowY = "scroll";
+    },
     openImageView() {
       this.urlList = this.imageList.map((item) => {
         return item;
@@ -735,7 +815,7 @@ export default {
     text-align: center;
     width: 100%;
     height: 24px;
-    background: #1a1a1a;
+    background: rgba(26, 26, 26, 0.3);
     opacity: 0.3;
     z-index: 15;
     position: absolute;
@@ -894,7 +974,7 @@ a {
 
 .imageViewer {
   ::v-deep .el-image-viewer__prev {
-    background-color: black;
+    background-color: rgba(26, 26, 26, 0.3);
   }
 
   ::v-deep .el-image-viewer__btn {
@@ -902,9 +982,8 @@ a {
   }
 
   ::v-deep .el-icon-close:before {
-    font-family: "icomoon";
-    content: "\e922";
-    color: #fff;
+    /* font-family: "icomoon"; */
+    /* content: "\e922"; */
   }
 
   ::v-deep .el-icon-arrow-left:before {
@@ -922,8 +1001,9 @@ a {
   ::v-deep .el-image-viewer__prev {
     width: 324px;
     height: 60px;
-    background: #1a1a1a;
-    opacity: 0.3;
+    /* background: #1a1a1a; */
+    /* opacity: 0.3; */
+    background: rgba(26, 26, 26, 0.3);
     border-radius: 6px;
     transform: translateX(-50%);
     left: 50%;
@@ -933,8 +1013,9 @@ a {
   ::v-deep .el-image-viewer__next {
     width: 324px;
     height: 60px;
-    background: #1a1a1a;
-    opacity: 0.3;
+    background: rgba(26, 26, 26, 0.3);
+    /* background: #1a1a1a; */
+    /* opacity: 0.3; */
     border-radius: 6px;
     // transform: translateX(-50%);
     // left: 50%;
@@ -947,8 +1028,9 @@ a {
   ::v-deep .el-image-viewer__close {
     width: 60px;
     height: 60px;
-    background: #1a1a1a;
-    opacity: 0.3;
+    /* background: #1a1a1a;
+    opacity: 0.3; */
+    background: rgba(26, 26, 26, 0.3);
     border-radius: 6px;
     top: 12px;
     right: 13px;

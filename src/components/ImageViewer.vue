@@ -79,9 +79,68 @@
           </span>
         </template>
         <span class="el-image-viewer__btn el-image-viewer__close" @click="hide">
-          <!-- <i class="el-icon-close"></i> -->
-          <i class="ortur-icon-cancel"></i>
+          <i class="el-icon-close"></i>
+          <!-- <i class="ortur-icon-cancel"></i> -->
         </span>
+        <div
+          v-if="isMake"
+          style="
+            width: 64px;
+            height: 160px;
+            background: rgba(26, 26, 26, 0.3);
+            border-radius: 6px;
+            position: absolute;
+            right: 16px;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          "
+          @click="isCollapse = !isCollapse"
+        >
+          <!-- <i class="el-icon-arrow-left"></i> -->
+          <i class="ortur-icon-message"></i>
+        </div>
+        <el-menu
+          @open="handleOpen"
+          @close="handleClose"
+          :collapse="isCollapse"
+          style="position: absolute; right: 0px; width: 600px; z-index: 3000"
+        >
+          <div
+            v-if="isCollapse"
+            style="
+              width: 100%;
+              height: 660px;
+              background: #fff;
+              display: flex;
+              align-items: center;
+            "
+          >
+            <el-button @click="isCollapse = false">></el-button>
+            <div style="height: 100%">
+              <Comment></Comment>
+            </div>
+          </div>
+        </el-menu>
+        <div
+          v-if="isMake"
+          style="
+            width: 120px;
+            height: 40px;
+            background: rgba(26, 26, 26, 0.3);
+            border-radius: 8px;
+            position: absolute;
+            left: 16px;
+            top: 16px;
+            color: #fff;
+            text-align: center;
+            line-height: 40px;
+            font-size: 12px;
+          "
+        >
+          scacel {{ Math.floor(this.transform.scale * 100) }}%
+        </div>
       </div>
     </div>
   </transition>
@@ -90,6 +149,7 @@
 import { on, off } from "element-ui/src/utils/dom";
 import { rafThrottle, isFirefox } from "element-ui/src/utils/util";
 import { PopupManager } from "element-ui/src/utils/popup";
+import Comment from "@/components/Comment/CommentWidget.vue";
 const Mode = {
   CONTAIN: {
     name: "contain",
@@ -105,6 +165,7 @@ const mousewheelEventName = isFirefox() ? "DOMMouseScroll" : "mousewheel";
 /* eslint-disable */
 export default {
   name: "ImageViwer",
+  components: { Comment },
   props: {
     urlList: {
       type: Array,
@@ -134,6 +195,10 @@ export default {
       type: Boolean,
       default: true,
     },
+    isMake: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   data() {
@@ -150,6 +215,7 @@ export default {
         offsetY: 0,
         enableTransition: false,
       },
+      isCollapse: false,
     };
   },
   computed: {
@@ -250,7 +316,7 @@ export default {
         }
       });
       on(document, "keydown", this._keyDownHandler);
-      //   on(document, mousewheelEventName, this._mouseWheelHandler);
+      on(document, mousewheelEventName, this._mouseWheelHandler);
     },
     deviceSupportUninstall() {
       off(document, "keydown", this._keyDownHandler);
@@ -344,6 +410,12 @@ export default {
           break;
       }
       transform.enableTransition = enableTransition;
+    },
+    handleOpen(key, keyPath) {
+      console.log(key, keyPath);
+    },
+    handleClose(key, keyPath) {
+      console.log(key, keyPath);
     },
   },
   mounted() {
