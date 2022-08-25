@@ -13,7 +13,7 @@ export default {
     userId: [String, Number],
     follow: {
       type: Boolean,
-      default: false,
+      default: true,
     },
   },
   data() {
@@ -22,16 +22,21 @@ export default {
       isFollow: false,
     };
   },
-  created() {
+  watch: {
+    follow: function () {
+      this.isFollow = this.follow;
+    },
+  },
+  mounted() {
     this.isFollow = this.follow;
   },
   computed: {
     followText() {
       return this.isFollow
         ? this.isEnterFollowingBox
-          ? "UNFOLLOW"
-          : "FOLLOWING"
-        : "FOLLOW";
+          ? this.$t("design.unFollow")
+          : this.$t("design.myFollowing")
+        : this.$t("design.follow");
     },
   },
   methods: {
@@ -39,10 +44,18 @@ export default {
       if (!this.isFollow) {
         follow({ userId: this.userId }).then(() => {
           this.isFollow = !this.isFollow;
+          this.$message({
+            type: "success",
+            message: this.$t("design.followSuccess"),
+          });
         });
       } else {
         unFollow({ userId: this.userId }).then(() => {
           this.isFollow = !this.isFollow;
+          this.$message({
+            type: "success",
+            message: this.$t("design.unFollowSuccess"),
+          });
         });
       }
     },

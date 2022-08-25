@@ -76,5 +76,10 @@ module.exports = {
     private: "隐私",
     accountBinding: "账号绑定",
     tips: "提示",
+    followSuccess: "关注成功",
+    unFollowSuccess: "取关成功",
+    follow: "关注",
+    myFollowing: "关注中",
+    unFollow: "取关",
   },
 };

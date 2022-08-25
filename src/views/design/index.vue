@@ -128,8 +128,9 @@
         </div>
         <FollowButton
           class="followBtn"
-          v-show="!isYourAccount"
+          v-if="!isYourAccount"
           :user-id="userId"
+          :follow="myFollowingList.includes(userId - 0)"
         ></FollowButton>
         <div
           class="desc"
@@ -416,6 +417,7 @@ export default {
         top: "0px",
       },
       resources: [],
+      myFollowingList: [],
       activeTab: "first",
       activeName: "first",
       isDescEdit: false,
@@ -450,24 +452,22 @@ export default {
     };
   },
   watch: {
-    "$store.getters.isLogin": function () {
+    "$store.getters.isLogin"() {
       console.log("change login status");
       if (this.$store.getters.isLogin) {
         this.getAllMyCollectList();
-        this.getMyLikesList().then(() => {
-          if (this.activeName == "first") {
-            console.log(1);
-            this.getResourceList();
-          } else if (this.activeName == "second") {
-            console.log(1);
-          } else if (this.activeName == "third") {
-            console.log(1);
-            this.getCollectResourceList();
-          } else if (this.activeName == "fourth") {
-            console.log(1);
-            this.getHistoriesList();
-          }
-        });
+        this.getMyFollowingList();
+
+        this.getMyLikesList().then(() => {});
+        if (this.activeName == "first") {
+          console.log(1);
+        } else if (this.activeName == "second") {
+          console.log(1);
+        } else if (this.activeName == "third") {
+          console.log(1);
+        } else if (this.activeName == "fourth") {
+          console.log(1);
+        }
       } else {
         this.$router.push("/");
       }
@@ -509,6 +509,7 @@ export default {
     this.userId = this.isYourAccount ? this.userInfo.user_id : this.user.userId;
     this.contextMenuData.menulists[0].disabled = !this.isYourAccount;
     this.isLogin ? this.getAllMyCollectList() : "";
+    this.isLogin && !this.isYourAccount && this.getMyFollowingList();
     // getUserInfo({ userId: this.userId }).then(() => {});
   },
   computed: {
@@ -698,6 +699,14 @@ export default {
           });
         });
     },
+    getMyFollowingList() {
+      getFollowingList({ userId: this.userInfo.user_id }).then((res) => {
+        this.myFollowingList = [];
+        this.myFollowingList = res.data.data.map((item) => {
+          return item.id - 0;
+        });
+      });
+    },
     handleFollowTapClick() {
       this.getMyFollowList();
       if (this.activeTab == "first") {
@@ -723,7 +732,6 @@ export default {
         let userId = this.user.userId;
         getResourceList({ userId }).then((res) => {
           this.resources = res.data.rows;
-          debugger;
         });
       }
     },
@@ -751,7 +759,6 @@ export default {
           for (const item of res.data.rows) {
             this.myLikes.push(item.id);
           }
-          debugger;
           resolve(1);
         });
       });

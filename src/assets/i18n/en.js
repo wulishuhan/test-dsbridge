@@ -76,5 +76,10 @@ module.exports = {
     private: "private",
     accountBinding: "accountBinding",
     tips: "tips",
+    followSuccess: "followSuccess",
+    unFollowSuccess: "unFollowSuccess",
+    follow: "follow",
+    myFollowing: "following",
+    unFollow: "unFollow",
   },
 };

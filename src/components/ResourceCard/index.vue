@@ -237,6 +237,12 @@ export default {
       return this.$store.getters.selectCollectionBox;
     },
   },
+  watch: {
+    isLike: function () {
+      this.showLikeStar = this.isLike;
+      debugger;
+    },
+  },
   methods: {
     handleDownClick() {
       this.showMoreMenu = false;
