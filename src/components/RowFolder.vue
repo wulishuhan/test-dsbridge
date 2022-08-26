@@ -15,6 +15,9 @@
             id="moreMenuIcon"
           >
             <div class="moreMenu" v-if="item.showMoreMenu">
+              <div class="moreMenuItem" @click.stop="handleRenameClick(item)">
+                Rename
+              </div>
               <div class="moreMenuItem" @click.stop="handleDelClick(item)">
                 Delete
               </div>
@@ -37,7 +40,8 @@
           </div>
           <input
             ref="folderInputs"
-            @change="handleEdited(item)"
+            @click.stop="return false;"
+            @change="isRename ? handleRenamed(item) : handleEdited(item)"
             class="editInput"
             type="text"
             v-model="item.name"
@@ -53,6 +57,7 @@
 </template>
 
 <script>
+import { renameCollection } from "@/api/design";
 export default {
   props: {
     imgArr: {
@@ -113,6 +118,7 @@ export default {
   data() {
     return {
       isEdit: false,
+      isRename: false,
     };
   },
   mounted() {},
@@ -137,6 +143,12 @@ export default {
       }
       target.showMoreMenu = !target.showMoreMenu;
     },
+    handleRenameClick(item) {
+      this.$emit("Rename", item);
+      item.isEdit = true;
+      item.showMoreMenu = false;
+      this.isRename = true;
+    },
     handleDelClick(item) {
       this.$emit("delFolder", item);
       item.showMoreMenu = false;
@@ -159,14 +171,35 @@ export default {
       // item.isEdit = true;
     },
     handleEdited(item) {
+      if (item.name == "") {
+        this.$message({
+          message: this.$t("design.folderNameRequire"),
+          type: "fail",
+        });
+        return;
+      }
       this.onFolderAdd(item).then(() => {
         item.isEdit = false;
         this.isEdit = false;
       });
       // this.$emit("input", [...this.folders]);
     },
+    handleRenamed(item) {
+      if (item.name == "") {
+        this.$message({
+          message: this.$t("design.folderNameRequire"),
+          type: "fail",
+        });
+        return;
+      }
+      renameCollection(item).then(() => {
+        item.isEdit = false;
+      });
+    },
     addFolder() {
       this.isEdit = true;
+      this.isRename = false;
+
       this.folders.push({
         name: this.folders.length + 1,
         id: this.folders.length + 1,
@@ -243,7 +276,7 @@ export default {
         .moreMenu {
           position: absolute;
           width: 160px;
-          height: 62px;
+          height: 124px;
           background: #ffffff;
           box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.07);
           border-radius: 10px;

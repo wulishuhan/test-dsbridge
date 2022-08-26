@@ -499,9 +499,8 @@ export default {
       this.user.nick_name = "test";
       this.user.userId = userId;
       if (this.isLogin) {
-        this.getMyLikesList().then(() => {
-          this.getResourceList();
-        });
+        this.getMyLikesList().then(() => {});
+        this.getResourceList();
       } else {
         this.getResourceList();
       }
@@ -600,12 +599,12 @@ export default {
       this.openCollectedOption = false;
     },
     handleMoveCollectionComplete() {
-      if (this.dialogCollectionVisible) {
-        this.getCollectResourceList();
-        this.getCollectFolderResourceList();
-      } else {
-        this.getCollectResourceList();
-      }
+      // if (this.dialogCollectionVisible) {
+      //   this.getCollectResourceList();
+      //   this.getCollectFolderResourceList();
+      // } else {
+      //   this.getCollectResourceList();
+      // }
     },
     moveCollectedOption(folderObject) {
       // this.isCollected = true;
@@ -809,9 +808,9 @@ export default {
         });
       });
     },
-    async getCollectFolderResourceList() {
+    getCollectFolderResourceList() {
       this.isLogin && this.getAllMyCollectList();
-      this.isLogin && !this.isYourAccount && (await this.getMyLikesList());
+      this.isLogin && !this.isYourAccount && this.getMyLikesList();
 
       if (!this.isYourAccount) {
         let userId = this.user.userId;
@@ -1194,6 +1193,8 @@ export default {
         }
       }
       .followBtn {
+        width: 112px;
+        height: 40px;
         margin-top: 12px;
         ::v-deep .el-button {
           padding: 5px;

@@ -14,6 +14,13 @@ export function unFollow(params) {
     params,
   });
 }
+export function renameCollection(data) {
+  return request({
+    url: `/library/collection`,
+    method: "put",
+    data,
+  });
+}
 export function addCollection(data) {
   return request({
     url: `/library/collection`,

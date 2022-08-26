@@ -81,5 +81,6 @@ module.exports = {
     follow: "关注",
     myFollowing: "关注中",
     unFollow: "取关",
+    folderNameRequire: "文件名不为空",
   },
 };

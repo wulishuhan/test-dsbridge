@@ -81,5 +81,6 @@ module.exports = {
     follow: "follow",
     myFollowing: "following",
     unFollow: "unFollow",
+    folderNameRequire: "folderNameRequire",
   },
 };
