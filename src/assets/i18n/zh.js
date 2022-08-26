@@ -82,5 +82,8 @@ module.exports = {
     myFollowing: "关注中",
     unFollow: "取关",
     folderNameRequire: "文件名不为空",
+    Rename: "重命名",
+    moveSuccess: "移动成功",
+    addSuccess: "添加成功",
   },
 };

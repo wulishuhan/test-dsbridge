@@ -82,5 +82,8 @@ module.exports = {
     myFollowing: "following",
     unFollow: "unFollow",
     folderNameRequire: "folderNameRequire",
+    Rename: "Rename",
+    moveSuccess: "moveSuccess",
+    addSuccess: "addSuccess",
   },
 };

@@ -534,7 +534,7 @@ export default {
         resourceId: id,
       }).then(() => {
         this.$message({
-          message: "cancel collected successfully",
+          message: this.$t("design.delSuccess"),
           type: "success",
         });
         this.getAllMyCollectList();
@@ -616,7 +616,7 @@ export default {
         }).then(() => {
           this.getAllMyCollectList();
           this.$message({
-            message: "move successfully",
+            message: this.$t("design.moveSuccess"),
             type: "success",
           });
         });
@@ -628,7 +628,7 @@ export default {
         }).then(() => {
           this.getAllMyCollectList();
           this.$message({
-            message: "move successfully",
+            message: this.$t("design.moveSuccess"),
             type: "success",
           });
         });
@@ -648,7 +648,7 @@ export default {
             this.getAllMyCollectList();
 
             this.$message({
-              message: "move successfully",
+              message: this.$t("design.moveSuccess"),
               type: "success",
             });
           });
@@ -665,7 +665,7 @@ export default {
             this.getAllMyCollectList();
 
             this.$message({
-              message: "move successfully",
+              message: this.$t("design.moveSuccess"),
               type: "success",
             });
           });
@@ -678,7 +678,7 @@ export default {
         }).then(() => {
           this.getAllMyCollectList();
           this.$message({
-            message: "move successfully",
+            message: this.$t("design.moveSuccess"),
             type: "success",
           });
         });
@@ -688,7 +688,7 @@ export default {
       addCollection({ name: folderName })
         .then(() => {
           this.$message({
-            message: "add folder successfully",
+            message: this.$t("design.addSuccess"),
             type: "success",
           });
         })

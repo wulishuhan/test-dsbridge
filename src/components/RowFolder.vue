@@ -16,10 +16,10 @@
           >
             <div class="moreMenu" v-if="item.showMoreMenu">
               <div class="moreMenuItem" @click.stop="handleRenameClick(item)">
-                Rename
+                {{ $t("design.Rename") }}
               </div>
               <div class="moreMenuItem" @click.stop="handleDelClick(item)">
-                Delete
+                {{ $t("design.Delete") }}
               </div>
             </div>
             ···
