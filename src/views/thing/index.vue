@@ -159,7 +159,7 @@
             <el-tab-pane label="Remix" name="third">
               <div>
                 <div class="flex justify-between">
-                  <a class="more-font" @click="dialogPostMake = true">
+                  <a class="more-font" @click="dialogPostRemix = true">
                     <i class="el-icon-plus"></i>
                     Post a Remix
                   </a>
@@ -169,7 +169,7 @@
                 </div>
                 <el-dialog
                   title="Post your make"
-                  :visible.sync="dialogPostMake"
+                  :visible.sync="dialogPostRemix"
                 >
                   <el-form>
                     <el-form-item
@@ -225,7 +225,7 @@
                     ></el-form-item>
                   </el-form>
                 </el-dialog>
-                <ElImageViewer
+                <!-- <ElImageViewer
                   class="imageViewer"
                   v-if="showMake"
                   :on-close="closeMake"
@@ -247,7 +247,8 @@
                       </div>
                     </div>
                   </div>
-                </div>
+                </div> -->
+                <make></make>
               </div>
             </el-tab-pane>
           </el-tabs>
@@ -363,6 +364,7 @@
 /* eslint-disable */
 // import ElImageViewer from "element-ui/packages/image/src/image-viewer";
 import ElImageViewer from "@/components/ImageViewer";
+import Make from "./components/Make.vue";
 import { getUserInfoByThingId } from "@/api/thing";
 import { getResource, getResourceListById } from "@/api/resource";
 import { getLikelist, addLike, deleteLike } from "@/api/like";
@@ -402,16 +404,12 @@ export default {
     SrollTopButton,
     Tutorial,
     CollectedOption,
+    Make,
   },
   data() {
     return {
       dialogPostMake: false,
-      showMake: false,
-      makeUrl: [
-        {
-          url: "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
-        },
-      ],
+      dialogPostRemix: false,
       showViewer: false, // 显示查看器
       urlList: [], //大图列表
       activeName: "description",
@@ -572,13 +570,15 @@ export default {
     },
     openImageView() {
       this.urlList = this.imageList.map((item) => {
-        return item;
+        return item.url;
       });
       this.showViewer = true;
+      document.documentElement.style.overflowY = "hidden";
     },
     // 关闭查看器
     closeViewer() {
       this.showViewer = false;
+      document.documentElement.style.overflowY = "scroll";
     },
     arrowClick(val) {
       if (val === "down") {
@@ -695,6 +695,7 @@ export default {
           type: "success",
         });
         this.isCollected = false;
+        this.detail.collect_count -= 1;
       });
     },
     closeCollectedOption() {
@@ -712,6 +713,7 @@ export default {
           message: "move successfully",
           type: "success",
         });
+        this.detail.collect_count += 1;
         this.isCollected = true;
       });
     },

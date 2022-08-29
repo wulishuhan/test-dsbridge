@@ -54,7 +54,7 @@
             v-if="i === index"
             ref="img"
             class="el-image-viewer__img"
-            :key="item.url"
+            :key="item"
             :src="currentImg"
             :style="imgStyle"
             @load="handleImgLoad"
@@ -82,63 +82,21 @@
           <i class="el-icon-close"></i>
           <!-- <i class="ortur-icon-cancel"></i> -->
         </span>
-        <div
-          v-if="isMake"
-          style="
-            width: 64px;
-            height: 160px;
-            background: rgba(26, 26, 26, 0.3);
-            border-radius: 6px;
-            position: absolute;
-            right: 16px;
-            color: #fff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-          "
-          @click="isCollapse = !isCollapse"
-        >
-          <!-- <i class="el-icon-arrow-left"></i> -->
+        <div v-if="isMake" class="open-comment-box" @click="openComment">
+          <i class="el-icon-arrow-left"></i>
           <i class="ortur-icon-message"></i>
         </div>
-        <el-menu
-          @open="handleOpen"
-          @close="handleClose"
-          :collapse="isCollapse"
-          style="position: absolute; right: 0px; width: 600px; z-index: 3000"
-        >
-          <div
-            v-if="isCollapse"
-            style="
-              width: 100%;
-              height: 660px;
-              background: #fff;
-              display: flex;
-              align-items: center;
-            "
-          >
-            <el-button @click="isCollapse = false">></el-button>
-            <div style="height: 100%">
+        <el-menu @open="handleOpen" @close="handleClose" :collapse="isCollapse">
+          <div v-if="isCollapse" class="comment-box">
+            <el-button @click="closeComment"
+              ><i class="el-icon-arrow-right"></i
+            ></el-button>
+            <div style="height: 100%; width: 100%; overflow-y: scroll">
               <Comment></Comment>
             </div>
           </div>
         </el-menu>
-        <div
-          v-if="isMake"
-          style="
-            width: 120px;
-            height: 40px;
-            background: rgba(26, 26, 26, 0.3);
-            border-radius: 8px;
-            position: absolute;
-            left: 16px;
-            top: 16px;
-            color: #fff;
-            text-align: center;
-            line-height: 40px;
-            font-size: 12px;
-          "
-        >
+        <div v-if="isMake" class="left-top-scacel-box">
           scacel {{ Math.floor(this.transform.scale * 100) }}%
         </div>
       </div>
@@ -229,7 +187,7 @@ export default {
       return this.index === this.urlList.length - 1;
     },
     currentImg() {
-      return this.urlList[this.index].url;
+      return this.urlList[this.index];
     },
     imgStyle() {
       const { scale, deg, offsetX, offsetY, enableTransition } = this.transform;
@@ -417,6 +375,14 @@ export default {
     handleClose(key, keyPath) {
       console.log(key, keyPath);
     },
+    openComment() {
+      this.isCollapse = true;
+      off(document, mousewheelEventName, this._mouseWheelHandler);
+    },
+    closeComment() {
+      this.isCollapse = false;
+      on(document, mousewheelEventName, this._mouseWheelHandler);
+    },
   },
   mounted() {
     this.deviceSupportInstall();
@@ -445,5 +411,49 @@ export default {
 }
 .el-image-viewer__img {
   object-fit: fill;
+}
+.left-top-scacel-box {
+  width: 120px;
+  height: 40px;
+  background: rgba(26, 26, 26, 0.3);
+  border-radius: 8px;
+  position: absolute;
+  left: 16px;
+  top: 16px;
+  color: #fff;
+  text-align: center;
+  line-height: 40px;
+  font-size: 12px;
+}
+.comment-box {
+  width: 100%;
+  height: 660px;
+  background: #fff;
+  display: flex;
+  align-items: center;
+}
+.open-comment-box {
+  width: 64px;
+  height: 160px;
+  background: rgba(26, 26, 26, 0.3);
+  border-radius: 6px;
+  position: absolute;
+  right: 16px;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.open-comment-box:hover {
+  cursor: pointer;
+}
+.el-menu {
+  position: absolute;
+  right: 0px;
+  width: 780px;
+  z-index: 3000;
+}
+.el-button {
+  border: none;
 }
 </style>
