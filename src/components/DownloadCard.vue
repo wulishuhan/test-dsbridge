@@ -2,7 +2,11 @@
   <div>
     <div class="download-card">
       <div class="left">
-        <img :id="'file-' + file.id" :src="file.url" alt="" />
+        <img
+          :id="'file-' + file.id"
+          :src="file.thumbnail != null ? file.thumbnail : file.url"
+          alt=""
+        />
         <div>
           <el-tooltip effect="dark" placement="bottom">
             <div style="max-width: 270px" slot="content">{{ file.name }}</div>
@@ -24,7 +28,8 @@
         </div>
       </div>
       <el-button @click.prevent.stop="download" type="primary">
-        {{ $t("download.download") }} <span>{{ file.downloadNumber }} </span>
+        <span class="ortur-icon-arrow-down"></span>
+        <span class="download-text">{{ file.downloadCount }} </span>
       </el-button>
     </div>
   </div>
@@ -42,7 +47,7 @@ export default {
         url: "https://cdn.thingiverse.com/assets/a0/23/4c/6f/68/medium_thumb_Headset_Holder_v1.png",
         size: "1 mb",
         updatedTime: "05-17-2022",
-        downloadNumber: 511,
+        downloadCount: 511,
         type: "stl",
       };
     },
@@ -141,12 +146,12 @@ export default {
     font-size: 11px;
     font-family: Source Han Sans CN;
     font-weight: 400;
-    color: #999999;
-    margin-right: 5px;
+    /* color: #999999; */
+    /* margin-right: 5px; */
   }
 }
 .el-button {
-  width: 152px;
+  width: 80px;
   height: 48px;
   background: #1e78f0;
   border-radius: 8px;
@@ -154,5 +159,9 @@ export default {
   font-family: Source Han Sans CN;
   font-weight: 400;
   color: #ffffff;
+}
+.download-text {
+  color: #fff;
+  margin-left: 10px;
 }
 </style>

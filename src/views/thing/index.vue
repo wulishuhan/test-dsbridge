@@ -34,7 +34,8 @@
                     :isCollect="isCollected"
                     :collectionNum="detail.collect_count"
                     @click="collect"
-                  ></CollectButton>
+                  >
+                  </CollectButton>
                   <CollectedOption
                     :show="openCollectedOption"
                     :folders="folders"
@@ -124,7 +125,7 @@
                         <i class="ortur-icon-arrow-up"></i>
                       </div>
                       <div class="down swiper-container-button">
-                        <i class="ortur-icon-arrow-down"></i>
+                        <i class="ortur-icon-arrow-bottom"></i>
                       </div>
                     </div>
                   </transition>
@@ -155,18 +156,35 @@
                 <tutorial :step="detail.tutorials"></tutorial>
               </show-more>
             </el-tab-pane>
-            <el-tab-pane label="Remix" name="third"> </el-tab-pane>
-            <el-tab-pane label="Makes" name="fourth">
+            <el-tab-pane label="Remix" name="third">
               <div>
                 <div class="flex justify-between">
-                  <a class="more-font">
+                  <a class="more-font" @click="dialogPostRemix = true">
                     <i class="el-icon-plus"></i>
-                    Post a make
+                    Post a Remix
                   </a>
                   <a class="view-more" @click="openViewAllDialog('view-makes')">
                     View all
                   </a>
                 </div>
+                <el-dialog
+                  title="Post your make"
+                  :visible.sync="dialogPostRemix"
+                >
+                  <el-form>
+                    <el-form-item
+                      ><el-input placeholder="add a step title"></el-input
+                    ></el-form-item>
+                    <el-form-item
+                      ><el-input
+                        placeholder="Add Photo (Bulk add supported)"
+                      ></el-input
+                    ></el-form-item>
+                    <el-form-item
+                      ><el-input placeholder="Add a description"></el-input
+                    ></el-form-item>
+                  </el-form>
+                </el-dialog>
                 <div class="flex justify-between" style="flex-wrap: wrap">
                   <div style="position: relative" v-for="i in 6" :key="i">
                     <el-image
@@ -174,7 +192,54 @@
                       src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
                     >
                     </el-image>
-                    <div class="makes-mask">
+                  </div>
+                </div>
+              </div>
+            </el-tab-pane>
+            <el-tab-pane label="Makes" name="fourth">
+              <div>
+                <div class="flex justify-between">
+                  <a class="more-font" @click="dialogPostMake = true">
+                    <i class="el-icon-plus"></i>
+                    Post a make
+                  </a>
+                  <a class="view-more" @click="openViewAllDialog('view-makes')">
+                    View all
+                  </a>
+                </div>
+                <el-dialog
+                  title="Post your make"
+                  :visible.sync="dialogPostMake"
+                >
+                  <el-form>
+                    <el-form-item
+                      ><el-input placeholder="add a step title"></el-input
+                    ></el-form-item>
+                    <el-form-item
+                      ><el-input
+                        placeholder="Add Photo (Bulk add supported)"
+                      ></el-input
+                    ></el-form-item>
+                    <el-form-item
+                      ><el-input placeholder="Add a description"></el-input
+                    ></el-form-item>
+                  </el-form>
+                </el-dialog>
+                <!-- <ElImageViewer
+                  class="imageViewer"
+                  v-if="showMake"
+                  :on-close="closeMake"
+                  :url-list="makeUrl"
+                  :isMake="true"
+                ></ElImageViewer>
+                <div class="flex justify-between" style="flex-wrap: wrap">
+                  <div style="position: relative" v-for="i in 6" :key="i">
+                    <el-image
+                      class="more-image"
+                      src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
+                    >
+                    </el-image>
+                    <div class="makes-mask" @click="openMake">
                       <div class="makes-mask-font-container">
                         <span class="ortur-icon-message"></span>
                         12
@@ -182,7 +247,8 @@
                       </div>
                     </div>
                   </div>
-                </div>
+                </div> -->
+                <make></make>
               </div>
             </el-tab-pane>
           </el-tabs>
@@ -248,10 +314,13 @@
           </div>
           <div style="margin-top: 32px">
             <div class="bottom-content-right-box-title">License</div>
-            <div class="flex justify-between license-box">
-              <i class="ortur-icon-cc"></i>
-              <i class="ortur-icon-reload"></i>
-              <i class="ortur-icon-user-info"></i>
+            <div class="flex license-box">
+              <div v-if="licenseIcon.length > 0">
+                <i v-for="item in licenseIcon" :key="item" :class="item"></i>
+              </div>
+              <div v-else>
+                <img v-for="item in licenseImg" :key="item" :src="item" />
+              </div>
             </div>
             <div class="license-info">
               {{ detail.title }} by {{ detail.creator.name }} is licensed under
@@ -295,6 +364,7 @@
 /* eslint-disable */
 // import ElImageViewer from "element-ui/packages/image/src/image-viewer";
 import ElImageViewer from "@/components/ImageViewer";
+import Make from "./components/Make.vue";
 import { getUserInfoByThingId } from "@/api/thing";
 import { getResource, getResourceListById } from "@/api/resource";
 import { getLikelist, addLike, deleteLike } from "@/api/like";
@@ -334,9 +404,12 @@ export default {
     SrollTopButton,
     Tutorial,
     CollectedOption,
+    Make,
   },
   data() {
     return {
+      dialogPostMake: false,
+      dialogPostRemix: false,
       showViewer: false, // 显示查看器
       urlList: [], //大图列表
       activeName: "description",
@@ -397,6 +470,13 @@ export default {
       folders: [],
       likeDisabled: false,
       isShowDownPanel: false,
+      licenseImg: [],
+      licenseIcon: [],
+      CCLicenseStyle: {
+        width: "35px",
+        height: "35px",
+        marginLeft: "26px",
+      },
     };
   },
   computed: {
@@ -408,52 +488,97 @@ export default {
     },
     licenseUrl() {
       let license = this.detail.license;
+      console.log(license);
       let licenseUrl = "";
       if (license === "Creative Commons - Attribution") {
         licenseUrl = "https://creativecommons.org/licenses/by/4.0/";
+        this.licenseIcon = ["ortur-icon-cc", "ortur-icon-user-info"];
       } else if (license === "Creative Commons - Attribution - Share Alike") {
         licenseUrl = "https://creativecommons.org/licenses/by-sa/4.0/";
+        this.licenseIcon = [
+          "ortur-icon-cc",
+          "ortur-icon-user-info",
+          "ortur-icon-reload",
+        ];
       } else if (
         license === "Creative Commons - Attribution - No Derivatives"
       ) {
         licenseUrl = "https://creativecommons.org/licenses/by-nd/4.0/";
+        this.licenseIcon = [
+          "ortur-icon-cc",
+          "ortur-icon-user-info",
+          "ortur-icon-no-derivatives",
+        ];
       } else if (
         license === "Creative Commons - Attribution - Non-Commercial"
       ) {
         licenseUrl = "https://creativecommons.org/licenses/by-nc/4.0/";
+        this.licenseIcon = [
+          "ortur-icon-cc",
+          "ortur-icon-user-info",
+          "ortur-icon-no-money",
+        ];
       } else if (
         license ===
         "Creative Commons - Attribution - Non-Commercial - Share Alike"
       ) {
         licenseUrl = "https://creativecommons.org/licenses/by-nc-sa/4.0/";
+        this.licenseIcon = [
+          "ortur-icon-cc",
+          "ortur-icon-user-info",
+          "ortur-icon-no-money",
+          "ortur-icon-reload",
+        ];
       } else if (
         license ===
         "Creative Commons - Attribution - Non-Commercial - No Derivatives "
       ) {
         licenseUrl = "https://creativecommons.org/licenses/by-nc-nd/4.0/";
+        this.licenseIcon = [
+          "ortur-icon-cc",
+          "ortur-icon-user-info",
+          "ortur-icon-no-money",
+          "ortur-icon-no-derivatives",
+        ];
       } else if (license === "Creative Commons - Public Domain Dedication") {
         licenseUrl =
           "https://creativecommons.org/share-your-work/public-domain/cc0/";
+        this.licenseImg = [
+          "/license-img/Creative Commons - Public Domain Dedication.png",
+        ];
       } else if (license === "GNU - GPL") {
         licenseUrl = "https://www.gnu.org/licenses/gpl-3.0.html";
-      } else if (license === "GNU - LGPL") {
+        this.licenseImg = ["/license-img/GNU - GPL.png"];
+      } else if (license === "GNU - LGPL ") {
         licenseUrl = "https://www.gnu.org/licenses/lgpl-3.0.html";
-      } else {
+        this.licenseImg = ["/license-img/GNU - LGPL.png"];
+      } else if ((license = "BSD License")) {
         licenseUrl = "https://opensource.org/licenses/BSD-3-Clause";
+        this.licenseImg = ["/license-img/BSD.png"];
       }
       return licenseUrl;
     },
   },
   methods: {
+    openMake() {
+      this.showMake = true;
+      document.documentElement.style.overflowY = "hidden";
+    },
+    closeMake() {
+      this.showMake = false;
+      document.documentElement.style.overflowY = "scroll";
+    },
     openImageView() {
       this.urlList = this.imageList.map((item) => {
-        return item;
+        return item.url;
       });
       this.showViewer = true;
+      document.documentElement.style.overflowY = "hidden";
     },
     // 关闭查看器
     closeViewer() {
       this.showViewer = false;
+      document.documentElement.style.overflowY = "scroll";
     },
     arrowClick(val) {
       if (val === "down") {
@@ -570,6 +695,7 @@ export default {
           type: "success",
         });
         this.isCollected = false;
+        this.detail.collect_count -= 1;
       });
     },
     closeCollectedOption() {
@@ -587,6 +713,7 @@ export default {
           message: "move successfully",
           type: "success",
         });
+        this.detail.collect_count += 1;
         this.isCollected = true;
       });
     },
@@ -690,7 +817,7 @@ export default {
     text-align: center;
     width: 100%;
     height: 24px;
-    background: #1a1a1a;
+    background: rgba(26, 26, 26, 0.3);
     opacity: 0.3;
     z-index: 15;
     position: absolute;
@@ -839,6 +966,10 @@ a {
   width: 145px;
   margin-top: 17px;
   font-size: 35px;
+  i {
+    font-size: 46px;
+    margin-left: 5px;
+  }
 }
 
 .license-info {
@@ -849,7 +980,7 @@ a {
 
 .imageViewer {
   ::v-deep .el-image-viewer__prev {
-    background-color: black;
+    background-color: rgba(26, 26, 26, 0.3);
   }
 
   ::v-deep .el-image-viewer__btn {
@@ -857,9 +988,8 @@ a {
   }
 
   ::v-deep .el-icon-close:before {
-    font-family: "icomoon";
-    content: "\e922";
-    color: #fff;
+    /* font-family: "icomoon"; */
+    /* content: "\e922"; */
   }
 
   ::v-deep .el-icon-arrow-left:before {
@@ -877,8 +1007,9 @@ a {
   ::v-deep .el-image-viewer__prev {
     width: 324px;
     height: 60px;
-    background: #1a1a1a;
-    opacity: 0.3;
+    /* background: #1a1a1a; */
+    /* opacity: 0.3; */
+    background: rgba(26, 26, 26, 0.3);
     border-radius: 6px;
     transform: translateX(-50%);
     left: 50%;
@@ -888,8 +1019,9 @@ a {
   ::v-deep .el-image-viewer__next {
     width: 324px;
     height: 60px;
-    background: #1a1a1a;
-    opacity: 0.3;
+    background: rgba(26, 26, 26, 0.3);
+    /* background: #1a1a1a; */
+    /* opacity: 0.3; */
     border-radius: 6px;
     // transform: translateX(-50%);
     // left: 50%;
@@ -902,8 +1034,9 @@ a {
   ::v-deep .el-image-viewer__close {
     width: 60px;
     height: 60px;
-    background: #1a1a1a;
-    opacity: 0.3;
+    /* background: #1a1a1a;
+    opacity: 0.3; */
+    background: rgba(26, 26, 26, 0.3);
     border-radius: 6px;
     top: 12px;
     right: 13px;
