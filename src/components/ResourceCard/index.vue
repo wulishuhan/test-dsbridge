@@ -80,7 +80,7 @@
         <div
           class="card-box-bottom-right-like-box"
           @click="like"
-          v-show="showStar"
+          v-if="showStar"
         >
           <i v-if="!showLikeStar" class="el-icon-star-off icon-star"></i>
           <i v-else class="ortur-icon-star-border icon-star"></i>
@@ -243,17 +243,27 @@ export default {
       this.$emit("clickDownMenu", this.thing);
     },
     handleDelClick() {
+      if (!this.$store.getters.isLogin) {
+        let payload = { loginDialogVisible: true, isLoginForm: true };
+        this.$store.dispatch("user/switchLoginRegisteForm", payload);
+        return;
+      }
       this.showMoreMenu = false;
       this.$emit("clickDelMenu", this.thing);
     },
-    handleMoveClick(e) {
+    handleMoveClick() {
       this.showMoreMenu = false;
-      this.$emit("clickMoveMenu", this.thing, { x: e.x - 170, y: e.y - 300 });
+      this.addCollection();
     },
     handleClickMore() {
       this.showMoreMenu = !this.showMoreMenu;
     },
     toUpload(id) {
+      if (!this.$store.getters.isLogin) {
+        let payload = { loginDialogVisible: true, isLoginForm: true };
+        this.$store.dispatch("user/switchLoginRegisteForm", payload);
+        return;
+      }
       this.$router.push(`/upload/${id}`);
     },
     toDetail(id) {
