@@ -13,6 +13,7 @@
         v-show="showCollection && isCollectIconShow"
         class="icon-collect-box"
         :id="'collect-box-' + thing.id"
+        ref="collect-button"
       >
         <i
           v-if="!isCollected"
@@ -79,7 +80,7 @@
         <div
           class="card-box-bottom-right-like-box"
           @click="like"
-          v-show="showStar"
+          v-if="showStar"
         >
           <i v-if="!showLikeStar" class="el-icon-star-off icon-star"></i>
           <i v-else class="ortur-icon-star-border icon-star"></i>
@@ -242,17 +243,27 @@ export default {
       this.$emit("clickDownMenu", this.thing);
     },
     handleDelClick() {
+      if (!this.$store.getters.isLogin) {
+        let payload = { loginDialogVisible: true, isLoginForm: true };
+        this.$store.dispatch("user/switchLoginRegisteForm", payload);
+        return;
+      }
       this.showMoreMenu = false;
       this.$emit("clickDelMenu", this.thing);
     },
     handleMoveClick() {
       this.showMoreMenu = false;
-      this.$emit("clickMoveMenu", this.thing);
+      this.addCollection();
     },
     handleClickMore() {
       this.showMoreMenu = !this.showMoreMenu;
     },
     toUpload(id) {
+      if (!this.$store.getters.isLogin) {
+        let payload = { loginDialogVisible: true, isLoginForm: true };
+        this.$store.dispatch("user/switchLoginRegisteForm", payload);
+        return;
+      }
       this.$router.push(`/upload/${id}`);
     },
     toDetail(id) {
@@ -318,7 +329,8 @@ export default {
         this.$store.dispatch("user/switchLoginRegisteForm", payload);
         return;
       }
-      let collectBox = document.querySelector("#collect-box-" + this.thing.id);
+      let collectBox = this.$refs["collect-button"];
+      // let left = this.getElementLeft(collectBox);
       let left = this.getElementLeft(collectBox) - collectBox.offsetLeft + 49;
       let top = this.getElementTop(collectBox);
       let displayTop = false;
@@ -332,7 +344,6 @@ export default {
       } else {
         top = top + 180 - collectBox.offsetTop;
       }
-      console.log("top:", top);
       this.$emit("openCollection", this.thing.id, left, top);
     },
     deleteCollection() {
@@ -348,10 +359,12 @@ export default {
       this.showUserRecommendation = true;
     },
     getElementLeft(element) {
-      var actualLeft = element.offsetLeft;
-      var current = element.offsetParent;
+      let actualLeft = element.offsetLeft;
+      let current = element.parentElement;
       while (current !== null) {
-        if (current.className === "el-tabs__content") {
+        console.log(current.className);
+        if (current.className.includes("view-more-row")) {
+          console.log("命中");
           this.isViewMorePage = true;
           break;
         }
@@ -361,11 +374,12 @@ export default {
       return actualLeft;
     },
     getElementTop(element) {
-      var actualTop = element.offsetTop;
-      var current = element.offsetParent;
+      let actualTop = element.offsetTop;
+      let current = element.parentElement;
       while (current !== null) {
-        if (current.className === "el-tabs__content") {
+        if (current.className.includes("view-more-row")) {
           this.isViewMorePage = true;
+          console.log("命中");
           break;
         }
         actualTop += current.offsetTop + current.clientTop;

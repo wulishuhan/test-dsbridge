@@ -23,7 +23,7 @@
                   </div>
                 </div>
               </div>
-              <div class="flex justify-between" style="width: 424px">
+              <div class="flex justify-between" style="width: 552px">
                 <StarButton
                   :starNum="detail.like_count"
                   :isStar="isLike"
@@ -48,7 +48,7 @@
                   :isShowDownPanel="isShowDownPanel"
                   :fileList="detail.files"
                   :fileNum="detail.files.length"
-                  :downLoadNum="5000"
+                  :downLoadNum="downloadNumber"
                   :resourceName="detail.title"
                   @click="openShowDownPanel"
                 ></DownLoadButton>
@@ -155,7 +155,8 @@
                 <tutorial :step="detail.tutorials"></tutorial>
               </show-more>
             </el-tab-pane>
-            <el-tab-pane label="Makes" name="third">
+            <el-tab-pane label="Remix" name="third"> </el-tab-pane>
+            <el-tab-pane label="Makes" name="fourth">
               <div>
                 <div class="flex justify-between">
                   <a class="more-font">
@@ -167,12 +168,20 @@
                   </a>
                 </div>
                 <div class="flex justify-between" style="flex-wrap: wrap">
-                  <el-image
-                    v-for="i in 6"
-                    :key="i"
-                    class="more-image"
-                    src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
-                  ></el-image>
+                  <div style="position: relative" v-for="i in 6" :key="i">
+                    <el-image
+                      class="more-image"
+                      src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
+                    >
+                    </el-image>
+                    <div class="makes-mask">
+                      <div class="makes-mask-font-container">
+                        <span class="ortur-icon-message"></span>
+                        12
+                        <span class="el-icon-arrow-right"></span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </el-tab-pane>
@@ -392,6 +401,11 @@ export default {
   },
   computed: {
     ...mapGetters(["isLogin", "userInfo"]),
+    downloadNumber() {
+      return this.detail.files.reduce((pre, cur) => {
+        return pre + cur.downloadCount;
+      }, 0);
+    },
     licenseUrl() {
       let license = this.detail.license;
       let licenseUrl = "";
@@ -1064,7 +1078,7 @@ a {
   border: none;
 }
 ::v-deep .el-tabs__header .is-top {
-  width: 360px;
+  width: 480px;
 }
 
 .more-dialog {
@@ -1112,5 +1126,23 @@ a {
 }
 .ortur-icon-twitter:hover {
   color: #0a93e2;
+}
+.makes-mask {
+  position: absolute;
+  bottom: 3px;
+  width: 184px;
+  height: 32px;
+  background-color: rgba(34, 34, 34, 0.5);
+  text-align: center;
+  line-height: 32px;
+  .ortur-icon-message {
+    position: relative;
+    top: 2px;
+  }
+  .makes-mask-font-container {
+    color: #fff;
+    font-size: 16px;
+    margin-left: 25px;
+  }
 }
 </style>

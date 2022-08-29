@@ -1,6 +1,6 @@
 <template>
   <div class="more-container" ref="more-container">
-    <el-row class="row" ref="content" style="height: 673px">
+    <el-row class="view-more-row" ref="content" style="height: 673px">
       <div v-for="item in resources" :key="item.thingId">
         <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
           <resource-card
