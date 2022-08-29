@@ -240,7 +240,6 @@ export default {
   watch: {
     isLike: function () {
       this.showLikeStar = this.isLike;
-      debugger;
     },
   },
   methods: {
