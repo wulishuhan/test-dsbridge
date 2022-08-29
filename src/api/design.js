@@ -108,18 +108,17 @@ export function getFollowerList(params) {
     params,
   });
 }
-export function getUserInfo(params) {
+
+export function updateDiy(data) {
   return request({
-    url: `/library/like/list`,
-    method: "get",
-    params,
+    url: `/library/author/profile`,
+    method: "put",
+    data,
   });
 }
-
-export function updateDiy(params) {
+export function getProfile(data) {
   return request({
-    url: `/thing/changeCollect`,
-    method: "post",
-    params,
+    url: `/library/author/profile/${data}`,
+    method: "get",
   });
 }

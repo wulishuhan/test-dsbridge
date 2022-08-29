@@ -79,11 +79,12 @@
         <el-upload
           v-if="isYourAccount"
           class="upload-bg"
-          :on-success="handleImgUploadSuccess"
+          :headers="headers"
+          :on-success="handleBgImgUploadSuccess"
           :on-error="handleImgUploadErr"
           :before-upload="handleBeforeImgUpload"
           ref="upload"
-          action="https://jsonplaceholder.typicode.com/posts/"
+          :action="baseURL + '/library/author/cover'"
           :auto-upload="true"
           :show-file-list="false"
         >
@@ -91,7 +92,7 @@
         </el-upload>
       </span>
 
-      <img class="img" :src="user.bgImg" alt="" />
+      <img class="img" :src="user.cover_image" alt="" />
     </div>
 
     <div class="content">
@@ -124,7 +125,7 @@
           />
         </div>
         <div class="name">
-          {{ isYourAccount ? userInfo.nick_name : user.nick_name }}
+          {{ isYourAccount ? userInfo.nick_name : user.name }}
         </div>
         <FollowButton
           class="followBtn"
@@ -136,27 +137,25 @@
           class="desc"
           @click="editDesc"
           v-if="!isDescEdit"
-          :class="[{ NoDesc: !user.desc }, { descHover: isYourAccount }]"
+          :class="[{ NoDesc: !user.description }, { descHover: isYourAccount }]"
         >
-          {{ user.desc || "add a description" }}
+          {{ user.description || "add a description" }}
         </div>
         <el-input
           class="descInput"
-          type="textarea"
           ref="descRef"
-          @blur="descChange"
           @change="descChange"
           v-show="isDescEdit"
-          v-model="user.desc"
+          v-model="user.description"
           placeholder=""
         ></el-input>
         <div class="follow">
           <span class="followers" @click="openFollowDialog('first')"
-            >{{ user.followers }}
+            >{{ user.follower_count }}
             <span style="color: #ccc">{{ $t("design.follower") }}</span>
           </span>
           <span class="following" @click="openFollowDialog('second')"
-            >{{ user.following
+            >{{ user.following_count
             }}<span style="color: #ccc"> {{ $t("design.following") }}</span>
           </span>
         </div>
@@ -175,14 +174,19 @@
           <el-input
             class="descInput"
             ref="diyRef"
-            @blur="editChange(item)"
-            @change="editChange(item)"
+            @change="editChange(item, index)"
             v-show="item.isEdit"
             v-model="item.text"
             placeholder=""
           ></el-input>
         </div>
-        <div v-show="isYourAccount" class="add" @click="addDiy">+</div>
+        <div
+          v-show="isYourAccount && diyArr.length < 3"
+          class="add"
+          @click="addDiy"
+        >
+          +
+        </div>
       </div>
       <div class="tabs">
         <!-- <span class="editTab">edit</span> -->
@@ -336,7 +340,7 @@ import {
   updateDiy,
   getFollowerList,
   getFollowingList,
-  // getUserInfo,
+  getProfile,
   getCollectList,
   moveResourceToCollection,
   addResourceToCollection,
@@ -426,25 +430,16 @@ export default {
         currentPage: 1,
       },
       dialogFollowersVisible: false,
-      diyArr: [
-        {
-          isEdit: false,
-          text: "11",
-        },
-        {
-          isEdit: false,
-          text: "11",
-        },
-      ],
+      diyArr: [],
       user: {
         // 自己或他人的用户信息
-        userId: "",
-        nick_name: "",
         avatar: "",
-        bgImg: "https://scpic.chinaz.net/files/pic/pic9/202207/apic42262.jpg",
-        following: "14",
-        followers: "13",
-        desc: "yang 654651",
+        cover_image: "",
+        description: "",
+        follower_count: "",
+        following_count: "",
+        id: 0,
+        name: "",
       },
       collectionId: "",
       userId: "", //自己或他人的主页
@@ -496,7 +491,6 @@ export default {
       this.getResourceList();
     } else {
       this.isYourAccount = false;
-      this.user.nick_name = "test";
       this.user.userId = userId;
       if (this.isLogin) {
         this.getMyLikesList().then(() => {});
@@ -509,7 +503,25 @@ export default {
     this.contextMenuData.menulists[0].disabled = !this.isYourAccount;
     this.isLogin ? this.getAllMyCollectList() : "";
     this.isLogin && !this.isYourAccount && this.getMyFollowingList();
-    // getUserInfo({ userId: this.userId }).then(() => {});
+    getProfile(this.userId).then((params) => {
+      let res = params.data.data;
+      Object.assign(this.user, res);
+      res.url1 &&
+        this.diyArr.push({
+          isEdit: false,
+          text: res.url1,
+        });
+      res.url2 &&
+        this.diyArr.push({
+          isEdit: false,
+          text: res.url2,
+        });
+      res.url3 &&
+        this.diyArr.push({
+          isEdit: false,
+          text: res.url3,
+        });
+    });
   },
   computed: {
     ...mapState(["userInfo"]),
@@ -926,6 +938,14 @@ export default {
       });
       this.$message.success("上传成功");
     },
+    handleBgImgUploadSuccess(res, file) {
+      console.log("res: ", res, file);
+      getProfile(this.userId).then((params) => {
+        let res = params.data.data;
+        this.user.cover_image = res.cover_image;
+      });
+      this.$message.success("上传成功");
+    },
     getMyFollowList() {
       getFollowingList({ userId: this.userInfo.user_id }).then((result) => {
         let res = [];
@@ -953,12 +973,14 @@ export default {
     },
     descChange(item) {
       console.log(item);
-      updateDiy({ item }).then(() => {
+      updateDiy({ description: item }).then(() => {
         this.isDescEdit = false;
       });
     },
-    editChange(item) {
-      updateDiy({ item }).then(() => {
+    editChange(item, index) {
+      console.log("item: ", item);
+      // let str = "url" + index;
+      updateDiy({ ["url" + (index + 1)]: item.text }).then(() => {
         item.isEdit = false;
       });
     },
