@@ -47,12 +47,18 @@ export default {
     },
     handlePost() {
       let resId = parseInt(this.$route.params.thingId);
+      if (this.comment == "") {
+        this.$message({
+          message: "评论不能为空",
+          type: "error",
+        });
+        return;
+      }
       postComment({
         resourceId: resId,
         parentId: this.commentId,
         content: this.comment,
-      }).then((res) => {
-        console.log("post comment", res);
+      }).then(() => {
         this.$store.dispatch("comment/getCommentList", { resId: resId });
         this.$message({
           message: "发送成功",
