@@ -54,7 +54,7 @@
             v-if="i === index"
             ref="img"
             class="el-image-viewer__img"
-            :key="item.url"
+            :key="item"
             :src="currentImg"
             :style="imgStyle"
             @load="handleImgLoad"
@@ -79,9 +79,26 @@
           </span>
         </template>
         <span class="el-image-viewer__btn el-image-viewer__close" @click="hide">
-          <!-- <i class="el-icon-close"></i> -->
-          <i class="ortur-icon-cancel"></i>
+          <i class="el-icon-close"></i>
+          <!-- <i class="ortur-icon-cancel"></i> -->
         </span>
+        <div v-if="isMake" class="open-comment-box" @click="openComment">
+          <i class="el-icon-arrow-left"></i>
+          <i class="ortur-icon-message"></i>
+        </div>
+        <el-menu @open="handleOpen" @close="handleClose" :collapse="isCollapse">
+          <div v-if="isCollapse" class="comment-box">
+            <el-button @click="closeComment"
+              ><i class="el-icon-arrow-right"></i
+            ></el-button>
+            <div style="height: 100%; width: 100%; overflow-y: scroll">
+              <Comment></Comment>
+            </div>
+          </div>
+        </el-menu>
+        <div v-if="isMake" class="left-top-scacel-box">
+          scacel {{ Math.floor(this.transform.scale * 100) }}%
+        </div>
       </div>
     </div>
   </transition>
@@ -90,6 +107,7 @@
 import { on, off } from "element-ui/src/utils/dom";
 import { rafThrottle, isFirefox } from "element-ui/src/utils/util";
 import { PopupManager } from "element-ui/src/utils/popup";
+import Comment from "@/components/Comment/CommentWidget.vue";
 const Mode = {
   CONTAIN: {
     name: "contain",
@@ -105,6 +123,7 @@ const mousewheelEventName = isFirefox() ? "DOMMouseScroll" : "mousewheel";
 /* eslint-disable */
 export default {
   name: "ImageViwer",
+  components: { Comment },
   props: {
     urlList: {
       type: Array,
@@ -134,6 +153,10 @@ export default {
       type: Boolean,
       default: true,
     },
+    isMake: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   data() {
@@ -150,6 +173,7 @@ export default {
         offsetY: 0,
         enableTransition: false,
       },
+      isCollapse: false,
     };
   },
   computed: {
@@ -163,7 +187,7 @@ export default {
       return this.index === this.urlList.length - 1;
     },
     currentImg() {
-      return this.urlList[this.index].url;
+      return this.urlList[this.index];
     },
     imgStyle() {
       const { scale, deg, offsetX, offsetY, enableTransition } = this.transform;
@@ -250,7 +274,7 @@ export default {
         }
       });
       on(document, "keydown", this._keyDownHandler);
-      //   on(document, mousewheelEventName, this._mouseWheelHandler);
+      on(document, mousewheelEventName, this._mouseWheelHandler);
     },
     deviceSupportUninstall() {
       off(document, "keydown", this._keyDownHandler);
@@ -345,6 +369,20 @@ export default {
       }
       transform.enableTransition = enableTransition;
     },
+    handleOpen(key, keyPath) {
+      console.log(key, keyPath);
+    },
+    handleClose(key, keyPath) {
+      console.log(key, keyPath);
+    },
+    openComment() {
+      this.isCollapse = true;
+      off(document, mousewheelEventName, this._mouseWheelHandler);
+    },
+    closeComment() {
+      this.isCollapse = false;
+      on(document, mousewheelEventName, this._mouseWheelHandler);
+    },
   },
   mounted() {
     this.deviceSupportInstall();
@@ -373,5 +411,49 @@ export default {
 }
 .el-image-viewer__img {
   object-fit: fill;
+}
+.left-top-scacel-box {
+  width: 120px;
+  height: 40px;
+  background: rgba(26, 26, 26, 0.3);
+  border-radius: 8px;
+  position: absolute;
+  left: 16px;
+  top: 16px;
+  color: #fff;
+  text-align: center;
+  line-height: 40px;
+  font-size: 12px;
+}
+.comment-box {
+  width: 100%;
+  height: 660px;
+  background: #fff;
+  display: flex;
+  align-items: center;
+}
+.open-comment-box {
+  width: 64px;
+  height: 160px;
+  background: rgba(26, 26, 26, 0.3);
+  border-radius: 6px;
+  position: absolute;
+  right: 16px;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.open-comment-box:hover {
+  cursor: pointer;
+}
+.el-menu {
+  position: absolute;
+  right: 0px;
+  width: 780px;
+  z-index: 3000;
+}
+.el-button {
+  border: none;
 }
 </style>
