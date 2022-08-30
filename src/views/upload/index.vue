@@ -1,5 +1,5 @@
 <template>
-  <div class="upload-container">
+  <div class="upload-container" id="upload-container">
     <h1 class="header-title">{{ headerTitle }}</h1>
     <el-form
       ref="resourceForm"
@@ -112,7 +112,7 @@
                     v-model="resourceForm.images"
                   >
                     <div
-                      class="swiper-slide swiper-no-swiping"
+                      class="swiper-slide"
                       v-for="(coverImage, coverKey) in resourceForm.images"
                       :key="coverKey"
                     >
@@ -124,7 +124,9 @@
                         <span class="path1"></span>
                         <span class="path2"></span>
                       </i>
-                      <i class="handle el-icon-s-operation"></i>
+                      <i
+                        class="handle el-icon-s-operation swiper-no-swiping"
+                      ></i>
                       <el-upload
                         class="cover-edit"
                         action="/dev-api/library/resource/upload"
@@ -154,9 +156,19 @@
                       </el-upload>
                     </div>
                   </draggable>
-                  <div class="swiper-button-prev swiper-button-black"></div>
+                  <div
+                    ref="swiperPrev"
+                    class="swiper-button-prev swiper-button-black"
+                    @drop="drop($event)"
+                    @dragover="allowDrop($event, 'swiperPrev')"
+                  ></div>
                   <!-- 白色 -->
-                  <div class="swiper-button-next swiper-button-black"></div>
+                  <div
+                    ref="swiperNext"
+                    @drop="drop($event)"
+                    @dragover="allowDrop($event, 'swiperNext')"
+                    class="swiper-button-next swiper-button-black"
+                  ></div>
                   <!-- 黑色 -->
                 </div>
               </div>
@@ -176,27 +188,30 @@
         <el-input v-model="resourceForm.title"></el-input>
       </el-form-item>
       <el-form-item :label="$t('upload.tags')" prop="tags">
-        <el-tag
-          :key="index"
-          v-for="(tag, index) in resourceForm.tags"
-          closable
-          :disable-transitions="true"
-          @close="handleCloseTag(tag)"
-        >
-          {{ tag }}
-        </el-tag>
-        <el-autocomplete
-          class="inline-input"
-          ref="autoInput"
-          v-model="inputValue"
-          :fetch-suggestions="querySearch"
-          value-key="name"
-          placeholder="请输入内容"
-          size="small"
-          :trigger-on-focus="false"
-          @select="handleSelect"
-          @keyup.enter.native="handleInputConfirm"
-        ></el-autocomplete>
+        <div class="tag-input-wrapper">
+          <el-tag
+            :key="index"
+            v-for="(tag, index) in resourceForm.tags"
+            closable
+            :disable-transitions="true"
+            @close="handleCloseTag(tag)"
+          >
+            {{ tag }}
+          </el-tag>
+          <el-autocomplete
+            style="width: 80px"
+            class="inline-input"
+            ref="autoInput"
+            v-model="inputValue"
+            :fetch-suggestions="querySearch"
+            value-key="name"
+            placeholder="New tag"
+            size="small"
+            :trigger-on-focus="false"
+            @select="handleSelect"
+            @keyup.enter.native="handleInputConfirm"
+          ></el-autocomplete>
+        </div>
       </el-form-item>
       <el-form-item :label="$t('upload.license')" prop="license">
         <el-select
@@ -270,7 +285,7 @@
                     v-model="tutorialItem.images"
                   >
                     <div
-                      class="swiper-slide swiper-no-swiping"
+                      class="swiper-slide"
                       v-for="(
                         tutorialImage, tutorialImgKey
                       ) in tutorialItem.images"
@@ -284,7 +299,9 @@
                         <span class="path1"></span>
                         <span class="path2"></span>
                       </i>
-                      <i class="handle el-icon-s-operation"></i>
+                      <i
+                        class="handle el-icon-s-operation swiper-no-swiping"
+                      ></i>
                       <el-upload
                         class="cover-edit"
                         action="/dev-api/library/resource/upload"
@@ -384,6 +401,7 @@ import {
   getResource,
   updateResource,
   getResourceTags,
+  uploadFile,
 } from "@/api/resource";
 export default {
   // eslint-disable-next-line
@@ -417,7 +435,7 @@ export default {
         images: [],
         files: [],
         title: "",
-        tags: ["标签一", "标签二", "标签三"],
+        tags: ["标签一"],
         license: "GNU - LGPL",
         description: "",
       },
@@ -531,9 +549,91 @@ export default {
         this.tutorialForm = detail.tutorials;
       });
     }
-    //更新标题
+
+    this._throttle = this.throttle((swiperArrow) => {
+      //滚动
+      this.$refs[swiperArrow].click();
+    }, 500);
   },
   methods: {
+    drop(event) {
+      event.preventDefault();
+    },
+    allowDrop(event, swiperArrow) {
+      this._throttle(swiperArrow);
+      event.preventDefault();
+    },
+    throttle(func, delay) {
+      delay = delay || 1000;
+      var previousDate = new Date();
+      var previous = previousDate.getTime(); // 初始化一个时间，也作为高频率事件判断事件间隔的变量，通过闭包进行保存。
+
+      return function (...args) {
+        var context = this;
+        var nowDate = new Date();
+        var now = nowDate.getTime();
+        if (now - previous >= delay) {
+          // 如果本次触发和上次触发的时间间隔超过设定的时间
+          func.apply(context, args); // 就执行事件处理函数 （eventHandler）
+          previous = now; // 然后将本次的触发时间，作为下次触发事件的参考时间。
+        }
+      };
+    },
+    genThumb(srcFile) {
+      //判断文件类型，如果是图片，则生成截图
+      if (srcFile.raw.type.indexOf("image") < 0) {
+        return;
+      }
+      //
+      return new Promise((resolve, reject) => {
+        const image = new Image();
+        image.src = URL.createObjectURL(srcFile.raw);
+        image.setAttribute("crossOrigin", "Anonymous");
+
+        image.onload = () => {
+          var canvas = document.createElement("canvas");
+          var ctx = canvas.getContext("2d");
+          var maxw = 400;
+          var maxh = 400;
+
+          var cw = image.width;
+          var ch = image.height;
+          var w = image.width;
+          var h = image.height;
+          canvas.width = w;
+          canvas.height = h;
+          if (cw > maxw && cw > ch) {
+            w = maxw;
+            h = (maxw * ch) / cw;
+            canvas.width = w;
+            canvas.height = h;
+          }
+          if (ch > maxh && ch > cw) {
+            h = maxh;
+            w = (maxh * cw) / ch;
+            canvas.width = w;
+            canvas.height = h;
+          }
+          ctx.drawImage(image, 0, 0, w, h);
+
+          canvas.toBlob((blob) => {
+            var file = new File([blob], srcFile.raw.name, {
+              type: "image/jpeg",
+            });
+            //TODO:调用上传接口获取缩略图地址
+            let formData = new FormData();
+            formData.append("file", file);
+            uploadFile(formData)
+              .then((res) => {
+                resolve(res);
+              })
+              .catch((error) => {
+                reject(error);
+              });
+          }, srcFile.raw.type);
+        };
+      });
+    },
     handleSelect(item) {
       this.$refs["autoInput"].focus();
       console.log(item);
@@ -618,8 +718,15 @@ export default {
         size: file.size,
         percent: 0,
         file: file,
+        thumbnail: "",
       };
-      this.resourceForm.files.push(fileInfo);
+      //获取缩略图
+      this.genThumb(file).then((res) => {
+        fileInfo.thumbnail = res.data.data.url;
+        console.log("fileInfo===", fileInfo);
+        this.resourceForm.files.push(fileInfo);
+      });
+
       console.log("handleSourceChange=========", file);
     },
     handleSourceProgress(event, file) {
@@ -632,12 +739,14 @@ export default {
       }
     },
     handleSourceSuccess(response, file) {
+      console.log("file", file);
       for (const index in this.resourceForm.files) {
         var item = this.resourceForm.files[index];
         if (file.uid == item.uid) {
           item.url = response.data.url;
           item.percent = 100;
           item.id = response.data.id;
+          // this.genThumb().then(() => {});
           break;
         }
       }
@@ -875,8 +984,8 @@ export default {
       .el-upload-dragger {
         height: 300px;
         width: 100%;
-        border: 1px dashed #fff;
-        background: #fff;
+        border: none;
+        background: none;
         display: flex;
         flex-direction: column;
         justify-content: space-around;
@@ -888,7 +997,7 @@ export default {
         }
       }
       .el-upload-dragger:hover {
-        border-color: #409eff;
+        border: 1px dashed #409eff;
       }
     }
   }
@@ -1012,6 +1121,17 @@ export default {
   .el-form-item input,
   .el-form-item textarea {
     font-size: 12px;
+  }
+  .el-input .el-input__inner {
+    background: none;
+  }
+  .el-textarea .el-textarea__inner {
+    background: none;
+  }
+  .tag-input-wrapper {
+    border: 1px solid #dcdfe6;
+    padding: 0 5px;
+    border-radius: 5px;
   }
 }
 

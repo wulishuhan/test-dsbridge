@@ -40,3 +40,20 @@ export function getResourceTags(params) {
     params,
   });
 }
+
+export function getAuthorList(params) {
+  return request({
+    url: `/library/author/search`,
+    method: "get",
+    params,
+  });
+}
+
+export function uploadFile(formData) {
+  return request({
+    url: `/library/resource/upload`,
+    headers: { "Content-Type": "multipart/form-data" },
+    method: "POST",
+    data: formData,
+  });
+}

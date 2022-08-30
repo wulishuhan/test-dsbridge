@@ -6,7 +6,7 @@
     <el-divider></el-divider>
     <el-tabs v-model="currentTab">
       <el-tab-pane name="grid">
-        <el-button slot="label">
+        <el-button slot="label" @click="searchSource">
           <i class="el-icon-s-fold"></i> &nbsp; Content
           <span v-if="currentTab == 'grid'">({{ resources.length }})</span>
         </el-button>
@@ -23,17 +23,13 @@
         </el-row>
       </el-tab-pane>
       <el-tab-pane name="list">
-        <el-button slot="label">
+        <el-button slot="label" @click="searchAuthor">
           <i class="el-icon-s-custom"></i> &nbsp; Author
-          <span v-if="currentTab == 'list'">({{ resources.length }})</span>
+          <span v-if="currentTab == 'list'">({{ authors.length }})</span>
         </el-button>
         <el-row class="row">
-          <div v-for="item in resources" :key="item.id">
-            <resource-line
-              :thing="item"
-              :isLike="likeList.includes(item.id)"
-              :isCollected="collectedList.includes(item.id)"
-            ></resource-line>
+          <div v-for="item in authors" :key="item.id">
+            <resource-line :authorInfo="item"></resource-line>
             <el-divider></el-divider>
           </div>
         </el-row>
@@ -44,7 +40,7 @@
   </div>
 </template>
 <script>
-import { getResourceList } from "@/api/resource";
+import { getResourceList, getAuthorList } from "@/api/resource";
 import { getLikelist } from "@/api/like";
 import { getCollectionResourceList } from "@/api/collection";
 import { mapGetters } from "vuex";
@@ -57,6 +53,7 @@ export default {
   data() {
     return {
       resources: [],
+      authors: [],
       likeList: [],
       collectedList: [],
       currentTab: "grid",
@@ -99,6 +96,28 @@ export default {
       });
     }
     console.log(this.$route);
+  },
+  methods: {
+    searchSource() {
+      getResourceList({
+        keywords: this.$route.query.keywords,
+        pageNum: 1,
+        pageSize: 10,
+      }).then((res) => {
+        this.resources = res.data.rows;
+        console.log(this.resources);
+      });
+    },
+    searchAuthor() {
+      getAuthorList({
+        keywords: this.$route.query.keywords,
+        pageNum: 1,
+        pageSize: 10,
+      }).then((res) => {
+        this.authors = res.data.rows;
+      });
+      console.log("searchAuthor");
+    },
   },
 };
 </script>

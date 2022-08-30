@@ -162,6 +162,7 @@
               autocomplete="off"
               placeholder="Password"
               show-password
+              @keyup.enter.native="handleEnter"
             ></el-input>
           </el-form-item>
           <el-form-item>
@@ -284,6 +285,9 @@ export default {
     };
   },
   methods: {
+    handleEnter() {
+      this.login("loginForm");
+    },
     switchLoginAndRegister(view) {
       this.$emit("changeView", view);
     },
