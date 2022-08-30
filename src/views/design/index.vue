@@ -120,7 +120,21 @@
           <img
             class="img"
             mode="widthFix"
+            v-if="
+              (isYourAccount && userInfo.avatar.length > 0) ||
+              user.avatar.length > 0
+            "
             :src="isYourAccount ? userInfo.avatar : user.avatar"
+            alt=""
+          />
+          <img
+            class="img"
+            mode="widthFix"
+            v-else-if="
+              (isYourAccount && userInfo.avatar.length == 0) ||
+              user.avatar.length == 0
+            "
+            src="../../assets/img/图层 1309.png"
             alt=""
           />
         </div>
@@ -319,6 +333,14 @@
       </div>
     </div>
     <SrollTopButton :to="'#top'"></SrollTopButton>
+    <DownListPanel
+      :isShowDownPanel="isShowDownPanel"
+      :fileList="detail.files"
+      :fileNum="detail.files.length"
+      :downLoadNum="downloadNumber"
+      :resourceName="detail.title"
+      @click="openShowDownPanel"
+    ></DownListPanel>
   </div>
 </template>
 <script>
@@ -345,6 +367,7 @@ import ResourceCard from "@/components/ResourceCard/index.vue";
 import IndexFollowPanel from "./IndexFollowPanel.vue";
 import CollectedOption from "@/components/CollectedOption";
 import RowFolder from "@/components/RowFolder.vue";
+import DownListPanel from "@/components/DownListPanel.vue";
 import {
   deleteCollectionResource,
   getCollectionResourceList,
@@ -369,6 +392,8 @@ import {
 // import { getUserInfo } from "@/api/user";
 import { getToken } from "@/utils/auth";
 import { createNamespacedHelpers } from "vuex";
+import { getResource } from "@/api/resource";
+
 const { mapState } = createNamespacedHelpers("user");
 export default {
   name: "Design",
@@ -379,9 +404,29 @@ export default {
     ResourceCard,
     CollectedOption,
     RowFolder,
+    DownListPanel,
   },
   data() {
     return {
+      detail: {
+        creator: {
+          avatar: "",
+          name: "UNKNOW",
+        },
+        description: "",
+        files: [],
+        id: "",
+        images: "",
+        license: "",
+        like_count: 0,
+        collect_count: 0,
+        tags: [],
+        title: "",
+        tutorials: [],
+        update_time: "1990-01-01",
+      },
+      isShowDownPanel: false,
+
       collectionName: "",
       myFollowList: [],
       folderCollection: [],
@@ -492,7 +537,9 @@ export default {
   mounted() {
     console.log(this.userInfo);
     console.log(this.isLogin);
-
+    document.addEventListener("click", () => {
+      this.isShowDownPanel = false;
+    });
     let userId = this.$route.params.userId;
 
     if (userId == "fromLike") {
@@ -547,8 +594,19 @@ export default {
   computed: {
     ...mapState(["userInfo"]),
     ...mapState(["isLogin"]),
+    downloadNumber() {
+      return this.detail.files.reduce((pre, cur) => {
+        return pre + cur.downloadCount;
+      }, 0);
+    },
   },
   methods: {
+    openShowDownPanel() {
+      if (!this.isShowDownPanel) {
+        this.openCollectedOption = false;
+      }
+      this.isShowDownPanel = !this.isShowDownPanel;
+    },
     openCollection(id, left, top) {
       this.openCollectedOption = true;
       this.collectionStyle.position = "absolute";
@@ -924,8 +982,11 @@ export default {
         this.openCollectedOption = true;
       });
     },
-    Handler_Down(index) {
-      console.log("index:", index, "选项1-2-1绑定事件执行");
+    Handler_Down(item) {
+      getResource(item.id).then((res) => {
+        this.detail = res.data.data;
+        this.isShowDownPanel = true;
+      });
     },
 
     addDiy() {
@@ -961,10 +1022,7 @@ export default {
     },
     handleBgImgUploadSuccess(res, file) {
       console.log("res: ", res, file);
-      getProfile(this.userId).then((params) => {
-        let res = params.data.data;
-        this.user.cover_image = res.cover_image;
-      });
+      this.user.cover_image = res.data;
       this.$message.success("上传成功");
     },
     getMyFollowList() {
@@ -1321,7 +1379,7 @@ export default {
         display: none;
       }
       .img {
-        background-color: red;
+        background-color: black;
         width: 120px;
         height: 119px;
         border-radius: 50%;

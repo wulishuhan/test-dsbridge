@@ -318,8 +318,9 @@ export default {
           width: 256px;
           border-radius: 12px;
           padding: 5px;
-          background: #e8ebf4;
-
+          background: #f0f3fa;
+          border: 1px solid #cccccc;
+          border-radius: 12px;
           .imgArrItem {
             margin: 8px;
             img {
@@ -363,7 +364,7 @@ export default {
       }
     }
     .folderContainer:hover .imgArr {
-      background-color: #fff;
+      background: #e8ebf4;
     }
   }
 }
