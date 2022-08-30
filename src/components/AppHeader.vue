@@ -50,7 +50,7 @@
             </li>
             <li class="alert">
               <el-button
-                @click="handleShowNotice"
+                @click.stop="handleShowNotice"
                 style="background: #f0f3fa; border: none; font-size: 20px"
               >
                 <i class="ortur-icon-alert"></i>

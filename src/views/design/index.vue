@@ -143,10 +143,13 @@
         </div>
         <el-input
           class="descInput"
+          type="textarea"
           ref="descRef"
+          autosize
           @change="descChange"
           v-show="isDescEdit"
-          v-model="user.description"
+          v-model.trim="user.description"
+          @keyup.enter.native="descChange"
           placeholder=""
         ></el-input>
         <div class="follow">
@@ -174,7 +177,8 @@
           <el-input
             class="descInput"
             ref="diyRef"
-            @change="editChange(item, index)"
+            v-on:keyup.enter.native="editChange(item, index)"
+            @blur="editChange(item, index)"
             v-show="item.isEdit"
             v-model="item.text"
             placeholder=""
@@ -318,6 +322,23 @@
   </div>
 </template>
 <script>
+let lock = false;
+
+function throttle(func, delay = 60) {
+  if (typeof func !== "function") {
+    throw "参数必须是函数";
+  }
+  return () => {
+    if (lock) {
+      return;
+    }
+    func();
+    lock = true;
+    setTimeout(() => {
+      lock = false;
+    }, delay);
+  };
+}
 import FollowButton from "@/components/FollowButton.vue";
 import SrollTopButton from "@/components/SrollTopButton/index.vue";
 import ResourceCard from "@/components/ResourceCard/index.vue";
@@ -973,16 +994,20 @@ export default {
     },
     descChange(item) {
       console.log(item);
-      updateDiy({ description: item }).then(() => {
-        this.isDescEdit = false;
-      });
+      throttle(() => {
+        updateDiy({ description: this.user.description }).then(() => {
+          this.isDescEdit = false;
+        });
+      }, 1000)();
     },
     editChange(item, index) {
       console.log("item: ", item);
       // let str = "url" + index;
-      updateDiy({ ["url" + (index + 1)]: item.text }).then(() => {
-        item.isEdit = false;
-      });
+      throttle(function () {
+        updateDiy({ ["url" + (index + 1)]: item.text }).then(() => {
+          item.isEdit = false;
+        });
+      }, 1000)();
     },
 
     editDesc() {
@@ -1001,6 +1026,8 @@ export default {
       }
       //console.log(e)
       item.isEdit = true;
+      this.isDescEdit = false;
+
       setTimeout(() => {
         this.$refs.diyRef[index].focus();
       }, 0);
@@ -1180,7 +1207,12 @@ export default {
       right: 12px;
       top: 12px;
       position: absolute;
-      color: white;
+      color: black;
+      background-color: #bfbfc1;
+      padding: 5px;
+    }
+    .ortur-icon-pen:hover {
+      background-color: gainsboro;
     }
   }
   text-align: center;
@@ -1210,8 +1242,10 @@ export default {
         margin-top: 12px;
         .followers {
           margin-right: 12px;
+          cursor: pointer;
         }
         .following {
+          cursor: pointer;
         }
       }
       .followBtn {
@@ -1238,6 +1272,14 @@ export default {
       }
       .descInput {
         margin-top: 12px;
+        ::v-deep {
+          .el-textarea__inner {
+            background-color: #f0f3fa;
+          }
+          .el-input__inner {
+            background-color: #f0f3fa;
+          }
+        }
       }
     }
     .imgWrap {
