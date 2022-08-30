@@ -1,7 +1,7 @@
 <template>
   <div class="card-box" @mouseenter="enter" @mouseleave="leave">
     <div style="position: relative">
-      <div class="resource-show-image">
+      <div class="resource-show-image-box">
         <img
           class="resource-show-image"
           :src="thing.image"
@@ -12,17 +12,15 @@
       <div
         v-show="showCollection && isCollectIconShow"
         class="icon-collect-box"
-        :id="'collect-box-' + thing.id"
         ref="collect-button"
+        @click.stop="oprateCollectionOption"
       >
         <i
-          v-if="!isCollected"
-          @click="addCollection"
+          v-show="!isCollected"
           class="ortur-icon-add-collect icon-collect"
         ></i>
         <span
-          v-if="isCollected"
-          @click="deleteCollection"
+          v-show="isCollected"
           class="ortur-icon-cancel-collect-strokes icon-collect"
         >
           <span class="path1"> </span>
@@ -59,7 +57,7 @@
           ></UserRecommendation>
           <el-avatar
             v-if="showAvatar"
-            :size="35"
+            :size="40"
             :src="thing.creator && thing.creator.avatar"
             :fit="'cover'"
             slot="reference"
@@ -331,7 +329,7 @@ export default {
       }
       let collectBox = this.$refs["collect-button"];
       // let left = this.getElementLeft(collectBox);
-      let left = this.getElementLeft(collectBox) - collectBox.offsetLeft + 49;
+      let left = this.getElementLeft(collectBox) - collectBox.offsetLeft + 82;
       let top = this.getElementTop(collectBox);
       let displayTop = false;
       if (this.isViewMorePage) {
@@ -342,7 +340,7 @@ export default {
       if (displayTop) {
         top = top - 240 - collectBox.offsetTop;
       } else {
-        top = top + 180 - collectBox.offsetTop;
+        top = top + 210 - collectBox.offsetTop;
       }
       this.$emit("openCollection", this.thing.id, left, top);
     },
@@ -387,6 +385,13 @@ export default {
       }
       return actualTop;
     },
+    oprateCollectionOption() {
+      if (this.isCollected) {
+        this.deleteCollection();
+      } else {
+        this.addCollection();
+      }
+    },
   },
 };
 </script>
@@ -410,15 +415,27 @@ export default {
 .card-box {
   border: 1px solid #f5f5f5;
   position: relative;
-  width: 300px;
+  width: 344px;
   border-radius: 8px;
   padding: 7px;
 }
 .resource-show-image {
-  width: 285px;
-  height: 180px;
+  width: 328px;
+  height: 200px;
   border-radius: 8px;
   object-fit: contain;
+}
+.resource-show-image-box {
+  width: 326px;
+  height: 200px;
+  border-radius: 8px;
+  border: solid 1px #f0f3fa;
+}
+.resource-show-image-box:hover {
+  width: 326px;
+  height: 200px;
+  border-radius: 8px;
+  border: solid 1px #c2c4cc;
 }
 ::v-deep .el-avatar > img {
   width: 100%;
@@ -486,7 +503,7 @@ export default {
 .icon-share,
 .icon-star {
   margin-right: 5px;
-  font-size: 13px;
+  font-size: 14px;
 }
 .icon-share:hover {
   color: #000;
@@ -522,16 +539,16 @@ img:hover {
   cursor: pointer;
 }
 .icon-collect-box {
-  width: 42px;
-  height: 30px;
+  width: 56px;
+  height: 40px;
   background: rgba(30, 120, 240, 1);
   border-radius: 4px;
   display: flex;
   justify-content: center;
   align-items: center;
   position: absolute;
-  bottom: 12px;
-  right: 12px;
+  bottom: 16px;
+  right: 24px;
   cursor: pointer;
 }
 .icon-collect {
