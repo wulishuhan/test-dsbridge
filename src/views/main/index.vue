@@ -1,5 +1,5 @@
 <template>
-  <div id="top" class="main" @click.stop="closeCollectedOptionBox">
+  <div id="top" class="main" @click="closeCollectedOptionBox">
     <header class="groups-header">
       <el-carousel height="392px" indicator-position="outside">
         <el-carousel-item v-for="item in bannerImages" :key="item.title">

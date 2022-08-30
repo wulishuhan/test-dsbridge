@@ -14,7 +14,7 @@
           </el-tooltip>
           <!-- <div class="name">{{ file.name }}</div> -->
           <div>
-            <span>{{ Math.floor(file.size / 1000) }}kb</span>
+            <span>{{ fileSize }}</span>
             <span v-if="type == 'stl'" class="type">stl</span>
             <span v-else-if="type == 'png'" class="type">png</span>
             <span v-else-if="type == 'jpg'" class="type">jpg</span>
@@ -46,7 +46,7 @@ export default {
       return {
         name: "Headset_Holder_v1.stl",
         url: "https://cdn.thingiverse.com/assets/a0/23/4c/6f/68/medium_thumb_Headset_Holder_v1.png",
-        size: "1 mb",
+        size: "1000",
         updatedTime: "05-17-2022",
         downloadCount: 511,
         type: "stl",
@@ -59,10 +59,22 @@ export default {
       downloadNum: 0,
     };
   },
+  computed: {
+    fileSize() {
+      let sizeText = "";
+      if (this.file.size > 1000) {
+        sizeText = Math.floor(this.file.size / 1000) + "kb";
+      } else {
+        sizeText = this.file.size + "b";
+      }
+      return sizeText;
+    },
+  },
   mounted() {
     let arr = this.file.name.split(".");
     this.type = arr[arr.length - 1].toLocaleLowerCase();
     this.downloadNum = this.file.downloadCount;
+    console.log(this.file.size);
   },
   methods: {
     download() {
@@ -161,11 +173,11 @@ export default {
     margin-right: 10px;
   }
   span {
-    font-size: 11px;
+    font-size: 12px;
     font-family: Source Han Sans CN;
     font-weight: 400;
-    /* color: #999999; */
-    /* margin-right: 5px; */
+    color: #999999;
+    margin-right: 5px;
   }
 }
 .el-button {

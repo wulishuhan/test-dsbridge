@@ -69,16 +69,17 @@ export default {
 <style lang="scss" scoped>
 .button {
   width: 120px;
-
+  height: 56px;
   .num {
     color: #000;
+    font-size: 20px;
   }
 }
 .ortur-icon-cancel-collect-fill {
   margin-left: 5px;
-  font-size: 18px;
+  font-size: 25px;
 }
 .ortur-icon-add-collect {
-  font-size: 18px;
+  font-size: 25px;
 }
 </style>

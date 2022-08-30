@@ -6,7 +6,7 @@
           <span class="fileNum">
             {{ fileNum }}{{ $t("download.fileNum") }}
           </span>
-          <a style="color: #1e78f0" @click="downLoadAll">{{
+          <a class="download-all-tag" @click="downLoadAll">{{
             $t("download.downloadAll")
           }}</a>
         </div>
@@ -120,6 +120,7 @@ export default {
 <style lang="scss" scoped>
 .button {
   width: 248px;
+  height: 56px;
   position: relative;
   background-color: #1e78f0;
   color: #fff;
@@ -128,6 +129,7 @@ export default {
     color: #fff;
     opacity: 0.5;
     padding: 0px 10px;
+    font-size: 20px;
   }
   .downPanel {
     position: absolute;
@@ -135,14 +137,14 @@ export default {
     height: 480px;
     background: #ffffff;
     border-radius: 20px;
-    top: 42px;
+    top: 60px;
     /* left: -358px; */
     right: 0px;
     overflow: auto;
     z-index: 9;
     .downLoadAll {
       .fileNum {
-        font-size: 12px;
+        font-size: 16px;
         font-family: Source Han Sans CN;
         font-weight: 400;
         color: #999999;
@@ -150,6 +152,10 @@ export default {
       display: flex;
       justify-content: space-between;
       padding: 15px 29px;
+      .download-all-tag {
+        font-size: 16px;
+        color: #1e78f0;
+      }
     }
   }
   .downPanel::-webkit-scrollbar {
@@ -174,15 +180,15 @@ export default {
 /* display: block; */
 /* } */
 .ortur-icon-file-download {
-  font-size: 18px;
+  font-size: 25px;
   color: #fff;
 }
 .path1::before,
 .path2::before {
   color: #fff;
-  font-size: 18px;
+  font-size: 25px;
 }
 .download-text {
-  font-size: 16px;
+  font-size: 20px;
 }
 </style>
