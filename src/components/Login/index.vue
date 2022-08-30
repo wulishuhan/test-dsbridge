@@ -86,17 +86,59 @@
           <el-form-item>
             <div class="continue-with">Continue with</div>
             <div class="icon-box">
-              <a @click="thirdPartyLogin('facebook')">
-                <i class="ortur-icon-facebook icon"></i>
+              <a
+                @click="thirdPartyLogin('facebook')"
+                @mouseenter="enter('facebook')"
+                @mouseleave="leave"
+              >
+                <i
+                  class="ortur-icon-facebook icon"
+                  :class="[
+                    activeIcon === 'facebook'
+                      ? 'ortur-icon-facebook-light'
+                      : '',
+                  ]"
+                ></i>
               </a>
-              <a @click="thirdPartyLogin('github')">
-                <i class="ortur-icon-github icon"></i>
+              <a
+                @click="thirdPartyLogin('github')"
+                @mouseenter="enter('github')"
+                @mouseleave="leave"
+              >
+                <i
+                  class="ortur-icon-github icon"
+                  :class="[
+                    activeIcon === 'github' ? 'ortur-icon-github-light' : '',
+                  ]"
+                ></i>
               </a>
-              <a @click="thirdPartyLogin('tiktok')">
-                <i class="ortur-icon-tiktok icon"></i>
+              <a
+                @click="thirdPartyLogin('tiktok')"
+                @mouseenter="enter('tiktok')"
+                @mouseleave="leave"
+              >
+                <i
+                  class="ortur-icon-tiktok icon"
+                  v-if="activeIcon !== 'tiktok'"
+                ></i>
+                <span v-else class="ortur-icon-tiktok-light icon"
+                  ><span class="path1"></span><span class="path2"></span
+                  ><span class="path3"></span
+                ></span>
               </a>
-              <a @click="thirdPartyLogin('google')">
-                <i class="ortur-icon-google icon"></i>
+              <a
+                @click="thirdPartyLogin('google')"
+                @mouseenter="enter('google')"
+                @mouseleave="leave"
+              >
+                <i
+                  v-if="activeIcon !== 'google'"
+                  class="ortur-icon-google icon"
+                ></i>
+                <span v-else class="ortur-icon-google-light icon"
+                  ><span class="path1"></span><span class="path2"></span
+                  ><span class="path3"></span><span class="path4"></span
+                ></span>
               </a>
               <a>
                 <i class="ortur-icon-apple icon disabled-icon"></i>
@@ -238,6 +280,7 @@ export default {
         password1: [{ validator: validatePass1, trigger: "blur" }],
         password2: [{ validator: validatePass2, trigger: "blur" }],
       },
+      activeIcon: "",
     };
   },
   methods: {
@@ -298,6 +341,12 @@ export default {
       let redirectUrl = window.location.href.split("?")[0];
       console.log("redirectUrl:", redirectUrl);
       window.location.href = `https://sso.leadiffer.com/oauth/thirdParty?from=${from}&redirect_url=${redirectUrl}`;
+    },
+    enter(val) {
+      this.activeIcon = val;
+    },
+    leave() {
+      this.activeIcon = "";
     },
   },
 };

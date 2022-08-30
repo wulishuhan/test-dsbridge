@@ -2,7 +2,7 @@
   <div class="user-card">
     <div class="user-info">
       <div class="user-info-avatar-name">
-        <el-avatar :src="creator.avatar" :size="40"></el-avatar>
+        <el-avatar :src="creator.avatar" :size="60"></el-avatar>
         <span class="name">{{ creator.name }}</span>
       </div>
       <el-button v-if="!followings.includes(creator.id)" @click="follow">
@@ -107,12 +107,12 @@ export default {
 </script>
 <style lang="scss" scoped>
 .user-card {
-  width: 320px;
-  height: 148px;
+  width: 384px;
+  height: 168px;
   background: #ffffff;
   box-shadow: 0px 2px 10px 0px rgba(18, 18, 18, 0.07);
   border-radius: 10px;
-  padding: 12px;
+  padding: 16px;
   font-family: Source Han Sans CN;
   font-weight: 400;
   .user-info {
@@ -124,13 +124,13 @@ export default {
       align-items: center;
       justify-content: space-between;
       .name {
-        font-size: 14px;
+        font-size: 20px;
         margin-left: 17px;
       }
     }
     .el-button {
-      width: 96px;
-      height: 38px;
+      width: 104px;
+      height: 40px;
       background: #1e78f0;
       border-radius: 8px;
       color: #ffffff;
@@ -139,16 +139,16 @@ export default {
       align-items: center;
       font-weight: 400;
       font-family: Source Han Sans CN;
-      font-size: 12px;
+      font-size: 16px;
     }
   }
   .recommend-resources {
     display: grid;
-    grid-template-columns: repeat(3, 90px);
+    grid-template-columns: repeat(3, 98px);
     justify-content: space-between;
     margin-top: 17px;
     .el-image {
-      width: 90px;
+      width: 98px;
       height: 59px;
       border-radius: 5px;
       cursor: pointer;

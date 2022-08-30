@@ -1,7 +1,7 @@
 <template>
-  <div id="top" class="main">
+  <div id="top" class="main" @click.stop="closeCollectedOptionBox">
     <header class="groups-header">
-      <el-carousel indicator-position="outside">
+      <el-carousel height="392px" indicator-position="outside">
         <el-carousel-item v-for="item in bannerImages" :key="item.title">
           <a :href="item.url">
             <img :src="item.image" alt="" />
@@ -285,6 +285,9 @@ export default {
       this.pagination.pageNum = 1;
       this.getResourceList();
     },
+    closeCollectedOptionBox() {
+      this.closeCollectedOption();
+    },
   },
 };
 </script>
@@ -296,7 +299,8 @@ export default {
   background: #f0f3fa;
 }
 .content {
-  width: 1200px;
+  /* width: 1200px; */
+  width: 1440px;
   margin: 0 auto;
 }
 .filter {
@@ -310,8 +314,9 @@ p {
   text-align: center;
 }
 .groups-header {
-  width: 1200px;
-  height: 300px;
+  /* width: 1200px; */
+  width: 1440px;
+  height: 392px;
   margin: 0 auto;
   color: #f0f3fa;
   position: relative;
@@ -343,8 +348,8 @@ p {
 ::v-deep .el-input__inner,
 .el-input,
 .el-select {
-  font-size: 12px;
-  height: 36px;
+  font-size: 14px;
+  height: 48px;
 }
 ::v-deep .el-input__inner:hover {
   border: none;
@@ -359,14 +364,14 @@ p {
 }
 .select-box {
   position: relative;
-  height: 36px;
+  height: 48px;
 }
 .icon-hourglass {
   position: absolute;
-  top: 10px;
-  left: 14px;
+  top: 12px;
+  left: 10px;
   z-index: 2;
-  font-size: 15px;
+  font-size: 22px;
 }
 .select {
   width: 160px;
@@ -386,17 +391,17 @@ p {
 }
 .option {
   width: 150px;
-  height: 42px;
+  height: 48px;
   margin: 0 auto;
   border-radius: 6px;
-  font-size: 12px;
+  font-size: 14px;
   font-family: Source Han Sans CN;
   font-weight: 400;
   box-sizing: border-box;
   text-align: center;
   padding: 0px;
   overflow: visible;
-  line-height: 42px;
+  line-height: 48px;
 }
 .option:hover {
   background: #8ab5ef;

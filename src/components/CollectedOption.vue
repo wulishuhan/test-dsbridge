@@ -1,5 +1,5 @@
 <template>
-  <div v-show="show" class="collected-option-box">
+  <div v-show="show" class="collected-option-box" @click.stop="stop">
     <span class="collect-to">Collect to</span>
     <el-radio-group class="folder-button-box" v-model="select">
       <!-- <el-radio-button class="folder-button" label="Draft"></el-radio-button> -->
@@ -99,6 +99,8 @@ export default {
     selectFolderToCollected() {
       this.$emit("moveFolder", this.select);
     },
+    // 阻止冒泡
+    stop() {},
   },
 };
 </script>
@@ -177,6 +179,9 @@ export default {
     height: 48px;
     width: 208px;
     line-height: 48px;
+    ::v-deep .el-input__inner {
+      height: 48px;
+    }
   }
   .button-group {
     height: 64px;
