@@ -84,7 +84,9 @@
     </div>
     <h1>ResourceCard 用法:</h1>
     <ul>
-      <li>@openCollection，回调参数：资源的id“resId”、收藏框计算后的left位置“left”、收藏框计算后的top位置“top”</li>
+      <li>
+        @openCollection，回调参数：资源的id“resId”、收藏框计算后的left位置“left”、收藏框计算后的top位置“top”
+      </li>
       <li>@closeCollection，回调参数：资源的id“resId”</li>
       <li>:isCollectd,传入 Boolean类型，用于确定是否已收藏</li>
       <li>:isLike,传入 Boolean类型，用于确定是否已喜欢</li>
@@ -164,6 +166,7 @@ import ShowMore from "@/components/ShowMore.vue";
 import ResourceCard from "@/components/ResourceCard";
 import CollectedOption from "@/components/CollectedOption";
 import UserRecommendation from "@/components/UserRecommendation";
+import axios from "axios";
 // more module style...
 // 用来预览组件
 export default {
@@ -327,7 +330,24 @@ export default {
       this.isCollected = false;
     },
   },
-  mounted() {},
+  mounted() {
+    axios
+      .get(
+        `https://orturbucket.s3.amazonaws.com/assets/2022/08/10/c4d93a3805b3ce3f323f7974e6f78jpeg_20220810181854A025.jpeg`,
+        {
+          responseType: "blob",
+          method: "get",
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+          },
+        }
+      )
+      .then((res) => {
+        // saveAs(res.data, this.file.name);
+        // this.downloadNum += 1;
+        console.log(res);
+      });
+  },
 };
 </script>
 <style lang="scss" scoped>

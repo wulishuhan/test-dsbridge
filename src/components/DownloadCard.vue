@@ -29,7 +29,8 @@
       </div>
       <el-button @click.prevent.stop="download" type="primary">
         <span class="ortur-icon-arrow-down"></span>
-        <span class="download-text">{{ file.downloadCount }} </span>
+        <!-- <span class="download-text">{{ file.downloadCount }} </span> -->
+        <span class="download-text">{{ downloadNum }} </span>
       </el-button>
     </div>
   </div>
@@ -55,11 +56,13 @@ export default {
   data() {
     return {
       type: "",
+      downloadNum: 0,
     };
   },
   mounted() {
     let arr = this.file.name.split(".");
     this.type = arr[arr.length - 1].toLocaleLowerCase();
+    this.downloadNum = this.file.downloadCount;
   },
   methods: {
     download() {
@@ -67,12 +70,17 @@ export default {
         .get(`/dev-api/library/resource/download/${this.file.id}`, {
           responseType: "blob",
           method: "get",
-          // headers: {
-          //   "Access-Control-Allow-Origin": "*",
-          // },
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+          },
         })
         .then((res) => {
           saveAs(res.data, this.file.name);
+          this.downloadNum += 1;
+        })
+        .catch((err) => {
+          console.log(err);
+          this.downloadFileUsingCanvasAndOpenWindow();
         });
     },
     // 使用canvas下载跨域图片文件的方法， 可以使用window.open()下载非浏览器直接可以预览的文件
@@ -93,6 +101,16 @@ export default {
           saveAs(blob, that.file.name);
         });
       };
+    },
+    downloadFileUsingCanvasAndOpenWindow() {
+      let imageType = ["jpg", "png", "gif", "jpeg", "svg"];
+      if (imageType.includes(this.type)) {
+        this.downloadUsingCanvas();
+        this.downloadNum += 1;
+      } else {
+        window.open(this.file.url);
+        this.downloadNum += 1;
+      }
     },
   },
 };
