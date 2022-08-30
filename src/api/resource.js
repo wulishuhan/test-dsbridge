@@ -41,6 +41,14 @@ export function getResourceTags(params) {
   });
 }
 
+export function getAuthorList(params) {
+  return request({
+    url: `/library/author/search`,
+    method: "get",
+    params,
+  });
+}
+
 export function uploadFile(formData) {
   return request({
     url: `/library/resource/upload`,

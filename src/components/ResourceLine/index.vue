@@ -1,33 +1,26 @@
 <template>
   <div class="resource-line-wrapper">
     <div class="userinfo">
-      <div class="avatar"></div>
+      <div class="avatar"><img :src="authorInfo.avatar" /></div>
       <div class="follow-wrapper">
-        <div class="username">J chen</div>
+        <div class="username">{{ authorInfo.name }}</div>
         <div class="follow-info">
           <el-button>关注</el-button>
           <span>
-            <span class="fans-num">45</span>
+            <span class="fans-num">{{ authorInfo.follower_count }}</span>
             <span class="follow-text"> Follows</span>
           </span>
         </div>
       </div>
     </div>
-    <div class="cover-list-wrapper">
+    <div class="cover-list-wrapper" v-if="authorInfo.resources.length > 0">
       <img
-        src="https://orturbucket.s3.amazonaws.com/assets/2022/08/10/c4d93a3805b3ce3f323f7974e6f78jpeg_20220810174516A016.jpeg"
-      />
-      <img
-        src="https://orturbucket.s3.amazonaws.com/assets/2022/08/10/c4d93a3805b3ce3f323f7974e6f78jpeg_20220810174516A016.jpeg"
-      />
-      <img
-        src="https://orturbucket.s3.amazonaws.com/assets/2022/08/10/c4d93a3805b3ce3f323f7974e6f78jpeg_20220810174516A016.jpeg"
-      />
-
-      <img
-        src="https://orturbucket.s3.amazonaws.com/assets/2022/08/10/c4d93a3805b3ce3f323f7974e6f78jpeg_20220810174516A016.jpeg"
+        v-for="item in authorInfo.resources.slice(0, 5)"
+        :src="item.image"
+        :key="item.id"
       />
     </div>
+    <div v-if="authorInfo.resources.length <= 0">Not resource Yet</div>
   </div>
 </template>
 <script>
@@ -36,10 +29,10 @@ export default {
     return {};
   },
   props: {
-    coverList: {
-      type: Array,
+    authorInfo: {
+      type: Object,
       default: () => {
-        return [];
+        return {};
       },
     },
   },
@@ -61,8 +54,12 @@ export default {
     .avatar {
       width: 74px;
       height: 74px;
-      background: #aaa;
+      overflow: hidden;
       border-radius: 50%;
+      img {
+        width: 100%;
+        height: 100%;
+      }
     }
     .follow-wrapper {
       width: 160px;
@@ -102,6 +99,7 @@ export default {
     img {
       width: 138px;
       height: 84px;
+      object-fit: cover;
     }
     img + img {
       margin-left: 30px;
