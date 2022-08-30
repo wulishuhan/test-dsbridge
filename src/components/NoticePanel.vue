@@ -45,7 +45,7 @@
 
 <script>
 import NoticeItem from "@/components/NoticeItem.vue";
-
+import { getAllList } from "@/api/notice.js";
 export default {
   components: {
     NoticeItem,
@@ -152,9 +152,16 @@ export default {
       ],
     };
   },
+  mounted() {
+    document.addEventListener("click", () => {
+      this.handleCloseClick();
+    });
+  },
+  destroyed() {},
   methods: {
     getAllList() {
       //console.log(e)
+      getAllList({}).then(() => {});
     },
     getSystemList() {
       //console.log(e)
@@ -167,6 +174,9 @@ export default {
     },
     showPanel() {
       this.isShowPanel = !this.isShowPanel;
+      if (this.isShowPanel) {
+        this.handleTabClick();
+      }
     },
     handleCloseClick() {
       this.isShowPanel = false;

@@ -1,9 +1,10 @@
 <template>
-  <div class="container" @mouseover="addScrollEvent" id="container">
+  <div class="container" id="container">
     <div id="folderWrapper" class="folderWrapper">
       <div
         class="folderContainer"
         v-for="item in folders"
+        @mouseenter="handleFolderMouseEnter"
         :key="item.id"
         @click="handleClickFolder(item)"
       >
@@ -49,9 +50,9 @@
           />
         </div>
       </div>
-    </div>
-    <div class="plus" @click="addFolder" v-show="isYourAccount && !isEdit">
-      +
+      <div class="plus" @click="addFolder" v-show="isYourAccount && !isEdit">
+        +
+      </div>
     </div>
   </div>
 </template>
@@ -143,6 +144,11 @@ export default {
       }
       target.showMoreMenu = !target.showMoreMenu;
     },
+    handleFolderMouseEnter() {
+      for (const item of this.folders) {
+        item.showMoreMenu = false;
+      }
+    },
     handleRenameClick(item) {
       this.$emit("Rename", item);
       item.isEdit = true;
@@ -156,15 +162,7 @@ export default {
     handleClickFolder(item) {
       this.$emit("clickFolder", item);
     },
-    addScrollEvent() {
-      let element = document.getElementById("container");
-      element.addEventListener("wheel", (event) => {
-        event.preventDefault();
-        element.scrollBy({
-          left: event.deltaY < 0 ? -1 : 1, // >0 是下滑，<0是上滑
-        });
-      });
-    },
+
     handleEdit(item) {
       console.log("item: ", item);
       // return;
@@ -239,7 +237,6 @@ export default {
   margin: 0 auto;
   display: flex;
   overflow-y: visible;
-  overflow-x: auto;
   // height: 168px;
 
   .plus {
@@ -251,12 +248,15 @@ export default {
   .folderWrapper {
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
+
     margin-right: 32px;
     .folderContainer:hover .moreMenuIcon {
       text-align: right;
       display: inline;
       margin-right: 5px;
     }
+
     .folderContainer {
       position: relative;
       .moreMenuIcon {
@@ -328,6 +328,7 @@ export default {
             }
           }
         }
+
         .editInput {
           width: 112px;
           height: 24px;
@@ -360,6 +361,9 @@ export default {
           -webkit-box-orient: vertical;
         }
       }
+    }
+    .folderContainer:hover .imgArr {
+      background-color: #fff;
     }
   }
 }
