@@ -1,11 +1,11 @@
 <template>
   <div class="app-header-wrapper">
-    <div class="app-header header-shadow navbar">
+    <div class="app-header navbar">
       <div class="app-header__content">
         <div class="app-header-left">
           <div class="app-header__logo">
             <router-link to="/main">
-              <img src="@/assets/logo.png" style="height: 36px" />
+              <img src="@/assets/logo.png" style="height: 32px" />
             </router-link>
           </div>
           <div class="app-header__search">
@@ -33,7 +33,7 @@
             <li>
               <router-link to="/upload">
                 <el-button class="el-btn-upload">
-                  <span style="font-size: 12px">{{ $t("header.upload") }}</span>
+                  <span>{{ $t("header.upload") }}</span>
                   &nbsp;
                   <i class="el-icon-upload el-icon--right"></i>
                 </el-button>
@@ -244,12 +244,12 @@ export default {
 <style lang="scss" scoped>
 .app-header-wrapper {
   width: 100%;
-  height: 60px;
+  height: 128px;
 }
 .app-header {
   background: #f0f3fa;
   width: 100%;
-  height: 60px;
+  height: 120px;
   display: flex;
   align-items: center;
   align-content: center;
@@ -261,7 +261,7 @@ export default {
     display: flex;
     flex-direction: row;
     align-items: center;
-    background: #f0f3fa;
+
     width: 1640px;
     height: 100%;
     margin: 0px auto;
@@ -279,12 +279,15 @@ export default {
         flex-direction: row;
         flex-wrap: nowrap;
         .el-input-search {
-          width: 400px;
+          width: 500px;
+
           ::v-deep .el-input__inner {
+            font-size: 16px;
+            height: 56px;
             border: 1px solid #999 !important;
             // border-right: transparent !important;
             // border-radius: 6px 0px 0px 6px;
-            border-radius: 6px;
+            border-radius: 10px;
             background: none;
           }
         }
@@ -311,6 +314,12 @@ export default {
       margin-left: auto;
       padding: 0 1.5rem 0 0;
       ul.app-header-dots {
+        width: 600px;
+        list-style-type: none;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
         .el-dropdown-link {
           cursor: pointer;
         }
@@ -322,12 +331,7 @@ export default {
             right: 0;
           }
         }
-        width: 550px;
-        list-style-type: none;
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-between;
+
         .el-dropdown {
           .el-button {
             background: #f0f3fa;
@@ -349,9 +353,12 @@ export default {
           }
         }
         .el-btn-upload {
-          width: 100px;
+          width: 136px;
+          height: 56px;
           background: #1e78f0;
+          border-radius: 8px;
           color: #fff;
+          font-size: 16px;
         }
       }
       ul.app-header-nologin {

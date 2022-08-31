@@ -27,14 +27,18 @@
               ref="uploadFile"
             >
               <i class="ortur-icon-file" style="font-size: 60px"></i>
-              <span>{{ $t("upload.dragFileTip") }} (&lt;12MB)</span>
-              <span>{{ $t("upload.or") }}</span>
+              <span style="font-size: 20px; color: #ccc">
+                {{ $t("upload.dragFileTip") }} (&lt;12MB)
+              </span>
+              <span style="font-size: 20px; color: #ccc">
+                {{ $t("upload.or") }}
+              </span>
               <el-button size="small" type="primary">
                 {{ $t("upload.selectFile") }}
               </el-button>
             </el-upload>
           </div>
-          <el-form-item prop="files">
+          <el-form-item prop="files" v-if="resourceForm.files.length > 0">
             <div class="list-area">
               <el-divider></el-divider>
               <div class="list-wrapper">
@@ -98,7 +102,7 @@
               </div>
             </div>
           </el-form-item>
-          <el-form-item prop="images">
+          <el-form-item prop="images" v-if="resourceForm.files.length > 0">
             <div class="list-area">
               <el-divider></el-divider>
               <div class="list-wrapper">
@@ -906,6 +910,7 @@ export default {
 
 <style lang="scss">
 .header-title {
+  font-size: 30px;
   margin: 50px auto 30px;
   font-weight: 300;
   text-align: center;
@@ -967,14 +972,12 @@ export default {
   }
 }
 .upload-container {
-  width: 1080px;
+  width: 1136px;
   margin: 0px auto;
 }
 .upload-wrapper {
-  width: 1080px;
   padding: 40px;
-  margin: 20px auto;
-  min-height: 500px;
+  min-height: 568px;
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
   .select-area {
     font-size: 24px;
@@ -992,7 +995,7 @@ export default {
         align-items: center;
         .el-button {
           width: 160px;
-          font-size: 18px;
+          font-size: 20px;
           padding: 20px;
         }
       }
@@ -1005,8 +1008,9 @@ export default {
   .list-area {
     .list-wrapper {
       .list-wrapper-title {
+        line-height: 16px;
         color: #777;
-        margin-bottom: 30px;
+        margin-bottom: 28px;
         font-weight: 300;
       }
       ul {
@@ -1068,8 +1072,9 @@ export default {
   }
   .support-file-area {
     .support-file-area__text {
+      font-size: 16px;
       text-align: center;
-      color: #777;
+      color: #cccccc;
     }
   }
 }
