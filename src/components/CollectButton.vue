@@ -1,5 +1,5 @@
 <template>
-  <span>
+  <span @click.stop="stopBublet">
     <el-button @click="click" class="baseButton button" :disabled="disabled">
       <i class="el-icon--left" v-show="!isCollect">
         <!-- <svg
@@ -34,6 +34,7 @@ export default {
     click() {
       this.$emit("click");
     },
+    stopBublet() {},
   },
   props: {
     collectionNum: {

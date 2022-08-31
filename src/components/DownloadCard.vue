@@ -74,7 +74,6 @@ export default {
     let arr = this.file.name.split(".");
     this.type = arr[arr.length - 1].toLocaleLowerCase();
     this.downloadNum = this.file.downloadCount;
-    console.log(this.file.size);
   },
   methods: {
     download() {
@@ -89,30 +88,35 @@ export default {
         .then((res) => {
           saveAs(res.data, this.file.name);
           this.downloadNum += 1;
+          console.log("okok", res.data);
         })
-        .catch((err) => {
-          console.log(err);
+        .catch(() => {
+          console.log("下载失败使用使用自定义方法下载！");
           this.downloadFileUsingCanvasAndOpenWindow();
         });
     },
     // 使用canvas下载跨域图片文件的方法， 可以使用window.open()下载非浏览器直接可以预览的文件
     downloadUsingCanvas() {
       console.log("图片!");
-      let image = new Image();
-      image.src = this.file.url;
-      var that = this;
-      image.crossOrigin = "anonymous";
-      image.onload = function () {
-        let c = document.createElement("canvas");
-        let ctx = c.getContext("2d");
-        c.width = this.width;
-        c.height = this.height;
-        ctx.clearRect(0, 0, c.width, c.height);
-        ctx.drawImage(image, 0, 0, c.width, c.height);
-        c.toBlob(function (blob) {
-          saveAs(blob, that.file.name);
-        });
-      };
+      try {
+        let image = new Image();
+        image.src = this.file.url;
+        let that = this;
+        image.crossOrigin = "anonymous";
+        image.onload = function () {
+          let c = document.createElement("canvas");
+          let ctx = c.getContext("2d");
+          c.width = this.width;
+          c.height = this.height;
+          ctx.clearRect(0, 0, c.width, c.height);
+          ctx.drawImage(image, 0, 0, c.width, c.height);
+          c.toBlob(function (blob) {
+            saveAs(blob, that.file.name);
+          });
+        };
+      } catch (error) {
+        console.log("canvas存在问题", error);
+      }
     },
     downloadFileUsingCanvasAndOpenWindow() {
       let imageType = ["jpg", "png", "gif", "jpeg", "svg"];

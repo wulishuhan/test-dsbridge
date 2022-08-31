@@ -1,7 +1,7 @@
 <template>
   <div @click="closeDownPanel">
     <el-button class="baseButton button" @click.stop="showDownPanel">
-      <div class="downPanel" v-show="isShowDownPanel">
+      <div class="downPanel" @click.stop="stopBublet" v-show="isShowDownPanel">
         <div class="downLoadAll">
           <span class="fileNum">
             {{ fileNum }}{{ $t("download.fileNum") }}
@@ -72,6 +72,7 @@ export default {
       this.$emit("click");
       // this.isShowDownPanel = !this.isShowDownPanel;
     },
+    stopBublet() {},
   },
   props: {
     fileList: {

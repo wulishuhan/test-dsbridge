@@ -17,7 +17,6 @@ export async function getFileData(id) {
       }
     });
   } catch (err) {
-    alert("服务器出错");
     console.log(err);
   }
 }

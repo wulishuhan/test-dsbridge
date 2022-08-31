@@ -39,7 +39,7 @@ export default {
 <style></style>
 <style lang="scss" scoped>
 .tag {
-  font-size: 18px;
+  font-size: 24px;
   font-family: Source Han Sans CN;
   font-weight: 400;
   color: #1a1a1a;
@@ -48,13 +48,15 @@ export default {
   display: flex;
   flex-wrap: wrap;
   .button {
-    margin-right: 12px;
-    margin-top: 12px;
-    font-size: 15px;
+    margin-right: 24px;
+    margin-top: 16px;
+    font-size: 20px;
     font-family: Source Han Sans CN;
     font-weight: 400;
     color: #999999;
     margin-left: unset;
+    width: 120px;
+    height: 56px;
   }
 }
 </style>
