@@ -51,18 +51,18 @@ export default {
 </script>
 <style lang="scss" scoped>
 .share-box {
-  width: 180px;
-  height: 54px;
+  width: 240px;
+  height: 72px;
   background: #ffffff;
   box-shadow: 0px 2px 8px 0px rgba(18, 18, 18, 0.07);
-  border-radius: 8px;
+  border-radius: 10px;
   display: flex;
   justify-content: space-evenly;
   align-items: center;
 }
 .ortur-icon {
   color: #686565;
-  font-size: 30px;
+  font-size: 38px;
 }
 .share-icon-box {
   text-decoration: none;

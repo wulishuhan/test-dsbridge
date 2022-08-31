@@ -1,5 +1,5 @@
 <template>
-  <div id="detail-top" class="container">
+  <div id="detail-top" class="container" @click="closeButtonPanel">
     <div class="center-container">
       <div class="show">
         <el-row>
@@ -158,7 +158,7 @@
             </el-tab-pane>
             <el-tab-pane label="Remix" name="third">
               <div>
-                <div class="flex justify-between">
+                <div class="flex justify-between remix-link-box">
                   <a class="more-font" @click="dialogPostRemix = true">
                     <i class="el-icon-plus"></i>
                     Post a Remix
@@ -198,7 +198,7 @@
             </el-tab-pane>
             <el-tab-pane label="Makes" name="fourth">
               <div>
-                <div class="flex justify-between">
+                <div class="flex justify-between make-link-box">
                   <a class="more-font" @click="dialogPostMake = true">
                     <i class="el-icon-plus"></i>
                     Post a make
@@ -743,6 +743,10 @@ export default {
       }
       this.isShowDownPanel = !this.isShowDownPanel;
     },
+    closeButtonPanel() {
+      this.isShowDownPanel = false;
+      this.openCollectedOption = false;
+    },
   },
   created() {
     getLikelist({ userId: this.userInfo.user_id })
@@ -860,11 +864,15 @@ export default {
   height: 56px;
   text-align: center;
   cursor: pointer;
+  background: #e8ebf4;
+  line-height: 56px;
 }
 
 .share {
   display: flex;
   flex-flow: row wrap;
+  justify-content: space-between;
+  margin-top: 21px;
 }
 
 a {
@@ -907,7 +915,7 @@ a {
 .bottom-content {
   width: 1024px;
   margin: 0 auto;
-  margin-top: 24px;
+  margin-top: 32px;
 }
 
 .bottom-content-left {
@@ -919,14 +927,20 @@ a {
 }
 
 .view-more {
-  font-size: 15px;
+  font-size: 20px;
   cursor: pointer;
 }
 
 .more-font {
-  font-size: 18px;
+  font-size: 24px;
   color: #1a1a1a;
   font-weight: 400;
+}
+.make-link-box {
+  margin-bottom: 24px;
+}
+.remix-link-box {
+  margin-bottom: 24px;
 }
 
 .more-image-box {
@@ -958,7 +972,7 @@ a {
 }
 
 .bottom-content-right-box-title {
-  font-size: 18px;
+  font-size: 24px;
   color: #1a1a1a;
 }
 
@@ -973,9 +987,9 @@ a {
 }
 
 .license-info {
-  font-size: 15px;
+  font-size: 20px;
   color: #9e9e9e;
-  line-height: 23px;
+  line-height: 25px;
 }
 
 .imageViewer {
@@ -1211,7 +1225,8 @@ a {
   border: none;
 }
 ::v-deep .el-tabs__header .is-top {
-  width: 480px;
+  width: 510px;
+  font-size: 16px;
 }
 
 .more-dialog {
