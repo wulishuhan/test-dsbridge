@@ -4,7 +4,11 @@
       <div class="left">
         <img
           :id="'file-' + file.id"
-          :src="file.thumbnail != null ? file.thumbnail : file.url"
+          :src="
+            file.thumbnail != null
+              ? file.thumbnail
+              : file.url + '?not-from-cache-please'
+          "
           alt=""
         />
         <div>
@@ -45,7 +49,7 @@ export default {
     default: () => {
       return {
         name: "Headset_Holder_v1.stl",
-        url: "https://cdn.thingiverse.com/assets/a0/23/4c/6f/68/medium_thumb_Headset_Holder_v1.png",
+        url: "https://cdn.thingiverse.com/assets/a0/23/4c/6f/68/medium_thumb_Headset_Holder_v1.png?not-from-cache-please",
         size: "1000",
         updatedTime: "05-17-2022",
         downloadCount: 511,
@@ -77,14 +81,18 @@ export default {
   },
   methods: {
     download() {
+      //?not-from-cache-please是处理google浏览器下载跨域
       axios
-        .get(`/dev-api/library/resource/download/${this.file.id}`, {
-          responseType: "blob",
-          method: "get",
-          headers: {
-            "Access-Control-Allow-Origin": "*",
-          },
-        })
+        .get(
+          `/dev-api/library/resource/download/${this.file.id}?not-from-cache-please`,
+          {
+            responseType: "blob",
+            method: "get",
+            headers: {
+              "Access-Control-Allow-Origin": "*",
+            },
+          }
+        )
         .then((res) => {
           saveAs(res.data, this.file.name);
           this.downloadNum += 1;
@@ -100,9 +108,10 @@ export default {
       console.log("图片!");
       try {
         let image = new Image();
-        image.src = this.file.url;
-        let that = this;
         image.crossOrigin = "anonymous";
+        image.setAttribute("crossOrigin", "anonymous");
+        image.src = this.file.url + "?not-from-cache-please";
+        let that = this;
         image.onload = function () {
           let c = document.createElement("canvas");
           let ctx = c.getContext("2d");

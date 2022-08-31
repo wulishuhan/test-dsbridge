@@ -55,7 +55,7 @@ export default {
     font-weight: 400;
     color: #999999;
     margin-left: unset;
-    width: 120px;
+    /* width: 120px; */
     height: 56px;
   }
 }
