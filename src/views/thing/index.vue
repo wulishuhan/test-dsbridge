@@ -159,7 +159,10 @@
             <el-tab-pane label="Remix" name="third">
               <div>
                 <div class="flex justify-between remix-link-box">
-                  <a class="more-font" @click="dialogPostRemix = true">
+                  <a
+                    class="more-font post-remix"
+                    @click="dialogPostRemix = true"
+                  >
                     <i class="el-icon-plus"></i>
                     Post a Remix
                   </a>
@@ -199,7 +202,7 @@
             <el-tab-pane label="Makes" name="fourth">
               <div>
                 <div class="flex justify-between make-link-box">
-                  <a class="more-font" @click="dialogPostMake = true">
+                  <a class="more-font post-make" @click="dialogPostMake = true">
                     <i class="el-icon-plus"></i>
                     Post a make
                   </a>
@@ -207,47 +210,10 @@
                     View all
                   </a>
                 </div>
-                <el-dialog
-                  title="Post your make"
-                  :visible.sync="dialogPostMake"
-                >
-                  <el-form>
-                    <el-form-item
-                      ><el-input placeholder="add a step title"></el-input
-                    ></el-form-item>
-                    <el-form-item
-                      ><el-input
-                        placeholder="Add Photo (Bulk add supported)"
-                      ></el-input
-                    ></el-form-item>
-                    <el-form-item
-                      ><el-input placeholder="Add a description"></el-input
-                    ></el-form-item>
-                  </el-form>
-                </el-dialog>
-                <!-- <ElImageViewer
-                  class="imageViewer"
-                  v-if="showMake"
-                  :on-close="closeMake"
-                  :url-list="makeUrl"
-                  :isMake="true"
-                ></ElImageViewer>
-                <div class="flex justify-between" style="flex-wrap: wrap">
-                  <div style="position: relative" v-for="i in 6" :key="i">
-                    <el-image
-                      class="more-image"
-                      src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
-                    >
-                    </el-image>
-                    <div class="makes-mask" @click="openMake">
-                      <div class="makes-mask-font-container">
-                        <span class="ortur-icon-message"></span>
-                        12
-                        <span class="el-icon-arrow-right"></span>
-                      </div>
-                    </div>
-                  </div>
-                </div> -->
+                <make-dialog
+                  :isShow.sync="dialogPostMake"
+                  :customClass="'make-dialog'"
+                ></make-dialog>
                 <make></make>
               </div>
             </el-tab-pane>
@@ -388,6 +354,7 @@ import ViewMore from "./ViewMore.vue";
 import SrollTopButton from "@/components/SrollTopButton";
 import Tutorial from "./components/Tutorial.vue";
 import CollectedOption from "@/components/CollectedOption";
+import MakeDialog from "./components/MakeDialog.vue";
 export default {
   name: "Thing",
   components: {
@@ -405,6 +372,7 @@ export default {
     Tutorial,
     CollectedOption,
     Make,
+    MakeDialog,
   },
   data() {
     return {
@@ -1292,5 +1260,11 @@ a {
     font-size: 16px;
     margin-left: 25px;
   }
+}
+.post-make {
+  cursor: pointer;
+}
+.post-remix {
+  cursor: pointer;
 }
 </style>
