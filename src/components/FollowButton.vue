@@ -1,6 +1,10 @@
 <template>
   <div @mouseover="enterFollowing" @mouseleave="leaveFollowing">
-    <el-button type="primary" @click="changeFollowState">
+    <el-button
+      type="primary"
+      @click="changeFollowState"
+      :class="{ white: isFollow }"
+    >
       {{ followText }}
     </el-button>
   </div>
@@ -68,4 +72,9 @@ export default {
   },
 };
 </script>
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.white {
+  background-color: #fff;
+  color: #000;
+}
+</style>
