@@ -5,6 +5,8 @@
       :visible.sync="visible"
       :width="width"
       :custom-class="customClass"
+      @close="close"
+      :append-to-body="true"
     >
       <el-form>
         <el-form-item>
@@ -52,7 +54,7 @@
 <script>
 import { getToken } from "@/utils/auth";
 export default {
-  name: "MakeDialog",
+  name: "PostMakeDialog",
   props: {
     isShow: {
       type: Boolean,
@@ -103,7 +105,15 @@ export default {
       console.log(this.form);
     },
     uploadSuccessHandler(response) {
+      console.log(response);
       this.form.url = response.data.url;
+    },
+    close() {
+      this.form = {
+        title: "",
+        description: "",
+        url: "",
+      };
     },
   },
   watch: {

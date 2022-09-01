@@ -1,16 +1,13 @@
 <template>
   <div>
-    <ElImageViewer
-      class="imageViewer"
-      v-if="showMake"
-      :on-close="closeMake"
-      :url-list="makeUrl"
-      :isMake="true"
-    ></ElImageViewer>
     <div style="display: flex; justify-content: space-between; flex-wrap: wrap">
-      <div style="position: relative">
-        <el-image class="more-image" :src="url"> </el-image>
-        <div class="makes-mask" @click="openMake">
+      <div
+        style="position: relative"
+        @mouseenter="showMask = true"
+        @mouseleave="showMask = false"
+      >
+        <el-image class="more-image" :src="make.url"> </el-image>
+        <div class="makes-mask" @click="openMake" v-show="showMask">
           <div class="makes-mask-font-container">
             <span class="ortur-icon-message"></span>
             12
@@ -22,35 +19,32 @@
   </div>
 </template>
 <script>
-import ElImageViewer from "@/components/ImageViewer";
-
 export default {
-  components: { ElImageViewer },
   props: {
-    url: {
-      type: String,
-      default:
-        "https://orturbucket.s3.amazonaws.com/assets/2022/08/10/c4d93a3805b3ce3f323f7974e6f78jpeg_20220810182053A028.jpeg",
+    make: {
+      type: Object,
+      default: () => {
+        return {
+          id: new Date().getTime(),
+          url: "https://orturbucket.s3.amazonaws.com/assets/2022/08/10/c4d93a3805b3ce3f323f7974e6f78jpeg_20220810182053A028.jpeg",
+        };
+      },
     },
-  },
-  computed: {
-    makeUrl() {
-      return [this.url];
+    index: {
+      type: Number,
+      default: 0,
     },
   },
   data() {
     return {
       showMake: false,
+      showMask: false,
     };
   },
   methods: {
     openMake() {
-      this.showMake = true;
-      document.documentElement.style.overflowY = "hidden";
-    },
-    closeMake() {
-      this.showMake = false;
-      document.documentElement.style.overflowY = "scroll";
+      this.$emit("openMake");
+      this.$emit("getIndex", this.index);
     },
   },
 };

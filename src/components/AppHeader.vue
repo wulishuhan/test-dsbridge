@@ -188,6 +188,7 @@ export default {
     this.$store.dispatch("user/getUserInfo").catch((e) => {
       console.log(e);
     });
+    console.log("code", this.$route.query.code);
   },
   methods: {
     handleSettingClick() {
