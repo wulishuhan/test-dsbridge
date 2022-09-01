@@ -94,10 +94,10 @@
           popper-class="popover"
           :visible-arrow="false"
         >
-          <ShareSocialMedia :id="thing.id"></ShareSocialMedia>
+          <!-- <ShareSocialMedia :id="thing.id"></ShareSocialMedia> -->
           <div class="share-box" slot="reference">
-            <i class="el-icon-share icon-share"></i>
-            {{ thing.share_count }}
+            <i class="el-icon-view icon-share"></i>
+            {{ thing.view_count }}
           </div>
         </el-popover>
         <span
@@ -140,13 +140,13 @@
   </div>
 </template>
 <script>
-import ShareSocialMedia from "@/components/ShareCard";
+// import ShareSocialMedia from "@/components/ShareCard";
 import CollectedOption from "@/components/CollectedOption";
 import UserRecommendation from "@/components/UserRecommendation";
 import { addLike, deleteLike } from "@/api/like";
 export default {
   name: "ResourceCard",
-  components: { ShareSocialMedia, CollectedOption, UserRecommendation },
+  components: { CollectedOption, UserRecommendation },
   props: {
     isYourAccount: {
       type: Boolean,
