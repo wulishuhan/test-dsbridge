@@ -60,7 +60,7 @@ export default {
   mounted() {
     this.editor = new Editor({
       content: this.comment,
-      autofocus: true,
+      autofocus: false,
       extensions: [
         StarterKit,
         Placeholder.configure({
@@ -75,6 +75,9 @@ export default {
       },
       onFocus: () => {
         this.showAvatar = false;
+      },
+      onBlur: () => {
+        this.showAvatar = true;
       },
     });
   },
@@ -175,7 +178,7 @@ export default {
       border-radius: 50%;
     }
     .post-content {
-      width: 90%;
+      width: 100%;
       ::v-deep .ProseMirror {
         outline: none;
         min-height: 40px;
