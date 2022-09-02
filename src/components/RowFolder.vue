@@ -3,7 +3,7 @@
     <div id="folderWrapper" class="folderWrapper">
       <div
         class="folderContainer"
-        v-for="item in folders"
+        v-for="(item, index) in folders"
         @mouseenter="handleFolderMouseEnter"
         :key="item.id"
         @click="handleClickFolder(item)"
@@ -16,7 +16,10 @@
             id="moreMenuIcon"
           >
             <div class="moreMenu" v-if="item.showMoreMenu">
-              <div class="moreMenuItem" @click.stop="handleRenameClick(item)">
+              <div
+                class="moreMenuItem"
+                @click.stop="handleRenameClick(item, index)"
+              >
                 {{ $t("design.Rename") }}
               </div>
               <div class="moreMenuItem" @click.stop="handleDelClick(item)">
@@ -28,11 +31,7 @@
         </div>
         <div class="folder">
           <div class="imgArr">
-            <div
-              class="imgArrItem"
-              v-for="(item, index) in imgArr"
-              :key="index"
-            >
+            <div class="imgArrItem" v-for="item in imgArr" :key="item.id">
               <img :src="item" alt="" />
             </div>
           </div>
@@ -42,7 +41,11 @@
           <input
             ref="folderInputs"
             @click.stop="return false;"
-            @change="isRename ? handleRenamed(item) : handleEdited(item)"
+            @keyup.enter="
+              item.isEdit = false;
+              isEdit = false;
+            "
+            @blur="isRename ? handleRenamed(item) : handleEdited(item)"
             class="editInput"
             type="text"
             v-model="item.name"
@@ -153,6 +156,10 @@ export default {
       item.isEdit = true;
       item.showMoreMenu = false;
       this.isRename = true;
+      this.$nextTick(() => {
+        console.log(this.$refs.folderInputs[0].focus());
+        // [this.folders.length - 1].focus();
+      });
     },
     handleDelClick(item) {
       this.$emit("delFolder", item);
@@ -173,6 +180,9 @@ export default {
           message: this.$t("design.folderNameRequire"),
           type: "fail",
         });
+        item.isEdit = true;
+        this.isEdit = true;
+
         return;
       }
       this.onFolderAdd(item).then(() => {
@@ -187,6 +197,8 @@ export default {
           message: this.$t("design.folderNameRequire"),
           type: "fail",
         });
+        item.isEdit = true;
+        this.isEdit = true;
         return;
       }
       renameCollection(item).then(() => {
@@ -252,7 +264,6 @@ export default {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-    justify-content: space-between;
 
     margin-right: 32px;
     .folderContainer:hover .moreMenuIcon {
@@ -263,6 +274,7 @@ export default {
 
     .folderContainer {
       position: relative;
+      margin-right: 32px;
       .moreMenuIcon {
         display: none;
         text-align: center;
@@ -284,8 +296,8 @@ export default {
           background: #ffffff;
           box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.07);
           border-radius: 10px;
-          top: 30px;
-          left: 30px;
+          top: 20px;
+          right: 10px;
           text-align: left;
           z-index: 500;
           .moreMenuItem {

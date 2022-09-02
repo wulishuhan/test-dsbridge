@@ -74,6 +74,7 @@
                     ></span>
                     <span v-else class="ortur-icon-facebook icon"></span>
                     <span>facebook</span>
+                    <span class="username">111111</span>
                   </div>
                   <div class="right">
                     <el-switch
@@ -321,6 +322,11 @@ export default {
       .icon {
         margin-right: 18px;
         font-size: 26px;
+        width: 30px;
+        height: 26px;
+      }
+      .username {
+        margin-left: 20px;
       }
     }
     .right {
