@@ -69,7 +69,6 @@ export default {
           "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.jj20.com%2Fup%2Fallimg%2Ftp09%2F210F2130512J47-0-lp.jpg&refer=http%3A%2F%2Fimg.jj20.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1663124045&t=d288c47a19560c2971d5541c585dea56",
           "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.jj20.com%2Fup%2Fallimg%2Ftp09%2F210F2130512J47-0-lp.jpg&refer=http%3A%2F%2Fimg.jj20.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1663124045&t=d288c47a19560c2971d5541c585dea56",
           "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.jj20.com%2Fup%2Fallimg%2Ftp09%2F210F2130512J47-0-lp.jpg&refer=http%3A%2F%2Fimg.jj20.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1663124045&t=d288c47a19560c2971d5541c585dea56",
-          "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.jj20.com%2Fup%2Fallimg%2Ftp09%2F210F2130512J47-0-lp.jpg&refer=http%3A%2F%2Fimg.jj20.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1663124045&t=d288c47a19560c2971d5541c585dea56",
         ];
       },
     },
@@ -243,12 +242,17 @@ export default {
     font-size: 26px;
     font-weight: 400;
     margin: auto 0;
+    width: 256px;
+    text-align: center;
+    height: 130px;
+    line-height: 130px;
   }
 
   .folderWrapper {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
+    justify-content: space-between;
 
     margin-right: 32px;
     .folderContainer:hover .moreMenuIcon {
@@ -324,8 +328,8 @@ export default {
           .imgArrItem {
             margin: 8px;
             img {
-              width: 64px;
-              height: 39px;
+              width: 104px;
+              height: 68px;
             }
           }
         }
