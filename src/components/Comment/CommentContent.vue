@@ -15,7 +15,10 @@
         <el-button><i class="ortur-icon-message"></i></el-button>
       </div>
     </div>
-    <div class="comment-detail" style="margin-left: 54px">
+    <div class="comment-pic" v-if="comment.image != '' && comment.image">
+      <img :src="comment.image" />
+    </div>
+    <div class="comment-detail">
       {{ comment.content }}
     </div>
     <div
@@ -100,7 +103,17 @@ export default {
   }
 }
 
+.comment-pic {
+  margin-left: 54px;
+  img {
+    width: 184px;
+    height: 122px;
+    object-fit: cover;
+  }
+}
+
 .comment-detail {
+  margin-left: 54px !important;
   margin: 10px auto;
   font-size: 16px;
   font-weight: 400;
