@@ -85,6 +85,9 @@ module.exports = {
     Rename: "Rename",
     moveSuccess: "Move success",
     addSuccess: "Add success",
+    mine: "Mine",
+    remixes: "Remixes",
+    makes: "Makes",
   },
   setting: {
     forgetPassword: "Forget password",
