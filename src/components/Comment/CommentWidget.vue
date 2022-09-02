@@ -21,7 +21,7 @@
       </div>
       <div class="reply-wrapper">
         <div class="comment-detail">{{ commentItem.content }}</div>
-        <div class="reply-list-wrapper">
+        <div class="reply-list-wrapper" v-if="commentItem.replies.length > 0">
           <div
             class="reply-item"
             v-for="(replyItem, replyIndex) in commentItem.replies.slice(0, 3)"
@@ -44,11 +44,26 @@
                 <el-button><i class="ortur-icon-message"></i></el-button>
               </div>
             </div>
-            <div class="reply-detail">{{ replyItem.content }}</div>
+            <div class="reply-detail">
+              <div class="comment-detail">{{ replyItem.content }}</div>
+              <div
+                class="reply-ref-detail"
+                v-if="JSON.stringify(replyItem.refer) != '{}'"
+              >
+                <span class="reply-label">回复</span>
+                &nbsp;
+                <span class="reply-nickname">{{
+                  "@" + replyItem.refer.user.name
+                }}</span>
+                &nbsp;
+                <span class="reply-comment">{{ replyItem.refer.content }}</span>
+              </div>
+            </div>
           </div>
           <el-button
             @click="showReplyList(commentIndex)"
             class="reply-list-fold"
+            v-if="commentItem.replies.length > 0"
           >
             <span style="font-size: 12px">View all replies </span>
             <span style="margin-right: 6px; color: #999">{{
@@ -99,14 +114,17 @@
           </div>
           <div class="reply-wrapper">
             <div class="comment-detail">{{ replyRow.content }}</div>
-            <div class="reply-ref-detail" v-if="replyRow.replyType == 2">
+            <div
+              class="reply-ref-detail"
+              v-if="JSON.stringify(replyRow.refer) != '{}'"
+            >
               <span class="reply-label">回复</span>
               &nbsp;
               <span class="reply-nickname">{{
-                "@" + replyRow.toNickname
+                "@" + replyRow.refer.user.name
               }}</span>
               &nbsp;
-              <span class="reply-comment">{{ replyRow.content }}</span>
+              <span class="reply-comment">{{ replyRow.refer.content }}</span>
             </div>
           </div>
         </div>
@@ -244,10 +262,13 @@ export default {
         }
       }
       .nickname {
-        font-weight: 700;
+        font-size: 16px;
+        font-weight: 500;
+        color: #1a1a1a;
       }
       .release-date {
         color: #999;
+        font-size: 14px;
       }
     }
     .message-btn {
@@ -261,14 +282,15 @@ export default {
     padding: 0px 10px;
     margin-left: 52px;
     .comment-detail {
-      margin-bottom: 10px;
-      font-size: 14px;
+      margin: 10px auto;
+      font-size: 16px;
+      font-weight: 400;
       color: #1a1a1a;
     }
     .reply-ref-detail {
-      font-size: 14px;
+      font-size: 16px;
       color: #1a1a1a;
-      background: #f5f5f5;
+      background: #dadde6;
       border-radius: 8px;
       padding: 10px 20px;
       .reply-label {
@@ -297,6 +319,9 @@ export default {
         padding: 5px 10px;
         .reply-detail {
           margin: 0px 54px;
+          font-size: 16px;
+          font-weight: 400;
+          color: #1a1a1a;
         }
       }
     }

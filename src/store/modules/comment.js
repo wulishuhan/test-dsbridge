@@ -6,7 +6,6 @@ const state = {
 const mutations = {
   SET_LIST: (state, payload) => {
     state.commentList = payload;
-    console.log("payload:", payload);
   },
 };
 

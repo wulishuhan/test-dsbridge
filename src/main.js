@@ -5,6 +5,7 @@ import router from "./router";
 import store from "./store";
 import ElementUI from "element-ui";
 import { baseURL } from "@/utils/request";
+import VEmojiPicker from "v-emoji-picker";
 
 import moment from "moment";
 import "element-ui/lib/theme-chalk/index.css";
@@ -18,6 +19,7 @@ import "@/assets/css/icon.css";
 import VueContextMenu from "vue-contextmenu";
 import Ads from "vue-google-adsense";
 
+Vue.use(VEmojiPicker);
 Vue.use(require("vue-script2"));
 Vue.use(Ads.Adsense);
 Vue.use(Ads.InArticleAdsense);
