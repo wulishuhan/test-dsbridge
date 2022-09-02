@@ -63,7 +63,7 @@
           <el-button
             @click="showReplyList(commentIndex)"
             class="reply-list-fold"
-            v-if="commentItem.replies.length > 0"
+            v-if="commentItem.replies.length > 3"
           >
             <span style="font-size: 12px">View all replies </span>
             <span style="margin-right: 6px; color: #999">{{

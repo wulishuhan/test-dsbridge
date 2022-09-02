@@ -1,5 +1,14 @@
 <template>
   <div class="reply-widget-wrapper">
+    <div class="comment-pic">
+      <div class="pic-wrapper" v-if="commentPic != ''">
+        <img :src="commentPic" />
+        <span class="ortur-icon-minus remove-handle" @click="handleRemovePic()">
+          <span class="path1"></span>
+          <span class="path2"></span>
+        </span>
+      </div>
+    </div>
     <div class="post-content-wrapper">
       <img v-if="showAvatar" :src="userInfo.avatar" />
       <editor-content
@@ -48,6 +57,7 @@ export default {
       editor: null,
       showAvatar: true,
       comment: "",
+      commentPic: "",
       acceptType: ".jpg,.png,.jpeg",
     };
   },
@@ -77,7 +87,11 @@ export default {
         this.showAvatar = false;
       },
       onBlur: () => {
-        this.showAvatar = true;
+        if (this.comment == "" && this.commentPic == "") {
+          this.showAvatar = true;
+        } else {
+          this.showAvatar = false;
+        }
       },
     });
   },
@@ -123,20 +137,9 @@ export default {
       this.editor.commands.clearContent(true);
       this.$emit("closeReplyModal");
     },
-    upSuccess(response, file) {
-      console.log("file", file);
-      for (const index in this.resourceForm.files) {
-        var item = this.resourceForm.files[index];
-        if (file.uid == item.uid) {
-          item.url = response.data.url;
-          item.percent = 100;
-          item.id = response.data.id;
-          // this.genThumb().then(() => {});
-          break;
-        }
-      }
-
-      //TODO 完成的时候隐藏掉进度条，显示移除
+    upSuccess(response) {
+      this.commentPic = response.data.url;
+      this.editor.commands.focus();
     },
     beforeUpload(file) {
       let extension = file.name.substring(file.name.lastIndexOf(".") + 1);
@@ -150,6 +153,9 @@ export default {
       accept = true;
       return accept;
     },
+    handleRemovePic() {
+      this.commentPic = "";
+    },
   },
 };
 </script>
@@ -161,9 +167,24 @@ export default {
   flex-wrap: nowrap;
   border: 1px solid #ccc !important;
   border-radius: 10px;
-  min-height: 96px;
-  max-height: 96px;
   justify-content: space-between;
+  .comment-pic {
+    display: flex;
+    .pic-wrapper {
+      position: relative;
+      padding: 10px;
+      img {
+        width: 100px;
+        height: 60px;
+        object-fit: cover;
+      }
+      .remove-handle {
+        position: absolute;
+        right: 20px;
+        bottom: 20px;
+      }
+    }
+  }
   .post-content-wrapper {
     width: 100%;
     padding: 8px;
@@ -176,6 +197,7 @@ export default {
       border-radius: 50%;
       object-fit: cover;
       border-radius: 50%;
+      margin-right: 20px;
     }
     .post-content {
       width: 100%;
@@ -185,7 +207,6 @@ export default {
         max-height: 40px;
         font-size: 20px;
         line-height: 40px;
-        padding: 0 20px;
         overflow: hidden;
         white-space: nowrap;
       }
