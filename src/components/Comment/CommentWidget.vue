@@ -5,73 +5,35 @@
       v-for="(commentItem, commentIndex) in commentList"
       :key="commentItem.id"
     >
-      <div class="userinfo-wrapper">
-        <div class="profile">
-          <span class="user-avatar"
-            ><img :src="commentItem.user.avatar"
-          /></span>
-          <span class="nickname">{{ commentItem.user.name }}</span>
-          <span class="release-date">
-            {{ $d(new Date(commentItem.create_time), "long") }}
-          </span>
+      <comment-content
+        :comment="commentItem"
+        :showReplyDialog="showReplyOuterDialog"
+        :commentIndex="commentIndex"
+      ></comment-content>
+      <div class="reply-wrapper" v-if="commentItem.replies.length > 0">
+        <div
+          class="reply-item"
+          v-for="(replyItem, replyIndex) in commentItem.replies.slice(0, 3)"
+          :key="replyIndex"
+        >
+          <comment-content
+            :comment="replyItem"
+            :showReplyDialog="showReplyOuterDialogFromReply"
+            :commentIndex="commentIndex"
+            :replyIndex="replyIndex"
+          ></comment-content>
         </div>
-        <div class="message-btn" @click="showReplyOuterDialog(commentIndex)">
-          <el-button><i class="ortur-icon-message"></i></el-button>
-        </div>
-      </div>
-      <div class="reply-wrapper">
-        <div class="comment-detail">{{ commentItem.content }}</div>
-        <div class="reply-list-wrapper" v-if="commentItem.replies.length > 0">
-          <div
-            class="reply-item"
-            v-for="(replyItem, replyIndex) in commentItem.replies.slice(0, 3)"
-            :key="replyIndex"
-          >
-            <div class="userinfo-wrapper">
-              <div class="profile">
-                <span class="user-avatar">
-                  <img :src="replyItem.user.avatar" />
-                </span>
-                <span class="nickname">{{ replyItem.user.name }}</span>
-                <span class="release-date">
-                  {{ $d(new Date(replyItem.create_time), "long") }}
-                </span>
-              </div>
-              <div
-                class="message-btn"
-                @click="showReplyOuterDialogFromReply(commentIndex, replyIndex)"
-              >
-                <el-button><i class="ortur-icon-message"></i></el-button>
-              </div>
-            </div>
-            <div class="reply-detail">
-              <div class="comment-detail">{{ replyItem.content }}</div>
-              <div
-                class="reply-ref-detail"
-                v-if="JSON.stringify(replyItem.refer) != '{}'"
-              >
-                <span class="reply-label">回复</span>
-                &nbsp;
-                <span class="reply-nickname">{{
-                  "@" + replyItem.refer.user.name
-                }}</span>
-                &nbsp;
-                <span class="reply-comment">{{ replyItem.refer.content }}</span>
-              </div>
-            </div>
-          </div>
-          <el-button
-            @click="showReplyList(commentIndex)"
-            class="reply-list-fold"
-            v-if="commentItem.replies.length > 3"
-          >
-            <span style="font-size: 12px">View all replies </span>
-            <span style="margin-right: 6px; color: #999">{{
-              commentItem.replies ? commentItem.replies.length : 0
-            }}</span>
-            <i class="el-icon-right" style="color: #999"></i>
-          </el-button>
-        </div>
+        <el-button
+          @click="showReplyList(commentIndex)"
+          class="reply-list-fold"
+          v-if="commentItem.replies.length > 3"
+        >
+          <span style="font-size: 12px">View all replies </span>
+          <span style="margin-right: 6px; color: #999">{{
+            commentItem.replies ? commentItem.replies.length : 0
+          }}</span>
+          <i class="el-icon-right" style="color: #999"></i>
+        </el-button>
       </div>
     </div>
     <el-dialog
@@ -135,24 +97,25 @@
         append-to-body
         top="35vh"
       >
-        <ReplyWidget
+        <reply-widget
           @closeReplyModal="handleClose('inner')"
           :comment-id="currentCommentId"
-        ></ReplyWidget>
+        ></reply-widget>
       </el-dialog>
     </el-dialog>
 
     <el-dialog :title="replyTo" :visible.sync="outerVisible">
-      <ReplyWidget
+      <reply-widget
         @closeReplyModal="handleClose('outer')"
         :comment-id="currentCommentId"
-      ></ReplyWidget>
+      ></reply-widget>
     </el-dialog>
   </div>
 </template>
 
 <script>
 import ReplyWidget from "@/components/Comment/ReplyWidget.vue";
+import CommentContent from "@/components/Comment/CommentContent.vue";
 import { createNamespacedHelpers } from "vuex";
 const { mapState } = createNamespacedHelpers("comment");
 export default {
@@ -181,6 +144,7 @@ export default {
     };
   },
   components: {
+    CommentContent,
     ReplyWidget,
   },
   mounted() {
@@ -279,8 +243,11 @@ export default {
     }
   }
   .reply-wrapper {
-    padding: 0px 10px;
+    padding: 5px 10px;
     margin-left: 52px;
+    background: #e8ebf4;
+    border-radius: 8px;
+    font-size: 14px;
     .comment-detail {
       margin: 10px auto;
       font-size: 16px;
@@ -300,29 +267,23 @@ export default {
         color: #1e78f0;
       }
     }
-    .reply-list-wrapper {
-      background: #e8ebf4;
-      padding: 5px;
-      border-radius: 8px;
-      font-size: 14px;
-      .reply-list-fold {
+    .reply-list-fold {
+      color: #1e78f0;
+      background: none;
+      border: none;
+      width: 104px;
+      height: 40px;
+      .reply-label {
         color: #1e78f0;
-        background: none;
-        border: none;
-        width: 104px;
-        height: 40px;
-        .reply-label {
-          color: #1e78f0;
-        }
       }
-      .reply-item {
-        padding: 5px 10px;
-        .reply-detail {
-          margin: 0px 54px;
-          font-size: 16px;
-          font-weight: 400;
-          color: #1a1a1a;
-        }
+    }
+    .reply-item {
+      padding: 5px 10px;
+      .reply-detail {
+        margin: 0px 54px;
+        font-size: 16px;
+        font-weight: 400;
+        color: #1a1a1a;
       }
     }
   }

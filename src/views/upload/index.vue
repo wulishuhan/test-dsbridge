@@ -358,7 +358,7 @@
                 ></el-input>
               </el-form-item>
               <el-button class="drag-btn"
-                ><i class="el-icon-s-operation"></i
+                ><i class="ortur-icon-settings-gray"></i
               ></el-button>
 
               <el-button class="add-btn" @click="addTutorialItem(tutorialKey)">

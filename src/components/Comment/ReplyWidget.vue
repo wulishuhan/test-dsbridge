@@ -126,6 +126,7 @@ export default {
         resourceId: resId,
         parentId: this.commentId,
         content: this.comment,
+        image: this.commentPic,
       }).then(() => {
         this.$store.dispatch("comment/getCommentList", { resId: resId });
         this.$message({
@@ -135,6 +136,7 @@ export default {
       });
 
       this.editor.commands.clearContent(true);
+      this.commentPic = "";
       this.$emit("closeReplyModal");
     },
     upSuccess(response) {
