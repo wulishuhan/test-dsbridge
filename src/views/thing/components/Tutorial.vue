@@ -58,17 +58,19 @@ export default {
   }
 }
 h2 {
-  font-size: 16px;
+  font-size: 20px;
   font-family: Source Han Sans CN;
   font-weight: 500;
   color: #1a1a1a;
+  margin-bottom: 21px;
 }
 .description {
-  font-size: 14px;
+  font-size: 20px;
   font-family: Source Han Sans CN;
   font-weight: 400;
   color: #9e9e9e;
   line-height: 30px;
+  margin-bottom: 21px;
 }
 .images {
   width: 637px;

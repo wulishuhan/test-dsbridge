@@ -157,9 +157,22 @@
       <UserRecommendation></UserRecommendation>
       <el-avatar :size="40" slot="reference"></el-avatar>
     </el-popover>
+    <el-popover
+      placement="bottom-end"
+      trigger="click"
+      popper-class="popover"
+      :visible-arrow="false"
+    >
+      <ShareSocialMedia></ShareSocialMedia>
+      <div class="share-box" slot="reference">
+        <i class="el-icon-share icon-share"></i>
+        12345
+      </div>
+    </el-popover>
   </div>
 </template>
 <script>
+import ShareSocialMedia from "@/components/ShareCard";
 import Login from "@/components/Login";
 import ShowMore from "@/components/ShowMore.vue";
 // import Preview from "@/components/Preview.vue";
@@ -178,6 +191,7 @@ export default {
     ResourceCard,
     CollectedOption,
     UserRecommendation,
+    ShareSocialMedia,
   },
   data() {
     return {
@@ -483,5 +497,9 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+::v-deep .el-popover {
+  min-width: none;
+  padding: 0px;
 }
 </style>

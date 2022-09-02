@@ -6,3 +6,10 @@ export function getAllList(data) {
     data,
   });
 }
+export function follow(params) {
+  return request({
+    url: `/library/follower`,
+    method: "post",
+    params,
+  });
+}

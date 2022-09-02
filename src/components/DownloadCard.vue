@@ -4,7 +4,11 @@
       <div class="left">
         <img
           :id="'file-' + file.id"
-          :src="file.thumbnail != null ? file.thumbnail : file.url"
+          :src="
+            file.thumbnail != null
+              ? file.thumbnail
+              : file.url + '?not-from-cache-please'
+          "
           alt=""
         />
         <div>
@@ -14,7 +18,7 @@
           </el-tooltip>
           <!-- <div class="name">{{ file.name }}</div> -->
           <div>
-            <span>{{ Math.floor(file.size / 1000) }}kb</span>
+            <span>{{ fileSize }}</span>
             <span v-if="type == 'stl'" class="type">stl</span>
             <span v-else-if="type == 'png'" class="type">png</span>
             <span v-else-if="type == 'jpg'" class="type">jpg</span>
@@ -45,8 +49,8 @@ export default {
     default: () => {
       return {
         name: "Headset_Holder_v1.stl",
-        url: "https://cdn.thingiverse.com/assets/a0/23/4c/6f/68/medium_thumb_Headset_Holder_v1.png",
-        size: "1 mb",
+        url: "https://cdn.thingiverse.com/assets/a0/23/4c/6f/68/medium_thumb_Headset_Holder_v1.png?not-from-cache-please",
+        size: "1000",
         updatedTime: "05-17-2022",
         downloadCount: 511,
         type: "stl",
@@ -59,6 +63,17 @@ export default {
       downloadNum: 0,
     };
   },
+  computed: {
+    fileSize() {
+      let sizeText = "";
+      if (this.file.size > 1000) {
+        sizeText = Math.floor(this.file.size / 1000) + "kb";
+      } else {
+        sizeText = this.file.size + "b";
+      }
+      return sizeText;
+    },
+  },
   mounted() {
     let arr = this.file.name.split(".");
     this.type = arr[arr.length - 1].toLocaleLowerCase();
@@ -66,41 +81,51 @@ export default {
   },
   methods: {
     download() {
+      //?not-from-cache-please是处理google浏览器下载跨域
       axios
-        .get(`/dev-api/library/resource/download/${this.file.id}`, {
-          responseType: "blob",
-          method: "get",
-          headers: {
-            "Access-Control-Allow-Origin": "*",
-          },
-        })
+        .get(
+          `/dev-api/library/resource/download/${this.file.id}?not-from-cache-please`,
+          {
+            responseType: "blob",
+            method: "get",
+            headers: {
+              "Access-Control-Allow-Origin": "*",
+            },
+          }
+        )
         .then((res) => {
           saveAs(res.data, this.file.name);
           this.downloadNum += 1;
+          console.log("okok", res.data);
         })
-        .catch((err) => {
-          console.log(err);
+        .catch(() => {
+          console.log("下载失败使用使用自定义方法下载！");
           this.downloadFileUsingCanvasAndOpenWindow();
         });
     },
     // 使用canvas下载跨域图片文件的方法， 可以使用window.open()下载非浏览器直接可以预览的文件
     downloadUsingCanvas() {
       console.log("图片!");
-      let image = new Image();
-      image.src = this.file.url;
-      var that = this;
-      image.crossOrigin = "anonymous";
-      image.onload = function () {
-        let c = document.createElement("canvas");
-        let ctx = c.getContext("2d");
-        c.width = this.width;
-        c.height = this.height;
-        ctx.clearRect(0, 0, c.width, c.height);
-        ctx.drawImage(image, 0, 0, c.width, c.height);
-        c.toBlob(function (blob) {
-          saveAs(blob, that.file.name);
-        });
-      };
+      try {
+        let image = new Image();
+        image.crossOrigin = "anonymous";
+        image.setAttribute("crossOrigin", "anonymous");
+        image.src = this.file.url + "?not-from-cache-please";
+        let that = this;
+        image.onload = function () {
+          let c = document.createElement("canvas");
+          let ctx = c.getContext("2d");
+          c.width = this.width;
+          c.height = this.height;
+          ctx.clearRect(0, 0, c.width, c.height);
+          ctx.drawImage(image, 0, 0, c.width, c.height);
+          c.toBlob(function (blob) {
+            saveAs(blob, that.file.name);
+          });
+        };
+      } catch (error) {
+        console.log("canvas存在问题", error);
+      }
     },
     downloadFileUsingCanvasAndOpenWindow() {
       let imageType = ["jpg", "png", "gif", "jpeg", "svg"];
@@ -161,11 +186,11 @@ export default {
     margin-right: 10px;
   }
   span {
-    font-size: 11px;
+    font-size: 12px;
     font-family: Source Han Sans CN;
     font-weight: 400;
-    /* color: #999999; */
-    /* margin-right: 5px; */
+    color: #999999;
+    margin-right: 5px;
   }
 }
 .el-button {

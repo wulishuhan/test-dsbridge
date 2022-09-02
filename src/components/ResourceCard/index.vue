@@ -84,10 +84,22 @@
           <i v-else class="ortur-icon-star-border icon-star"></i>
           {{ likes }}
         </div>
-        <div @click="share" class="share-box" v-show="showShare">
+        <!-- <div @click="share" class="share-box" v-show="showShare">
           <i class="el-icon-share icon-share"></i>
           {{ thing.share_count }}
-        </div>
+        </div> -->
+        <el-popover
+          placement="bottom-end"
+          trigger="click"
+          popper-class="popover"
+          :visible-arrow="false"
+        >
+          <!-- <ShareSocialMedia :id="thing.id"></ShareSocialMedia> -->
+          <div class="share-box" slot="reference">
+            <i class="el-icon-view icon-share"></i>
+            {{ thing.view_count }}
+          </div>
+        </el-popover>
         <span
           @click="handleClickMore(thing)"
           class="moreMenuIcon"
@@ -112,9 +124,9 @@
         </span>
       </div>
     </div>
-    <div class="share-container">
+    <!-- <div class="share-container">
       <share-social-media :id="thing.id" v-show="isShare"></share-social-media>
-    </div>
+    </div> -->
     <div class="collected-option-container">
       <CollectedOption
         v-if="false"
@@ -128,13 +140,13 @@
   </div>
 </template>
 <script>
-import ShareSocialMedia from "@/components/ShareCard";
+// import ShareSocialMedia from "@/components/ShareCard";
 import CollectedOption from "@/components/CollectedOption";
 import UserRecommendation from "@/components/UserRecommendation";
 import { addLike, deleteLike } from "@/api/like";
 export default {
   name: "ResourceCard",
-  components: { ShareSocialMedia, CollectedOption, UserRecommendation },
+  components: { CollectedOption, UserRecommendation },
   props: {
     isYourAccount: {
       type: Boolean,
@@ -434,7 +446,7 @@ export default {
   width: 326px;
   height: 200px;
   border-radius: 8px;
-  border: solid 1px #f0f3fa;
+  border: solid 1px #c2c4cc;
 }
 .resource-show-image-box:hover {
   width: 326px;

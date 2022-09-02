@@ -52,6 +52,9 @@ export default {
       for (let i = 0; i < this.fileList.length; i++) {
         const element = this.fileList[i];
         let res = await getFileData(element.id);
+        // if (!res) {
+        //   return;
+        // }
         zip.file(element.name, res);
       }
       zip.generateAsync({ type: "blob" }).then((content) => {

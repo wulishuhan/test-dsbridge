@@ -183,10 +183,14 @@
             v-if="!item.isEdit"
             :class="[{ NoDesc: !item.text }, { descHover: isYourAccount }]"
           >
-            <a target="_blank" v-if="!isYourAccount" :href="item.text">
+            <a
+              target="_blank"
+              v-if="item.text.startsWith('http')"
+              :href="item.text"
+            >
               {{ item.text }}
             </a>
-            <div v-if="isYourAccount">{{ item.text || "add something" }}</div>
+            <div v-else>{{ item.text || "add something" }}</div>
           </div>
           <el-input
             class="descInput"

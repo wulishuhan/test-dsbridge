@@ -86,4 +86,16 @@ module.exports = {
     moveSuccess: "移动成功",
     addSuccess: "添加成功",
   },
+  setting: {
+    forgetPassword: "忘记密码",
+    submit: "提交",
+    changeEmail: "更换邮箱",
+    newEmail: "新邮箱",
+    confirmPassword: "确认密码",
+    currentPassword: "当前密码",
+    newPassword: "新密码",
+    changePassword: "更换密码",
+    changeName: "更换名称",
+    newName: "新名称",
+  },
 };
