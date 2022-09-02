@@ -39,41 +39,7 @@
         </el-tab-pane>
       </el-tabs>
     </el-dialog>
-    <el-dialog
-      :visible.sync="dialogCollectionVisible"
-      :title="collectionName"
-      @close="handleCollectDialogClose"
-      class="DialogCollection"
-    >
-      <div class="collectionDialog">
-        <div
-          v-for="item in folderCollection"
-          :key="item.thingId"
-          class="collectionDialogItem"
-        >
-          <resource-card
-            @clickMoveMenu="Handler_MoveTo(item)"
-            @clickDelMenu="handleCancelCollect(item)"
-            @clickDownMenu="Handler_Down(item)"
-            @moveCollectionComplete="handleMoveCollectionComplete"
-            :isCollected="myCollects.includes(item.id)"
-            @deleteCollection="deleteCollection"
-            @openCollection="openCollection"
-            :thing="item"
-            :showEdit="false"
-            :showStar="true"
-            :showMoreMenuBtn="isYourAccount"
-            :key="item.id"
-            :isYourAccount="isYourAccount"
-            :isLike="myLikes.includes(item.id)"
-          >
-          </resource-card>
-        </div>
-        <div class="noCollection" v-show="folderCollection.length == 0">
-          无收藏文件
-        </div>
-      </div>
-    </el-dialog>
+
     <div class="bg">
       <span v-if="isYourAccount" class="ortur-icon-pen">
         <el-upload
@@ -218,43 +184,105 @@
           class="tabsContent"
         >
           <el-tab-pane :label="$t('design.resources')" name="first">
-            <el-row :gutter="20">
-              <div
-                class="resourceWrapper"
-                v-for="(item, index) in resources"
-                :key="item.thingId"
-                @contextmenu="showMenu(index, item)"
-              >
-                <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                  <resource-card
-                    :key="item.id"
-                    @clickMoveMenu="Handler_MoveTo(item)"
-                    @clickDelMenu="Handler_Del(item)"
-                    @clickDownMenu="Handler_Down(item)"
-                    @openCollection="openCollection"
-                    @deleteCollection="deleteCollection"
-                    :isCollected="myCollects.includes(item.id)"
-                    :thing="item"
-                    :showEdit="isLogin && isYourAccount"
-                    :showMoreMenuBtn="isYourAccount && true"
-                    :showAvatar="false"
-                    :showCollection="!isLogin || !isYourAccount"
-                    :isYourAccount="isYourAccount"
-                    :isLike="myLikes.includes(item.id)"
-                    :showStar="true"
+            <el-tabs
+              v-model="resourceActiveTab"
+              @tab-click="handleResourceTabClick"
+              class="resourceTabsContent"
+            >
+              <el-tab-pane :label="$t('design.mine')" name="first">
+                <el-row :gutter="20">
+                  <div
+                    class="resourceWrapper"
+                    v-for="(item, index) in resources"
+                    :key="item.thingId"
+                    @contextmenu="showMenu(index, item)"
                   >
-                  </resource-card>
-                </el-col>
-                <vue-context-menu
-                  class="contextMenu"
-                  :contextMenuData="contextMenuData"
-                  :transferIndex="transferIndex"
-                  @Handler1="Handler_Del(item)"
-                  @Handler2="Handler_MoveTo(item)"
-                  @Handler3="Handler_Down(item)"
-                ></vue-context-menu>
-              </div>
-            </el-row>
+                    <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
+                      <resource-card
+                        :key="item.id"
+                        @clickMoveMenu="Handler_MoveTo(item)"
+                        @clickDelMenu="Handler_Del(item)"
+                        @clickDownMenu="Handler_Down(item)"
+                        @openCollection="openCollection"
+                        @deleteCollection="deleteCollection"
+                        :isCollected="myCollects.includes(item.id)"
+                        :thing="item"
+                        :showEdit="isLogin && isYourAccount"
+                        :showMoreMenuBtn="isYourAccount && true"
+                        :showAvatar="false"
+                        :showCollection="!isLogin || !isYourAccount"
+                        :isYourAccount="isYourAccount"
+                        :isLike="myLikes.includes(item.id)"
+                        :showStar="false"
+                      >
+                      </resource-card>
+                    </el-col>
+                    <!-- <vue-context-menu
+                      class="contextMenu"
+                      :contextMenuData="contextMenuData"
+                      :transferIndex="transferIndex"
+                      @Handler1="Handler_Del(item)"
+                      @Handler2="Handler_MoveTo(item)"
+                      @Handler3="Handler_Down(item)"
+                    ></vue-context-menu> -->
+                  </div>
+                </el-row>
+              </el-tab-pane>
+              <el-tab-pane :label="$t('design.remixes')" name="second">
+                <el-row :gutter="20">
+                  <div
+                    class="resourceWrapper"
+                    v-for="(item, index) in remixesList"
+                    :key="item.thingId"
+                    @contextmenu="showMenu(index, item)"
+                  >
+                    <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
+                      <resource-card
+                        :key="item.id"
+                        @clickMoveMenu="Handler_MoveTo(item)"
+                        @clickDelMenu="Handler_Del(item)"
+                        @clickDownMenu="Handler_Down(item)"
+                        @openCollection="openCollection"
+                        @deleteCollection="deleteCollection"
+                        :isCollected="myCollects.includes(item.id)"
+                        :thing="item"
+                        :showEdit="isLogin && isYourAccount"
+                        :showMoreMenuBtn="isYourAccount && true"
+                        :showAvatar="false"
+                        :showCollection="!isLogin || !isYourAccount"
+                        :isYourAccount="isYourAccount"
+                        :isLike="myLikes.includes(item.id)"
+                        :showStar="false"
+                      >
+                      </resource-card>
+                    </el-col>
+                  </div>
+                </el-row>
+              </el-tab-pane>
+
+              <el-tab-pane :label="$t('design.makes')" name="third">
+                <Make></Make>
+                <el-row :gutter="20">
+                  <div v-for="item in histories" :key="item.thingId">
+                    <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
+                      <resource-card
+                        :key="item.id"
+                        :thing="item"
+                        :isLike="myLikes.includes(item.id)"
+                        @openCollection="openCollection"
+                        @clickMoveMenu="Handler_MoveTo(item)"
+                        @clickDelMenu="handleCancelCollect(item)"
+                        @clickDownMenu="Handler_Down(item)"
+                        @moveCollectionComplete="handleMoveCollectionComplete"
+                        @deleteCollection="deleteCollection"
+                        :isCollected="myCollects.includes(item.id)"
+                      >
+                      </resource-card>
+                    </el-col>
+                  </div>
+                </el-row>
+              </el-tab-pane>
+            </el-tabs>
           </el-tab-pane>
           <el-tab-pane :label="$t('design.likes')" name="second">
             <el-row :gutter="20">
@@ -278,6 +306,7 @@
           </el-tab-pane>
           <el-tab-pane :label="$t('design.collection')" name="third">
             <RowFolder
+              v-show="!dialogCollectionVisible"
               :isYourAccount="isYourAccount"
               style="width: 98%; margin-bottom: 20px"
               :value="rowFolders"
@@ -285,8 +314,43 @@
               @clickFolder="handleClickFolder"
               @delFolder="handleDelFolder"
             ></RowFolder>
-            <div class="draft">Draft</div>
-            <div style="display: flex; flex-wrap: wrap">
+            <div class="draft" v-show="!dialogCollectionVisible">Draft</div>
+            <div class="nav" v-show="dialogCollectionVisible">
+              <i class="el-icon-back" @click="handleCollectDialogClose"></i>
+              <div>{{ collectionName }}</div>
+            </div>
+            <div class="collectionDialog" v-show="dialogCollectionVisible">
+              <div
+                v-for="item in folderCollection"
+                :key="item.thingId"
+                style="width: 33.3%"
+              >
+                <resource-card
+                  @clickMoveMenu="Handler_MoveTo(item)"
+                  @clickDelMenu="handleCancelCollect(item)"
+                  @clickDownMenu="Handler_Down(item)"
+                  @moveCollectionComplete="handleMoveCollectionComplete"
+                  :isCollected="myCollects.includes(item.id)"
+                  @deleteCollection="deleteCollection"
+                  @openCollection="openCollection"
+                  :thing="item"
+                  :showEdit="false"
+                  :showStar="true"
+                  :showMoreMenuBtn="isYourAccount"
+                  :key="item.id"
+                  :isYourAccount="isYourAccount"
+                  :isLike="myLikes.includes(item.id)"
+                >
+                </resource-card>
+              </div>
+              <div class="noCollection" v-show="folderCollection.length == 0">
+                无收藏文件
+              </div>
+            </div>
+            <div
+              style="display: flex; flex-wrap: wrap"
+              v-show="!dialogCollectionVisible"
+            >
               <div
                 v-for="item in collections"
                 :key="item.thingId"
@@ -372,6 +436,7 @@ import IndexFollowPanel from "./IndexFollowPanel.vue";
 import CollectedOption from "@/components/CollectedOption";
 import RowFolder from "@/components/RowFolder.vue";
 import DownListPanel from "@/components/DownListPanel.vue";
+import Make from "@/views/thing/components/Make.vue";
 import {
   deleteCollectionResource,
   getCollectionResourceList,
@@ -409,9 +474,11 @@ export default {
     CollectedOption,
     RowFolder,
     DownListPanel,
+    Make,
   },
   data() {
     return {
+      remixesList: [],
       detail: {
         creator: {
           avatar: "",
@@ -429,6 +496,7 @@ export default {
         tutorials: [],
         update_time: "1990-01-01",
       },
+      resourceActiveTab: "first",
       isShowDownPanel: false,
 
       collectionName: "",
@@ -637,6 +705,7 @@ export default {
     },
     handleCollectDialogClose() {
       // this.getMyLikesList();
+      this.dialogCollectionVisible = false;
     },
     handleCancelCollect(item) {
       if (this.dialogCollectionVisible) {
@@ -826,6 +895,18 @@ export default {
         let userId = this.user.userId;
         getResourceList({ userId }).then((res) => {
           this.resources = res.data.rows;
+        });
+      }
+    },
+    getRemixesList() {
+      if (this.isYourAccount) {
+        getResourceList({ userId: this.userInfo.user_id }).then((res) => {
+          this.remixesList = res.data.rows;
+        });
+      } else {
+        let userId = this.user.userId;
+        getResourceList({ userId }).then((res) => {
+          this.remixesList = res.data.rows;
         });
       }
     },
@@ -1106,8 +1187,8 @@ export default {
       });
     },
     async handleResourceClick() {
-      if (this.activeName == "first") {
-        this.isLogin && !this.isYourAccount && (await this.getMyLikesList());
+      if (this.activeName == "first" && this.resourceActiveTab == "first") {
+        this.isLogin && !this.isYourAccount && this.getMyLikesList();
 
         this.getResourceList();
       } else if (this.activeName == "second") {
@@ -1119,6 +1200,20 @@ export default {
         this.getHistoriesList();
         this.isLogin && this.getAllMyCollectList();
         // this.isLogin && !this.isYourAccount && this.getMyLikesList();
+      }
+    },
+    async handleResourceTabClick() {
+      if (this.resourceActiveTab == "first") {
+        // this.isLogin && !this.isYourAccount && this.getMyLikesList();
+
+        this.getResourceList();
+      } else if (this.resourceActiveTab == "second") {
+        // this.isLogin && !this.isYourAccount && this.getMyLikesList();
+
+        this.getRemixesList();
+      } else if (this.resourceActiveTab == "third") {
+        this.getHistoriesList();
+        this.isLogin && this.getAllMyCollectList();
       }
     },
   },
@@ -1151,9 +1246,11 @@ export default {
   .collectionDialog {
     display: flex;
     flex-wrap: wrap;
-    .collectionDialogItem {
+    .noCollection {
       margin: 10px;
       // width: 33.3%;
+      text-align: center;
+      margin: 20px auto;
     }
   }
   .followDialog {
@@ -1164,7 +1261,36 @@ export default {
       border-radius: 20px;
     }
   }
+
   .tabsContent {
+    ::v-deep .resourceTabsContent {
+      .el-tabs__nav-wrap::after {
+        height: 0px;
+      }
+      .el-tabs__active-bar {
+        height: 0;
+      }
+      .el-tabs__item {
+        // padding: 0 20px;
+        width: 120px;
+        height: 40px;
+        font-size: 16px;
+        font-family: Source Han Sans CN;
+        font-weight: 400;
+        color: #999999;
+        padding: 0;
+        text-align: center;
+      }
+      .is-active {
+        background: #1e78f0;
+        border-radius: 8px;
+        color: white !important;
+        // padding: 0 20px;
+        font-size: 16px;
+        font-family: Source Han Sans CN;
+        font-weight: 400;
+      }
+    }
     ::v-deep .el-tabs__item {
       font-size: 20px;
       font-family: Source Han Sans CN;
@@ -1243,6 +1369,15 @@ export default {
       border-top: 1px solid #999999;
       padding: 10px;
       margin: 0 15px;
+    }
+    .nav {
+      display: flex;
+      font-size: 20px;
+      margin-bottom: 16px;
+      .el-icon-back {
+        font-size: 30px;
+        margin-right: 16px;
+      }
     }
   }
   .bg {
