@@ -24,18 +24,18 @@
             ···
           </div>
         </div>
-      </div>
-      <div class="moreMenu" v-if="showMoreMenu">
-        <div
-          class="moreMenuItem"
-          @click.stop="handleDelClick"
-          v-show="isYourAccount"
-        >
-          {{ $t("design.Delete") }}
-        </div>
+        <div class="moreMenu" v-if="showMoreMenu">
+          <div
+            class="moreMenuItem"
+            @click.stop="handleDelClick"
+            v-show="isYourAccount"
+          >
+            {{ $t("design.Delete") }}
+          </div>
 
-        <div class="moreMenuItem" @click.stop="handleDownClick">
-          {{ $t("design.download") }}
+          <div class="moreMenuItem" @click.stop="handleDownClick">
+            {{ $t("design.download") }}
+          </div>
         </div>
       </div>
     </div>
@@ -80,7 +80,7 @@ export default {
         return;
       }
       this.showMoreMenu = false;
-      this.$emit("clickDownMenu", this.thing);
+      this.$emit("clickDownMenu");
     },
     handleDelClick() {
       if (!this.$store.getters.isLogin) {
@@ -89,7 +89,7 @@ export default {
         return;
       }
       this.showMoreMenu = false;
-      this.$emit("clickDelMenu", this.thing);
+      this.$emit("clickDelMenu");
     },
     handleClickMore() {
       this.showMoreMenu = !this.showMoreMenu;
