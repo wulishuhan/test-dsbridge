@@ -88,18 +88,23 @@
           <i class="el-icon-share icon-share"></i>
           {{ thing.share_count }}
         </div> -->
-        <el-popover
+        <div class="share-box" slot="reference">
+          <i class="ortur-icon-look icon-share"></i>
+          {{ thing.view_count }}
+        </div>
+        <!-- <el-popover
           placement="bottom-end"
           trigger="click"
           popper-class="popover"
           :visible-arrow="false"
-        >
-          <!-- <ShareSocialMedia :id="thing.id"></ShareSocialMedia> -->
-          <div class="share-box" slot="reference">
+        > -->
+        <!-- <ShareSocialMedia :id="thing.id"></ShareSocialMedia> -->
+        <!-- <div class="share-box" slot="reference">
             <i class="el-icon-view icon-share"></i>
+            <i class="ortur-icon-share icon-share"></i>
             {{ thing.view_count }}
-          </div>
-        </el-popover>
+          </div> -->
+        <!-- </el-popover> -->
         <span
           @click="handleClickMore(thing)"
           class="moreMenuIcon"

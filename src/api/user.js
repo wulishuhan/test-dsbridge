@@ -91,3 +91,19 @@ export function postComment(data) {
     data,
   });
 }
+
+export function openLogin(data) {
+  return request({
+    url: "/auth/user/openLogin",
+    method: "post",
+    data,
+  });
+}
+
+export function bindThird(data) {
+  return request({
+    url: "/system/user/bindThird",
+    method: "post",
+    data,
+  });
+}

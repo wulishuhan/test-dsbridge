@@ -4,11 +4,9 @@
       width="396px"
       :visible.sync="dialogVisible"
       :before-close="handleClose"
+      @opened="handleOpen"
     >
-      <div v-show="!isLogin">
-        <div :class="loginFormTip === '' ? 'no-tips' : 'tips'" slot="title">
-          {{ registerFormTip }}
-        </div>
+      <div v-show="!isLogin && !isThirdPartyRegisterForm">
         <el-form :model="registerForm" :rules="rules" ref="registerForm">
           <el-form-item>
             <div class="continue-with">Continue with</div>
@@ -78,10 +76,7 @@
           </el-form-item>
         </el-form>
       </div>
-      <div v-show="isLogin">
-        <div :class="loginFormTip === '' ? 'no-tips' : 'tips'" slot="title">
-          {{ loginFormTip }}
-        </div>
+      <div v-show="isLogin && !isThirdPartyRegisterForm">
         <el-form :model="loginForm" ref="loginForm" :rules="rules">
           <el-form-item>
             <div class="continue-with">Continue with</div>
@@ -182,6 +177,47 @@
           </el-form-item>
         </el-form>
       </div>
+      <div v-show="isThirdPartyRegisterForm">
+        <el-form
+          :model="registerForm"
+          :rules="rules"
+          ref="thirdPartyRegisterForm"
+        >
+          <el-form-item>
+            <div class="continue-with">Complete your information</div>
+          </el-form-item>
+          <el-form-item prop="email">
+            <el-input
+              v-model="registerForm.email"
+              autocomplete="off"
+              placeholder="Email"
+            ></el-input>
+          </el-form-item>
+          <el-form-item prop="password1">
+            <el-input
+              type="password"
+              v-model="registerForm.password"
+              autocomplete="off"
+              placeholder="Password"
+              show-password
+            ></el-input>
+          </el-form-item>
+          <el-form-item prop="password2">
+            <el-input
+              type="password"
+              v-model="registerForm.password2"
+              autocomplete="off"
+              placeholder="Password"
+              show-password
+            ></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-button @click="thridPartyAccountBind('thirdPartyRegisterForm')">
+              Complete
+            </el-button>
+          </el-form-item>
+        </el-form>
+      </div>
       <el-dialog width="396px" :visible.sync="innerVisible" append-to-body>
         <div class="loading-box" v-loading="loading"></div>
       </el-dialog>
@@ -189,6 +225,7 @@
   </div>
 </template>
 <script>
+import { bindThird } from "@/api/user";
 export default {
   props: {
     loadLoginDialog: {
@@ -199,6 +236,8 @@ export default {
       type: Boolean,
       default: false,
     },
+    isThirdPartyRegisterForm: { type: Boolean, default: false },
+    openLoginInfo: { type: Number, default: 0 },
   },
   computed: {
     dialogVisible: function () {
@@ -206,6 +245,9 @@ export default {
     },
     isLogin: function () {
       return this.loadLoginDialog;
+    },
+    openLoginMsg: function () {
+      return this.openLoginInfo;
     },
   },
   data() {
@@ -228,7 +270,37 @@ export default {
         callback();
       }
     };
+    var validateUserName = (rule, value, callback) => {
+      let { email } = this.$route.query;
+      if (this.thirdPartyFormTip != "") {
+        callback(new Error(this.thirdPartyFormTip));
+        this.thirdPartyFormTip = "";
+      }
+      if (this.loginFormTip != "") {
+        callback(new Error(this.loginFormTip));
+        this.loginFormTip = "";
+      }
+      if (this.registerFormTip != "") {
+        callback(new Error(this.registerFormTip));
+        this.registerFormTip = "";
+      }
+      if (this.openLoginMsg === 1020) {
+        if (this.isComplete) {
+          callback();
+        } else {
+          callback(new Error("please register first"));
+        }
+      }
+      if (this.openLoginMsg === 1021) {
+        if (email === value) {
+          callback(new Error("please login first"));
+        } else {
+          callback();
+        }
+      }
+    };
     return {
+      isComplete: false,
       loginFormTip: "",
       registerFormTip: "",
       loginForm: {
@@ -250,13 +322,17 @@ export default {
           { required: true, message: "请输入邮箱", trigger: "blur" },
           {
             min: 5,
-            max: 20,
-            message: "长度在 5 到 20 个字符",
+            max: 50,
+            message: "长度在 5 到 50 个字符",
             trigger: "blur",
           },
           {
             type: "email",
             message: "请输入正确的邮箱地址",
+            trigger: ["blur", "change"],
+          },
+          {
+            validator: validateUserName,
             trigger: ["blur", "change"],
           },
         ],
@@ -282,6 +358,12 @@ export default {
         password2: [{ validator: validatePass2, trigger: "blur" }],
       },
       activeIcon: "",
+      thirdPartyFormTip: "",
+      thirdPartyInfo: {
+        userId: "",
+        catalog: "",
+        email: "",
+      },
     };
   },
   methods: {
@@ -290,6 +372,11 @@ export default {
     },
     switchLoginAndRegister(view) {
       this.$emit("changeView", view);
+      // if (view == "register") {
+      //   this.$refs.registerForm.resetFields();
+      // } else {
+      //   this.$refs.loginForm.resetFields();
+      // }
     },
     login(formName) {
       this.$refs[formName].validate((valid) => {
@@ -305,8 +392,10 @@ export default {
               this.handleClose();
             })
             .catch((error) => {
-              this.$message.error(error.msg);
+              // this.$message.error(error.msg);
+              this.loginFormTip = error.msg;
               this.innerVisible = false;
+              this.$refs.loginForm.validateField("email");
             });
         } else {
           console.log("error submit!!");
@@ -331,6 +420,42 @@ export default {
               }
             })
             .catch((e) => {
+              this.registerFormTip = e.msg;
+              this.$refs.registerForm.validateField("email");
+            });
+        } else {
+          return false;
+        }
+      });
+    },
+    thridPartyAccountBind(formName) {
+      this.isComplete = true;
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          this.registerForm.username = this.registerForm.email;
+          this.$store
+            .dispatch("user/register", {
+              auto_login: true,
+              client_subtype: "Windows",
+              client_type: "pc",
+              ...this.registerForm,
+            })
+            .then((res) => {
+              if (res.code == 0) {
+                bindThird(this.thirdPartyInfo)
+                  .then((res) => {
+                    console.log("bindThird successfully", res);
+                    this.$router.push(this.$route.path + "#");
+                    this.handleClose();
+                  })
+                  .catch((err) => {
+                    console.log(err);
+                  });
+              }
+            })
+            .catch((e) => {
+              this.thirdPartyFormTip = e.msg;
+              this.$refs.thirdPartyRegisterForm.validateField("email");
               console.log(e);
             });
         } else {
@@ -340,10 +465,23 @@ export default {
     },
     handleClose() {
       this.$emit("handleClose");
+      this.$refs.loginForm.resetFields();
+      this.$refs.registerForm.resetFields();
+      this.isComplete = false;
+      // this.$refs.thirdPartyRegisterForm.resetFields();
+    },
+    handleOpen() {
+      if (this.isThirdPartyRegisterForm) {
+        let { code, from, email } = this.$route.query;
+        this.thirdPartyInfo.userId = code;
+        this.thirdPartyInfo.catalog = from;
+        this.thirdPartyInfo.email = email;
+        this.registerForm.email = email;
+        this.registerForm.username = email;
+      }
     },
     thirdPartyLogin(from) {
       let redirectUrl = window.location.href.split("?")[0];
-      console.log("redirectUrl:", redirectUrl);
       window.location.href = `https://sso.leadiffer.com/oauth/thirdParty?from=${from}&redirect_url=${redirectUrl}`;
     },
     enter(val) {
@@ -381,8 +519,21 @@ export default {
   line-height: 23px;
   margin: 30px auto -25px;
 }
-.continue-with {
+.no-third-tips {
+  height: 35px;
+}
+.third-tips {
+  width: 312px;
+  height: 35px;
   font-size: 15px;
+  font-family: Source Han Sans CN;
+  font-weight: 400;
+  color: #ff6161;
+  line-height: 23px;
+  margin: 0px auto;
+}
+.continue-with {
+  font-size: 20px;
   color: #1a1a1a;
   margin-top: -14px;
 }
