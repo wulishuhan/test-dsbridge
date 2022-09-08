@@ -1,5 +1,12 @@
 // eslint-disable-next-line
-import { Login, Logout, getUserInfo, refresh, register } from "@/api/user";
+import {
+  Login,
+  Logout,
+  getUserInfo,
+  refresh,
+  register,
+  getFollowingList,
+} from "@/api/user";
 import { getToken, setToken, removeToken } from "@/utils/auth";
 
 const getDefaultState = () => {
@@ -13,6 +20,7 @@ const getDefaultState = () => {
       email: "",
       user_name: "",
     },
+    followingList: [],
     expiresIn: [],
     isLogin: false,
     accessToken: getToken(),
@@ -37,6 +45,9 @@ const mutations = {
     state.userInfo.email = payload.email;
     state.userInfo.user_name = payload.user_name;
     state.isLogin = true;
+  },
+  SET_FOLLOWINGLIST: (state, payload) => {
+    state.followingList = payload;
   },
   SWITCH_LOGIN_REGISTER_FORM: (state, payload) => {
     state.loginDialogVisible = payload.loginDialogVisible;
@@ -103,6 +114,13 @@ const actions = {
         .catch((error) => {
           reject(error);
         });
+    });
+  },
+  getFollowingList({ commit }, payload) {
+    console.log("getFollowingList============", payload);
+    getFollowingList(payload).then((res) => {
+      console.log("getFollowingList===================", res);
+      commit("SET_FOLLOWINGLIST", res.data.data);
     });
   },
   logout({ commit, state }) {

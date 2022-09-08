@@ -196,6 +196,9 @@ export default {
     this.$store.dispatch("user/getUserInfo").catch((e) => {
       console.log(e);
     });
+    this.$store.dispatch("user/getFollowingList", {
+      userId: this.userInfo.user_id,
+    });
   },
   methods: {
     handleSettingClick() {

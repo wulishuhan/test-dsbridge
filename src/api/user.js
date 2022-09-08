@@ -68,6 +68,13 @@ export function findFollowsByUserId(params) {
     params,
   });
 }
+export function getFollowingList(params) {
+  return request({
+    url: `/library/follower/followings`,
+    method: "get",
+    params,
+  });
+}
 export function register(data) {
   return request({
     url: "/auth/user/register",
