@@ -535,6 +535,7 @@ export default {
     },
   },
   mounted() {
+    console.log("mounted", this.$route.params.sourceId);
     this.sourceId = this.$route.params.sourceId;
     if (this.sourceId != undefined) {
       //调用详解接口

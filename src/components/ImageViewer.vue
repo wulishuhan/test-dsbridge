@@ -54,7 +54,7 @@
             v-if="i === index"
             ref="img"
             class="el-image-viewer__img"
-            :key="item"
+            :key="item.id"
             :src="currentImg"
             :style="imgStyle"
             @load="handleImgLoad"
@@ -65,15 +65,39 @@
         <template v-if="!isSingle">
           <span
             class="el-image-viewer__btn el-image-viewer__prev"
+            :class="[
+              !infinite && isFirst ? 'is-disabled' : '',
+              !isMake ? 'up-box' : '',
+            ]"
+            @click="prev"
+            v-show="!isMake"
+          >
+            <i class="ortur-icon-arrow-up" />
+          </span>
+          <span
+            class="el-image-viewer__btn el-image-viewer__next"
+            :class="[
+              !infinite && isFirst ? 'is-disabled' : '',
+              !isMake ? 'down-box' : '',
+            ]"
+            @click="next"
+            v-show="!isMake"
+          >
+            <i class="ortur-icon-arrow-bottom" />
+          </span>
+          <span
+            class="el-image-viewer__btn el-image-viewer__prev make-left-box"
             :class="{ 'is-disabled': !infinite && isFirst }"
             @click="prev"
+            v-show="isMake"
           >
             <i class="el-icon-arrow-left" />
           </span>
           <span
-            class="el-image-viewer__btn el-image-viewer__next"
+            class="el-image-viewer__btn el-image-viewer__next make-right-box"
             :class="{ 'is-disabled': !infinite && isLast }"
             @click="next"
+            v-show="isMake"
           >
             <i class="el-icon-arrow-right" />
           </span>
@@ -157,6 +181,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    isVertical: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   data() {
@@ -187,7 +215,8 @@ export default {
       return this.index === this.urlList.length - 1;
     },
     currentImg() {
-      return this.urlList[this.index];
+      console.log("修改", this.urlList[this.index].url);
+      return this.urlList[this.index].url;
     },
     imgStyle() {
       const { scale, deg, offsetX, offsetY, enableTransition } = this.transform;
@@ -203,6 +232,9 @@ export default {
       return style;
     },
     viewerZIndex() {
+      if (this.isMake) {
+        return 9999;
+      }
       const nextZIndex = PopupManager.nextZIndex();
       return this.zIndex > nextZIndex ? this.zIndex : nextZIndex;
     },
@@ -411,6 +443,8 @@ export default {
 }
 .el-image-viewer__img {
   object-fit: fill;
+  width: 1084px;
+  height: 660px;
 }
 .left-top-scacel-box {
   width: 120px;
@@ -455,5 +489,73 @@ export default {
 }
 .el-button {
   border: none;
+}
+.el-image-viewer__prev {
+  background-color: rgba(26, 26, 26, 0.3);
+}
+
+.el-image-viewer__btn {
+  border-radius: 6px;
+}
+
+.el-icon-close:before {
+}
+
+.el-image-viewer__actions {
+  display: none;
+}
+
+.up-box {
+  width: 324px;
+  height: 60px;
+  /* background: #1a1a1a; */
+  /* opacity: 0.3; */
+  background: rgba(26, 26, 26, 0.3);
+  border-radius: 6px;
+  transform: translateX(-50%);
+  left: 50%;
+  top: 12px;
+}
+
+.down-box {
+  width: 324px;
+  height: 60px;
+  background: rgba(26, 26, 26, 0.3);
+  /* background: #1a1a1a; */
+  /* opacity: 0.3; */
+  border-radius: 6px;
+  /* transform: translateX(-50%); */
+  /* left: 50%; */
+  transform: translateX(-50%);
+  left: 50%;
+  bottom: 12px;
+  top: auto;
+}
+
+.el-image-viewer__close {
+  width: 60px;
+  height: 60px;
+  /* background: #1a1a1a;
+    opacity: 0.3; */
+  background: rgba(26, 26, 26, 0.3);
+  border-radius: 6px;
+  top: 12px;
+  right: 13px;
+}
+.make-left-box {
+  width: 48px;
+  height: 184px;
+  left: -200px;
+  border-radius: 0;
+  background: none;
+  font-size: 70px;
+}
+.make-right-box {
+  width: 48px;
+  height: 184px;
+  right: -200px;
+  border-radius: 0;
+  background: none;
+  font-size: 70px;
 }
 </style>

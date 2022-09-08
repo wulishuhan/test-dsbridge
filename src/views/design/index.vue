@@ -261,26 +261,23 @@
               </el-tab-pane>
 
               <el-tab-pane :label="$t('design.makes')" name="third">
-                <Make></Make>
-                <el-row :gutter="20">
-                  <div v-for="item in histories" :key="item.thingId">
-                    <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                      <resource-card
-                        :key="item.id"
-                        :thing="item"
-                        :isLike="myLikes.includes(item.id)"
-                        @openCollection="openCollection"
-                        @clickMoveMenu="Handler_MoveTo(item)"
-                        @clickDelMenu="handleCancelCollect(item)"
-                        @clickDownMenu="Handler_Down(item)"
-                        @moveCollectionComplete="handleMoveCollectionComplete"
-                        @deleteCollection="deleteCollection"
-                        :isCollected="myCollects.includes(item.id)"
-                      >
-                      </resource-card>
-                    </el-col>
-                  </div>
-                </el-row>
+                <div
+                  style="
+                    display: flex;
+                    flex-wrap: wrap;
+                    justify-content: space-between;
+                  "
+                >
+                  <Make
+                    v-for="item in makesList"
+                    :key="item.id"
+                    class="Make"
+                    @clickDownMenu="handleDownClick(item)"
+                    @clickDelMenu="handleDelClick(item)"
+                    :showMoreIcon="true"
+                    :isYourAccount="isYourAccount"
+                  ></Make>
+                </div>
               </el-tab-pane>
             </el-tabs>
           </el-tab-pane>
@@ -478,6 +475,16 @@ export default {
   },
   data() {
     return {
+      makesList: [
+        { id: 1 },
+        { id: 1 },
+        { id: 1 },
+        { id: 1 },
+        { id: 1 },
+        { id: 1 },
+        { id: 1 },
+        { id: 2 },
+      ],
       remixesList: [],
       detail: {
         creator: {
@@ -673,6 +680,14 @@ export default {
     },
   },
   methods: {
+    handleDelClick() {
+      if (!this.$store.getters.isLogin) {
+        let payload = { loginDialogVisible: true, isLoginForm: true };
+        this.$store.dispatch("user/switchLoginRegisteForm", payload);
+        return;
+      }
+      this.$emit("clickDelMenu", this.thing);
+    },
     openShowDownPanel() {
       if (!this.isShowDownPanel) {
         this.openCollectedOption = false;
@@ -1220,6 +1235,17 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.Make {
+  margin-bottom: 45px;
+  $width: 228px;
+  ::v-deep .more-image {
+    width: $width;
+    height: 139px;
+  }
+  ::v-deep .makes-mask {
+    width: $width;
+  }
+}
 .collectMenu {
   position: fixed;
   left: 0;

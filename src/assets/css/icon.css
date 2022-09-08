@@ -1,17 +1,17 @@
 @font-face {
-  font-family: 'icomoon';
-  src:
-    url('../fonts/icomoon.ttf?oyxab2') format('truetype'),
-    url('../fonts/icomoon.woff?oyxab2') format('woff'),
-    url('../fonts/icomoon.svg?oyxab2#icomoon') format('svg');
+  font-family: "icomoon";
+  src: url("../fonts/icomoon.ttf?yqck8c") format("truetype"),
+    url("../fonts/icomoon.woff?yqck8c") format("woff"),
+    url("../fonts/icomoon.svg?yqck8c#icomoon") format("svg");
   font-weight: normal;
   font-style: normal;
   font-display: block;
 }
 
-[class^="ortur-icon-"], [class*=" ortur-icon-"] {
+[class^="ortur-icon-"],
+[class*=" ortur-icon-"] {
   /* use !important to prevent issues with browser extensions that change fonts */
-  font-family: 'icomoon' !important;
+  font-family: "icomoon" !important;
   speak: never;
   font-style: normal;
   font-weight: normal;
@@ -24,6 +24,62 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.ortur-icon-look:before {
+  content: "\e95a";
+  color: #949494;
+}
+.ortur-icon-colum .path1:before {
+  content: "\e95b";
+  color: rgb(0, 0, 0);
+}
+.ortur-icon-colum .path2:before {
+  content: "\e95c";
+  margin-left: -0.9169921875em;
+  color: rgb(0, 0, 0);
+}
+.ortur-icon-colum .path3:before {
+  content: "\e95d";
+  margin-left: -0.9169921875em;
+  color: rgb(0, 0, 0);
+}
+.ortur-icon-colum .path4:before {
+  content: "\e95e";
+  margin-left: -0.9169921875em;
+  color: rgb(0, 0, 0);
+}
+.ortur-icon-colum .path5:before {
+  content: "\e95f";
+  margin-left: -0.9169921875em;
+  color: rgb(0, 0, 0);
+  opacity: 0.3;
+}
+.ortur-icon-circle-flag:before {
+  content: "\e960";
+}
+.ortur-icon-cuboid:before {
+  content: "\e961";
+}
+.ortur-icon-menu-1:before {
+  content: "\e962";
+}
+.ortur-icon-circle-water:before {
+  content: "\e963";
+}
+.ortur-icon-menu-2:before {
+  content: "\e964";
+}
+.ortur-icon-more-point:before {
+  content: "\e965";
+  color: #949494;
+}
+.ortur-icon-Property-1Frame-58644860:before {
+  content: "\e966";
+  color: #949494;
+}
+.ortur-icon-4:before {
+  content: "\e967";
+  color: #fff;
+}
 .ortur-icon-no-derivatives:before {
   content: "\e926";
 }

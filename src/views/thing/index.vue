@@ -159,32 +159,14 @@
             <el-tab-pane label="Remix" name="third">
               <div>
                 <div class="flex justify-between remix-link-box">
-                  <a class="more-font" @click="dialogPostRemix = true">
+                  <a class="more-font post-remix" @click="toUpload">
                     <i class="el-icon-plus"></i>
                     Post a Remix
                   </a>
-                  <a class="view-more" @click="openViewAllDialog('view-makes')">
+                  <a class="view-more" @click="openViewAllDialog('view-remix')">
                     View all
                   </a>
                 </div>
-                <el-dialog
-                  title="Post your make"
-                  :visible.sync="dialogPostRemix"
-                >
-                  <el-form>
-                    <el-form-item
-                      ><el-input placeholder="add a step title"></el-input
-                    ></el-form-item>
-                    <el-form-item
-                      ><el-input
-                        placeholder="Add Photo (Bulk add supported)"
-                      ></el-input
-                    ></el-form-item>
-                    <el-form-item
-                      ><el-input placeholder="Add a description"></el-input
-                    ></el-form-item>
-                  </el-form>
-                </el-dialog>
                 <div class="flex justify-between" style="flex-wrap: wrap">
                   <div style="position: relative" v-for="i in 6" :key="i">
                     <el-image
@@ -199,56 +181,41 @@
             <el-tab-pane label="Makes" name="fourth">
               <div>
                 <div class="flex justify-between make-link-box">
-                  <a class="more-font" @click="dialogPostMake = true">
+                  <a class="more-font post-make" @click="dialogPostMake = true">
                     <i class="el-icon-plus"></i>
                     Post a make
                   </a>
-                  <a class="view-more" @click="openViewAllDialog('view-makes')">
+                  <a class="view-more" @click="dialogViewMake = true">
                     View all
                   </a>
                 </div>
-                <el-dialog
-                  title="Post your make"
-                  :visible.sync="dialogPostMake"
-                >
-                  <el-form>
-                    <el-form-item
-                      ><el-input placeholder="add a step title"></el-input
-                    ></el-form-item>
-                    <el-form-item
-                      ><el-input
-                        placeholder="Add Photo (Bulk add supported)"
-                      ></el-input
-                    ></el-form-item>
-                    <el-form-item
-                      ><el-input placeholder="Add a description"></el-input
-                    ></el-form-item>
-                  </el-form>
-                </el-dialog>
-                <!-- <ElImageViewer
+                <PostMakeDialog
+                  :isShow.sync="dialogPostMake"
+                  :customClass="'make-dialog'"
+                ></PostMakeDialog>
+                <el-row>
+                  <el-col
+                    :span="8"
+                    v-for="(item, index) in makes"
+                    :key="item.id"
+                  >
+                    <make
+                      :make="item"
+                      :index="index"
+                      @openMake="openMake"
+                      @getIndex="getIndex"
+                    ></make>
+                  </el-col>
+                </el-row>
+                <ElImageViewer
                   class="imageViewer"
                   v-if="showMake"
                   :on-close="closeMake"
-                  :url-list="makeUrl"
+                  :url-list="makes"
                   :isMake="true"
+                  :initialIndex="index"
                 ></ElImageViewer>
-                <div class="flex justify-between" style="flex-wrap: wrap">
-                  <div style="position: relative" v-for="i in 6" :key="i">
-                    <el-image
-                      class="more-image"
-                      src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
-                    >
-                    </el-image>
-                    <div class="makes-mask" @click="openMake">
-                      <div class="makes-mask-font-container">
-                        <span class="ortur-icon-message"></span>
-                        12
-                        <span class="el-icon-arrow-right"></span>
-                      </div>
-                    </div>
-                  </div>
-                </div> -->
-                <make></make>
+                <ViewMake :isShow.sync="dialogViewMake"></ViewMake>
               </div>
             </el-tab-pane>
           </el-tabs>
@@ -352,8 +319,8 @@
         <el-tab-pane label="Similar with this" name="view-similar">
           <view-more v-if="viewMoreActive === 'view-similar'"></view-more>
         </el-tab-pane>
-        <el-tab-pane label="Makes from others" name="view-makes">
-          <view-more v-if="viewMoreActive === 'view-makes'"></view-more>
+        <el-tab-pane label="Remix" name="view-remix">
+          <view-more v-if="viewMoreActive === 'view-remix'"></view-more>
         </el-tab-pane>
       </el-tabs>
     </el-dialog>
@@ -365,6 +332,7 @@
 // import ElImageViewer from "element-ui/packages/image/src/image-viewer";
 import ElImageViewer from "@/components/ImageViewer";
 import Make from "./components/Make.vue";
+import ViewMake from "./components/ViewMake.vue";
 import { getUserInfoByThingId } from "@/api/thing";
 import { getResource, getResourceListById } from "@/api/resource";
 import { getLikelist, addLike, deleteLike } from "@/api/like";
@@ -388,6 +356,7 @@ import ViewMore from "./ViewMore.vue";
 import SrollTopButton from "@/components/SrollTopButton";
 import Tutorial from "./components/Tutorial.vue";
 import CollectedOption from "@/components/CollectedOption";
+import PostMakeDialog from "./components/PostMakeDialog.vue";
 export default {
   name: "Thing",
   components: {
@@ -405,9 +374,12 @@ export default {
     Tutorial,
     CollectedOption,
     Make,
+    PostMakeDialog,
+    ViewMake,
   },
   data() {
     return {
+      dialogViewMake: false,
       dialogPostMake: false,
       dialogPostRemix: false,
       showViewer: false, // 显示查看器
@@ -472,11 +444,17 @@ export default {
       isShowDownPanel: false,
       licenseImg: [],
       licenseIcon: [],
-      CCLicenseStyle: {
-        width: "35px",
-        height: "35px",
-        marginLeft: "26px",
-      },
+      makes: [
+        {
+          id: 56785,
+          url: "https://orturbucket.s3.amazonaws.com/assets/2022/08/30/abcddd_20220830153658A043.png",
+        },
+        {
+          id: 12345,
+          url: "https://orturbucket.s3.amazonaws.com/assets/2022/08/30/abc_20220830153645A040.png",
+        },
+      ],
+      showMake: false,
     };
   },
   computed: {
@@ -488,7 +466,6 @@ export default {
     },
     licenseUrl() {
       let license = this.detail.license;
-      console.log(license);
       let licenseUrl = "";
       if (license === "Creative Commons - Attribution") {
         licenseUrl = "https://creativecommons.org/licenses/by/4.0/";
@@ -570,7 +547,7 @@ export default {
     },
     openImageView() {
       this.urlList = this.imageList.map((item) => {
-        return item.url;
+        return item;
       });
       this.showViewer = true;
       document.documentElement.style.overflowY = "hidden";
@@ -746,6 +723,26 @@ export default {
     closeButtonPanel() {
       this.isShowDownPanel = false;
       this.openCollectedOption = false;
+    },
+    getIndex(index) {
+      console.log(index);
+      this.index = index;
+    },
+    openMake() {
+      this.showMake = true;
+      document.documentElement.style.overflowY = "hidden";
+    },
+    closeMake() {
+      this.showMake = false;
+      document.documentElement.style.overflowY = "scroll";
+    },
+    toUpload() {
+      this.$router.push({
+        path: "/upload",
+        params: {
+          sourceId: this.detail.id,
+        },
+      });
     },
   },
   created() {
@@ -993,73 +990,6 @@ a {
 }
 
 .imageViewer {
-  ::v-deep .el-image-viewer__prev {
-    background-color: rgba(26, 26, 26, 0.3);
-  }
-
-  ::v-deep .el-image-viewer__btn {
-    border-radius: 6px;
-  }
-
-  ::v-deep .el-icon-close:before {
-    /* font-family: "icomoon"; */
-    /* content: "\e922"; */
-  }
-
-  ::v-deep .el-icon-arrow-left:before {
-    content: "\e6e1";
-  }
-
-  ::v-deep .el-icon-arrow-right:before {
-    content: "\e6df";
-  }
-
-  ::v-deep .el-image-viewer__actions {
-    display: none;
-  }
-
-  ::v-deep .el-image-viewer__prev {
-    width: 324px;
-    height: 60px;
-    /* background: #1a1a1a; */
-    /* opacity: 0.3; */
-    background: rgba(26, 26, 26, 0.3);
-    border-radius: 6px;
-    transform: translateX(-50%);
-    left: 50%;
-    top: 12px;
-  }
-
-  ::v-deep .el-image-viewer__next {
-    width: 324px;
-    height: 60px;
-    background: rgba(26, 26, 26, 0.3);
-    /* background: #1a1a1a; */
-    /* opacity: 0.3; */
-    border-radius: 6px;
-    // transform: translateX(-50%);
-    // left: 50%;
-    transform: translateX(-50%);
-    left: 50%;
-    bottom: 12px;
-    top: auto;
-  }
-
-  ::v-deep .el-image-viewer__close {
-    width: 60px;
-    height: 60px;
-    /* background: #1a1a1a;
-    opacity: 0.3; */
-    background: rgba(26, 26, 26, 0.3);
-    border-radius: 6px;
-    top: 12px;
-    right: 13px;
-  }
-
-  ::v-deep .el-image-viewer__img {
-    width: 1084px;
-    height: 660px;
-  }
 }
 ::v-deep .el-button.is-disabled {
   background-color: none;
@@ -1231,7 +1161,7 @@ a {
 
 .more-dialog {
   ::v-deep .el-tabs__header .is-top {
-    width: 477px;
+    width: 520px;
   }
 }
 
@@ -1292,5 +1222,11 @@ a {
     font-size: 16px;
     margin-left: 25px;
   }
+}
+.post-make {
+  cursor: pointer;
+}
+.post-remix {
+  cursor: pointer;
 }
 </style>

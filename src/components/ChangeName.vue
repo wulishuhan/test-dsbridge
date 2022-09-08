@@ -34,6 +34,7 @@
   </div>
 </template>
 <script>
+import { changeName } from "@/api/setting.js";
 export default {
   props: {
     visible: {
@@ -62,22 +63,12 @@ export default {
 
     changePassword() {
       console.log(this.registerForm);
-      debugger;
-      this.$store
-        .dispatch("user/register", {
-          auto_login: true,
-          client_subtype: "Windows",
-          client_type: "pc",
-          ...this.registerForm,
-        })
-        .then((res) => {
-          if (res.code == 0) {
-            this.handleClose();
-          }
-        })
-        .catch((e) => {
+      changeName({ nickName: this.registerForm.Name }).then(() => {
+        this.$store.dispatch("user/getUserInfo").catch((e) => {
           console.log(e);
         });
+        this.handleClose();
+      });
     },
     handleClose() {
       this.$emit("handleClose");
