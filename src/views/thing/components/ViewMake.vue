@@ -49,6 +49,17 @@ export default {
       type: String,
       default: "840px",
     },
+    makes: {
+      type: Array,
+      default: () => {
+        return [
+          {
+            url: "https://orturbucket.s3.amazonaws.com/assets/2022/08/30/abcddd_20220830153658A043.png",
+            id: 1234,
+          },
+        ];
+      },
+    },
   },
   data() {
     return {
@@ -56,16 +67,6 @@ export default {
       showMake: false,
       index: 0,
       url: "https://orturbucket.s3.amazonaws.com/assets/2022/08/30/abcddd_20220830153658A043.png",
-      makes: [
-        {
-          id: 56785,
-          url: "https://orturbucket.s3.amazonaws.com/assets/2022/08/30/abcddd_20220830153658A043.png",
-        },
-        {
-          id: 12345,
-          url: "https://orturbucket.s3.amazonaws.com/assets/2022/08/30/abc_20220830153645A040.png",
-        },
-      ],
     };
   },
   computed: {
