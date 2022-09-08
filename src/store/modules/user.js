@@ -1,5 +1,12 @@
 // eslint-disable-next-line
-import { Login, Logout, getUserInfo, refresh, register } from "@/api/user";
+import {
+  Login,
+  Logout,
+  getUserInfo,
+  refresh,
+  register,
+  openLogin,
+} from "@/api/user";
 import { getToken, setToken, removeToken } from "@/utils/auth";
 
 const getDefaultState = () => {
@@ -70,6 +77,22 @@ const actions = {
         })
         .catch((error) => {
           console.log(error);
+          reject(error);
+        });
+    });
+  },
+  openLogin({ commit }, payload) {
+    return new Promise((resolve, reject) => {
+      openLogin(payload)
+        .then((res) => {
+          if (res.data.code !== 0) {
+            reject(res.data);
+          }
+          commit("SET_LOGININFO", res.data.data);
+          setToken(res.data.data.access_token);
+          resolve(res.data.data);
+        })
+        .catch((error) => {
           reject(error);
         });
     });

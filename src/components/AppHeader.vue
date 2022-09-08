@@ -149,6 +149,8 @@
     <login
       :loadLoginDialog="isLoginForm"
       :visible.sync="loginDialogVisible"
+      :isThirdPartyRegisterForm="isThirdPartyRegisterForm"
+      :openLoginInfo="openLoginInfo"
       @handleClose="handleCloseDialog"
       @changeView="showLoginDialog"
     ></login>
@@ -167,6 +169,13 @@ export default {
     return {
       keywords: "",
       select: "",
+      isThirdPartyRegisterForm: false,
+      thirdPartyInfo: {
+        id: "",
+        catalog: "",
+        email: "",
+      },
+      openLoginInfo: 0,
     };
   },
   components: {
@@ -188,7 +197,26 @@ export default {
     this.$store.dispatch("user/getUserInfo").catch((e) => {
       console.log(e);
     });
-    console.log("code", this.$route.query.code);
+    let { code, from, email } = this.$route.query;
+    if (code && from && email) {
+      this.thirdPartyInfo.id = code;
+      this.thirdPartyInfo.catalog = from;
+      this.thirdPartyInfo.email = email;
+      this.$store
+        .dispatch("user/openLogin", this.thirdPartyInfo)
+        .then(() => {
+          this.$router.push(this.$route.path + "#");
+          this.handleCloseDialog();
+        })
+        .catch((data) => {
+          if (data.code == 1020 || data.code == 1021) {
+            this.isThirdPartyRegisterForm = true;
+            this.openLoginInfo = data.code;
+          }
+          this.showLoginDialog("");
+          console.log(data);
+        });
+    }
   },
   methods: {
     handleSettingClick() {
@@ -236,6 +264,12 @@ export default {
       this.$store.dispatch("user/logout");
     },
     handleCloseDialog() {
+      let { code, from, email } = this.$route.query;
+      if (code && from && email) {
+        this.$router.push(this.$route.path);
+      }
+      this.isThirdPartyRegisterForm = false;
+      this.openLoginInfo = 0;
       this.$store.dispatch("user/closeLoginRegisteForm");
     },
   },
