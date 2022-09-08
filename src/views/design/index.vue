@@ -261,7 +261,14 @@
               </el-tab-pane>
 
               <el-tab-pane :label="$t('design.makes')" name="third">
-                <Make></Make>
+                <div class="makeWrapper">
+                  <Make
+                    class="Make"
+                    @clickMore="handleClickMore"
+                    :showMoreIcon="true"
+                    :isYourAccount="isYourAccount"
+                  ></Make>
+                </div>
                 <el-row :gutter="20">
                   <div v-for="item in histories" :key="item.thingId">
                     <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
@@ -478,6 +485,11 @@ export default {
   },
   data() {
     return {
+      showMoreMenu: true,
+      makeStyle: {
+        top: "688px",
+        left: "375px",
+      },
       remixesList: [],
       detail: {
         creator: {
@@ -673,6 +685,24 @@ export default {
     },
   },
   methods: {
+    handleClickMore(x, y) {
+      this.makeStyle.top = x + "px";
+      this.makeStyle.left = y + "px";
+      debugger;
+    },
+    handleDownClick() {
+      this.showMoreMenu = false;
+      this.$emit("clickDownMenu", this.thing);
+    },
+    handleDelClick() {
+      if (!this.$store.getters.isLogin) {
+        let payload = { loginDialogVisible: true, isLoginForm: true };
+        this.$store.dispatch("user/switchLoginRegisteForm", payload);
+        return;
+      }
+      this.showMoreMenu = false;
+      this.$emit("clickDelMenu", this.thing);
+    },
     openShowDownPanel() {
       if (!this.isShowDownPanel) {
         this.openCollectedOption = false;
@@ -1220,6 +1250,20 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.makeWrapper {
+  position: relative;
+  display: inline-block;
+}
+.Make {
+  $width: 228px;
+  ::v-deep .more-image {
+    width: $width;
+    height: 139px;
+  }
+  ::v-deep .makes-mask {
+    width: $width;
+  }
+}
 .collectMenu {
   position: fixed;
   left: 0;

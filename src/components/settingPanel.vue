@@ -47,7 +47,7 @@
               </div>
               <div class="bottom">
                 <div class="title">{{ $t("design.password") }}</div>
-                <div class="name">{{ userInfo.nick_name }}</div>
+                <div class="name">xxxxxxxxxx</div>
                 <div class="action" @click="handleChangePasswordClick">
                   {{ $t("setting.changePassword") }}
                 </div>
@@ -69,16 +69,17 @@
                 <div class="bindItem">
                   <div class="left">
                     <span
-                      v-if="binding.switch1"
+                      v-if="bindingInfo.switch1"
                       class="ortur-icon-facebook-light icon"
                     ></span>
                     <span v-else class="ortur-icon-facebook icon"></span>
                     <span>facebook</span>
-                    <span class="username">111111</span>
+                    <span class="username">{{ bindingInfo.username }}</span>
+                    <span class="email">{{ bindingInfo.email }}</span>
                   </div>
                   <div class="right">
                     <el-switch
-                      v-model="binding.switch1"
+                      v-model="bindingInfo.switch1"
                       @change="handleSwitch1Change($event, 1)"
                     >
                     </el-switch>
@@ -101,7 +102,7 @@
                     </el-switch>
                   </div>
                 </div>
-                <div class="bindItem">
+                <!-- <div class="bindItem">
                   <div class="left">
                     <svg
                       v-if="binding.switch3"
@@ -143,7 +144,7 @@
                     >
                     </el-switch>
                   </div>
-                </div>
+                </div> -->
                 <div class="bindItem">
                   <div class="left">
                     <span
@@ -238,6 +239,11 @@ export default {
       isChangeNameVisible: false,
       ChangePasswordOrEmail: false,
       isChangePasswordVisible: false,
+      bindingInfo: {
+        switch1: true,
+        username: "hzy",
+        email: "115997",
+      },
       binding: {
         switch1: true,
         switch2: true,

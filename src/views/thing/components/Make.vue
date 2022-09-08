@@ -16,6 +16,26 @@
             12
             <span class="el-icon-arrow-right"></span>
           </div>
+          <div
+            v-if="showMoreIcon"
+            style="color: white; padding-right: 16px; font-size: 16px"
+            @click.stop="handleClickMore"
+          >
+            ···
+          </div>
+        </div>
+      </div>
+      <div class="moreMenu" v-if="showMoreMenu">
+        <div
+          class="moreMenuItem"
+          @click.stop="handleDelClick"
+          v-show="isYourAccount"
+        >
+          {{ $t("design.Delete") }}
+        </div>
+
+        <div class="moreMenuItem" @click.stop="handleDownClick">
+          {{ $t("design.download") }}
         </div>
       </div>
     </div>
@@ -27,6 +47,14 @@ import ElImageViewer from "@/components/ImageViewer";
 export default {
   components: { ElImageViewer },
   props: {
+    isYourAccount: {
+      type: Boolean,
+      default: false,
+    },
+    showMoreIcon: {
+      type: Boolean,
+      default: false,
+    },
     url: {
       type: String,
       default:
@@ -41,9 +69,31 @@ export default {
   data() {
     return {
       showMake: false,
+      showMoreMenu: false,
     };
   },
   methods: {
+    handleDownClick() {
+      if (!this.$store.getters.isLogin) {
+        let payload = { loginDialogVisible: true, isLoginForm: true };
+        this.$store.dispatch("user/switchLoginRegisteForm", payload);
+        return;
+      }
+      this.showMoreMenu = false;
+      this.$emit("clickDownMenu", this.thing);
+    },
+    handleDelClick() {
+      if (!this.$store.getters.isLogin) {
+        let payload = { loginDialogVisible: true, isLoginForm: true };
+        this.$store.dispatch("user/switchLoginRegisteForm", payload);
+        return;
+      }
+      this.showMoreMenu = false;
+      this.$emit("clickDelMenu", this.thing);
+    },
+    handleClickMore() {
+      this.showMoreMenu = !this.showMoreMenu;
+    },
     openMake() {
       this.showMake = true;
       document.documentElement.style.overflowY = "hidden";
@@ -56,7 +106,32 @@ export default {
 };
 </script>
 <style scoped lang="scss">
+.moreMenu {
+  z-index: 9999;
+  position: absolute;
+  width: 160px;
+  // height: 176px;
+  background: #ffffff;
+  box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.07);
+  border-radius: 10px;
+  text-align: left;
+  bottom: 35px;
+  right: 7px;
+  .moreMenuItem {
+    width: 144px;
+    height: 48px;
+    border-radius: 8px;
+    line-height: 48px;
+    margin: 8px auto;
+    padding-left: 25px;
+  }
+  .moreMenuItem:hover {
+    background: #8ab5ef;
+  }
+}
 .makes-mask {
+  display: flex;
+  justify-content: space-between;
   position: absolute;
   bottom: 3px;
   width: 184px;
