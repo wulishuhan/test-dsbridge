@@ -122,3 +122,10 @@ export function bindThird(data) {
     data,
   });
 }
+export function unbindThird(data) {
+  return request({
+    url: "/system/user/unbindThird",
+    method: "post",
+    data,
+  });
+}

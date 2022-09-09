@@ -171,6 +171,8 @@ import Login from "@/components/Login";
 import NoticePanel from "@/components/NoticePanel";
 import settingPanel from "@/components/settingPanel";
 import { createNamespacedHelpers } from "vuex";
+import { bindThird } from "@/api/user";
+
 const { mapState } = createNamespacedHelpers("user");
 export default {
   data() {
@@ -202,6 +204,9 @@ export default {
     ]),
   },
   mounted() {
+    let isBinding = sessionStorage.getItem("isBinding");
+    console.log("isBinding: ", isBinding);
+
     this.$store.dispatch("user/getUserInfo").catch((e) => {
       console.log(e);
     });
@@ -209,24 +214,39 @@ export default {
       userId: this.userInfo.user_id,
     });
     let { code, from, email } = this.$route.query;
-    if (code && from && email) {
-      this.thirdPartyInfo.id = code;
-      this.thirdPartyInfo.catalog = from;
-      this.thirdPartyInfo.email = email;
-      this.$store
-        .dispatch("user/openLogin", this.thirdPartyInfo)
-        .then(() => {
-          this.$router.push(this.$route.path + "#");
-          this.handleCloseDialog();
-        })
-        .catch((data) => {
-          if (data.code == 1020 || data.code == 1021) {
-            this.isThirdPartyRegisterForm = true;
-            this.openLoginInfo = data.code;
-          }
-          this.showLoginDialog("");
-          console.log(data);
-        });
+    if (isBinding == 2) {
+      if (code && from && email) {
+        this.thirdPartyInfo.id = code;
+        this.thirdPartyInfo.catalog = from;
+        this.thirdPartyInfo.email = email;
+        this.$store
+          .dispatch("user/openLogin", this.thirdPartyInfo)
+          .then(() => {
+            this.$router.push(this.$route.path + "#");
+            this.handleCloseDialog();
+          })
+          .catch((data) => {
+            if (data.code == 1020 || data.code == 1021) {
+              this.isThirdPartyRegisterForm = true;
+              this.openLoginInfo = data.code;
+            }
+            this.showLoginDialog("");
+            console.log(data);
+          });
+      }
+    } else if (isBinding == 1) {
+      if (code && from && email) {
+        bindThird({ catalog: from, userId: code, email: email })
+          .then((res) => {
+            console.log("bindThird successfully", res);
+            this.$message("bindThird successfully");
+            this.$router.push(this.$route.path + "#");
+            // this.$router.push(this.$route.path + "#");
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
     }
   },
   methods: {
