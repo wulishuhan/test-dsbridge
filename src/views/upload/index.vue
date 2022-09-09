@@ -13,17 +13,15 @@
         <div class="upload-wrapper">
           <div class="select-area">
             <el-upload
-              action="/dev-api/library/resource/upload"
+              :action="baseApi + '/library/resource/upload'"
               :show-file-list="showFile"
-              :file-list="fileList"
-              drag
               multiple
-              :on-change="handleSourceChange"
+              drag
               :on-progress="handleSourceProgress"
               :on-success="handleSourceSuccess"
               :headers="headers"
               :accept="acceptType"
-              :before-upload="beforeUpload"
+              :before-upload="beforeUploadSource"
               ref="uploadFile"
             >
               <i class="ortur-icon-file" style="font-size: 60px"></i>
@@ -613,8 +611,12 @@ export default {
         editDatetime: this.$t("upload.editOn") + this.$d(new Date(), "short"),
       };
     },
+    baseApi() {
+      return process.env.VUE_APP_BASE_API;
+    },
   },
   created() {
+    console.log(this.baseApi);
     this.sourceId = this.$route.params.sourceId || 0;
     this.parentId = this.$route.query.refId || 0;
     //refId不为空则为POST Remix
@@ -689,14 +691,15 @@ export default {
       };
     },
     genThumb(srcFile) {
+      console.log("srcFile", srcFile);
       //判断文件类型，如果是图片，则生成截图
-      if (srcFile.raw.type.indexOf("image") < 0) {
+      if (srcFile.type.indexOf("image") < 0) {
         return;
       }
       //
       return new Promise((resolve, reject) => {
         const image = new Image();
-        image.src = URL.createObjectURL(srcFile.raw);
+        image.src = URL.createObjectURL(srcFile);
         image.setAttribute("crossOrigin", "Anonymous");
 
         image.onload = () => {
@@ -726,7 +729,7 @@ export default {
           ctx.drawImage(image, 0, 0, w, h);
 
           canvas.toBlob((blob) => {
-            var file = new File([blob], srcFile.raw.name, {
+            var file = new File([blob], srcFile.name, {
               type: "image/jpeg",
             });
             //TODO:调用上传接口获取缩略图地址
@@ -739,7 +742,7 @@ export default {
               .catch((error) => {
                 reject(error);
               });
-          }, srcFile.raw.type);
+          }, srcFile.type);
         };
       });
     },
@@ -755,6 +758,36 @@ export default {
     },
     closePreviewDialog() {
       this.previewDialogVisible = false;
+    },
+    async beforeUploadSource(file) {
+      let extension = file.name.substring(file.name.lastIndexOf(".") + 1);
+      let accept = this.acceptType.indexOf(extension) < 0 ? false : true;
+      if (!accept) {
+        this.$message({
+          message: "Supported Files:" + this.acceptType,
+          type: "warning",
+        });
+      }
+      accept = true;
+
+      let fileInfo = {
+        uid: file.uid,
+        url: "",
+        id: 0,
+        name: file.name,
+        size: file.size,
+        percent: 0,
+        file: file,
+        thumbnail: "",
+      };
+      //获取缩略图
+
+      let res = await this.genThumb(file);
+      console.log("res", res);
+      fileInfo.thumbnail = res.data.data.url;
+      this.resourceForm.files.push(fileInfo);
+      console.log(this.resourceForm, res);
+      return accept && res.code == 0;
     },
     beforeUpload(file) {
       let extension = file.name.substring(file.name.lastIndexOf(".") + 1);
@@ -810,32 +843,6 @@ export default {
       }
       return filesize.toFixed(2) + units;
     },
-    handleSourceChange(file) {
-      //检查当前队列里是否已经有该元素
-      for (const index in this.resourceForm.files) {
-        var item = this.resourceForm.files[index];
-        if (file.uid == item.uid) {
-          return;
-        }
-      }
-
-      let fileInfo = {
-        uid: file.uid,
-        url: "",
-        id: 0,
-        name: file.name,
-        size: file.size,
-        percent: 0,
-        file: file,
-        thumbnail: "",
-      };
-      //获取缩略图
-      this.genThumb(file).then((res) => {
-        fileInfo.thumbnail = res.data.data.url;
-        console.log("fileInfo===", fileInfo);
-        this.resourceForm.files.push(fileInfo);
-      });
-    },
     handleSourceProgress(event, file) {
       for (const index in this.resourceForm.files) {
         var item = this.resourceForm.files[index];
@@ -853,7 +860,6 @@ export default {
           item.url = response.data.url;
           item.percent = 100;
           item.id = response.data.id;
-          // this.genThumb().then(() => {});
           break;
         }
       }
