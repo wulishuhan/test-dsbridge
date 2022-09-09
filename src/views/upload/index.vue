@@ -632,6 +632,18 @@ export default {
         this.resourceForm.tags = detail.tags;
         this.resourceForm.license = detail.license;
         this.tutorialForm = detail.tutorials;
+        if (detail.parentId != 0) {
+          getResource(parseInt(this.parentId)).then((res) => {
+            this.refResource = res.data.data;
+
+            for (const item of this.licenseSelectList) {
+              if (item.value == this.refResource.license) {
+                this.refResource.licenseIcon = item.icon;
+                break;
+              }
+            }
+          });
+        }
       });
     }
     if (this.parentId != 0) {
@@ -645,7 +657,6 @@ export default {
             break;
           }
         }
-        console.log("==========", this.refResource);
       });
     }
     this._throttle = this.throttle((swiperArrow) => {
@@ -1234,6 +1245,9 @@ export default {
     background: #e8ebf4;
     h4 {
       line-height: 24px;
+      font-size: 16px;
+      font-weight: 400;
+      color: #1a1a1a;
     }
     .el-divider--horizontal {
       margin: 10px 0;
