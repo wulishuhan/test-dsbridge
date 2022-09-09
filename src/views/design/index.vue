@@ -949,24 +949,31 @@ export default {
     },
     getResourceList() {
       if (this.isYourAccount) {
-        getResourceList({ userId: this.userInfo.user_id }).then((res) => {
+        getResourceList({
+          userId: this.userInfo.user_id,
+          type: "mine",
+        }).then((res) => {
           this.resources = res.data.rows;
         });
       } else {
         let userId = this.user.userId;
-        getResourceList({ userId }).then((res) => {
+
+        getResourceList({ userId, type: "mine" }).then((res) => {
           this.resources = res.data.rows;
         });
       }
     },
     getRemixesList() {
       if (this.isYourAccount) {
-        getResourceList({ userId: this.userInfo.user_id }).then((res) => {
+        getResourceList({
+          userId: this.userInfo.user_id,
+          type: "remix",
+        }).then((res) => {
           this.remixesList = res.data.rows;
         });
       } else {
         let userId = this.user.userId;
-        getResourceList({ userId }).then((res) => {
+        getResourceList({ userId, type: "remix" }).then((res) => {
           this.remixesList = res.data.rows;
         });
       }
