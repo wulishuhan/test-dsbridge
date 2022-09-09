@@ -45,6 +45,7 @@ const mutations = {
     state.userInfo.avatar = payload.avatar;
     state.userInfo.email = payload.email;
     state.userInfo.user_name = payload.user_name;
+    state.userInfo.third_user = payload.third_user;
     state.isLogin = true;
   },
   SET_FOLLOWINGLIST: (state, payload) => {
