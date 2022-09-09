@@ -24,13 +24,13 @@
           ></comment-content>
         </div>
         <el-button
-          @click="showReplyList(commentIndex)"
+          @click="showReplyList(commentIndex, commentItem.id)"
           class="reply-list-fold"
-          v-if="commentItem.replies.length > 3"
+          v-if="commentItem.comment_count > 3"
         >
           <span style="font-size: 12px">View all replies </span>
           <span style="margin-right: 6px; color: #999">{{
-            commentItem.replies ? commentItem.replies.length : 0
+            commentItem.comment_count
           }}</span>
           <i class="el-icon-right" style="color: #999"></i>
         </el-button>
@@ -117,6 +117,7 @@
 import ReplyWidget from "@/components/Comment/ReplyWidget.vue";
 import CommentContent from "@/components/Comment/CommentContent.vue";
 import { createNamespacedHelpers } from "vuex";
+import { getCommentListFromId } from "@/api/user";
 const { mapState } = createNamespacedHelpers("comment");
 export default {
   data() {
@@ -188,10 +189,14 @@ export default {
         "reply to " + this.currentComment.replies[replyIndex].user.name;
       this.currentCommentId = this.currentComment.replies[replyIndex].id;
     },
-    showReplyList(index) {
+    showReplyList(index, id) {
       this.replyListDialog = true;
       this.currentComment = this.commentList[index];
-      // this.replyTotalRows = this.currentComment.replies.length + "条回复";
+      getCommentListFromId(id).then((res) => {
+        console.log("评论详情", res);
+        this.replyTotalRows = res.data.total + "条回复";
+        this.currentComment.replies = res.data.rows;
+      });
     },
   },
 };

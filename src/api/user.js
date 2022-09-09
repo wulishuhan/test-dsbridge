@@ -91,6 +91,13 @@ export function getCommentList(params) {
   });
 }
 
+export function getCommentListFromId(comemntId) {
+  return request({
+    url: `/library/comment/detail/${comemntId}`,
+    method: "get",
+  });
+}
+
 export function postComment(data) {
   return request({
     url: "/library/comment",
