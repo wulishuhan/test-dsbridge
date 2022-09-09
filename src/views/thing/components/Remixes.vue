@@ -7,15 +7,18 @@
       </a>
       <a class="view-more" @click="dialogRemixes = true"> View all </a>
     </div>
-    <div class="remixes-image-container">
-      <div style="position: relative" v-for="i in 6" :key="i">
+
+    <el-row>
+      <el-col :span="8" v-for="item in remixes" :key="item.id">
         <el-image
           class="more-image"
-          src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
+          :src="item.image"
+          @click="toRemix(item.id)"
         >
         </el-image>
-      </div>
-    </div>
+      </el-col>
+    </el-row>
+
     <el-dialog :visible.sync="dialogRemixes" width="1136px">
       <el-tabs class="more-dialog" v-model="viewMoreActive" :stretch="true">
         <el-tab-pane label="Remixes" name="Remixes">
@@ -30,19 +33,44 @@
 </template>
 <script>
 import ViewMore from "../ViewMore.vue";
+import { getResourceListById } from "@/api/resource";
 export default {
   components: {
     ViewMore,
+  },
+  mounted() {
+    this.getResourceList();
   },
   data() {
     return {
       dialogRemixes: false,
       viewMoreActive: "Remixes",
+      remixes: [],
     };
   },
   methods: {
     toUpload() {
       this.$router.push(`/upload?refId=${this.$route.params.thingId}`);
+    },
+    getResourceList() {
+      let parameters = {
+        pageSize: 6,
+        pageNum: 1,
+        type: "remix",
+        resId: this.$route.params.thingId,
+      };
+      getResourceListById(parameters)
+        .then((res) => {
+          console.log("okok", res.data.rows);
+          this.remixes = res.data.rows;
+        })
+        .catch(() => {
+          this.loading = false;
+          this.noMore = true;
+        });
+    },
+    toRemix(id) {
+      this.$router.push(`/thing/${id}`);
     },
   },
 };
@@ -61,15 +89,11 @@ export default {
 .post-remix {
   cursor: pointer;
 }
-.remixes-image-container {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-}
 .more-image {
   width: 184px;
   height: 112px;
   margin-top: 5px;
+  cursor: pointer;
 }
 .more-dialog {
   ::v-deep .el-tabs__header .is-top {
