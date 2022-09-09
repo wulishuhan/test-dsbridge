@@ -116,7 +116,7 @@
               ><i class="el-icon-arrow-right"></i
             ></el-button>
             <div style="height: 100%; width: 100%; overflow-y: scroll">
-              <Comment></Comment>
+              <MakesCommentWidget :make="urlList[index]"></MakesCommentWidget>
             </div>
           </div>
         </el-menu>
@@ -131,7 +131,7 @@
 import { on, off } from "element-ui/src/utils/dom";
 import { rafThrottle, isFirefox } from "element-ui/src/utils/util";
 import { PopupManager } from "element-ui/src/utils/popup";
-import Comment from "@/components/Comment/CommentWidget.vue";
+import MakesCommentWidget from "@/components/Comment/MakesCommentWidget.vue";
 const Mode = {
   CONTAIN: {
     name: "contain",
@@ -147,7 +147,7 @@ const mousewheelEventName = isFirefox() ? "DOMMouseScroll" : "mousewheel";
 /* eslint-disable */
 export default {
   name: "ImageViwer",
-  components: { Comment },
+  components: { MakesCommentWidget },
   props: {
     urlList: {
       type: Array,
@@ -215,7 +215,6 @@ export default {
       return this.index === this.urlList.length - 1;
     },
     currentImg() {
-      console.log("修改", this.urlList[this.index].url);
       return this.urlList[this.index].url;
     },
     imgStyle() {
@@ -366,11 +365,13 @@ export default {
       if (this.isFirst && !this.infinite) return;
       const len = this.urlList.length;
       this.index = (this.index - 1 + len) % len;
+      this.closeComment();
     },
     next() {
       if (this.isLast && !this.infinite) return;
       const len = this.urlList.length;
       this.index = (this.index + 1) % len;
+      this.closeComment();
     },
     handleActions(action, options = {}) {
       if (this.loading) return;

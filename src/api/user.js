@@ -107,6 +107,13 @@ export function getMakeList(params) {
   });
 }
 
+export function getMakeDetail(params) {
+  return request({
+    url: `/library/comment/detail/${params.commentId}`,
+    method: "get",
+  });
+}
+
 export function openLogin(data) {
   return request({
     url: "/auth/user/openLogin",
