@@ -19,7 +19,10 @@
     <el-dialog :visible.sync="dialogRemixes" width="1136px">
       <el-tabs class="more-dialog" v-model="viewMoreActive" :stretch="true">
         <el-tab-pane label="Remixes" name="Remixes">
-          <view-more v-if="viewMoreActive === 'Remixes'"></view-more>
+          <view-more
+            v-if="viewMoreActive === 'Remixes'"
+            :isRemixes="true"
+          ></view-more>
         </el-tab-pane>
       </el-tabs>
     </el-dialog>
@@ -39,7 +42,7 @@ export default {
   },
   methods: {
     toUpload() {
-      this.$router.push(`/upload?resId=${this.$route.params.thingId}`);
+      this.$router.push(`/upload?refId=${this.$route.params.thingId}`);
     },
   },
 };

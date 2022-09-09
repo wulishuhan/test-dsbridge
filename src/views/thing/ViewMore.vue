@@ -54,6 +54,10 @@ export default {
         };
       },
     },
+    isRemixes: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -82,6 +86,7 @@ export default {
     ...mapGetters(["isLogin", "userInfo"]),
   },
   mounted() {
+    console.log("mounted", this.isRemixes);
     getLikelist({
       userId: this.userInfo.user_id,
     })
@@ -131,8 +136,17 @@ export default {
   },
   methods: {
     getResourceList() {
-      getResourceListById({ ...this.pagination, userId: this.creator.id })
+      let parameters = { ...this.pagination, userId: this.creator.id };
+      if (this.isRemixes) {
+        parameters = {
+          ...this.pagination,
+          type: "remix",
+          resId: this.$route.params.thingId,
+        };
+      }
+      getResourceListById(parameters)
         .then((res) => {
+          console.log("res", res);
           let resource = res.data.rows;
           for (let i = 0; i < resource.length; i++) {
             const element = resource[i];
