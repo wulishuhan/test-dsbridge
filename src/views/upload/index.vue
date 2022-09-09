@@ -973,7 +973,7 @@ export default {
           });
         }
         if (valid && this.tutorialValidateResult) {
-          if (this.sourceId != undefined) {
+          if (this.sourceId != 0) {
             //调用详解接口
             updateResource({
               id: this.sourceId,
