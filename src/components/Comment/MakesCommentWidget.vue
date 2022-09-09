@@ -24,13 +24,13 @@
           ></comment-content>
         </div>
         <el-button
-          @click="showReplyList(commentIndex, commentItem.id)"
+          @click="showReplyList(commentIndex)"
           class="reply-list-fold"
-          v-if="commentItem.comment_count > 3"
+          v-if="commentItem.replies.length > 3"
         >
           <span style="font-size: 12px">View all replies </span>
           <span style="margin-right: 6px; color: #999">{{
-            commentItem.comment_count
+            commentItem.replies ? commentItem.replies.length : 0
           }}</span>
           <i class="el-icon-right" style="color: #999"></i>
         </el-button>
@@ -116,10 +116,17 @@
 <script>
 import ReplyWidget from "@/components/Comment/ReplyWidget.vue";
 import CommentContent from "@/components/Comment/CommentContent.vue";
-import { createNamespacedHelpers } from "vuex";
-import { getCommentListFromId } from "@/api/user";
-const { mapState } = createNamespacedHelpers("comment");
+import { getMakeDetail } from "@/api/user";
 export default {
+  props: {
+    make: {
+      type: Object,
+      default: () => {
+        return {};
+      },
+      required: true,
+    },
+  },
   data() {
     return {
       outerVisible: false,
@@ -142,6 +149,8 @@ export default {
       currentResId: 0,
       keywords: "",
       select: "",
+      commentList: [],
+      comment: {},
     };
   },
   components: {
@@ -149,11 +158,16 @@ export default {
     ReplyWidget,
   },
   mounted() {
-    let resId = parseInt(this.$route.params.thingId);
-    this.$store.dispatch("comment/getCommentList", { resId: resId });
-  },
-  computed: {
-    ...mapState(["commentList"]),
+    console.log("make", this.make, this.make.id);
+    this.comment = this.make;
+
+    getMakeDetail({
+      commentId: this.make.id,
+    }).then((res) => {
+      console.log("makeid", res);
+      this.comment.replies = res.data.rows;
+      this.commentList.push(this.comment);
+    });
   },
   methods: {
     handleClose(space) {
@@ -189,14 +203,10 @@ export default {
         "reply to " + this.currentComment.replies[replyIndex].user.name;
       this.currentCommentId = this.currentComment.replies[replyIndex].id;
     },
-    showReplyList(index, id) {
+    showReplyList(index) {
       this.replyListDialog = true;
       this.currentComment = this.commentList[index];
-      getCommentListFromId(id).then((res) => {
-        console.log("评论详情", res);
-        this.replyTotalRows = res.data.total + "条回复";
-        this.currentComment.replies = res.data.rows;
-      });
+      // this.replyTotalRows = this.currentComment.replies.length + "条回复";
     },
   },
 };

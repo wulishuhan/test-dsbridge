@@ -10,9 +10,14 @@
     <PostMakeDialog
       :isShow.sync="dialogPostMake"
       :customClass="'make-dialog'"
+      @addMake="addMake"
     ></PostMakeDialog>
     <el-row>
-      <el-col :span="8" v-for="(item, index) in makes" :key="item.id">
+      <el-col
+        :span="8"
+        v-for="(item, index) in makes.slice(0, 6)"
+        :key="item.id"
+      >
         <make
           :make="item"
           :index="index"
@@ -43,11 +48,11 @@ export default {
   components: { Make, PostMakeDialog, ViewMake, ElImageViewer },
   mounted() {
     getMakeList({ resId: this.$route.params.thingId }).then((res) => {
+      console.log("makes", res);
       this.makes = res.data.rows;
       this.makes.map((item) => {
         item.url = item.image;
       });
-      console.log("makes", this.makes);
     });
   },
   data() {
@@ -71,6 +76,16 @@ export default {
     closeMake() {
       this.showMake = false;
       document.documentElement.style.overflowY = "scroll";
+    },
+    addMake() {
+      //   this.makes.push(make);
+      getMakeList({ resId: this.$route.params.thingId }).then((res) => {
+        console.log("makes", res);
+        this.makes = res.data.rows;
+        this.makes.map((item) => {
+          item.url = item.image;
+        });
+      });
     },
   },
 };
