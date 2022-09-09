@@ -13,7 +13,18 @@
         >
           <div class="wrapper">
             <div class="left">
-              <img class="img" alt="" :src="userInfo.avatar" />
+              <img
+                class="img"
+                alt=""
+                v-if="userInfo.avatar.length > 0"
+                :src="userInfo.avatar"
+              />
+              <img
+                class="img"
+                alt=""
+                v-else
+                src="../assets/img/图层 1309.png"
+              />
               <el-upload
                 class="upload-demo"
                 :headers="headers"
@@ -365,6 +376,7 @@ export default {
     width: 129px;
     height: 129px;
     border-radius: 50%;
+    background-color: black;
   }
 }
 .right {
