@@ -13,7 +13,18 @@
         >
           <div class="wrapper">
             <div class="left">
-              <img class="img" alt="" :src="userInfo.avatar" />
+              <img
+                class="img"
+                alt=""
+                v-if="userInfo.avatar.length > 0"
+                :src="userInfo.avatar"
+              />
+              <img
+                class="img"
+                alt=""
+                v-else
+                src="../assets/img/图层 1309.png"
+              />
               <el-upload
                 class="upload-demo"
                 :headers="headers"
@@ -73,11 +84,21 @@
                 >
                   <div class="left">
                     <span
-                      v-if="item.switch1"
+                      v-if="item.switch1 && item.catalog !== 'tiktok'"
                       class="icon"
                       :class="item.iconClassLight"
                     ></span>
-                    <span v-else class="icon" :class="item.iconClass"></span>
+                    <span
+                      v-if="item.switch1 && item.catalog == 'tiktok'"
+                      class="ortur-icon-tiktok-light icon"
+                      ><span class="path1"></span><span class="path2"></span
+                      ><span class="path3"></span
+                    ></span>
+                    <span
+                      v-else-if="!item.switch1"
+                      class="icon"
+                      :class="item.iconClass"
+                    ></span>
                     <span>{{ item.catalog }}</span>
                     <span class="username">{{
                       item.username ? "item.username" : ""
@@ -164,15 +185,15 @@ export default {
           iconClassLight: "ortur-icon-google-light",
           iconClass: "ortur-icon-google",
         },
-        whatsApp: {
-          catalog: "whatsApp",
-          user_id: "",
-          switch1: false,
-          username: "",
-          email: "",
-          iconClassLight: "ortur-icon-whatsapp-light",
-          iconClass: "ortur-icon-whats-app",
-        },
+        // whatsApp: {
+        //   catalog: "whatsApp",
+        //   user_id: "",
+        //   switch1: false,
+        //   username: "",
+        //   email: "",
+        //   iconClassLight: "ortur-icon-whatsapp-light",
+        //   iconClass: "ortur-icon-whats-app",
+        // },
         twitter: {
           catalog: "twitter",
           user_id: "",
@@ -181,6 +202,15 @@ export default {
           email: "",
           iconClassLight: "ortur-icon-twitter-light",
           iconClass: "ortur-icon-twitter",
+        },
+        tiktok: {
+          catalog: "tiktok",
+          user_id: "",
+          switch1: false,
+          username: "",
+          email: "",
+          iconClassLight: "ortur-icon-tiktok-light",
+          iconClass: "ortur-icon-tiktok",
         },
       },
 
@@ -346,6 +376,7 @@ export default {
     width: 129px;
     height: 129px;
     border-radius: 50%;
+    background-color: black;
   }
 }
 .right {
