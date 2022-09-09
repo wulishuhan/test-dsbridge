@@ -73,11 +73,21 @@
                 >
                   <div class="left">
                     <span
-                      v-if="item.switch1"
+                      v-if="item.switch1 && item.catalog !== 'tiktok'"
                       class="icon"
                       :class="item.iconClassLight"
                     ></span>
-                    <span v-else class="icon" :class="item.iconClass"></span>
+                    <span
+                      v-if="item.switch1 && item.catalog == 'tiktok'"
+                      class="ortur-icon-tiktok-light icon"
+                      ><span class="path1"></span><span class="path2"></span
+                      ><span class="path3"></span
+                    ></span>
+                    <span
+                      v-else-if="!item.switch1"
+                      class="icon"
+                      :class="item.iconClass"
+                    ></span>
                     <span>{{ item.catalog }}</span>
                     <span class="username">{{
                       item.username ? "item.username" : ""
@@ -181,6 +191,15 @@ export default {
           email: "",
           iconClassLight: "ortur-icon-twitter-light",
           iconClass: "ortur-icon-twitter",
+        },
+        tiktok: {
+          catalog: "tiktok",
+          user_id: "",
+          switch1: false,
+          username: "",
+          email: "",
+          iconClassLight: "ortur-icon-tiktok-light",
+          iconClass: "ortur-icon-tiktok",
         },
       },
 
