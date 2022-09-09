@@ -34,6 +34,7 @@ module.exports = {
     preview: "Preview",
     reset: "Reset",
     editOn: "Editd on ",
+    source: "source",
   },
   download: {
     fileNum: "Files",

@@ -655,8 +655,8 @@ export default {
     toUpload() {
       this.$router.push({
         path: "/upload",
-        params: {
-          sourceId: this.detail.id,
+        query: {
+          refId: this.detail.id,
         },
       });
     },

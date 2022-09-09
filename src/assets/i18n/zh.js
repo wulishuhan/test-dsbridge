@@ -34,6 +34,7 @@ module.exports = {
     preview: "预览",
     reset: "重置",
     editOn: "编辑 ",
+    source: "引用资源",
   },
   download: {
     fileNum: "个文件",

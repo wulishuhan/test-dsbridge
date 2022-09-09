@@ -188,6 +188,26 @@
           </div>
         </div>
       </el-form-item>
+      <el-form-item class="ref-resource-info" v-if="parentId != 0">
+        <h4>Source</h4>
+        <el-divider></el-divider>
+        <div class="resource-info-wrapper">
+          <div class="resource-info-intro">
+            <img :src="refResource.images[0].url" />
+            <div class="resource-info">
+              <span class="ref-title">{{ refResource.title }}</span>
+              <span class="ref-author">By {{ refResource.creator.name }}</span>
+            </div>
+          </div>
+          <div class="copyright">
+            <img
+              :src="iconUrl"
+              v-for="(iconUrl, IconKey) in refResource.licenseIcon"
+              :key="IconKey"
+            />
+          </div>
+        </div>
+      </el-form-item>
       <el-form-item :label="$t('upload.title')" prop="title">
         <el-input v-model="resourceForm.title"></el-input>
       </el-form-item>
@@ -418,6 +438,7 @@ export default {
     return {
       previewDialogVisible: false,
       sourceId: 0,
+      parentId: 0,
       fileList: [],
       acceptType: ".jpg,.png,.svg,.dxf,.gc,.nc,.jpeg",
       tutorialValidateResult: true,
@@ -427,6 +448,18 @@ export default {
       inputValue: "",
       searchSuggestions: "",
       dialogVisible: false,
+      refResource: {
+        title: "",
+        images: [
+          {
+            url: "",
+          },
+        ],
+        creator: {
+          name: "",
+        },
+        licenseIcon: [],
+      },
       resourceFormRules: {
         files: [{ required: true, message: "资源不能为空" }],
         images: [{ required: true, message: "封面不能为空" }],
@@ -448,46 +481,93 @@ export default {
         {
           label: "Creative Commons - Attribution",
           value: "Creative Commons - Attribution",
+          url: "https://creativecommons.org/licenses/by/4.0/",
+          icon: [
+            "/license-img/Creative Commons.png",
+            "/license-img/Attribution.png",
+          ],
         },
         {
           label: "Creative Commons - Attribution - Share Alike",
           value: "Creative Commons - Attribution - Share Alike",
+          url: "https://creativecommons.org/licenses/by-sa/4.0/",
+          icon: [
+            "/license-img/Creative Commons.png",
+            "/license-img/Attribution.png",
+            "/license-img/Share Alike.png",
+          ],
         },
         {
           label: "Creative Commons - Attribution - No Derivatives",
           value: "Creative Commons - Attribution - No Derivatives",
+          url: "https://creativecommons.org/licenses/by-nd/4.0/",
+          icon: [
+            "/license-img/Creative Commons.png",
+            "/license-img/Attribution.png",
+            "/license-img/No Derivatives.png",
+          ],
         },
         {
           label: "Creative Commons - Attribution - Non-Commercial",
           value: "Creative Commons - Attribution - Non-Commercial",
+          url: "https://creativecommons.org/licenses/by-nc/4.0/",
+          icon: [
+            "/license-img/Creative Commons.png",
+            "/license-img/Attribution.png",
+            "/license-img/Non-Commercial.png",
+          ],
         },
         {
           label:
             "Creative Commons - Attribution - Non-Commercial - Share Alike",
           value:
             "Creative Commons - Attribution - Non-Commercial - Share Alike",
+          url: "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+          icon: [
+            "/license-img/Creative Commons.png",
+            "/license-img/Attribution.png",
+            "/license-img/Non-Commercial.png",
+            "/license-img/Share Alike.png",
+          ],
         },
         {
           label:
             "Creative Commons - Attribution - Non-Commercial - No Derivatives ",
           value:
             "Creative Commons - Attribution - Non-Commercial - No Derivatives ",
+          url: "https://creativecommons.org/licenses/by-nc-nd/4.0/",
+          icon: [
+            "/license-img/Creative Commons.png",
+            "/license-img/Attribution.png",
+            "/license-img/Non-Commercial.png",
+            "/license-img/No Derivatives.png",
+          ],
         },
         {
           label: "Creative Commons - Public Domain Dedication",
           value: "Creative Commons - Public Domain Dedication",
+          url: "https://creativecommons.org/share-your-work/public-domain/cc0/",
+          icon: [
+            "/license-img/Creative Commons - Public Domain Dedication.png",
+          ],
         },
         {
           label: "GNU - GPL",
           value: "GNU - GPL",
+          url: "https://www.gnu.org/licenses/gpl-3.0.html",
+          icon: ["/license-img/GNU - GPL.png"],
         },
         {
-          label: "GNU - LGPL ",
-          value: "GNU - LGPL ",
+          label: "GNU - LGPL",
+          value: "GNU - LGPL",
+          url: "https://www.gnu.org/licenses/lgpl-3.0.html",
+          icon: ["/license-img/GNU - LGPL.png"],
         },
         {
           label: "BSD License",
           value: "BSD License",
+          url: "https://opensource.org/licenses/BSD-3-Clause",
+          icon: ["/license-img/BSD.png"],
         },
       ],
       tutorialFormRules: {
@@ -520,7 +600,7 @@ export default {
       };
     },
     headerTitle() {
-      if (this.sourceId != undefined) {
+      if (this.sourceId != 0) {
         return this.$t("upload.editProject");
       } else {
         return this.$t("upload.createProject");
@@ -534,14 +614,14 @@ export default {
       };
     },
   },
-  mounted() {
-    console.log("mounted", this.$route.params.sourceId);
-    this.sourceId = this.$route.params.sourceId;
-    if (this.sourceId != undefined) {
+  created() {
+    this.sourceId = this.$route.params.sourceId || 0;
+    this.parentId = this.$route.query.refId || 0;
+    //refId不为空则为POST Remix
+    if (this.sourceId != 0) {
       //调用详解接口
       getResource(parseInt(this.sourceId)).then((res) => {
         let detail = res.data.data;
-        console.log("资源详情", detail);
         this.resourceForm.description = detail.description;
         this.resourceForm.title = detail.title;
         this.resourceForm.files = detail.files;
@@ -552,9 +632,33 @@ export default {
         this.resourceForm.tags = detail.tags;
         this.resourceForm.license = detail.license;
         this.tutorialForm = detail.tutorials;
+        if (detail.parentId != 0) {
+          getResource(parseInt(this.parentId)).then((res) => {
+            this.refResource = res.data.data;
+
+            for (const item of this.licenseSelectList) {
+              if (item.value == this.refResource.license) {
+                this.refResource.licenseIcon = item.icon;
+                break;
+              }
+            }
+          });
+        }
       });
     }
+    if (this.parentId != 0) {
+      //调用详解接口
+      getResource(parseInt(this.parentId)).then((res) => {
+        this.refResource = res.data.data;
 
+        for (const item of this.licenseSelectList) {
+          if (item.value == this.refResource.license) {
+            this.refResource.licenseIcon = item.icon;
+            break;
+          }
+        }
+      });
+    }
     this._throttle = this.throttle((swiperArrow) => {
       //滚动
       this.$refs[swiperArrow].click();
@@ -731,8 +835,6 @@ export default {
         console.log("fileInfo===", fileInfo);
         this.resourceForm.files.push(fileInfo);
       });
-
-      console.log("handleSourceChange=========", file);
     },
     handleSourceProgress(event, file) {
       for (const index in this.resourceForm.files) {
@@ -755,8 +857,6 @@ export default {
           break;
         }
       }
-
-      //TODO 完成的时候隐藏掉进度条，显示移除
     },
     handleRemoveSource(sourceIndex) {
       this.resourceForm.files.splice(sourceIndex, 1);
@@ -852,8 +952,6 @@ export default {
     },
     callback() {},
     format(percentage) {
-      // return percentage === 100 ? "满" : `${percentage}%`;
-
       return `${percentage}%`;
     },
     formatStatus(percentage) {
@@ -877,7 +975,6 @@ export default {
               tutorials: this.tutorialForm,
             })
               .then(() => {
-                console.log("修改成功");
                 this.$message.success("修改成功");
               })
               .catch(() => {
@@ -887,6 +984,7 @@ export default {
             saveResource({
               ...this.resourceForm,
               tutorials: this.tutorialForm,
+              parentId: this.parentId,
             })
               .then((res) => {
                 if (res.data.code == 0) {
@@ -899,7 +997,6 @@ export default {
                 console.log(e);
               });
           }
-          console.log("表单验证成功");
         } else {
           this.$message.error("验证失败!");
         }
@@ -1124,6 +1221,10 @@ export default {
 }
 
 .el-form {
+  .el-form-item label {
+    font-weight: 400;
+    font-size: 16px;
+  }
   .el-form-item input,
   .el-form-item textarea {
     font-size: 12px;
@@ -1138,6 +1239,54 @@ export default {
     border: 1px solid #dcdfe6;
     padding: 0 5px;
     border-radius: 5px;
+  }
+  .ref-resource-info {
+    padding: 10px;
+    background: #e8ebf4;
+    h4 {
+      line-height: 24px;
+      font-size: 16px;
+      font-weight: 400;
+      color: #1a1a1a;
+    }
+    .el-divider--horizontal {
+      margin: 10px 0;
+    }
+    .resource-info-wrapper {
+      line-height: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      .resource-info-intro {
+        display: flex;
+        justify-content: space-between;
+        align-content: center;
+        img {
+          width: 88px;
+          height: 56px;
+          object-fit: cover;
+        }
+        .resource-info {
+          margin-left: 20px;
+          display: flex;
+          flex-direction: column;
+          .ref-title {
+            font-size: 16px;
+          }
+          .ref-author {
+            font-size: 14px;
+            color: #999999;
+          }
+        }
+      }
+      .copyright img {
+        height: 46px;
+        width: auto;
+      }
+      .copyright img + img {
+        margin-left: 20px;
+      }
+    }
   }
 }
 

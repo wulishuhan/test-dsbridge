@@ -86,6 +86,7 @@
   </div>
 </template>
 <script>
+import { changePassword } from "@/api/setting.js";
 export default {
   name: "ChangePassword",
   props: {
@@ -218,21 +219,9 @@ export default {
         if (valid) {
           console.log(this.registerForm);
           debugger;
-          this.$store
-            .dispatch("user/register", {
-              auto_login: true,
-              client_subtype: "Windows",
-              client_type: "pc",
-              ...this.registerForm,
-            })
-            .then((res) => {
-              if (res.code == 0) {
-                this.handleClose();
-              }
-            })
-            .catch((e) => {
-              console.log(e);
-            });
+          changePassword(this.registerForm).then(() => {
+            debugger;
+          });
         } else {
           return false;
         }

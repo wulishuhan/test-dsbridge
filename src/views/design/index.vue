@@ -261,6 +261,22 @@
               </el-tab-pane>
 
               <el-tab-pane :label="$t('design.makes')" name="third">
+                <PostMakeDialog
+                  :isShow.sync="dialogPostMake"
+                  :customClass="'make-dialog'"
+                ></PostMakeDialog>
+                <ElImageViewer
+                  class="imageViewer"
+                  v-if="showMake"
+                  :on-close="closeMake"
+                  :url-list="makes"
+                  :isMake="true"
+                  :initialIndex="index"
+                ></ElImageViewer>
+                <ViewMake
+                  :makes="makes"
+                  :isShow.sync="dialogViewMake"
+                ></ViewMake>
                 <div
                   style="
                     display: flex;
@@ -269,12 +285,16 @@
                   "
                 >
                   <Make
-                    v-for="item in makesList"
+                    v-for="(item, index) in makes"
                     :key="item.id"
                     class="Make"
-                    @clickDownMenu="handleDownClick(item)"
+                    @clickDownMenu="Handler_Down(item)"
                     @clickDelMenu="handleDelClick(item)"
-                    :showMoreIcon="true"
+                    @openMake="openMake"
+                    @getIndex="getIndex"
+                    :make="item"
+                    :index="index"
+                    :showMoreIcon="false"
                     :isYourAccount="isYourAccount"
                   ></Make>
                 </div>
@@ -459,6 +479,10 @@ import {
 import { getToken } from "@/utils/auth";
 import { createNamespacedHelpers } from "vuex";
 import { getResource } from "@/api/resource";
+import PostMakeDialog from "@/views/thing/components/PostMakeDialog.vue";
+import ElImageViewer from "@/components/ImageViewer";
+import ViewMake from "@/views/thing/components/ViewMake.vue";
+import { getMakeList } from "@/api/user";
 
 const { mapState } = createNamespacedHelpers("user");
 export default {
@@ -472,19 +496,17 @@ export default {
     RowFolder,
     DownListPanel,
     Make,
+    PostMakeDialog,
+    ViewMake,
+    ElImageViewer,
   },
   data() {
     return {
-      makesList: [
-        { id: 1 },
-        { id: 1 },
-        { id: 1 },
-        { id: 1 },
-        { id: 1 },
-        { id: 1 },
-        { id: 1 },
-        { id: 2 },
-      ],
+      dialogPostMake: false,
+      dialogViewMake: false,
+      makes: [],
+      showMake: false,
+      index: 0,
       remixesList: [],
       detail: {
         creator: {
@@ -680,13 +702,37 @@ export default {
     },
   },
   methods: {
-    handleDelClick() {
+    getIndex(index) {
+      console.log(index);
+      this.index = index;
+    },
+    openMake() {
+      this.showMake = true;
+      document.documentElement.style.overflowY = "hidden";
+    },
+    closeMake() {
+      this.showMake = false;
+      document.documentElement.style.overflowY = "scroll";
+    },
+    handleDelClick(item) {
       if (!this.$store.getters.isLogin) {
         let payload = { loginDialogVisible: true, isLoginForm: true };
         this.$store.dispatch("user/switchLoginRegisteForm", payload);
         return;
       }
-      this.$emit("clickDelMenu", this.thing);
+      this.$confirm(this.$t("design.delFileTip"), this.$t("design.tips"), {
+        confirmButtonText: this.$t("design.confirm"),
+        cancelButtonText: this.$t("design.cancel"),
+        type: "warning",
+      }).then(() => {
+        deleteResource({ resId: item.id }).then(() => {
+          this.$message({
+            type: "success",
+            message: this.$t("design.delSuccess"),
+          });
+          this.getResourceList();
+        });
+      });
     },
     openShowDownPanel() {
       if (!this.isShowDownPanel) {
@@ -903,24 +949,31 @@ export default {
     },
     getResourceList() {
       if (this.isYourAccount) {
-        getResourceList({ userId: this.userInfo.user_id }).then((res) => {
+        getResourceList({
+          userId: this.userInfo.user_id,
+          type: "mine",
+        }).then((res) => {
           this.resources = res.data.rows;
         });
       } else {
         let userId = this.user.userId;
-        getResourceList({ userId }).then((res) => {
+
+        getResourceList({ userId, type: "mine" }).then((res) => {
           this.resources = res.data.rows;
         });
       }
     },
     getRemixesList() {
       if (this.isYourAccount) {
-        getResourceList({ userId: this.userInfo.user_id }).then((res) => {
+        getResourceList({
+          userId: this.userInfo.user_id,
+          type: "remix",
+        }).then((res) => {
           this.remixesList = res.data.rows;
         });
       } else {
         let userId = this.user.userId;
-        getResourceList({ userId }).then((res) => {
+        getResourceList({ userId, type: "remix" }).then((res) => {
           this.remixesList = res.data.rows;
         });
       }
@@ -1217,6 +1270,15 @@ export default {
         // this.isLogin && !this.isYourAccount && this.getMyLikesList();
       }
     },
+    getMakeList() {
+      getMakeList({ resId: "1" }).then((res) => {
+        this.makes = res.data.rows;
+        this.makes.map((item) => {
+          item.url = item.image;
+        });
+        console.log("makes", this.makes);
+      });
+    },
     async handleResourceTabClick() {
       if (this.resourceActiveTab == "first") {
         // this.isLogin && !this.isYourAccount && this.getMyLikesList();
@@ -1227,8 +1289,7 @@ export default {
 
         this.getRemixesList();
       } else if (this.resourceActiveTab == "third") {
-        this.getHistoriesList();
-        this.isLogin && this.getAllMyCollectList();
+        this.getMakeList();
       }
     },
   },
