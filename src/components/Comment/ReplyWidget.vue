@@ -19,8 +19,7 @@
     </div>
     <div class="toolbar">
       <el-upload
-        action="/dev-api/library/resource/upload"
-        multiple
+        :action="baseApi + '/library/resource/upload'"
         :show-file-list="false"
         :on-success="upSuccess"
         :headers="headers"
@@ -104,6 +103,9 @@ export default {
       return {
         Authorization: "Bearer " + getToken(),
       };
+    },
+    baseApi() {
+      return process.env.VUE_APP_BASE_API;
     },
   },
   methods: {
