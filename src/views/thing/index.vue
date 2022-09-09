@@ -156,27 +156,8 @@
                 <tutorial :step="detail.tutorials"></tutorial>
               </show-more>
             </el-tab-pane>
-            <el-tab-pane label="Remix" name="third">
-              <div>
-                <div class="flex justify-between remix-link-box">
-                  <a class="more-font post-remix" @click="toUpload">
-                    <i class="el-icon-plus"></i>
-                    Post a Remix
-                  </a>
-                  <a class="view-more" @click="openViewAllDialog('view-remix')">
-                    View all
-                  </a>
-                </div>
-                <div class="flex justify-between" style="flex-wrap: wrap">
-                  <div style="position: relative" v-for="i in 6" :key="i">
-                    <el-image
-                      class="more-image"
-                      src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
-                    >
-                    </el-image>
-                  </div>
-                </div>
-              </div>
+            <el-tab-pane label="Remixes" name="third">
+              <remixes></remixes>
             </el-tab-pane>
             <el-tab-pane label="Makes" name="fourth">
               <Makes></Makes>
@@ -282,9 +263,6 @@
         <el-tab-pane label="Similar with this" name="view-similar">
           <view-more v-if="viewMoreActive === 'view-similar'"></view-more>
         </el-tab-pane>
-        <el-tab-pane label="Remix" name="view-remix">
-          <view-more v-if="viewMoreActive === 'view-remix'"></view-more>
-        </el-tab-pane>
       </el-tabs>
     </el-dialog>
     <sroll-top-button :to="'#detail-top'"></sroll-top-button>
@@ -317,6 +295,7 @@ import SrollTopButton from "@/components/SrollTopButton";
 import Tutorial from "./components/Tutorial.vue";
 import CollectedOption from "@/components/CollectedOption";
 import Makes from "./components/Makes.vue";
+import Remixes from "./components/Remixes.vue";
 export default {
   name: "Thing",
   components: {
@@ -333,6 +312,7 @@ export default {
     Tutorial,
     CollectedOption,
     Makes,
+    Remixes,
   },
   data() {
     return {
