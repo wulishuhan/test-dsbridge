@@ -179,44 +179,7 @@
               </div>
             </el-tab-pane>
             <el-tab-pane label="Makes" name="fourth">
-              <div>
-                <div class="flex justify-between make-link-box">
-                  <a class="more-font post-make" @click="dialogPostMake = true">
-                    <i class="el-icon-plus"></i>
-                    Post a make
-                  </a>
-                  <a class="view-more" @click="dialogViewMake = true">
-                    View all
-                  </a>
-                </div>
-                <PostMakeDialog
-                  :isShow.sync="dialogPostMake"
-                  :customClass="'make-dialog'"
-                ></PostMakeDialog>
-                <el-row>
-                  <el-col
-                    :span="8"
-                    v-for="(item, index) in makes"
-                    :key="item.id"
-                  >
-                    <make
-                      :make="item"
-                      :index="index"
-                      @openMake="openMake"
-                      @getIndex="getIndex"
-                    ></make>
-                  </el-col>
-                </el-row>
-                <ElImageViewer
-                  class="imageViewer"
-                  v-if="showMake"
-                  :on-close="closeMake"
-                  :url-list="makes"
-                  :isMake="true"
-                  :initialIndex="index"
-                ></ElImageViewer>
-                <ViewMake :isShow.sync="dialogViewMake"></ViewMake>
-              </div>
+              <Makes></Makes>
             </el-tab-pane>
           </el-tabs>
           <div class="split-line"></div>
@@ -331,8 +294,6 @@
 /* eslint-disable */
 // import ElImageViewer from "element-ui/packages/image/src/image-viewer";
 import ElImageViewer from "@/components/ImageViewer";
-import Make from "./components/Make.vue";
-import ViewMake from "./components/ViewMake.vue";
 import { getUserInfoByThingId } from "@/api/thing";
 import { getResource, getResourceListById } from "@/api/resource";
 import { getLikelist, addLike, deleteLike } from "@/api/like";
@@ -348,7 +309,6 @@ import DownLoadButton from "@/components/DownLoadButton.vue";
 import StarButton from "@/components/StarButton.vue";
 import CollectButton from "@/components/CollectButton.vue";
 import LabelCard from "@/components/LabelCard.vue";
-import ShareCard from "@/components/ShareCard";
 import Comment from "@/components/Comment/CommentWidget.vue";
 import ShowMore from "@/components/ShowMore.vue";
 import Reply from "@/components/Comment/ReplyWidget.vue";
@@ -356,7 +316,7 @@ import ViewMore from "./ViewMore.vue";
 import SrollTopButton from "@/components/SrollTopButton";
 import Tutorial from "./components/Tutorial.vue";
 import CollectedOption from "@/components/CollectedOption";
-import PostMakeDialog from "./components/PostMakeDialog.vue";
+import Makes from "./components/Makes.vue";
 export default {
   name: "Thing",
   components: {
@@ -365,7 +325,6 @@ export default {
     CollectButton,
     DownLoadButton,
     LabelCard,
-    ShareCard,
     Comment,
     ShowMore,
     Reply,
@@ -373,14 +332,10 @@ export default {
     SrollTopButton,
     Tutorial,
     CollectedOption,
-    Make,
-    PostMakeDialog,
-    ViewMake,
+    Makes,
   },
   data() {
     return {
-      dialogViewMake: false,
-      dialogPostMake: false,
       dialogPostRemix: false,
       showViewer: false, // 显示查看器
       urlList: [], //大图列表
@@ -444,17 +399,6 @@ export default {
       isShowDownPanel: false,
       licenseImg: [],
       licenseIcon: [],
-      makes: [
-        {
-          id: 56785,
-          url: "https://orturbucket.s3.amazonaws.com/assets/2022/08/30/abcddd_20220830153658A043.png",
-        },
-        {
-          id: 12345,
-          url: "https://orturbucket.s3.amazonaws.com/assets/2022/08/30/abc_20220830153645A040.png",
-        },
-      ],
-      showMake: false,
     };
   },
   computed: {
@@ -727,14 +671,6 @@ export default {
     getIndex(index) {
       console.log(index);
       this.index = index;
-    },
-    openMake() {
-      this.showMake = true;
-      document.documentElement.style.overflowY = "hidden";
-    },
-    closeMake() {
-      this.showMake = false;
-      document.documentElement.style.overflowY = "scroll";
     },
     toUpload() {
       this.$router.push({

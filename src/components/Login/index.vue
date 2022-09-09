@@ -298,6 +298,7 @@ export default {
           callback();
         }
       }
+      callback();
     };
     return {
       isComplete: false,

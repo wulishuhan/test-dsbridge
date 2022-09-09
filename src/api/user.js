@@ -99,6 +99,14 @@ export function postComment(data) {
   });
 }
 
+export function getMakeList(params) {
+  return request({
+    url: "/library/comment/make/list",
+    method: "get",
+    params,
+  });
+}
+
 export function openLogin(data) {
   return request({
     url: "/auth/user/openLogin",
