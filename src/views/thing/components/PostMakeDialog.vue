@@ -10,18 +10,14 @@
     >
       <el-form>
         <el-form-item>
-          <el-input
-            placeholder="Add a step title"
-            v-model="form.title"
-          ></el-input>
-        </el-form-item>
-        <el-form-item>
           <el-upload
+            ref="upload-make-file"
             class="upload-demo"
-            action="/dev-api/library/resource/upload"
+            :action="uploadUrl"
             :on-preview="handlePreview"
             :on-remove="handleRemove"
             :on-success="uploadSuccessHandler"
+            :before-upload="uploadBefore"
             :headers="headers"
             :limit="1"
             list-type="picture"
@@ -35,15 +31,11 @@
           <el-input
             placeholder="Add a description"
             type="textarea"
-            v-model="form.description"
+            v-model="form.content"
           ></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button
-            type="primary"
-            @click="onSubmit"
-            style="float: right; margin-right: 15px"
-          >
+          <el-button type="primary" @click="onSubmit" class="post-make-button">
             post
           </el-button>
         </el-form-item>
@@ -53,6 +45,7 @@
 </template>
 <script>
 import { getToken } from "@/utils/auth";
+import { postComment } from "@/api/user";
 export default {
   name: "PostMakeDialog",
   props: {
@@ -72,9 +65,11 @@ export default {
   data() {
     return {
       form: {
-        title: "",
-        description: "",
-        url: "",
+        image: "",
+        content: "",
+        resourceId: this.$route.params.thingId,
+        isMake: "1",
+        id: 0,
       },
     };
   },
@@ -93,6 +88,9 @@ export default {
         Authorization: "Bearer " + getToken(),
       };
     },
+    uploadUrl() {
+      return `${process.env.VUE_APP_BASE_API}/library/resource/upload`;
+    },
   },
   methods: {
     handleRemove(file, fileList) {
@@ -102,16 +100,37 @@ export default {
       console.log(file);
     },
     onSubmit() {
-      console.log(this.form);
+      postComment(this.form).then((res) => {
+        console.log(res);
+        this.$message({
+          message: "post make successfully",
+          type: "success",
+        });
+        this.form.id = res.data.data;
+        this.$emit("addMake", this.form);
+        this.close();
+      });
     },
     uploadSuccessHandler(response) {
-      console.log(response);
+      this.form.image = response.data.url;
       this.form.url = response.data.url;
     },
+    uploadBefore(file) {
+      console.log("upload before file", file);
+      if (file.name.length > 50) {
+        this.$message.error("文件名过长！");
+        return false;
+      }
+      return true;
+    },
     close() {
+      this.$emit("update:isShow", false);
+      this.$refs["upload-make-file"].clearFiles();
       this.form = {
-        title: "",
-        description: "",
+        image: "",
+        content: "",
+        resourceId: this.$route.params.thingId,
+        isMake: "1",
         url: "",
       };
     },
@@ -162,5 +181,11 @@ export default {
 .el-form {
   background: #f5f5f5;
   padding: 8px;
+}
+.post-make-button {
+  width: 120px;
+  font-size: 16px;
+  float: right;
+  margin-right: 15px;
 }
 </style>
