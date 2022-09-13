@@ -5,15 +5,7 @@
         <div class="app-header-left">
           <div class="app-header__logo">
             <router-link to="/main">
-              <!-- <img src="@/assets/logo.png" style="height: 32px" /> -->
-              <i class="ortur-icon-logo-white">
-                <span class="path1"></span>
-                <span class="path2"></span>
-                <span class="path3"></span>
-                <span class="path4"></span>
-                <span class="path5"></span>
-                <span class="path6"></span>
-              </i>
+              <img src="@/assets/logo.png" style="height: 24px" />
             </router-link>
           </div>
           <div class="app-header__search">
@@ -49,18 +41,13 @@
             </li>
             <li>
               <router-link to="/design/fromLike">
-                <el-button
-                  style="background: #f0f3fa; border: none; font-size: 20px"
-                >
+                <el-button>
                   <i class="ortur-icon-collected"></i>
                 </el-button>
               </router-link>
             </li>
             <li class="alert">
-              <el-button
-                @click.stop="handleShowNotice"
-                style="background: #f0f3fa; border: none; font-size: 20px"
-              >
+              <el-button @click.stop="handleShowNotice">
                 <i class="ortur-icon-alert"></i>
               </el-button>
               <div class="noticePanel">
@@ -310,12 +297,12 @@ export default {
 <style lang="scss" scoped>
 .app-header-wrapper {
   width: 100%;
-  height: 128px;
+  height: 88px;
 }
 .app-header {
-  background: #f0f3fa;
+  background: #1e78f0;
   width: 100%;
-  height: 120px;
+  height: 56px;
   display: flex;
   align-items: center;
   align-content: center;
@@ -338,7 +325,7 @@ export default {
       padding: 0 0 0 1.5rem;
       width: 828px;
       .app-header__logo {
-        font-size: 24px;
+        font-size: 18px;
       }
       .app-header__search {
         display: flex;
@@ -348,13 +335,11 @@ export default {
           width: 500px;
 
           ::v-deep .el-input__inner {
-            font-size: 16px;
-            height: 56px;
-            border: 1px solid #999 !important;
-            // border-right: transparent !important;
-            // border-radius: 6px 0px 0px 6px;
-            border-radius: 10px;
-            background: none;
+            font-size: 14px;
+            height: 36px;
+            border-radius: 6px;
+            background: #ffffff;
+            border: 1px solid #999999;
           }
         }
 
@@ -388,6 +373,7 @@ export default {
         justify-content: space-between;
         .el-dropdown-link {
           cursor: pointer;
+          color: #fff;
         }
         .alert {
           position: relative;
@@ -400,7 +386,6 @@ export default {
 
         .el-dropdown {
           .el-button {
-            background: #f0f3fa;
             border: none;
           }
           span {
@@ -418,13 +403,17 @@ export default {
             }
           }
         }
+        .el-button {
+          border: none;
+          background: none;
+          color: #fff;
+          font-size: 14px;
+        }
         .el-btn-upload {
           width: 136px;
-          height: 56px;
-          background: #1e78f0;
-          border-radius: 8px;
-          color: #fff;
-          font-size: 16px;
+          .el-icon-upload {
+            font-size: 16px;
+          }
         }
       }
       ul.app-header-nologin {

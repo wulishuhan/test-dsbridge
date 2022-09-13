@@ -164,40 +164,12 @@
             </el-tab-pane>
           </el-tabs>
           <div class="split-line"></div>
-          <div style="margin-top: 42px">
-            <div style="display: flex; justify-content: space-between">
-              <h2 class="more-font">More by this creator</h2>
-              <a class="view-more" @click="openViewAllDialog('view-creator')">
-                View all
-              </a>
-            </div>
-            <div class="more-image-box">
-              <el-image
-                v-for="item in moreCreateList"
-                :key="item.id"
-                class="more-image"
-                :src="item.image"
-                @click="toMore(item.id)"
-              ></el-image>
-            </div>
-          </div>
+          <MoreByCreator
+            :moreList="moreCreateList"
+            @openViewAllDialog="openViewAllDialog"
+          ></MoreByCreator>
 
-          <div>
-            <div class="flex justify-between" style="margin-top: 35px">
-              <h2 class="more-font">Similar with this</h2>
-              <a class="view-more" @click="openViewAllDialog('view-similar')">
-                View all
-              </a>
-            </div>
-            <div class="more-image-box">
-              <el-image
-                v-for="i in 3"
-                :key="i"
-                class="more-image"
-                src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
-              ></el-image>
-            </div>
-          </div>
+          <similar @openViewAllDialog="openViewAllDialog"></similar>
           <div class="split-line"></div>
           <div class="comment-box">
             <Reply></Reply>
@@ -258,10 +230,14 @@
           <view-more
             v-if="viewMoreActive === 'view-creator'"
             :creator="detail.creator"
+            :name="'view-creator'"
           ></view-more>
         </el-tab-pane>
         <el-tab-pane label="Similar with this" name="view-similar">
-          <view-more v-if="viewMoreActive === 'view-similar'"></view-more>
+          <view-more
+            v-if="viewMoreActive === 'view-similar'"
+            :name="'view-similar'"
+          ></view-more>
         </el-tab-pane>
       </el-tabs>
     </el-dialog>
@@ -273,7 +249,11 @@
 // import ElImageViewer from "element-ui/packages/image/src/image-viewer";
 import ElImageViewer from "@/components/ImageViewer";
 import { getUserInfoByThingId } from "@/api/thing";
-import { getResource, getResourceListById } from "@/api/resource";
+import {
+  getResource,
+  getResourceListById,
+  getMoreByThisCreator,
+} from "@/api/resource";
 import { getLikelist, addLike, deleteLike } from "@/api/like";
 import { mapGetters } from "vuex";
 import {
@@ -296,6 +276,8 @@ import Tutorial from "./components/Tutorial.vue";
 import CollectedOption from "@/components/CollectedOption";
 import Makes from "./components/Makes.vue";
 import Remixes from "./components/Remixes.vue";
+import Similar from "./components/Similar.vue";
+import MoreByCreator from "./components/MoreByCreator.vue";
 export default {
   name: "Thing",
   components: {
@@ -313,6 +295,8 @@ export default {
     CollectedOption,
     Makes,
     Remixes,
+    Similar,
+    MoreByCreator,
   },
   data() {
     return {
@@ -696,21 +680,14 @@ export default {
             return this.detail.creator.id;
           })
           .then((id) => {
-            getResourceListById({
-              userId: id,
-              pageSize: 4,
+            getMoreByThisCreator({
+              pageSize: 3,
               pageNum: 1,
+              resId: this.$route.params.thingId,
+              userId: id,
             }).then((res) => {
-              console.log("get more:", res, id);
-              let more = res.data.rows;
-              for (let i = 0; i < more.length; i++) {
-                if (more[i].id !== this.detail.id) {
-                  this.moreCreateList.push(more[i]);
-                }
-              }
-              if (this.moreCreateList.length > 3) {
-                this.moreCreateList.pop();
-              }
+              console.log("creator", res);
+              this.moreCreateList = res.data.rows;
             });
           });
       });
@@ -844,37 +821,6 @@ a {
   width: 259px;
 }
 
-.view-more {
-  font-size: 20px;
-  cursor: pointer;
-}
-
-.more-font {
-  font-size: 24px;
-  color: #1a1a1a;
-  font-weight: 400;
-}
-.make-link-box {
-  margin-bottom: 24px;
-}
-.remix-link-box {
-  margin-bottom: 24px;
-}
-
-.more-image-box {
-  margin-top: 31px;
-  cursor: pointer;
-  display: grid;
-  grid-template-columns: repeat(3, 184px);
-  justify-content: space-between;
-}
-
-.more-image {
-  width: 184px;
-  height: 112px;
-  margin-top: 5px;
-}
-
 .split-line {
   border: solid #ccc 1px;
   height: 1px;
@@ -908,6 +854,7 @@ a {
   font-size: 20px;
   color: #9e9e9e;
   line-height: 25px;
+  margin-top: 22px;
 }
 
 .imageViewer {
@@ -1090,7 +1037,6 @@ a {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  margin-top: 30px;
 }
 
 .show-header-left {

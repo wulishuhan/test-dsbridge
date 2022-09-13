@@ -445,7 +445,7 @@ export default {
   width: 328px;
   height: 200px;
   border-radius: 8px;
-  object-fit: contain;
+  object-fit: cover;
 }
 .resource-show-image-box {
   width: 326px;

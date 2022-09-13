@@ -56,7 +56,7 @@ export default {
     color: #999999;
     margin-left: unset;
     /* width: 120px; */
-    height: 56px;
+    height: 48px;
   }
 }
 </style>

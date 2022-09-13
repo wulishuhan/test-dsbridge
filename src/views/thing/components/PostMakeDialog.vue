@@ -154,6 +154,7 @@ export default {
   height: 40px;
   border-radius: 6px;
   border: 1px solid #ebebeb;
+  cursor: pointer;
 }
 
 ::v-deep .el-textarea__inner {
