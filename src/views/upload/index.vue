@@ -131,7 +131,7 @@
                       ></i>
                       <el-upload
                         class="cover-edit"
-                        action="/dev-api/library/resource/upload"
+                        :action="baseApi + '/library/resource/upload'"
                         :show-file-list="showFile"
                         :on-success="handleCoverEditSuccess"
                         :headers="headers"
@@ -146,7 +146,7 @@
                     </div>
                     <div class="swiper-slide">
                       <el-upload
-                        action="/dev-api/library/resource/upload"
+                        :action="baseApi + '/library/resource/upload'"
                         :show-file-list="showFile"
                         class="cover-add"
                         :on-success="handleCoverAddSuccess"
@@ -326,7 +326,7 @@
                       ></i>
                       <el-upload
                         class="cover-edit"
-                        action="/dev-api/library/resource/upload"
+                        :action="baseApi + '/library/resource/upload'"
                         :show-file-list="showFile"
                         :on-success="handleTutorialEditSuccess"
                         :headers="headers"
@@ -346,7 +346,7 @@
                     </div>
                     <div class="swiper-slide">
                       <el-upload
-                        action="/dev-api/library/resource/upload"
+                        :action="baseApi + '/library/resource/upload'"
                         :show-file-list="showFile"
                         class="cover-add"
                         :on-success="handleTutorialAddSuccess"
@@ -973,7 +973,7 @@ export default {
           });
         }
         if (valid && this.tutorialValidateResult) {
-          if (this.sourceId != undefined) {
+          if (this.sourceId != 0) {
             //调用详解接口
             updateResource({
               id: this.sourceId,
