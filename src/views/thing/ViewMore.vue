@@ -29,8 +29,11 @@
 import ResourceCard from "@/components/ResourceCard";
 import { throttle } from "@/utils/cache.js";
 import { getLikelist } from "@/api/like";
-// import { getThingList } from "@/api/thing";
-import { getResourceListById } from "@/api/resource";
+import {
+  getResourceListById,
+  getSimilar,
+  getMoreByThisCreator,
+} from "@/api/resource";
 import CollectedOption from "@/components/CollectedOption";
 import { mapGetters } from "vuex";
 import {
@@ -57,6 +60,10 @@ export default {
     isRemixes: {
       type: Boolean,
       default: false,
+    },
+    name: {
+      type: String,
+      default: "view-creator",
     },
   },
   data() {
@@ -143,23 +150,21 @@ export default {
           type: "remix",
           resId: this.$route.params.thingId,
         };
+        this.getRemixes(parameters);
+      } else if (this.name === "view-creator") {
+        parameters = {
+          ...this.pagination,
+          resId: this.$route.params.thingId,
+          userId: this.creator.id,
+        };
+        this.getMoreByThisCreator(parameters);
+      } else if (this.name === "view-similar") {
+        parameters = {
+          ...this.pagination,
+          resId: this.$route.params.thingId,
+        };
+        this.getSimilar(parameters);
       }
-      getResourceListById(parameters)
-        .then((res) => {
-          console.log("res", res);
-          let resource = res.data.rows;
-          for (let i = 0; i < resource.length; i++) {
-            const element = resource[i];
-            element.creator = this.creator;
-          }
-          this.resources.push(...resource);
-          this.resourcesTotal = res.data.total;
-          this.loading = false;
-        })
-        .catch(() => {
-          this.loading = false;
-          this.noMore = true;
-        });
     },
     openCollection(id, left, top) {
       this.openCollectedOption = true;
@@ -222,6 +227,55 @@ export default {
           }).then((res) => {
             this.folders = res.data.data;
           });
+        });
+    },
+    getRemixes(parameters) {
+      getResourceListById(parameters)
+        .then((res) => {
+          console.log("res", res);
+          let resource = res.data.rows;
+          for (let i = 0; i < resource.length; i++) {
+            const element = resource[i];
+            element.creator = this.creator;
+          }
+          this.resources.push(...resource);
+          this.resourcesTotal = res.data.total;
+          this.loading = false;
+        })
+        .catch(() => {
+          this.loading = false;
+          this.noMore = true;
+        });
+    },
+    getMoreByThisCreator(parameters) {
+      getMoreByThisCreator(parameters)
+        .then((res) => {
+          let resource = res.data.rows;
+          for (let i = 0; i < resource.length; i++) {
+            const element = resource[i];
+            element.creator = this.creator;
+          }
+          this.resources.push(...resource);
+          this.resourcesTotal = res.data.total;
+          this.loading = false;
+        })
+        .catch(() => {
+          this.loading = false;
+          this.noMore = true;
+        });
+    },
+    getSimilar(parameters) {
+      getSimilar(parameters)
+        .then((res) => {
+          console.log("res", res);
+          let resource = res.data.rows;
+          this.resources.push(...resource);
+          this.resourcesTotal = res.data.total;
+          this.loading = false;
+        })
+        .catch(() => {
+          this.loading = false;
+          this.noMore = true;
         });
     },
   },

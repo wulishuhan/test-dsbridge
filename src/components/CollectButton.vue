@@ -70,7 +70,7 @@ export default {
 <style lang="scss" scoped>
 .button {
   width: 120px;
-  height: 56px;
+  height: 48px;
   .num {
     color: #000;
     font-size: 20px;

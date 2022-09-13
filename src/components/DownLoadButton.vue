@@ -121,7 +121,7 @@ export default {
 <style lang="scss" scoped>
 .button {
   width: 248px;
-  height: 56px;
+  height: 48px;
   position: relative;
   background-color: #1e78f0;
   color: #fff;
