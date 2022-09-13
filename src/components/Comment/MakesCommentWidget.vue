@@ -1,6 +1,7 @@
 <template>
   <div class="comment-wrapper">
-    <div v-if="commentList.length == 0">暂无评论</div>
+    <div v-if="!comment.replies">暂无评论</div>
+    <div v-else class="comment-count">{{ comment.replies.length }}条回复</div>
     <div
       v-for="(commentItem, commentIndex) in commentList"
       :key="commentItem.id"
@@ -177,9 +178,15 @@ export default {
       } else {
         this.outerVisible = false;
       }
+      getMakeDetail({
+        commentId: this.make.id,
+      }).then((res) => {
+        this.comment.replies = res.data.rows;
+        this.commentList = [this.comment];
+        console.log(space, "okok");
+      });
     },
     showReplyOuterDialog(index) {
-      console.log("open outer");
       if (!this.isLogin) {
         this.showLoginDialog();
         this.$emit("closeAll");
@@ -191,7 +198,6 @@ export default {
       this.replyTo = "reply to " + this.currentComment.user.name;
     },
     showReplyOuterDialogFromReply(commentIndex, replyIndex) {
-      console.log("open inner");
       if (!this.isLogin) {
         this.showLoginDialog();
         this.$emit("closeAll");
@@ -219,7 +225,7 @@ export default {
     showReplyList(index) {
       this.replyListDialog = true;
       this.currentComment = this.commentList[index];
-      // this.replyTotalRows = this.currentComment.replies.length + "条回复";
+      this.replyTotalRows = this.currentComment.replies.length + "条回复";
     },
     showLoginDialog() {
       let payload = { loginDialogVisible: true, isLoginForm: true };
@@ -335,5 +341,9 @@ export default {
 }
 .el-dialog__wrapper {
   background: rgba(0, 0, 0, 0.5);
+}
+.comment-count {
+  color: #999;
+  margin-bottom: 30px;
 }
 </style>
