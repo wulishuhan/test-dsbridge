@@ -3,7 +3,7 @@
     <span class="ortur-icon-cancel" @click="handleCloseClick"></span>
     <div class="read" @click="handleReadClick">{{ $t("notice.markRead") }}</div>
     <el-tabs v-model="activeName" @tab-click="handleTabClick">
-      <el-tab-pane :label="$t('notice.all')" name="first">
+      <el-tab-pane :label="$t('notice.all')" name="first" @click="() => {}">
         <div class="scroll">
           <NoticeItem
             v-for="item in noticeArr"
@@ -45,7 +45,12 @@
 
 <script>
 import NoticeItem from "@/components/NoticeItem.vue";
-import { getAllList } from "@/api/notice.js";
+import {
+  getAllList,
+  getFollowList,
+  getCommentList,
+  getSystemList,
+} from "@/api/notice.js";
 export default {
   components: {
     NoticeItem,
@@ -153,9 +158,12 @@ export default {
     };
   },
   mounted() {
-    document.addEventListener("click", () => {
-      this.handleCloseClick();
-    });
+    // document.addEventListener("click", (e) => {
+    //   console.log(e.target);
+    //   if (!e.target.className.includes("el-tabs__item")) {
+    //     this.handleCloseClick();
+    //   }
+    // });
   },
   destroyed() {},
   methods: {
@@ -165,12 +173,15 @@ export default {
     },
     getSystemList() {
       //console.log(e)
+      getSystemList().then(() => {});
     },
     getCommentList() {
       //console.log(e)
+      getCommentList().then(() => {});
     },
     getFollowList() {
       //console.log(e)
+      getFollowList().then(() => {});
     },
     showPanel() {
       this.isShowPanel = !this.isShowPanel;

@@ -31,8 +31,18 @@
         </div>
         <div class="folder">
           <div class="imgArr">
-            <div class="imgArrItem" v-for="item in imgArr" :key="item.id">
-              <img :src="item" alt="" />
+            <template v-if="item.images && item.images.length > 0">
+              <div
+                class="imgArrItem"
+                v-for="subItem in item.images"
+                :key="subItem"
+              >
+                <img :src="subItem" alt="" />
+              </div>
+            </template>
+            <div class="noImgItem" v-for="item in imgArr" :key="item" v-else>
+              <!-- <img :src="item" alt="" /> -->
+              <div class="noImg">空收藏夹</div>
             </div>
           </div>
           <div class="title" v-if="!item.isEdit" @click="handleEdit(item)">
@@ -68,11 +78,6 @@ export default {
       type: Array,
       default: () => {
         return [
-          "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.jj20.com%2Fup%2Fallimg%2Ftp09%2F210F2130512J47-0-lp.jpg&refer=http%3A%2F%2Fimg.jj20.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1663124045&t=d288c47a19560c2971d5541c585dea56",
-          "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.jj20.com%2Fup%2Fallimg%2Ftp09%2F210F2130512J47-0-lp.jpg&refer=http%3A%2F%2Fimg.jj20.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1663124045&t=d288c47a19560c2971d5541c585dea56",
-          "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.jj20.com%2Fup%2Fallimg%2Ftp09%2F210F2130512J47-0-lp.jpg&refer=http%3A%2F%2Fimg.jj20.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1663124045&t=d288c47a19560c2971d5541c585dea56",
-          "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.jj20.com%2Fup%2Fallimg%2Ftp09%2F210F2130512J47-0-lp.jpg&refer=http%3A%2F%2Fimg.jj20.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1663124045&t=d288c47a19560c2971d5541c585dea56",
-          "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.jj20.com%2Fup%2Fallimg%2Ftp09%2F210F2130512J47-0-lp.jpg&refer=http%3A%2F%2Fimg.jj20.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1663124045&t=d288c47a19560c2971d5541c585dea56",
           "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.jj20.com%2Fup%2Fallimg%2Ftp09%2F210F2130512J47-0-lp.jpg&refer=http%3A%2F%2Fimg.jj20.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1663124045&t=d288c47a19560c2971d5541c585dea56",
         ];
       },
@@ -339,11 +344,21 @@ export default {
           background: #f0f3fa;
           border: 1px solid #cccccc;
           border-radius: 12px;
+
           .imgArrItem {
             margin: 8px;
             img {
               width: 104px;
               height: 68px;
+            }
+          }
+          .noImgItem {
+            margin: auto;
+            text-align: center;
+            .noImg {
+              width: 104px;
+              height: 68px;
+              line-height: 68px;
             }
           }
         }

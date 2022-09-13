@@ -6,10 +6,24 @@ export function getAllList(data) {
     data,
   });
 }
-export function follow(params) {
+export function getSystemList(data) {
   return request({
-    url: `/library/follower`,
-    method: "post",
-    params,
+    url: "/select/type",
+    method: "get",
+    data,
+  });
+}
+export function getCommentList(data) {
+  return request({
+    url: "/select/type",
+    method: "get",
+    data,
+  });
+}
+export function getFollowList(data) {
+  return request({
+    url: "/select/type",
+    method: "get",
+    data,
   });
 }
