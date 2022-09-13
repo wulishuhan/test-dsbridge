@@ -1072,7 +1072,7 @@ export default {
     margin: 0px auto;
     width: 150px;
     height: 90px;
-    object-fit: contain;
+    object-fit: cover;
   }
 }
 .upload-container {
