@@ -1037,7 +1037,6 @@ a {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  margin-top: 30px;
 }
 
 .show-header-left {
