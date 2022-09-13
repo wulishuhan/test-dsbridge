@@ -19,9 +19,11 @@
           <el-form-item>
             <div class="submit">
               <div></div>
-              <el-button @click="changePassword('registerForm')">{{
-                $t("setting.submit")
-              }}</el-button>
+              <el-button
+                class="el-button"
+                @click="changePassword('registerForm')"
+                >{{ $t("setting.submit") }}</el-button
+              >
             </div>
           </el-form-item>
         </el-form>
@@ -76,12 +78,33 @@ export default {
   },
 };
 </script>
-<style scoped>
+<style scoped lang="scss">
+::v-deep .el-dialog {
+  width: 464px;
+  height: 232px;
+  background: #ffffff;
+  border-radius: 10px;
+  .el-dialog__body {
+    font-size: 16px;
+  }
+}
 .submit {
   display: flex;
   justify-content: space-between;
+  margin-top: 15px;
+  .el-button {
+    width: 104px;
+    height: 40px;
+    background: #1e78f0;
+    border-radius: 6px;
+    font-size: 14px;
+  }
 }
 .forget {
+  font-size: 16px;
+  font-family: Source Han Sans CN;
+  font-weight: 400;
+  color: #1e78f0;
 }
 
 .loading-box {
@@ -103,7 +126,7 @@ export default {
 ::v-deep .el-input__inner {
   height: 48px;
   width: 312px;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 200;
 }
 ::v-deep .el-dialog {

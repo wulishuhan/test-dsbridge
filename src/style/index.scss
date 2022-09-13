@@ -45,10 +45,15 @@ color: #141414;
 .el-message-box__btns {
   margin-top: 20px;
   text-align: center;
+ 
   .el-button--default {
+    margin:0 28px;
+
     background: #1E78F0;
 border-radius: 6px;
 color: white;
+width: 88px;
+height: 40px;
   }
   .el-button--primary{
     background: #FF6161;

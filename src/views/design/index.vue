@@ -752,21 +752,15 @@ export default {
       });
     },
     deleteCollection(id) {
-      debugger;
-      this.$confirm(this.$t("design.delFileTip"), this.$t("design.tips"), {
-        confirmButtonText: this.$t("design.confirm"),
-        cancelButtonText: this.$t("design.cancel"),
+      deleteCollectionResource({
+        userId: this.$store.getters.userInfo.user_id,
+        resourceId: id,
       }).then(() => {
-        deleteCollectionResource({
-          userId: this.$store.getters.userInfo.user_id,
-          resourceId: id,
-        }).then(() => {
-          this.$message({
-            message: this.$t("design.delSuccess"),
-            type: "success",
-          });
-          this.getAllMyCollectList();
+        this.$message({
+          message: this.$t("design.delSuccess"),
+          type: "success",
         });
+        this.getAllMyCollectList();
       });
     },
     handleCollectDialogClose() {
