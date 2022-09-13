@@ -33,6 +33,23 @@ export function getResourceListById(params) {
     params,
   });
 }
+
+export function getMoreByThisCreator(params) {
+  return request({
+    url: `/library/resource/list/creator`,
+    method: "get",
+    params,
+  });
+}
+
+export function getSimilar(params) {
+  return request({
+    url: `/library/resource/list/similar`,
+    method: "get",
+    params,
+  });
+}
+
 export function getResourceTags(params) {
   return request({
     url: `/library/tag/list`,
