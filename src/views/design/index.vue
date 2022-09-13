@@ -348,8 +348,8 @@
                   @clickDownMenu="Handler_Down(item)"
                   @moveCollectionComplete="handleMoveCollectionComplete"
                   :isCollected="myCollects.includes(item.id)"
-                  @deleteCollection="deleteCollection"
                   @openCollection="openCollection"
+                  @deleteCollection="deleteCollection"
                   :thing="item"
                   :showEdit="false"
                   :showStar="true"
@@ -379,6 +379,7 @@
                   @clickDownMenu="Handler_Down(item)"
                   @moveCollectionComplete="handleMoveCollectionComplete"
                   @openCollection="openCollection"
+                  @deleteCollection="deleteCollection"
                   :isCollected="myCollects.includes(item.id)"
                   :thing="item"
                   :showEdit="false"
@@ -387,7 +388,6 @@
                   :key="item.id"
                   :isYourAccount="isYourAccount"
                   :isLike="myLikes.includes(item.id)"
-                  @deleteCollection="deleteCollection"
                 >
                 </resource-card>
               </div>
@@ -723,7 +723,6 @@ export default {
       this.$confirm(this.$t("design.delFileTip"), this.$t("design.tips"), {
         confirmButtonText: this.$t("design.confirm"),
         cancelButtonText: this.$t("design.cancel"),
-        type: "warning",
       }).then(() => {
         deleteResource({ resId: item.id }).then(() => {
           this.$message({
@@ -753,15 +752,21 @@ export default {
       });
     },
     deleteCollection(id) {
-      deleteCollectionResource({
-        userId: this.$store.getters.userInfo.user_id,
-        resourceId: id,
+      debugger;
+      this.$confirm(this.$t("design.delFileTip"), this.$t("design.tips"), {
+        confirmButtonText: this.$t("design.confirm"),
+        cancelButtonText: this.$t("design.cancel"),
       }).then(() => {
-        this.$message({
-          message: this.$t("design.delSuccess"),
-          type: "success",
+        deleteCollectionResource({
+          userId: this.$store.getters.userInfo.user_id,
+          resourceId: id,
+        }).then(() => {
+          this.$message({
+            message: this.$t("design.delSuccess"),
+            type: "success",
+          });
+          this.getAllMyCollectList();
         });
-        this.getAllMyCollectList();
       });
     },
     handleCollectDialogClose() {
@@ -770,21 +775,26 @@ export default {
       this.dialogCollectionVisible = false;
     },
     handleCancelCollect(item) {
-      if (this.dialogCollectionVisible) {
-        cancelCollectResource({
-          collectionId: this.collectionId,
-          resId: item.id,
-        }).then(() => {
-          this.getCollectFolderResourceList();
-        });
-      } else {
-        cancelCollectResource({
-          collectionId: 0,
-          resId: item.id,
-        }).then(() => {
-          this.getCollectResourceList();
-        });
-      }
+      this.$confirm(this.$t("design.delFileTip"), this.$t("design.tips"), {
+        confirmButtonText: this.$t("design.confirm"),
+        cancelButtonText: this.$t("design.cancel"),
+      }).then(() => {
+        if (this.dialogCollectionVisible) {
+          cancelCollectResource({
+            collectionId: this.collectionId,
+            resId: item.id,
+          }).then(() => {
+            this.getCollectFolderResourceList();
+          });
+        } else {
+          cancelCollectResource({
+            collectionId: 0,
+            resId: item.id,
+          }).then(() => {
+            this.getCollectResourceList();
+          });
+        }
+      });
     },
     handleClickFolder(item) {
       this.collectionId = item.id;
@@ -796,7 +806,6 @@ export default {
       this.$confirm(this.$t("design.delFolderTip"), this.$t("design.tips"), {
         confirmButtonText: this.$t("design.confirm"),
         cancelButtonText: this.$t("design.cancel"),
-        type: "warning",
       }).then(() => {
         deleteCollection({ collectionId: item.id }).then(() => {
           this.getCollectList();
@@ -1115,7 +1124,6 @@ export default {
       this.$confirm(this.$t("design.delFileTip"), this.$t("design.tips"), {
         confirmButtonText: this.$t("design.confirm"),
         cancelButtonText: this.$t("design.cancel"),
-        type: "warning",
       }).then(() => {
         deleteResource({ resId: item.id }).then(() => {
           this.$message({
