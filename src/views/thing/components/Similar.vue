@@ -52,7 +52,7 @@ export default {
   margin-top: 35px;
 
   .more-font {
-    font-size: 24px;
+    font-size: 20px;
     color: #1a1a1a;
     font-weight: 400;
   }

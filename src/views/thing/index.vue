@@ -854,6 +854,7 @@ a {
   font-size: 20px;
   color: #9e9e9e;
   line-height: 25px;
+  margin-top: 22px;
 }
 
 .imageViewer {
