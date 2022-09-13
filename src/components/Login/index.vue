@@ -5,6 +5,7 @@
       :visible.sync="dialogVisible"
       :before-close="handleClose"
       @opened="handleOpen"
+      append-to-body
     >
       <div v-show="!isLogin && !isThirdPartyRegisterForm">
         <el-form :model="registerForm" :rules="rules" ref="registerForm">

@@ -535,6 +535,11 @@ export default {
       }
     },
     collect() {
+      if (!this.isLogin) {
+        let payload = { loginDialogVisible: true, isLoginForm: true };
+        this.$store.dispatch("user/switchLoginRegisteForm", payload);
+        return;
+      }
       if (this.isCollected) {
         this.deleteCollection();
       } else {

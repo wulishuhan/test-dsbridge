@@ -117,6 +117,7 @@
 import ReplyWidget from "@/components/Comment/ReplyWidget.vue";
 import CommentContent from "@/components/Comment/CommentContent.vue";
 import { getMakeDetail } from "@/api/user";
+import { mapGetters } from "vuex";
 export default {
   props: {
     make: {
@@ -126,6 +127,9 @@ export default {
       },
       required: true,
     },
+  },
+  computed: {
+    ...mapGetters(["isLogin"]),
   },
   data() {
     return {
@@ -158,13 +162,10 @@ export default {
     ReplyWidget,
   },
   mounted() {
-    console.log("make", this.make, this.make.id);
     this.comment = this.make;
-
     getMakeDetail({
       commentId: this.make.id,
     }).then((res) => {
-      console.log("makeid", res);
       this.comment.replies = res.data.rows;
       this.commentList.push(this.comment);
     });
@@ -178,12 +179,24 @@ export default {
       }
     },
     showReplyOuterDialog(index) {
+      console.log("open outer");
+      if (!this.isLogin) {
+        this.showLoginDialog();
+        this.$emit("closeAll");
+        return;
+      }
       this.outerVisible = true;
       this.currentComment = this.commentList[index];
       this.currentCommentId = this.currentComment.id;
       this.replyTo = "reply to " + this.currentComment.user.name;
     },
     showReplyOuterDialogFromReply(commentIndex, replyIndex) {
+      console.log("open inner");
+      if (!this.isLogin) {
+        this.showLoginDialog();
+        this.$emit("closeAll");
+        return;
+      }
       this.outerVisible = true;
       this.currentComment = this.commentList[commentIndex];
       console.log("replyIndex:" + replyIndex);
@@ -207,6 +220,10 @@ export default {
       this.replyListDialog = true;
       this.currentComment = this.commentList[index];
       // this.replyTotalRows = this.currentComment.replies.length + "条回复";
+    },
+    showLoginDialog() {
+      let payload = { loginDialogVisible: true, isLoginForm: true };
+      this.$store.dispatch("user/switchLoginRegisteForm", payload);
     },
   },
 };
@@ -315,5 +332,8 @@ export default {
     padding: 0px 20px;
     border-left: 2px solid #e6e6e6;
   }
+}
+.el-dialog__wrapper {
+  background: rgba(0, 0, 0, 0.5);
 }
 </style>

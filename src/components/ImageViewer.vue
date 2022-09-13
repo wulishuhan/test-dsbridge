@@ -116,7 +116,10 @@
               ><i class="el-icon-arrow-right"></i
             ></el-button>
             <div style="height: 100%; width: 100%; overflow-y: scroll">
-              <MakesCommentWidget :make="urlList[index]"></MakesCommentWidget>
+              <MakesCommentWidget
+                :make="urlList[index]"
+                @closeAll="closeAll"
+              ></MakesCommentWidget>
             </div>
           </div>
         </el-menu>
@@ -415,6 +418,10 @@ export default {
     closeComment() {
       this.isCollapse = false;
       on(document, mousewheelEventName, this._mouseWheelHandler);
+    },
+    closeAll() {
+      this.isCollapse = false;
+      this.hide();
     },
   },
   mounted() {
