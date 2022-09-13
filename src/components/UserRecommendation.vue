@@ -21,7 +21,7 @@
   </div>
 </template>
 <script>
-import { getResourceListById } from "@/api/resource";
+import { getMoreByThisCreator } from "@/api/resource";
 import { follow, unFollow, getFollowingList } from "@/api/design";
 export default {
   name: "UserRecommendation",
@@ -43,20 +43,13 @@ export default {
     },
   },
   mounted() {
-    getResourceListById({
+    getMoreByThisCreator({
       userId: this.creator.id,
-      pageSize: 4,
+      pageSize: 3,
       pageNum: 1,
+      resId: this.currentResourceId,
     }).then((res) => {
-      let more = res.data.rows;
-      for (let i = 0; i < more.length; i++) {
-        if (more[i].id !== this.currentResourceId) {
-          this.moreCreateList.push(more[i]);
-        }
-      }
-      if (this.moreCreateList.length > 3) {
-        this.moreCreateList.pop();
-      }
+      this.moreCreateList = res.data.rows;
     });
     getFollowingList({
       userId: this.$store.getters.userInfo.user_id,
