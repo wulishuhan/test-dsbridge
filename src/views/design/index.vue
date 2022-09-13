@@ -294,7 +294,7 @@
                     @getIndex="getIndex"
                     :make="item"
                     :index="index"
-                    :showMoreIcon="false"
+                    :showMoreIcon="true"
                     :isYourAccount="isYourAccount"
                   ></Make>
                 </div>
@@ -766,6 +766,7 @@ export default {
     },
     handleCollectDialogClose() {
       // this.getMyLikesList();
+      this.getCollectList();
       this.dialogCollectionVisible = false;
     },
     handleCancelCollect(item) {
