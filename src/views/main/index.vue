@@ -36,7 +36,7 @@
           <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="6">
             <resource-card
               :thing="item"
-              :isLike="likeList.includes(item.id)"
+              :isLike="comfirmLike(item.id)"
               :isCollected="collectedList.includes(item.id)"
               @openCollection="openCollection"
               @deleteCollection="deleteCollection"
@@ -131,10 +131,7 @@ export default {
           userId: this.userInfo.user_id,
         })
           .then((res) => {
-            for (let i = 0; i < res.data.rows.length; i++) {
-              const element = res.data.rows[i];
-              this.likeList.push(element.id);
-            }
+            this.likeList = res.data.rows;
           })
           .then(() => {
             getCollectionResourceList({
@@ -156,10 +153,7 @@ export default {
       userId: this.userInfo.user_id,
     })
       .then((res) => {
-        for (let i = 0; i < res.data.rows.length; i++) {
-          const element = res.data.rows[i];
-          this.likeList.push(element.id);
-        }
+        this.likeList = res.data.rows;
       })
       .then(() => {
         getCollectionResourceList({
@@ -202,6 +196,11 @@ export default {
     window.removeEventListener("scroll", this.load);
   },
   methods: {
+    comfirmLike(id) {
+      return this.likeList.some((item) => {
+        return item.id === id;
+      });
+    },
     getResourceList() {
       getResourceList({ ...this.pagination, sort: this.value })
         .then((res) => {
