@@ -186,12 +186,12 @@
           </div>
         </div>
       </el-form-item>
-      <el-form-item class="ref-resource-info" v-if="parentId != 0">
+      <el-form-item class="ref-resource-info" v-if="isRefSource">
         <h4>Source</h4>
         <el-divider></el-divider>
         <div class="resource-info-wrapper">
           <div class="resource-info-intro">
-            <img :src="refResource.images[0].url" />
+            <img :src="refResource.image" />
             <div class="resource-info">
               <span class="ref-title">{{ refResource.title }}</span>
               <span class="ref-author">By {{ refResource.creator.name }}</span>
@@ -437,6 +437,7 @@ export default {
       previewDialogVisible: false,
       sourceId: 0,
       parentId: 0,
+      isRefSource: false,
       fileList: [],
       acceptType: ".jpg,.png,.svg,.dxf,.gc,.nc,.jpeg",
       tutorialValidateResult: true,
@@ -634,22 +635,21 @@ export default {
         this.resourceForm.tags = detail.tags;
         this.resourceForm.license = detail.license;
         this.tutorialForm = detail.tutorials;
-        if (detail.parentId != 0) {
-          getResource(parseInt(this.parentId)).then((res) => {
-            this.refResource = res.data.data;
-
-            for (const item of this.licenseSelectList) {
-              if (item.value == this.refResource.license) {
-                this.refResource.licenseIcon = item.icon;
-                break;
-              }
+        if (Object.keys(detail.ancestor).length > 0) {
+          this.isRefSource = true;
+          this.refResource = detail.ancestor;
+          for (const item of this.licenseSelectList) {
+            if (item.value == this.refResource.license) {
+              this.refResource.licenseIcon = item.icon;
+              break;
             }
-          });
+          }
         }
       });
     }
     if (this.parentId != 0) {
       //调用详解接口
+      this.isRefSource = true;
       getResource(parseInt(this.parentId)).then((res) => {
         this.refResource = res.data.data;
 
