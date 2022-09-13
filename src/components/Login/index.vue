@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-dialog
-      width="396px"
+      width="528px"
       :visible.sync="dialogVisible"
       :before-close="handleClose"
       @opened="handleOpen"
@@ -63,7 +63,7 @@
             >
           </el-form-item>
           <el-form-item>
-            <div style="display: flex; flex-direction: column">
+            <div class="privacy-text-box">
               <span class="login-text">
                 Already have an account?
                 <a @click="switchLoginAndRegister('login')"> &nbsp; Log in </a>
@@ -508,13 +508,22 @@ export default {
 .login-text-nav {
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
+  height: 114px;
+  margin-top: 20px;
+}
+.privacy-text-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 95px;
 }
 .no-tips {
   width: 0px;
   height: 0px;
 }
 .tips {
-  width: 312px;
+  width: 416px;
   height: 35px;
   font-size: 15px;
   font-family: Source Han Sans CN;
@@ -527,7 +536,7 @@ export default {
   height: 35px;
 }
 .third-tips {
-  width: 312px;
+  width: 416px;
   height: 35px;
   font-size: 15px;
   font-family: Source Han Sans CN;
@@ -542,36 +551,36 @@ export default {
   margin-top: -14px;
 }
 .icon {
-  font-size: 22px;
+  font-size: 32px;
   color: #000;
   cursor: pointer;
 }
 .icon-box {
   display: flex;
   justify-content: space-between;
-  width: 205px;
-  margin-top: 14px;
+  width: 273px;
+  margin-top: 27px;
 }
 .or {
   text-align: center;
-  font-size: 12px;
+  font-size: 16px;
   color: #999;
-  padding-top: 4px;
+  /* padding-top: 4px; */
 }
 .el-button {
   background: #1e78f0;
   color: #fff;
-  width: 312px;
-  height: 48px;
-  font-size: 18px;
+  width: 416px;
+  height: 64px;
+  font-size: 20px;
   font-weight: 200;
   border-radius: 5px;
 }
 ::v-deep .el-input__inner {
-  height: 48px;
-  width: 312px;
-  font-size: 18px;
-  font-weight: 200;
+  height: 64px;
+  width: 416px;
+  font-size: 20px;
+  font-weight: 400;
 }
 ::v-deep .el-dialog {
   border-radius: 15px;
@@ -579,14 +588,13 @@ export default {
   font-family: Source Han Sans CN;
 }
 .login-text {
-  font-size: 15px;
+  font-size: 20px;
   color: #000;
   text-align: center;
 }
 .privacy-text {
   margin: 0 auto;
-  width: 278px;
-  height: 35px;
+  width: 372px;
   line-height: 23px;
   text-align: start;
 }
@@ -595,7 +603,7 @@ export default {
   cursor: default;
 }
 .el-form-item {
-  margin-bottom: 18px;
+  margin-bottom: 24px;
 }
 .el-form-item__content {
   line-height: 36px;
@@ -606,11 +614,11 @@ a {
   color: #1e78f0;
 }
 ::v-deep .el-form {
-  width: 312px;
+  width: 416px;
   margin: 0 auto;
 }
 ::v-deep .el-dialog__headerbtn .el-dialog__close {
-  font-size: 11px;
+  font-size: 16px;
   color: #000;
   border-radius: 15px;
 }
