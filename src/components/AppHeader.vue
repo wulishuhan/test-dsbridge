@@ -297,7 +297,7 @@ export default {
 <style lang="scss" scoped>
 .app-header-wrapper {
   width: 100%;
-  height: 128px;
+  height: 88px;
 }
 .app-header {
   background: #1e78f0;
