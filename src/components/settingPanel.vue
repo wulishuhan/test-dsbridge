@@ -21,9 +21,11 @@
               />
               <img
                 class="img"
-                alt=""
                 v-else
-                src="../assets/img/图层 1309.png"
+                :src="
+                  'http://dummyimage.com/300x200/96f279/FFF&text=' +
+                  userInfo.nick_name
+                "
               />
               <el-upload
                 class="upload-demo"
@@ -376,7 +378,6 @@ export default {
     width: 129px;
     height: 129px;
     border-radius: 50%;
-    background-color: black;
   }
 }
 .right {

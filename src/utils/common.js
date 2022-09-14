@@ -27,3 +27,46 @@ export function debounce(func, delay) {
     }, delay);
   };
 }
+
+/**
+ * W：宽
+ * H：高
+ * borderWidth：border宽
+ * borderColor：border颜色
+ * color：背景颜色
+ * textColor：文字颜色
+ * fontText：圆内的文字
+ *  */
+export function createCanvas(
+  Id,
+  W,
+  H,
+  borderWidth,
+  borderColor,
+  color,
+  textColor,
+  fontText
+) {
+  var canvas = document.getElementById(Id);
+  canvas.width = W;
+  canvas.height = H;
+  var ctx = canvas.getContext("2d");
+  ctx.beginPath();
+  ctx.arc(W / 2, H / 2, 55, 0, Math.PI * 2, true);
+  ctx.closePath();
+  // 填充背景颜色
+  ctx.fillStyle = color;
+  ctx.fill();
+
+  // 填充边框颜色
+  ctx.lineWidth = borderWidth;
+  ctx.lineCap = "round";
+  ctx.strokeStyle = "red";
+  ctx.stroke(); //
+
+  // 填充文字颜色
+  ctx.font = "20px Arial";
+  ctx.fillStyle = textColor;
+  ctx.textAlign = "center";
+  ctx.fillText(fontText, (W + borderWidth) / 2, (H + borderWidth * 2) / 2);
+}

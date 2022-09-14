@@ -86,6 +86,11 @@ module.exports = {
     Rename: "重命名",
     moveSuccess: "移动成功",
     addSuccess: "添加成功",
+    mine: "我的",
+    remixes: "Remixes",
+    makes: "Makes",
+    updSuccess: "修改成功",
+    emptyCollection: "空收藏夹",
   },
   setting: {
     forgetPassword: "忘记密码",
