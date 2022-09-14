@@ -94,7 +94,7 @@
             </el-upload>
           </span>
 
-          <img
+          <!-- <img
             class="img"
             v-if="
               (isYourAccount && userInfo.avatar.length == 0) ||
@@ -106,17 +106,15 @@
                   userInfo.nick_name
                 : 'http://dummyimage.com/300x200/96f279/FFF&text=' + user.name
             "
-          />
-          <!-- <img
+          /> -->
+          <img
             class="img"
             v-if="
               (isYourAccount && userInfo.avatar.length == 0) ||
               user.avatar.length == 0
             "
-            :src="
-              defaultAvatar
-            "
-          /> -->
+            :src="defaultAvatar"
+          />
           <img
             class="img"
             mode="widthFix"
@@ -718,14 +716,13 @@ export default {
         });
     });
     this.defaultAvatar = createCanvas(
-      "avatarCanvas",
       120,
       120,
-      5,
-      "red",
+      0,
+      "white",
       "#555555",
       "#fff",
-      this.userInfo.nick_name
+      this.isYourAccount ? this.userInfo.nick_name : this.user.name
     );
   },
   computed: {

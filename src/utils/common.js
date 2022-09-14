@@ -61,7 +61,7 @@ export function createCanvas(
   // 填充边框颜色
   ctx.lineWidth = borderWidth;
   ctx.lineCap = "round";
-  ctx.strokeStyle = "red";
+  ctx.strokeStyle = borderColor;
   ctx.stroke(); //
 
   // 填充文字颜色
@@ -70,6 +70,6 @@ export function createCanvas(
   ctx.textAlign = "center";
   ctx.fillText(fontText, (W + borderWidth) / 2, (H + borderWidth * 2) / 2);
   // 转base64
-  let res = canvas.toDataURL("image/jpeg", 1);
+  let res = canvas.toDataURL("image/png", 1);
   return res;
 }
