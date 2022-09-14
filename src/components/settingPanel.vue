@@ -408,6 +408,7 @@ export default {
     font-weight: 400;
     color: #1e78f0;
     margin-top: 15px;
+    cursor: pointer;
   }
 }
 </style>

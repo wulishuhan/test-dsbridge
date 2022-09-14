@@ -38,7 +38,6 @@ export function debounce(func, delay) {
  * fontText：圆内的文字
  *  */
 export function createCanvas(
-  Id,
   W,
   H,
   borderWidth,
@@ -47,11 +46,12 @@ export function createCanvas(
   textColor,
   fontText
 ) {
-  var canvas = document.getElementById(Id);
+  var canvas = document.createElement("canvas");
   canvas.width = W;
   canvas.height = H;
   var ctx = canvas.getContext("2d");
   ctx.beginPath();
+  // 画圆
   ctx.arc(W / 2, H / 2, 55, 0, Math.PI * 2, true);
   ctx.closePath();
   // 填充背景颜色
@@ -69,4 +69,7 @@ export function createCanvas(
   ctx.fillStyle = textColor;
   ctx.textAlign = "center";
   ctx.fillText(fontText, (W + borderWidth) / 2, (H + borderWidth * 2) / 2);
+  // 转base64
+  let res = canvas.toDataURL("image/jpeg", 1);
+  return res;
 }
