@@ -3,7 +3,7 @@ import store from "./store";
 // import { Message } from "element-ui";
 // import { getToken } from "@/utils/auth"; // get token from cookie
 router.beforeEach(async (to, from, next) => {
-  document.title = to.meta.title;
+  // document.title = to.meta.title;
   // const hasToken = getToken();
   if (store.getters.isLogin) {
     // if (to.path === "/login") {
