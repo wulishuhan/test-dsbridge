@@ -96,7 +96,12 @@
             @click="prev"
             v-show="isMake"
           >
-            <i class="el-icon-arrow-left" />
+            <!-- <i class="el-icon-arrow-left" /> -->
+            <svg-icon
+              icon-class="left"
+              class-name="make-left"
+              class="make-left"
+            ></svg-icon>
           </span>
           <span
             class="el-image-viewer__btn el-image-viewer__next make-right-box"
@@ -104,7 +109,12 @@
             @click="next"
             v-show="isMake"
           >
-            <i class="el-icon-arrow-right" />
+            <!-- <i class="el-icon-arrow-right" /> -->
+            <svg-icon
+              icon-class="right"
+              class-name="make-right"
+              class="make-right"
+            ></svg-icon>
           </span>
         </template>
         <span class="el-image-viewer__btn el-image-viewer__close" @click="hide">
@@ -580,6 +590,9 @@ export default {
   border-radius: 0;
   background: none;
   font-size: 70px;
+  color: #fff;
+}
+.make-left {
 }
 .make-right-box {
   width: 48px;
@@ -588,5 +601,8 @@ export default {
   border-radius: 0;
   background: none;
   font-size: 70px;
+  color: #fff;
+}
+.make-right {
 }
 </style>

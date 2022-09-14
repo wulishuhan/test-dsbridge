@@ -130,7 +130,7 @@ export default {
 }
 .makes-mask {
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
   position: absolute;
   bottom: 3px;
   width: 184px;
