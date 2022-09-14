@@ -1,5 +1,5 @@
 <template>
-  <div class="search-wrapper">
+  <div id="top" class="search-wrapper">
     <div class="search-keywords-wrapper">
       <span>{{ $t(searchText) }}</span>
     </div>

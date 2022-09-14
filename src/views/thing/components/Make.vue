@@ -10,7 +10,7 @@
         <div class="makes-mask" @click="openMake" v-show="showMask">
           <div class="makes-mask-font-container">
             <span class="ortur-icon-message"></span>
-            12
+            {{ make.comment_count }}
             <span class="el-icon-arrow-right"></span>
           </div>
           <div

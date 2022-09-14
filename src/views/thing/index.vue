@@ -761,6 +761,7 @@ export default {
   cursor: pointer;
   background: #e8ebf4;
   line-height: 56px;
+  border-radius: 8px;
 }
 
 .share {

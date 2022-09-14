@@ -6,7 +6,10 @@
       :custom-class="customClass"
       :append-to-body="true"
     >
-      <a @click="showPostForm = true" slot="title">post make</a>
+      <el-button @click="showPostForm = true" slot="title">
+        <i class="el-icon-plus"></i>
+        post make
+      </el-button>
       <PostMakeDialog :isShow.sync="showPostForm"></PostMakeDialog>
       <el-row>
         <el-col :span="8" v-for="(item, index) in makes" :key="item.id">
@@ -119,5 +122,9 @@ export default {
   width: 40px;
   height: 40px;
   font-size: 14px;
+}
+.el-button:hover {
+  background: #ececec;
+  color: #606266;
 }
 </style>
