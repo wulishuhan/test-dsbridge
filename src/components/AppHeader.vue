@@ -72,11 +72,7 @@
                 <el-button>
                   <span>
                     <img
-                      :src="
-                        userInfo.avatar
-                          ? userInfo.avatar
-                          : 'http://dummyimage.com/300x200/96f279/FFF&text=gcfqdvmp'
-                      "
+                      :src="userInfo.avatar ? userInfo.avatar : defaultAvatar"
                     />
                     <i class="el-icon-arrow-down el-icon--right"></i>
                   </span>
@@ -88,12 +84,7 @@
                   <el-dropdown-item class="header-userinfo">
                     <div class="header-avatar">
                       <img
-                        :src="
-                          userInfo.avatar
-                            ? userInfo.avatar
-                            : 'http://dummyimage.com/300x200/96f279/FFF&text=' +
-                              userInfo.nick_name
-                        "
+                        :src="userInfo.avatar ? userInfo.avatar : defaultAvatar"
                       />
                     </div>
                     <div class="username-and-email">
@@ -152,11 +143,13 @@ import Login from "@/components/Login";
 import settingPanel from "@/components/settingPanel";
 import { createNamespacedHelpers } from "vuex";
 import { bindThird } from "@/api/user";
+import { createCanvas } from "@/utils/common.js";
 
 const { mapState } = createNamespacedHelpers("user");
 export default {
   data() {
     return {
+      defaultAvatar: "",
       keywords: "",
       select: "",
       isThirdPartyRegisterForm: false,
@@ -184,6 +177,15 @@ export default {
     ]),
   },
   mounted() {
+    this.defaultAvatar = createCanvas(
+      120,
+      120,
+      0,
+      "white",
+      "#555555",
+      "#fff",
+      this.userInfo.nick_name
+    );
     let isBinding = sessionStorage.getItem("isBinding");
     console.log("isBinding: ", isBinding);
 
@@ -401,11 +403,12 @@ export default {
           background: none;
           color: #fff;
           font-size: 14px;
+          padding: unset;
         }
         .el-btn-upload {
           width: 136px;
           .el-icon-upload {
-            font-size: 16px;
+            font-size: 20px;
           }
         }
       }

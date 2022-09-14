@@ -93,16 +93,8 @@
               </button>
             </el-upload>
           </span>
-          <!-- <div
-            class="img"
-            v-if="
-              (isYourAccount && userInfo.avatar.length == 0) ||
-              user.avatar.length == 0
-            "
-          >
-            <canvas id="avatarCanvas"></canvas>
-          </div> -->
-          <img
+
+          <!-- <img
             class="img"
             v-if="
               (isYourAccount && userInfo.avatar.length == 0) ||
@@ -114,6 +106,14 @@
                   userInfo.nick_name
                 : 'http://dummyimage.com/300x200/96f279/FFF&text=' + user.name
             "
+          /> -->
+          <img
+            class="img"
+            v-if="
+              (isYourAccount && userInfo.avatar.length == 0) ||
+              user.avatar.length == 0
+            "
+            :src="defaultAvatar"
           />
           <img
             class="img"
@@ -476,7 +476,7 @@ import CollectedOption from "@/components/CollectedOption";
 import RowFolder from "@/components/RowFolder.vue";
 import DownListPanel from "@/components/DownListPanel.vue";
 import Make from "@/views/thing/components/Make.vue";
-// import { createCanvas } from "@/utils/common.js";
+import { createCanvas } from "@/utils/common.js";
 import {
   deleteCollectionResource,
   getCollectionResourceList,
@@ -525,6 +525,7 @@ export default {
   },
   data() {
     return {
+      defaultAvatar: "",
       dialogPostMake: false,
       dialogViewMake: false,
       makes: [],
@@ -714,21 +715,15 @@ export default {
           text: res.url3,
         });
     });
-    // if (
-    //   (this.isYourAccount && this.userInfo.avatar.length == 0) ||
-    //   this.user.avatar.length == 0
-    // ) {
-    //   createCanvas(
-    //     "avatarCanvas",
-    //     120,
-    //     120,
-    //     5,
-    //     "red",
-    //     "#555555",
-    //     "#fff",
-    //     this.userInfo.nick_name
-    //   );
-    // }
+    this.defaultAvatar = createCanvas(
+      120,
+      120,
+      0,
+      "white",
+      "#555555",
+      "#fff",
+      this.isYourAccount ? this.userInfo.nick_name : this.user.name
+    );
   },
   computed: {
     ...mapState(["userInfo"]),

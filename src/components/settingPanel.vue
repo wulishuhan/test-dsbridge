@@ -19,14 +19,7 @@
                 v-if="userInfo.avatar.length > 0"
                 :src="userInfo.avatar"
               />
-              <img
-                class="img"
-                v-else
-                :src="
-                  'http://dummyimage.com/300x200/96f279/FFF&text=' +
-                  userInfo.nick_name
-                "
-              />
+              <img class="img" v-else :src="defaultAvatar" />
               <el-upload
                 class="upload-demo"
                 :headers="headers"
@@ -147,6 +140,7 @@ import { getToken } from "@/utils/auth";
 import ChangeEmailPassword from "@/components/ChangeEmailPassword.vue";
 import ChangeName from "@/components/ChangeName.vue";
 import { unbindThird, getUserInfo } from "@/api/user";
+import { createCanvas } from "@/utils/common.js";
 
 export default {
   components: {
@@ -155,6 +149,7 @@ export default {
   },
   data() {
     return {
+      defaultAvatar: "",
       third_user: [],
       isChangeNameVisible: false,
       ChangePasswordOrEmail: false,
@@ -227,6 +222,15 @@ export default {
     // getUserInfo().then((e) => {
     //   this.third_user = e.data.data.third_user;
     // });
+    this.defaultAvatar = createCanvas(
+      120,
+      120,
+      0,
+      "white",
+      "#555555",
+      "#fff",
+      this.userInfo.nick_name
+    );
   },
 
   computed: {
@@ -408,6 +412,7 @@ export default {
     font-weight: 400;
     color: #1e78f0;
     margin-top: 15px;
+    cursor: pointer;
   }
 }
 </style>
