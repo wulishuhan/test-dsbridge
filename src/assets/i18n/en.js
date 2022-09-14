@@ -89,6 +89,8 @@ module.exports = {
     mine: "Mine",
     remixes: "Remixes",
     makes: "Makes",
+    updSuccess: "Update success",
+    emptyCollection: "Empty",
   },
   setting: {
     forgetPassword: "Forget password",

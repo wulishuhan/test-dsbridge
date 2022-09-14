@@ -15,7 +15,7 @@ export function changeName(data) {
 }
 export function changePassword(data) {
   return request({
-    url: `auth/user/changePassword`,
+    url: `system/user/changePassword`,
     method: "post",
     data,
   });

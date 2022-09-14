@@ -219,8 +219,14 @@ export default {
         if (valid) {
           console.log(this.registerForm);
           debugger;
-          changePassword(this.registerForm).then(() => {
-            debugger;
+          changePassword({
+            newPassword: this.registerForm.currentPassword,
+            oldPassword: this.registerForm.password,
+          }).then(() => {
+            this.$message({
+              type: "success",
+              message: this.$t("design.updSuccess"),
+            });
           });
         } else {
           return false;

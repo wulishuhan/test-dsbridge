@@ -58,7 +58,18 @@
         </el-upload>
       </span>
 
-      <img class="img" :src="user.cover_image" alt="" />
+      <img
+        class="img"
+        v-if="user.cover_image.length > 0"
+        :src="user.cover_image"
+        alt=""
+      />
+      <img
+        class="img"
+        v-else
+        src="../../assets/img/Frame 58644504.png"
+        alt=""
+      />
     </div>
 
     <div class="content">
@@ -82,25 +93,36 @@
               </button>
             </el-upload>
           </span>
-
+          <!-- <div
+            class="img"
+            v-if="
+              (isYourAccount && userInfo.avatar.length == 0) ||
+              user.avatar.length == 0
+            "
+          >
+            <canvas id="avatarCanvas"></canvas>
+          </div> -->
           <img
             class="img"
-            mode="widthFix"
             v-if="
-              (isYourAccount && userInfo.avatar.length > 0) ||
-              user.avatar.length > 0
+              (isYourAccount && userInfo.avatar.length == 0) ||
+              user.avatar.length == 0
             "
-            :src="isYourAccount ? userInfo.avatar : user.avatar"
-            alt=""
+            :src="
+              isYourAccount
+                ? 'http://dummyimage.com/300x200/96f279/FFF&text=' +
+                  userInfo.nick_name
+                : 'http://dummyimage.com/300x200/96f279/FFF&text=' + user.name
+            "
           />
           <img
             class="img"
             mode="widthFix"
             v-else-if="
-              (isYourAccount && userInfo.avatar.length == 0) ||
-              user.avatar.length == 0
+              (isYourAccount && userInfo.avatar.length > 0) ||
+              user.avatar.length > 0
             "
-            src="../../assets/img/图层 1309.png"
+            :src="isYourAccount ? userInfo.avatar : user.avatar"
             alt=""
           />
         </div>
@@ -454,6 +476,7 @@ import CollectedOption from "@/components/CollectedOption";
 import RowFolder from "@/components/RowFolder.vue";
 import DownListPanel from "@/components/DownListPanel.vue";
 import Make from "@/views/thing/components/Make.vue";
+// import { createCanvas } from "@/utils/common.js";
 import {
   deleteCollectionResource,
   getCollectionResourceList,
@@ -691,6 +714,21 @@ export default {
           text: res.url3,
         });
     });
+    // if (
+    //   (this.isYourAccount && this.userInfo.avatar.length == 0) ||
+    //   this.user.avatar.length == 0
+    // ) {
+    //   createCanvas(
+    //     "avatarCanvas",
+    //     120,
+    //     120,
+    //     5,
+    //     "red",
+    //     "#555555",
+    //     "#fff",
+    //     this.userInfo.nick_name
+    //   );
+    // }
   },
   computed: {
     ...mapState(["userInfo"]),
@@ -1320,7 +1358,6 @@ export default {
   z-index: 9999;
 }
 .img {
-  background-color: black;
   width: 100%;
   height: 100%;
 }
@@ -1598,7 +1635,6 @@ export default {
         position: absolute;
         top: 0;
         font-size: 40px;
-        background-color: black;
         line-height: 100px;
         color: white;
         opacity: 0.5;
@@ -1608,7 +1644,6 @@ export default {
         display: none;
       }
       .img {
-        background-color: black;
         width: 120px;
         height: 119px;
         border-radius: 50%;
