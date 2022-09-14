@@ -11,7 +11,7 @@ export default {
   props: {
     to: {
       type: String,
-      default: "",
+      default: ".app-header-wrapper",
     },
   },
   methods: {

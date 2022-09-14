@@ -1,5 +1,5 @@
 <template>
-  <div id="top" class="search-wrapper">
+  <div class="search-wrapper">
     <div class="search-keywords-wrapper">
       <span>{{ $t(searchText) }}</span>
     </div>
@@ -36,7 +36,7 @@
       </el-tab-pane>
     </el-tabs>
 
-    <sroll-top-button :to="'#top'"></sroll-top-button>
+    <sroll-top-button></sroll-top-button>
   </div>
 </template>
 <script>

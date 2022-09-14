@@ -46,7 +46,7 @@
       </el-row>
       <p v-if="loading">loading...</p>
       <p v-if="noMore">no more</p>
-      <sroll-top-button :to="'#top'"></sroll-top-button>
+      <sroll-top-button></sroll-top-button>
     </div>
     <CollectedOption
       :style="collectionStyle"

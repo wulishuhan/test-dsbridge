@@ -241,7 +241,7 @@
         </el-tab-pane>
       </el-tabs>
     </el-dialog>
-    <sroll-top-button :to="'#detail-top'"></sroll-top-button>
+    <sroll-top-button></sroll-top-button>
   </div>
 </template>
 <script>
