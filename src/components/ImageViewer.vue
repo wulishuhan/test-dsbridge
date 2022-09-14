@@ -461,16 +461,18 @@ export default {
   /* width: 1432px; */
   /* height: 880px; */
   margin: 0 auto;
-  margin-top: 96px;
+  /* margin-top: 96px; */
   background: rgba(255, 255, 255, 0.8);
 }
 .make-canvas-img {
-  width: 1084px;
-  height: 660px;
+  width: 1440px;
+  height: 896px;
+  /* margin-top: 288px; */
 }
 .canvas-img {
   width: 1432px;
   height: 880px;
+  /* margin-top: 96px; */
 }
 .el-image-viewer__img {
   object-fit: fill;
@@ -574,7 +576,7 @@ export default {
 .make-left-box {
   width: 48px;
   height: 184px;
-  left: -200px;
+  left: -100px;
   border-radius: 0;
   background: none;
   font-size: 70px;
@@ -582,7 +584,7 @@ export default {
 .make-right-box {
   width: 48px;
   height: 184px;
-  right: -200px;
+  right: -100px;
   border-radius: 0;
   background: none;
   font-size: 70px;
