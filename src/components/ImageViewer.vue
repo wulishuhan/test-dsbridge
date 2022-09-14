@@ -47,7 +47,7 @@
         </div>
       </div>
       <!-- CANVAS -->
-      <div class="el-image-viewer__canvas">
+      <div class="el-image-viewer__canvas" :style="imgStyle">
         <!-- eslint-disable-next-line -->
         <div v-for="(item, i) in urlList">
           <img
@@ -225,8 +225,8 @@ export default {
       const style = {
         transform: `scale(${scale}) rotate(${deg}deg)`,
         transition: enableTransition ? "transform .3s" : "",
-        "margin-left": `${offsetX}px`,
-        "margin-top": `${offsetY}px`,
+        // "margin-left": `${offsetX}px`,
+        // "margin-top": `${offsetY}px`,
       };
       if (this.mode === Mode.CONTAIN) {
         style.maxWidth = style.maxHeight = "100%";
