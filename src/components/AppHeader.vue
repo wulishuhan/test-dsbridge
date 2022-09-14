@@ -403,11 +403,12 @@ export default {
           background: none;
           color: #fff;
           font-size: 14px;
+          padding: unset;
         }
         .el-btn-upload {
           width: 136px;
           .el-icon-upload {
-            font-size: 16px;
+            font-size: 20px;
           }
         }
       }
