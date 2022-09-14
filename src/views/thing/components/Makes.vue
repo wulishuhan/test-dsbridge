@@ -92,12 +92,12 @@ export default {
 </script>
 <style scoped lang="scss">
 .view-more {
-  font-size: 20px;
+  font-size: 16px;
   color: #1e78f0;
   cursor: pointer;
 }
 .more-font {
-  font-size: 24px;
+  font-size: 20px;
   color: #1a1a1a;
   font-weight: 400;
 }

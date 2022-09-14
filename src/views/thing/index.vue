@@ -23,7 +23,7 @@
                   </div>
                 </div>
               </div>
-              <div class="flex justify-between" style="width: 552px">
+              <div class="flex justify-between" style="width: 456px">
                 <StarButton
                   :starNum="detail.like_count"
                   :isStar="isLike"
@@ -836,7 +836,7 @@ a {
 }
 
 .bottom-content-right-box-title {
-  font-size: 24px;
+  font-size: 20px;
   color: #1a1a1a;
 }
 

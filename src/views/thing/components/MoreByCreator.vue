@@ -55,7 +55,7 @@ export default {
     font-weight: 400;
   }
   .view-more {
-    font-size: 20px;
+    font-size: 16px;
     cursor: pointer;
     color: #1e78f0;
   }

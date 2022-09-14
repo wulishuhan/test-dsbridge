@@ -52,15 +52,15 @@ export default {
 <style></style>
 <style lang="scss" scoped>
 .button {
-  width: 120px;
+  width: 96px;
   height: 48px;
   /* margin-left: 24px; */
   .num {
     color: #000;
-    font-size: 20px;
+    font-size: 16px;
   }
   i {
-    font-size: 25px;
+    font-size: 16px;
   }
 }
 </style>

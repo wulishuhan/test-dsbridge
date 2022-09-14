@@ -82,7 +82,7 @@ export default {
   justify-content: space-between;
 }
 .more-font {
-  font-size: 24px;
+  font-size: 20px;
   color: #1a1a1a;
   font-weight: 400;
 }
@@ -101,7 +101,7 @@ export default {
   }
 }
 .view-more {
-  font-size: 20px;
+  font-size: 16px;
   cursor: pointer;
   color: #1e78f0;
 }

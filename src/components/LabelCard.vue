@@ -39,7 +39,7 @@ export default {
 <style></style>
 <style lang="scss" scoped>
 .tag {
-  font-size: 24px;
+  font-size: 20px;
   font-family: Source Han Sans CN;
   font-weight: 400;
   color: #1a1a1a;

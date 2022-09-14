@@ -120,7 +120,7 @@ export default {
 
 <style lang="scss" scoped>
 .button {
-  width: 248px;
+  width: 200px;
   height: 48px;
   position: relative;
   background-color: #1e78f0;
@@ -130,7 +130,7 @@ export default {
     color: #fff;
     opacity: 0.5;
     padding: 0px 10px;
-    font-size: 20px;
+    font-size: 16px;
   }
   .downPanel {
     position: absolute;
@@ -181,15 +181,15 @@ export default {
 /* display: block; */
 /* } */
 .ortur-icon-file-download {
-  font-size: 25px;
+  font-size: 18px;
   color: #fff;
 }
 .path1::before,
 .path2::before {
   color: #fff;
-  font-size: 25px;
+  font-size: 18px;
 }
 .download-text {
-  font-size: 20px;
+  font-size: 16px;
 }
 </style>
