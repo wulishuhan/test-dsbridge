@@ -74,10 +74,11 @@ export default {
   .num {
     color: #000;
     font-size: 16px;
+    margin-left: 15px;
   }
 }
 .ortur-icon-cancel-collect-fill {
-  margin-left: 5px;
+  /* margin-left: 5px; */
   font-size: 18px;
 }
 .ortur-icon-add-collect {

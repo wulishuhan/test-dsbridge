@@ -125,7 +125,6 @@ export default {
   position: relative;
   background-color: #1e78f0;
   color: #fff;
-  padding: 0px 5px;
   .num {
     color: #fff;
     opacity: 0.5;
@@ -191,5 +190,10 @@ export default {
 }
 .download-text {
   font-size: 16px;
+  margin-left: 0px !important;
+}
+.el-icon-arrow-down {
+  position: relative;
+  top: -2px;
 }
 </style>
