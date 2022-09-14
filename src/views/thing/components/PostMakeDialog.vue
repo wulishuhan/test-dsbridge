@@ -112,6 +112,7 @@ export default {
       });
     },
     uploadSuccessHandler(response) {
+      console.log("uploadSuccessHandler", response);
       this.form.image = response.data.url;
       this.form.url = response.data.url;
     },
