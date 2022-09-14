@@ -42,7 +42,7 @@
             </template>
             <div class="noImgItem" v-for="item in imgArr" :key="item" v-else>
               <!-- <img :src="item" alt="" /> -->
-              <div class="noImg">空收藏夹</div>
+              <div class="noImg">{{ $t("design.emptyCollection") }}</div>
             </div>
           </div>
           <div class="title" v-if="!item.isEdit" @click="handleEdit(item)">

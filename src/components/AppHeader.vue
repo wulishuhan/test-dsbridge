@@ -46,14 +46,14 @@
                 </el-button>
               </router-link>
             </li>
-            <li class="alert">
+            <!-- <li class="alert">
               <el-button @click.stop="handleShowNotice">
                 <i class="ortur-icon-alert"></i>
               </el-button>
               <div class="noticePanel">
                 <NoticePanel ref="NoticePanel"></NoticePanel>
               </div>
-            </li>
+            </li> -->
 
             <li>
               <el-dropdown @command="selectLanguage">
@@ -91,7 +91,8 @@
                         :src="
                           userInfo.avatar
                             ? userInfo.avatar
-                            : 'http://dummyimage.com/300x200/96f279/FFF&text=gcfqdvmp'
+                            : 'http://dummyimage.com/300x200/96f279/FFF&text=' +
+                              userInfo.nick_name
                         "
                       />
                     </div>
@@ -147,7 +148,7 @@
 
 <script>
 import Login from "@/components/Login";
-import NoticePanel from "@/components/NoticePanel";
+// import NoticePanel from "@/components/NoticePanel";
 import settingPanel from "@/components/settingPanel";
 import { createNamespacedHelpers } from "vuex";
 import { bindThird } from "@/api/user";
@@ -169,7 +170,7 @@ export default {
   },
   components: {
     Login,
-    NoticePanel,
+    // NoticePanel,
     settingPanel,
   },
   computed: {
