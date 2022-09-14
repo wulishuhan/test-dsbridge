@@ -47,7 +47,11 @@
         </div>
       </div>
       <!-- CANVAS -->
-      <div class="el-image-viewer__canvas">
+      <div
+        class="el-image-viewer__canvas"
+        :style="imgStyle"
+        :class="[isMake ? 'make-canvas-img' : 'canvas-img']"
+      >
         <!-- eslint-disable-next-line -->
         <div v-for="(item, i) in urlList">
           <img
@@ -60,6 +64,7 @@
             @load="handleImgLoad"
             @error="handleImgError"
             @mousedown="handleMouseDown"
+            :class="[isMake ? 'make-canvas-img' : 'canvas-img']"
           />
         </div>
         <template v-if="!isSingle">
@@ -222,12 +227,21 @@ export default {
     },
     imgStyle() {
       const { scale, deg, offsetX, offsetY, enableTransition } = this.transform;
-      const style = {
+      // const style = {
+      //   transform: `scale(${scale}) rotate(${deg}deg)`,
+      //   transition: enableTransition ? "transform .3s" : "",
+      //   // "margin-left": `${offsetX}px`,
+      //   // "margin-top": `${offsetY}px`,
+      // };
+      let style = {
         transform: `scale(${scale}) rotate(${deg}deg)`,
         transition: enableTransition ? "transform .3s" : "",
-        "margin-left": `${offsetX}px`,
-        "margin-top": `${offsetY}px`,
+        // "margin-left": `${offsetX}px`,
+        // "margin-top": `${offsetY}px`,
       };
+      if (!this.isMake) {
+        style = {};
+      }
       if (this.mode === Mode.CONTAIN) {
         style.maxWidth = style.maxHeight = "100%";
       }
@@ -444,15 +458,22 @@ export default {
 <style scoped>
 .el-image-viewer__canvas {
   position: relative;
-  width: 1084px;
-  height: 660px;
+  /* width: 1432px; */
+  /* height: 880px; */
   margin: 0 auto;
   margin-top: 96px;
+  background: rgba(255, 255, 255, 0.8);
+}
+.make-canvas-img {
+  width: 1084px;
+  height: 660px;
+}
+.canvas-img {
+  width: 1432px;
+  height: 880px;
 }
 .el-image-viewer__img {
   object-fit: fill;
-  width: 1084px;
-  height: 660px;
 }
 .left-top-scacel-box {
   width: 120px;
@@ -514,8 +535,8 @@ export default {
 }
 
 .up-box {
-  width: 324px;
-  height: 60px;
+  width: 432px;
+  height: 80px;
   /* background: #1a1a1a; */
   /* opacity: 0.3; */
   background: rgba(26, 26, 26, 0.3);
@@ -526,8 +547,8 @@ export default {
 }
 
 .down-box {
-  width: 324px;
-  height: 60px;
+  width: 432px;
+  height: 80px;
   background: rgba(26, 26, 26, 0.3);
   /* background: #1a1a1a; */
   /* opacity: 0.3; */
