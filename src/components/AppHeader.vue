@@ -122,18 +122,10 @@
 
           <ul class="app-header-nologin" v-else>
             <li>
-              <el-button
-                style="background: #f0f3fa; border: none; font-size: 20px"
-                @click="showLoginDialog('login')"
-              >
-                Log in
-              </el-button>
+              <el-button @click="showLoginDialog('login')"> Log in </el-button>
             </li>
             <li>
-              <el-button
-                style="background: #f0f3fa; border: none; font-size: 20px"
-                @click="showLoginDialog('register')"
-              >
+              <el-button @click="showLoginDialog('register')">
                 Sign up
               </el-button>
             </li>
@@ -421,6 +413,12 @@ export default {
         display: flex;
         flex-direction: row;
         align-items: center;
+        .el-button {
+          border: none;
+          background: none;
+          color: #fff;
+          font-size: 14px;
+        }
         .el-btn-upload {
           width: 90px;
           background: #88bbf3;
