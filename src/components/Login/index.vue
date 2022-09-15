@@ -509,8 +509,7 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 114px;
-  margin-top: 20px;
+  height: 58px;
 }
 .privacy-text-box {
   display: flex;
@@ -588,13 +587,13 @@ export default {
   font-family: Source Han Sans CN;
 }
 .login-text {
-  font-size: 20px;
+  font-size: 16px;
   color: #000;
   text-align: center;
 }
 .privacy-text {
   margin: 0 auto;
-  width: 372px;
+  width: 314px;
   line-height: 23px;
   text-align: start;
 }

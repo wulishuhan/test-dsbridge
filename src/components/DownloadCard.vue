@@ -17,12 +17,15 @@
             <div class="name">{{ file.name }}</div>
           </el-tooltip>
           <!-- <div class="name">{{ file.name }}</div> -->
-          <div>
-            <span>{{ fileSize }}</span>
+          <div class="file-size-box">
+            <span class="file-size">{{ fileSize }}</span>
             <span v-if="type == 'stl'" class="type">stl</span>
             <span v-else-if="type == 'png'" class="type">png</span>
             <span v-else-if="type == 'jpg'" class="type">jpg</span>
+            <span v-else-if="type == 'jpeg'" class="type">jpeg</span>
             <span v-else-if="type == 'obj'" class="type">obj</span>
+            <span v-else-if="type == 'svg'" class="type">svg</span>
+            <span v-else-if="type == 'gc'" class="type">gc</span>
             <span v-else-if="type == 'code'" class="type">code</span>
             <span v-else class="type">other</span>
           </div>
@@ -32,7 +35,7 @@
         </div>
       </div>
       <el-button @click.prevent.stop="download" type="primary">
-        <span class="ortur-icon-arrow-down"></span>
+        <i class="ortur-icon-arrow-down"></i>
         <!-- <span class="download-text">{{ file.downloadCount }} </span> -->
         <span class="download-text">{{ downloadNum }} </span>
       </el-button>
@@ -172,13 +175,22 @@ export default {
     padding: 0 5px;
     margin-left: 2px;
     color: white;
+    line-height: 12px;
   }
   .time {
-    margin-top: 2px;
+    margin-top: 6px;
     font-size: 14px;
     font-family: Source Han Sans CN;
     font-weight: 400;
     color: #999999;
+  }
+  .file-size-box {
+    margin-top: 8px;
+  }
+  .file-size {
+    margin-right: 17px;
+    display: inline-block;
+    width: 41px;
   }
   img {
     width: 88px;
@@ -186,11 +198,10 @@ export default {
     margin-right: 10px;
   }
   span {
-    font-size: 12px;
+    font-size: 14px;
     font-family: Source Han Sans CN;
     font-weight: 400;
     color: #999999;
-    margin-right: 5px;
   }
 }
 .el-button {
@@ -202,9 +213,14 @@ export default {
   font-family: Source Han Sans CN;
   font-weight: 400;
   color: #ffffff;
+  padding: 17px;
 }
 .download-text {
   color: #fff;
   margin-left: 10px;
+  font-size: 16px !important;
+}
+.ortur-icon-arrow-down {
+  font-size: 12px;
 }
 </style>
