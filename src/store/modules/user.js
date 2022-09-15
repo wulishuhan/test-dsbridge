@@ -18,7 +18,7 @@ const getDefaultState = () => {
     userInfo: {
       user_id: 0,
       nick_name: "",
-      avatar: "",
+      avatar: generatorDefaultAvator(" ", 0),
       email: "",
       user_name: "",
     },
@@ -111,7 +111,6 @@ const actions = {
     return new Promise((resolve, reject) => {
       register(payload)
         .then((res) => {
-          console.log("register=========", res);
           commit("SET_LOGININFO", res.data.data);
           setToken(res.data.data.access_token);
           resolve(res.data);
