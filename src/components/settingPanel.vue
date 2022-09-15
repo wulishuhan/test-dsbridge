@@ -222,7 +222,10 @@ export default {
     // getUserInfo().then((e) => {
     //   this.third_user = e.data.data.third_user;
     // });
-    this.defaultAvatar = generatorDefaultAvator(this.userInfo.nick_name);
+    this.defaultAvatar = generatorDefaultAvator(
+      this.userInfo.nick_name,
+      this.userInfo.user_id
+    );
   },
 
   computed: {

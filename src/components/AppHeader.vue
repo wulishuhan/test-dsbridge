@@ -179,7 +179,10 @@ export default {
     ]),
   },
   mounted() {
-    this.defaultAvatar = generatorDefaultAvator(this.userInfo.nick_name);
+    this.defaultAvatar = generatorDefaultAvator(
+      this.userInfo.nick_name,
+      this.userInfo.user_id
+    );
     let isBinding = sessionStorage.getItem("isBinding");
     console.log("isBinding: ", isBinding);
 
