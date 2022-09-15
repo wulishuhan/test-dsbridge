@@ -283,10 +283,10 @@
               </el-tab-pane>
 
               <el-tab-pane :label="$t('design.makes')" name="third">
-                <PostMakeDialog
+                <!-- <PostMakeDialog
                   :isShow.sync="dialogPostMake"
                   :customClass="'make-dialog'"
-                ></PostMakeDialog>
+                ></PostMakeDialog> -->
                 <ElImageViewer
                   class="imageViewer"
                   v-if="showMake"
@@ -476,7 +476,6 @@ import IndexFollowPanel from "./IndexFollowPanel.vue";
 import CollectedOption from "@/components/CollectedOption";
 import RowFolder from "@/components/RowFolder.vue";
 import DownListPanel from "@/components/DownListPanel.vue";
-import Make from "@/views/thing/components/Make.vue";
 import { generatorDefaultAvator } from "@/utils/generateImage.js";
 import {
   deleteCollectionResource,
@@ -503,9 +502,11 @@ import {
 import { getToken } from "@/utils/auth";
 import { createNamespacedHelpers } from "vuex";
 import { getResource } from "@/api/resource";
-import PostMakeDialog from "./components/PostMakeDialog.vue";
+// import PostMakeDialog from "./components/PostMakeDialog.vue";
 import ElImageViewer from "@/components/ImageViewer";
-import ViewMake from "./components/ViewMake.vue";
+import ViewMake from "@/views/thing/components/ViewMake.vue";
+import Make from "@/views/thing/components/Make.vue";
+
 import { getMakeList } from "@/api/user";
 
 const { mapState } = createNamespacedHelpers("user");
@@ -520,14 +521,13 @@ export default {
     RowFolder,
     DownListPanel,
     Make,
-    PostMakeDialog,
+    // PostMakeDialog,
     ViewMake,
     ElImageViewer,
   },
   data() {
     return {
       defaultAvatar: "",
-      dialogPostMake: false,
       dialogViewMake: false,
       makes: [],
       showMake: false,
