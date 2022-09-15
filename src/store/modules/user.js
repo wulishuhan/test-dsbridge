@@ -135,9 +135,7 @@ const actions = {
     });
   },
   getMyFollowingList({ commit }, payload) {
-    console.log("getFollowingList============", payload);
     getFollowingList(payload).then((res) => {
-      console.log("getFollowingList===================", res);
       commit("SET_FOLLOWINGLIST", res.data.data);
     });
   },
