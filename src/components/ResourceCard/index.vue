@@ -59,7 +59,7 @@
           <el-avatar
             v-if="showAvatar"
             :size="40"
-            :src="thing.creator && thing.creator.avatar"
+            :src="avatar"
             :fit="'cover'"
             slot="reference"
           ></el-avatar>
@@ -150,6 +150,7 @@
 import CollectedOption from "@/components/CollectedOption";
 import UserRecommendation from "@/components/UserRecommendation";
 import { addLike, deleteLike } from "@/api/like";
+import { generatorDefaultAvator } from "@/utils/generateImage";
 export default {
   name: "ResourceCard",
   components: { CollectedOption, UserRecommendation },
@@ -251,6 +252,14 @@ export default {
   computed: {
     selected() {
       return this.$store.getters.selectCollectionBox;
+    },
+    avatar() {
+      return this.thing.creator.avatar
+        ? this.thing.creator.avatar
+        : generatorDefaultAvator(
+            this.thing.creator.name,
+            this.thing.creator.id
+          );
     },
   },
   watch: {
