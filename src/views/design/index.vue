@@ -295,10 +295,10 @@
                   :isMake="true"
                   :initialIndex="index"
                 ></ElImageViewer>
-                <ViewMake
+                <!-- <ViewMake
                   :makes="makes"
                   :isShow.sync="dialogViewMake"
-                ></ViewMake>
+                ></ViewMake> -->
                 <div
                   style="
                     display: flex;
@@ -504,7 +504,7 @@ import { createNamespacedHelpers } from "vuex";
 import { getResource } from "@/api/resource";
 // import PostMakeDialog from "./components/PostMakeDialog.vue";
 import ElImageViewer from "@/components/ImageViewer";
-import ViewMake from "@/views/thing/components/ViewMake.vue";
+// import ViewMake from "@/views/thing/components/ViewMake.vue";
 import Make from "@/views/thing/components/Make.vue";
 
 import { getMakeList } from "@/api/user";
@@ -522,13 +522,13 @@ export default {
     DownListPanel,
     Make,
     // PostMakeDialog,
-    ViewMake,
+    // ViewMake,
     ElImageViewer,
   },
   data() {
     return {
       defaultAvatar: "",
-      dialogViewMake: false,
+      // dialogViewMake: false,
       makes: [],
       showMake: false,
       index: 0,
