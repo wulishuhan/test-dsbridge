@@ -9,6 +9,7 @@ import {
   openLogin,
 } from "@/api/user";
 import { getToken, setToken, removeToken } from "@/utils/auth";
+import { generatorDefaultAvator } from "@/utils/generateImage";
 
 const getDefaultState = () => {
   return {
@@ -17,7 +18,7 @@ const getDefaultState = () => {
     userInfo: {
       user_id: 0,
       nick_name: "",
-      avatar: "",
+      avatar: generatorDefaultAvator(" ", 0),
       email: "",
       user_name: "",
     },
@@ -42,7 +43,10 @@ const mutations = {
   SET_USERINFO: (state, payload) => {
     state.userInfo.user_id = payload.user_id;
     state.userInfo.nick_name = payload.nick_name;
-    state.userInfo.avatar = payload.avatar;
+    // eslint-disable-next-line
+    state.userInfo.avatar = !!payload.avatar
+      ? payload.avatar
+      : generatorDefaultAvator(payload.nick_name, payload.user_id);
     state.userInfo.email = payload.email;
     state.userInfo.user_name = payload.user_name;
     state.userInfo.third_user = payload.third_user;
@@ -107,7 +111,6 @@ const actions = {
     return new Promise((resolve, reject) => {
       register(payload)
         .then((res) => {
-          console.log("register=========", res);
           commit("SET_LOGININFO", res.data.data);
           setToken(res.data.data.access_token);
           resolve(res.data);

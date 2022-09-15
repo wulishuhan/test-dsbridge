@@ -1,4 +1,5 @@
 export function generatorDefaultAvator(text, serNum = 0, size = 255, bgcolor) {
+  console.log("generatorDefaultAvator==========", text, serNum);
   //设置头像昵称，如果为null或者为空时，设置为无
   let nickname = text == null ? "无" : text == "" ? "无" : text;
   //设置头像大小
