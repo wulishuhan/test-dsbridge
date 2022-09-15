@@ -17,6 +17,7 @@
           v-for="(replyItem, replyIndex) in commentItem.replies.slice(0, 3)"
           :key="replyIndex"
         >
+          <div class="makes-reply-left-line"></div>
           <comment-content
             :comment="replyItem"
             :showReplyDialog="showReplyOuterDialogFromReply"
@@ -317,6 +318,7 @@ export default {
     }
     .reply-item {
       padding: 5px 10px;
+      position: relative;
       .reply-detail {
         margin: 0px 54px;
         font-size: 16px;
@@ -345,5 +347,13 @@ export default {
 .comment-count {
   color: #999;
   margin-bottom: 30px;
+}
+.makes-reply-left-line {
+  width: 1px;
+  height: 101px;
+  border-left: 1px solid #ccc;
+  position: absolute;
+  left: -52px;
+  top: -4px;
 }
 </style>
