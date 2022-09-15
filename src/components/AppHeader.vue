@@ -144,7 +144,7 @@ import Login from "@/components/Login";
 import settingPanel from "@/components/settingPanel";
 import { createNamespacedHelpers } from "vuex";
 import { bindThird } from "@/api/user";
-import { createCanvas } from "@/utils/common.js";
+import { generatorDefaultAvator } from "@/utils/generateImage.js";
 
 const { mapState } = createNamespacedHelpers("user");
 export default {
@@ -179,15 +179,7 @@ export default {
     ]),
   },
   mounted() {
-    this.defaultAvatar = createCanvas(
-      120,
-      120,
-      0,
-      "white",
-      "#555555",
-      "#fff",
-      this.userInfo.nick_name
-    );
+    this.defaultAvatar = generatorDefaultAvator(this.userInfo.nick_name);
     let isBinding = sessionStorage.getItem("isBinding");
     console.log("isBinding: ", isBinding);
 
