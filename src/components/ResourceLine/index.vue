@@ -5,7 +5,13 @@
       <div class="follow-wrapper">
         <div class="username">{{ authorInfo.name }}</div>
         <div class="follow-info">
-          <el-button>关注</el-button>
+          <el-button v-if="isFollow" @click="handleUnFollow">{{
+            $t("design.unFollow")
+          }}</el-button>
+          <el-button v-else @click="handleFollow">{{
+            $t("design.follow")
+          }}</el-button>
+
           <span>
             <span class="fans-num">{{ authorInfo.follower_count }}</span>
             <span class="follow-text"> Follows</span>
@@ -24,6 +30,9 @@
   </div>
 </template>
 <script>
+import { follow, unFollow } from "@/api/design";
+import { createNamespacedHelpers } from "vuex";
+const { mapState } = createNamespacedHelpers("user");
 export default {
   data() {
     return {};
@@ -36,7 +45,47 @@ export default {
       },
     },
   },
-  mounted() {},
+  computed: {
+    ...mapState(["myFollowingList", "userInfo"]),
+    isFollow() {
+      this.myFollowingList;
+
+      for (const item of this.myFollowingList) {
+        if (item.id == this.authorInfo.id) {
+          return true;
+        }
+      }
+      return false;
+    },
+  },
+  mounted() {
+    console.log("myFollowingList", this.myFollowingList);
+  },
+  methods: {
+    handleFollow() {
+      console.log(this.authorInfo);
+      follow({ userId: this.authorInfo.id }).then(() => {
+        this.$store.dispatch("user/getMyFollowingList", {
+          userId: this.userInfo.user_id,
+        });
+        this.$message({
+          type: "success",
+          message: this.$t("design.followSuccess"),
+        });
+      });
+    },
+    handleUnFollow() {
+      unFollow({ userId: this.authorInfo.id }).then(() => {
+        this.$store.dispatch("user/getMyFollowingList", {
+          userId: this.userInfo.user_id,
+        });
+        this.$message({
+          type: "success",
+          message: this.$t("design.unFollowSuccess"),
+        });
+      });
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>

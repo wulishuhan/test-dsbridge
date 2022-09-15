@@ -55,7 +55,7 @@
               </div>
             </li> -->
 
-            <li>
+            <!-- <li>
               <el-dropdown @command="selectLanguage">
                 <span class="el-dropdown-link">
                   {{ $t("header.language") }}
@@ -66,7 +66,7 @@
                   <el-dropdown-item command="zh">中文</el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
-            </li>
+            </li> -->
             <li>
               <el-dropdown class="el-dropdown-userinfo">
                 <el-button>
@@ -192,7 +192,7 @@ export default {
     this.$store.dispatch("user/getUserInfo").catch((e) => {
       console.log(e);
     });
-    this.$store.dispatch("user/getFollowingList", {
+    this.$store.dispatch("user/getMyFollowingList", {
       userId: this.userInfo.user_id,
     });
     let { code, from, email } = this.$route.query;
@@ -360,7 +360,7 @@ export default {
       margin-left: auto;
       padding: 0 1.5rem 0 0;
       ul.app-header-dots {
-        width: 600px;
+        width: 400px;
         list-style-type: none;
         display: flex;
         flex-direction: row;
@@ -406,7 +406,7 @@ export default {
           padding: unset;
         }
         .el-btn-upload {
-          width: 136px;
+          width: 110px;
           .el-icon-upload {
             font-size: 20px;
           }
