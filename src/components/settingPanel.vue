@@ -140,7 +140,7 @@ import { getToken } from "@/utils/auth";
 import ChangeEmailPassword from "@/components/ChangeEmailPassword.vue";
 import ChangeName from "@/components/ChangeName.vue";
 import { unbindThird, getUserInfo } from "@/api/user";
-import { createCanvas } from "@/utils/common.js";
+import { generatorDefaultAvator } from "@/utils/generateImage.js";
 
 export default {
   components: {
@@ -222,15 +222,7 @@ export default {
     // getUserInfo().then((e) => {
     //   this.third_user = e.data.data.third_user;
     // });
-    this.defaultAvatar = createCanvas(
-      120,
-      120,
-      0,
-      "white",
-      "#555555",
-      "#fff",
-      this.userInfo.nick_name
-    );
+    this.defaultAvatar = generatorDefaultAvator(this.userInfo.nick_name);
   },
 
   computed: {
