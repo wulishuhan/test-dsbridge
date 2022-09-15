@@ -6,7 +6,7 @@ import store from "./store";
 import ElementUI from "element-ui";
 import { baseURL } from "@/utils/request";
 import VEmojiPicker from "v-emoji-picker";
-
+import "@/icons/index";
 import moment from "moment";
 import "element-ui/lib/theme-chalk/index.css";
 import "element-ui/lib/theme-chalk/display.css";

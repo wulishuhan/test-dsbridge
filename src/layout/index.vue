@@ -2,7 +2,10 @@
   <div>
     <!-- <nav-bar></nav-bar> -->
     <app-header></app-header>
-    <router-view :key="$route.fullPath" />
+    <keep-alive>
+      <!-- 需要缓存的视图组件 -->
+      <router-view :key="$route.fullPath" />
+    </keep-alive>
   </div>
 </template>
 <script>

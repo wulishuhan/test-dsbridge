@@ -361,9 +361,23 @@
                       </el-upload>
                     </div>
                   </draggable>
-                  <div class="swiper-button-prev swiper-button-black"></div>
+                  <div
+                    class="swiper-button-prev swiper-button-black"
+                    ref="tutorialSwiperPrev"
+                    @drop="drop($event)"
+                    @dragover="
+                      allowDrop($event, 'tutorialSwiperPrev', tutorialKey)
+                    "
+                  ></div>
                   <!-- 白色 -->
-                  <div class="swiper-button-next swiper-button-black"></div>
+                  <div
+                    class="swiper-button-next swiper-button-black"
+                    ref="tutorialSwiperNext"
+                    @drop="drop($event)"
+                    @dragover="
+                      allowDrop($event, 'tutorialSwiperNext', tutorialKey)
+                    "
+                  ></div>
                   <!-- 黑色 -->
                 </div>
               </el-form-item>
@@ -665,15 +679,26 @@ export default {
       //滚动
       this.$refs[swiperArrow].click();
     }, 500);
+
+    this._throttle_tutorial = this.throttle((swiperArrow, curIndex) => {
+      //滚动
+      console.log("_throttle_tutorial", swiperArrow, this.$refs);
+      this.$refs[swiperArrow][curIndex].click();
+    }, 500);
   },
   methods: {
     drop(event) {
       event.preventDefault();
     },
-    allowDrop(event, swiperArrow) {
-      this._throttle(swiperArrow);
+    allowDrop(event, swiperArrow, curIndex) {
+      if (/^tutorial/.test(swiperArrow)) {
+        this._throttle_tutorial(swiperArrow, curIndex);
+      } else {
+        this._throttle(swiperArrow);
+      }
       event.preventDefault();
     },
+
     throttle(func, delay) {
       delay = delay || 1000;
       var previousDate = new Date();
@@ -1026,6 +1051,10 @@ export default {
 }
 
 .swiper-slide {
+  i {
+    cursor: pointer;
+    display: none;
+  }
   position: relative;
   .ortur-icon-minus {
     font-size: 20px;
@@ -1072,7 +1101,13 @@ export default {
     margin: 0px auto;
     width: 150px;
     height: 90px;
-    object-fit: contain;
+    object-fit: cover;
+  }
+}
+
+.swiper-slide:hover {
+  i {
+    display: block;
   }
 }
 .upload-container {

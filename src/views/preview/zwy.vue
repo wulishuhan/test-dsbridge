@@ -1,13 +1,19 @@
 <template>
   <div>
+    <FloatingMenu ref="test" :editor="editor">
+      <el-button>123123123</el-button>
+    </FloatingMenu>
     <editor-content :editor="editor" class="desc-editor" />
     <VEmojiPicker @mousedown="testClick($event)" @select="selectEmoji" />
+    <img :src="getImg()" />
   </div>
 </template>
 <script>
-import { Editor, EditorContent } from "@tiptap/vue-2";
+import { Editor, EditorContent, FloatingMenu } from "@tiptap/vue-2";
 import Placeholder from "@tiptap/extension-placeholder";
 import StarterKit from "@tiptap/starter-kit";
+import Focus from "@tiptap/extension-focus";
+import { generatorDefaultAvator } from "@/utils/generateImage";
 export default {
   // eslint-disable-next-line
   name: "zwy",
@@ -18,20 +24,36 @@ export default {
   },
   components: {
     EditorContent,
+    FloatingMenu,
   },
-  mounted() {
+  created() {
     this.editor = new Editor({
       content: "",
       extensions: [
         StarterKit,
+        Focus.configure({
+          className: "has-focus",
+          mode: "all",
+        }),
         Placeholder.configure({
           placeholder: "my custom placeholder",
         }),
       ],
+      onUpdate({ editor }) {
+        // The content has changed.
+        console.log("onUpdate:", editor);
+      },
+      onSelectionUpdate({ editor }) {
+        // The selection has changed.
+        console.log("onSelectionUpdate", editor);
+      },
     });
   },
   beforeDestroy() {
     this.editor.destroy();
+  },
+  mounted() {
+    console.log(generatorDefaultAvator("我的", "aaa"));
   },
   methods: {
     shouldShow({ editor, view, state }) {
@@ -43,6 +65,9 @@ export default {
       console.log(this.editor);
 
       this.editor.chain().focus().insertContent(emoji.data).run();
+    },
+    getImg() {
+      return generatorDefaultAvator("hello", 21);
     },
   },
 };

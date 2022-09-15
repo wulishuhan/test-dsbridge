@@ -96,7 +96,12 @@
             @click="prev"
             v-show="isMake"
           >
-            <i class="el-icon-arrow-left" />
+            <!-- <i class="el-icon-arrow-left" /> -->
+            <svg-icon
+              icon-class="left"
+              class-name="make-left"
+              class="make-left"
+            ></svg-icon>
           </span>
           <span
             class="el-image-viewer__btn el-image-viewer__next make-right-box"
@@ -104,12 +109,21 @@
             @click="next"
             v-show="isMake"
           >
-            <i class="el-icon-arrow-right" />
+            <!-- <i class="el-icon-arrow-right" /> -->
+            <svg-icon
+              icon-class="right"
+              class-name="make-right"
+              class="make-right"
+            ></svg-icon>
           </span>
         </template>
-        <span class="el-image-viewer__btn el-image-viewer__close" @click="hide">
-          <i class="el-icon-close"></i>
-          <!-- <i class="ortur-icon-cancel"></i> -->
+        <span
+          class="el-image-viewer__btn el-image-viewer__close"
+          @click="hide"
+          :class="[isMake ? 'makes-close' : 'img-close']"
+        >
+          <i v-if="!isMake" class="ortur-icon-shrink"></i>
+          <i v-else class="el-icon-close"></i>
         </span>
         <div v-if="isMake" class="open-comment-box" @click="openComment">
           <i class="el-icon-arrow-left"></i>
@@ -461,16 +475,18 @@ export default {
   /* width: 1432px; */
   /* height: 880px; */
   margin: 0 auto;
-  margin-top: 96px;
+  /* margin-top: 96px; */
   background: rgba(255, 255, 255, 0.8);
 }
 .make-canvas-img {
-  width: 1084px;
-  height: 660px;
+  width: 1440px !important;
+  height: 896px !important;
+  /* margin-top: 288px; */
 }
 .canvas-img {
-  width: 1432px;
-  height: 880px;
+  width: 1432px !important;
+  height: 880px !important;
+  /* margin-top: 96px; */
 }
 .el-image-viewer__img {
   object-fit: fill;
@@ -490,7 +506,7 @@ export default {
 }
 .comment-box {
   width: 100%;
-  height: 660px;
+  height: 896px;
   background: #fff;
   display: flex;
   align-items: center;
@@ -513,7 +529,7 @@ export default {
 .el-menu {
   position: absolute;
   right: 0px;
-  width: 780px;
+  width: 816px;
   z-index: 3000;
 }
 .el-button {
@@ -568,23 +584,45 @@ export default {
     opacity: 0.3; */
   background: rgba(26, 26, 26, 0.3);
   border-radius: 6px;
+  /* top: 12px; */
+  /* right: 13px; */
+}
+.makes-close {
+  width: 40px;
+  height: 40px;
+  top: 16px;
+  right: 24px;
+}
+.img-close {
+  width: 60px;
+  height: 60px;
   top: 12px;
   right: 13px;
 }
+
 .make-left-box {
-  width: 48px;
-  height: 184px;
-  left: -200px;
+  width: 32px;
+  height: 80px;
+  left: -100px;
   border-radius: 0;
   background: none;
-  font-size: 70px;
+  color: #fff;
+}
+.make-left {
+  width: 100% !important;
+  height: 100% !important;
 }
 .make-right-box {
-  width: 48px;
-  height: 184px;
-  right: -200px;
+  width: 32px;
+  height: 80px;
+  right: -100px;
   border-radius: 0;
   background: none;
   font-size: 70px;
+  color: #fff;
+}
+.make-right {
+  width: 100% !important;
+  height: 100% !important;
 }
 </style>

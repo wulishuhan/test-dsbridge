@@ -58,9 +58,10 @@ export default {
   .num {
     color: #000;
     font-size: 16px;
+    margin-left: 15px;
   }
   i {
-    font-size: 16px;
+    font-size: 20px;
   }
 }
 </style>

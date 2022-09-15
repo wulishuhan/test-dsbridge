@@ -36,7 +36,7 @@
       </el-tab-pane>
     </el-tabs>
 
-    <sroll-top-button :to="'#top'"></sroll-top-button>
+    <sroll-top-button></sroll-top-button>
   </div>
 </template>
 <script>

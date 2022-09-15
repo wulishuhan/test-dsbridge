@@ -6,10 +6,18 @@
       :custom-class="customClass"
       :append-to-body="true"
     >
-      <a @click="showPostForm = true" slot="title">post make</a>
+      <el-button
+        class="post-make-button"
+        type="text"
+        @click="showPostForm = true"
+        slot="title"
+      >
+        <i class="el-icon-plus"></i>
+        post make
+      </el-button>
       <PostMakeDialog :isShow.sync="showPostForm"></PostMakeDialog>
       <el-row>
-        <el-col :span="8" v-for="(item, index) in makes" :key="item.id">
+        <el-col :span="6" v-for="(item, index) in makes" :key="item.id">
           <make
             :make="item"
             :index="index"
@@ -47,7 +55,7 @@ export default {
     },
     width: {
       type: String,
-      default: "840px",
+      default: "1136px",
     },
     makes: {
       type: Array,
@@ -119,5 +127,33 @@ export default {
   width: 40px;
   height: 40px;
   font-size: 14px;
+}
+::v-deep .more-image {
+  width: 228px;
+  height: 139px;
+}
+::v-deep .makes-mask {
+  width: 227px;
+  height: 40px;
+  line-height: 40px;
+}
+::v-deep .ortur-icon-message {
+  font-size: 18px;
+}
+::v-deep .el-icon-arrow-right {
+  font-size: 18px;
+}
+.post-make-button:hover {
+  background: #ececec;
+  color: #606266;
+}
+.post-make-button {
+  color: #606266;
+  padding: 10px;
+  font-size: 16px;
+}
+.el-icon-plus {
+  margin-right: 5px;
+  font-size: 16px;
 }
 </style>

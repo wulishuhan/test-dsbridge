@@ -48,6 +48,7 @@
           popper-class="user-popover"
           placement="bottom-start"
           trigger="hover"
+          :visible-arrow="false"
           @show="userRecommendation"
         >
           <UserRecommendation

@@ -21,7 +21,7 @@ const getDefaultState = () => {
       email: "",
       user_name: "",
     },
-    followingList: [],
+    myFollowingList: [],
     expiresIn: [],
     isLogin: false,
     accessToken: getToken(),
@@ -49,7 +49,7 @@ const mutations = {
     state.isLogin = true;
   },
   SET_FOLLOWINGLIST: (state, payload) => {
-    state.followingList = payload;
+    state.myFollowingList = payload;
   },
   SWITCH_LOGIN_REGISTER_FORM: (state, payload) => {
     state.loginDialogVisible = payload.loginDialogVisible;
@@ -134,7 +134,7 @@ const actions = {
         });
     });
   },
-  getFollowingList({ commit }, payload) {
+  getMyFollowingList({ commit }, payload) {
     console.log("getFollowingList============", payload);
     getFollowingList(payload).then((res) => {
       console.log("getFollowingList===================", res);
