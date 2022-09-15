@@ -661,8 +661,6 @@ export default {
     },
   },
   mounted() {
-    console.log(this.userInfo);
-    console.log(this.isLogin);
     document.addEventListener("click", () => {
       this.isShowDownPanel = false;
     });
@@ -715,11 +713,12 @@ export default {
           isEdit: false,
           text: res.url3,
         });
+      this.defaultAvatar = generatorDefaultAvator(
+        this.isYourAccount ? this.userInfo.nick_name : this.user.name,
+        this.userId
+      );
     });
-
-    this.defaultAvatar = generatorDefaultAvator(
-      this.isYourAccount ? this.userInfo.nick_name : this.user.name
-    );
+    console.log(this.user.name, this.userInfo.nick_name);
   },
   computed: {
     ...mapState(["userInfo"]),

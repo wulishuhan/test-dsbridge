@@ -12,7 +12,7 @@
                 <div class="flex">
                   <el-avatar
                     :size="40"
-                    :src="detail.creator.avatar"
+                    :src="avatar"
                     :fit="'cover'"
                   ></el-avatar>
                   <div class="flex flex-column user-name-update-time">
@@ -295,6 +295,7 @@ import Makes from "./components/Makes.vue";
 import Remixes from "./components/Remixes.vue";
 import Similar from "./components/Similar.vue";
 import MoreByCreator from "./components/MoreByCreator.vue";
+import { generatorDefaultAvator } from "@/utils/generateImage";
 export default {
   name: "Thing",
   components: {
@@ -459,6 +460,14 @@ export default {
         this.licenseImg = ["/license-img/BSD.png"];
       }
       return licenseUrl;
+    },
+    avatar() {
+      return this.detail.creator.avatar
+        ? this.detail.creator.avatar
+        : generatorDefaultAvator(
+            this.detail.creator.name,
+            this.detail.creator.id
+          );
     },
   },
   methods: {
