@@ -44,11 +44,11 @@
 
 <script>
 import { postComment } from "@/api/user";
-import { createNamespacedHelpers } from "vuex";
+import { mapState } from "vuex";
 import { Editor, EditorContent } from "@tiptap/vue-2";
 import Placeholder from "@tiptap/extension-placeholder";
 import StarterKit from "@tiptap/starter-kit";
-const { mapState } = createNamespacedHelpers("user");
+
 import { getToken } from "@/utils/auth";
 export default {
   data() {
@@ -62,6 +62,10 @@ export default {
   },
   props: {
     commentId: {
+      type: Number,
+      default: 0,
+    },
+    primaryCommentId: {
       type: Number,
       default: 0,
     },
@@ -98,7 +102,10 @@ export default {
     EditorContent,
   },
   computed: {
-    ...mapState(["userInfo"]),
+    ...mapState({
+      userInfo: (state) => state.user.userInfo,
+      commentListFromId: (state) => state.comment.commentListFromId,
+    }),
     headers() {
       return {
         Authorization: "Bearer " + getToken(),
@@ -131,6 +138,11 @@ export default {
         image: this.commentPic,
       }).then(() => {
         this.$store.dispatch("comment/getCommentList", { resId: resId });
+        console.log("回复评论");
+        this.$store.dispatch(
+          "comment/getCommentListFromId",
+          this.primaryCommentId
+        );
         this.$message({
           message: "发送成功",
           type: "success",

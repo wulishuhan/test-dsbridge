@@ -2,7 +2,7 @@
   <div class="user-card">
     <div class="user-info">
       <div class="user-info-avatar-name">
-        <el-avatar :src="creator.avatar" :size="60"></el-avatar>
+        <el-avatar :src="avatar" :size="60"></el-avatar>
         <span class="name">{{ creator.name }}</span>
       </div>
       <el-button v-if="!isFollow" @click="follow"> Follow </el-button>
@@ -21,6 +21,7 @@
 <script>
 import { getMoreByThisCreator } from "@/api/resource";
 import { follow, unFollow } from "@/api/design";
+import { generatorDefaultAvator } from "@/utils/generateImage";
 export default {
   name: "UserRecommendation",
   props: {
@@ -60,6 +61,11 @@ export default {
       return this.$store.getters.myFollowingList.some((item) => {
         return item.id == this.creator.id;
       });
+    },
+    avatar() {
+      return this.creator.avatar
+        ? this.creator.avatar
+        : generatorDefaultAvator(this.creator.name, this.creator.id);
     },
   },
   methods: {

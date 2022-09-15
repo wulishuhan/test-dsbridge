@@ -59,7 +59,7 @@
       </div>
       <div class="comment">{{ currentComment.content }}</div>
       <div class="reply-list">
-        <div v-for="(replyRow, id) in currentComment.replies" :key="id">
+        <div v-for="(replyRow, id) in commentListFromId.rows" :key="id">
           <div class="userinfo-wrapper">
             <div class="profile">
               <span class="user-avatar"
@@ -100,6 +100,7 @@
         <reply-widget
           @closeReplyModal="handleClose('inner')"
           :comment-id="currentCommentId"
+          :primary-comment-id="currentComment.id"
         ></reply-widget>
       </el-dialog>
     </el-dialog>
@@ -108,6 +109,7 @@
       <reply-widget
         @closeReplyModal="handleClose('outer')"
         :comment-id="currentCommentId"
+        :primary-comment-id="currentComment.id"
       ></reply-widget>
     </el-dialog>
   </div>
@@ -117,7 +119,6 @@
 import ReplyWidget from "@/components/Comment/ReplyWidget.vue";
 import CommentContent from "@/components/Comment/CommentContent.vue";
 import { createNamespacedHelpers } from "vuex";
-import { getCommentListFromId } from "@/api/user";
 const { mapState } = createNamespacedHelpers("comment");
 export default {
   data() {
@@ -137,7 +138,6 @@ export default {
         replies: [],
       },
       currentCommentId: 0,
-      replyTotalRows: "0条回复",
       replyTo: "reply to xxxx",
       currentResId: 0,
       keywords: "",
@@ -153,7 +153,14 @@ export default {
     this.$store.dispatch("comment/getCommentList", { resId: resId });
   },
   computed: {
-    ...mapState(["commentList"]),
+    ...mapState(["commentList", "commentListFromId"]),
+    replyTotalRows() {
+      // eslint-disable-next-line
+      var total = !!this.commentListFromId.total
+        ? this.commentListFromId.total
+        : 0;
+      return total + "条回复";
+    },
   },
   methods: {
     handleClose(space) {
@@ -192,11 +199,7 @@ export default {
     showReplyList(index, id) {
       this.replyListDialog = true;
       this.currentComment = this.commentList[index];
-      getCommentListFromId(id).then((res) => {
-        console.log("评论详情", res);
-        this.replyTotalRows = res.data.total + "条回复";
-        this.currentComment.replies = res.data.rows;
-      });
+      this.$store.dispatch("comment/getCommentListFromId", id);
     },
   },
 };

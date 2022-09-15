@@ -1,11 +1,26 @@
-import { getCommentList } from "@/api/user";
+import { getCommentList, getCommentListFromId } from "@/api/user";
+import { generatorDefaultAvator } from "@/utils/generateImage";
 const state = {
   commentList: [],
+  commentListFromId: {
+    total: 0,
+    rows: [],
+  },
 };
 
 const mutations = {
-  SET_LIST: (state, payload) => {
+  SET_COMMENT_LIST: (state, payload) => {
     state.commentList = payload;
+  },
+  SET_COMMENT_LIST_FROM_ID: (state, payload) => {
+    console.log("payload==========", payload);
+    payload.rows.forEach((item) => {
+      // eslint-disable-next-line
+      item.user.avatar = !!item.user.avatar
+        ? item.user.avatar
+        : generatorDefaultAvator(item.user.name, item.user.id);
+    });
+    state.commentListFromId = payload;
   },
 };
 
@@ -14,8 +29,33 @@ const actions = {
     return new Promise((resolve, reject) => {
       getCommentList(payload)
         .then((res) => {
-          commit("SET_LIST", res.data.rows);
+          res.data.rows.forEach((item) => {
+            // eslint-disable-next-line
+            item.user.avatar = !!item.user.avatar
+              ? item.user.avatar
+              : generatorDefaultAvator(item.user.name, item.user.id);
+            item.replies.forEach((subItem) => {
+              // eslint-disable-next-line
+              subItem.user.avatar = !!item.user.avatar
+                ? item.user.avatar
+                : generatorDefaultAvator(subItem.user.name, subItem.user.id);
+            });
+          });
+          commit("SET_COMMENT_LIST", res.data.rows);
           resolve(res.data.rows);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  },
+
+  getCommentListFromId({ commit }, payload) {
+    return new Promise((resolve, reject) => {
+      getCommentListFromId(payload)
+        .then((res) => {
+          commit("SET_COMMENT_LIST_FROM_ID", res.data);
+          resolve(res);
         })
         .catch((error) => {
           reject(error);
