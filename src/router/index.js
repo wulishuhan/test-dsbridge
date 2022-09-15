@@ -327,6 +327,11 @@ const routes = [
       title: "preview",
     },
   },
+  {
+    path: "*",
+    name: "404",
+    component: () => import("@/views/error/404"),
+  },
 ];
 
 const router = new VueRouter({
