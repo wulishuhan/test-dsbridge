@@ -130,7 +130,7 @@ export default {
 }
 .makes-mask {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   position: absolute;
   bottom: 3px;
   width: 184px;
@@ -141,11 +141,15 @@ export default {
   .ortur-icon-message {
     position: relative;
     top: 2px;
+    margin-right: 10px;
+  }
+  .el-icon-arrow-right {
+    margin-left: 17px;
   }
   .makes-mask-font-container {
     color: #fff;
     font-size: 16px;
-    margin-left: 25px;
+    margin-right: 32px;
   }
 }
 .more-image-box {

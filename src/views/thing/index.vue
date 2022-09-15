@@ -23,7 +23,11 @@
                   </div>
                 </div>
               </div>
-              <div class="flex justify-between" style="width: 456px">
+              <div
+                v-if="userInfo.user_id !== detail.creator.id"
+                class="flex justify-between"
+                style="width: 456px"
+              >
                 <StarButton
                   :starNum="detail.like_count"
                   :isStar="isLike"
@@ -45,6 +49,19 @@
                     class="collected-option"
                   ></CollectedOption>
                 </div>
+                <DownLoadButton
+                  :isShowDownPanel="isShowDownPanel"
+                  :fileList="detail.files"
+                  :fileNum="detail.files.length"
+                  :downLoadNum="downloadNumber"
+                  :resourceName="detail.title"
+                  @click="openShowDownPanel"
+                ></DownLoadButton>
+              </div>
+              <div v-else class="flex justify-between" style="width: 300px">
+                <el-button @click="toUpload">
+                  <i class="ortur-icon-pen"></i>
+                </el-button>
                 <DownLoadButton
                   :isShowDownPanel="isShowDownPanel"
                   :fileList="detail.files"
@@ -86,7 +103,7 @@
                       arrow="hover"
                       ref="carousel"
                       indicator-position="none"
-                      :autoplay="true"
+                      :autoplay="false"
                       @change="carouselChange"
                     >
                       <el-carousel-item
@@ -642,12 +659,7 @@ export default {
       this.index = index;
     },
     toUpload() {
-      this.$router.push({
-        path: "/upload",
-        query: {
-          refId: this.detail.id,
-        },
-      });
+      this.$router.push(`/upload/${this.$route.params.thingId}`);
     },
   },
   created() {
@@ -760,7 +772,7 @@ export default {
   text-align: center;
   cursor: pointer;
   background: #e8ebf4;
-  line-height: 56px;
+  line-height: 60px;
   border-radius: 8px;
 }
 
@@ -842,17 +854,16 @@ a {
 }
 
 .license-box {
-  width: 145px;
   margin-top: 17px;
   font-size: 35px;
   i {
     font-size: 46px;
-    margin-left: 5px;
+    margin-right: 24px;
   }
 }
 
 .license-info {
-  font-size: 20px;
+  font-size: 16px;
   color: #9e9e9e;
   line-height: 25px;
   margin-top: 22px;
