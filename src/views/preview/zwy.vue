@@ -41,6 +41,10 @@ export default {
         // The content has changed.
         console.log("onUpdate:", editor);
       },
+      onSelectionUpdate({ editor }) {
+        // The selection has changed.
+        console.log("onSelectionUpdate", editor);
+      },
     });
   },
   beforeDestroy() {
