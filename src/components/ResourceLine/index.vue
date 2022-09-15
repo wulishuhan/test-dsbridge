@@ -1,7 +1,7 @@
 <template>
   <div class="resource-line-wrapper">
     <div class="userinfo">
-      <div class="avatar"><img :src="authorInfo.avatar" /></div>
+      <div class="avatar"><img :src="avatar" /></div>
       <div class="follow-wrapper">
         <div class="username">{{ authorInfo.name }}</div>
         <div class="follow-info">
@@ -32,6 +32,7 @@
 <script>
 import { follow, unFollow } from "@/api/design";
 import { createNamespacedHelpers } from "vuex";
+import { generatorDefaultAvator } from "@/utils/generateImage";
 const { mapState } = createNamespacedHelpers("user");
 export default {
   data() {
@@ -56,6 +57,11 @@ export default {
         }
       }
       return false;
+    },
+    avatar() {
+      return this.authorInfo.avatar == ""
+        ? generatorDefaultAvator(this.authorInfo.name, this.authorInfo.id)
+        : this.authorInfo.avatar;
     },
   },
   mounted() {

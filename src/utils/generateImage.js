@@ -1,6 +1,6 @@
-export function generatorDefaultAvator(username, size = 255, bgcolor) {
+export function generatorDefaultAvator(text, serNum = 0, size = 255, bgcolor) {
   //设置头像昵称，如果为null或者为空时，设置为无
-  let nickname = username == null ? "无" : username == "" ? "无" : username;
+  let nickname = text == null ? "无" : text == "" ? "无" : text;
   //设置头像大小
   let avatarSize = size == null ? 255 : size;
 
@@ -35,10 +35,10 @@ export function generatorDefaultAvator(username, size = 255, bgcolor) {
   ];
   let avatarColor =
     bgcolor == null
-      ? colors[Math.floor(Math.random() * colors.length)]
+      ? colors[Math.floor(serNum % colors.length)]
       : bgcolor == ""
       ? bgcolor
-      : colors[Math.floor(Math.random() * colors.length)];
+      : colors[Math.floor(serNum % colors.length)];
 
   /*根据id获取canvas
    * 如果为空，则创建新的canvas
