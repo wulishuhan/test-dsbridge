@@ -772,7 +772,7 @@ export default {
   text-align: center;
   cursor: pointer;
   background: #e8ebf4;
-  line-height: 62px;
+  line-height: 60px;
   border-radius: 8px;
 }
 
