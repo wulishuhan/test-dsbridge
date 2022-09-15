@@ -661,11 +661,19 @@ export default {
         }
       });
     }
+    console.log("refId", this.parentId);
     if (this.parentId != 0) {
       //调用详解接口
       this.isRefSource = true;
       getResource(parseInt(this.parentId)).then((res) => {
-        this.refResource = res.data.data;
+        var resData = res.data.data;
+        this.refResource = {
+          image: resData.images.length > 0 ? resData.images[0].url : "",
+          title: resData.title,
+          license: resData.license,
+          id: resData.id,
+          creator: resData.creator,
+        };
 
         for (const item of this.licenseSelectList) {
           if (item.value == this.refResource.license) {
@@ -673,6 +681,7 @@ export default {
             break;
           }
         }
+        console.log("refResource", this.refResource);
       });
     }
     this._throttle = this.throttle((swiperArrow) => {
