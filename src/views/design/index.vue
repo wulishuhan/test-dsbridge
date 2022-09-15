@@ -477,7 +477,7 @@ import CollectedOption from "@/components/CollectedOption";
 import RowFolder from "@/components/RowFolder.vue";
 import DownListPanel from "@/components/DownListPanel.vue";
 import Make from "@/views/thing/components/Make.vue";
-import { createCanvas } from "@/utils/common.js";
+import { generatorDefaultAvator } from "@/utils/generateImage.js";
 import {
   deleteCollectionResource,
   getCollectionResourceList,
@@ -716,13 +716,8 @@ export default {
           text: res.url3,
         });
     });
-    this.defaultAvatar = createCanvas(
-      120,
-      120,
-      0,
-      "white",
-      "#555555",
-      "#fff",
+
+    this.defaultAvatar = generatorDefaultAvator(
       this.isYourAccount ? this.userInfo.nick_name : this.user.name
     );
   },
