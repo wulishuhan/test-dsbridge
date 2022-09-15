@@ -103,7 +103,7 @@
                       arrow="hover"
                       ref="carousel"
                       indicator-position="none"
-                      :autoplay="true"
+                      :autoplay="false"
                       @change="carouselChange"
                     >
                       <el-carousel-item
@@ -772,7 +772,7 @@ export default {
   text-align: center;
   cursor: pointer;
   background: #e8ebf4;
-  line-height: 56px;
+  line-height: 62px;
   border-radius: 8px;
 }
 
@@ -864,7 +864,7 @@ a {
 }
 
 .license-info {
-  font-size: 20px;
+  font-size: 16px;
   color: #9e9e9e;
   line-height: 25px;
   margin-top: 22px;
