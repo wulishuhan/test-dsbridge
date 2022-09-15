@@ -5,9 +5,7 @@
         <el-avatar :src="creator.avatar" :size="60"></el-avatar>
         <span class="name">{{ creator.name }}</span>
       </div>
-      <el-button v-if="!followings.includes(creator.id)" @click="follow">
-        Follow
-      </el-button>
+      <el-button v-if="!isFollow" @click="follow"> Follow </el-button>
       <el-button v-else @click="unFollow">Unfollow</el-button>
     </div>
     <div class="recommend-resources">
@@ -22,7 +20,7 @@
 </template>
 <script>
 import { getMoreByThisCreator } from "@/api/resource";
-import { follow, unFollow, getFollowingList } from "@/api/design";
+import { follow, unFollow } from "@/api/design";
 export default {
   name: "UserRecommendation",
   props: {
@@ -51,46 +49,45 @@ export default {
     }).then((res) => {
       this.moreCreateList = res.data.rows;
     });
-    getFollowingList({
-      userId: this.$store.getters.userInfo.user_id,
-    }).then((res) => {
-      let list = res.data.data;
-      for (let i = 0; i < list.length; i++) {
-        this.followings.push(list[i].id);
-      }
-      console.log("getFollowingList: ", this.followings);
-    });
   },
   data() {
     return {
       moreCreateList: [],
-      followings: [],
     };
+  },
+  computed: {
+    isFollow() {
+      return this.$store.getters.myFollowingList.some((item) => {
+        return item.id == this.creator.id;
+      });
+    },
   },
   methods: {
     follow() {
-      console.log(
-        "following",
-        this.$store.getters.userInfo.user_id,
-        this.creator.id
-      );
       follow({
         userId: this.creator.id,
-      }).then(() => {
-        this.followings.push(this.creator.id);
-      });
+      })
+        .then(() => {
+          this.$store.commit("user/SET_FOLLOWINGLIST", [
+            ...this.$store.getters.myFollowingList,
+            this.creator,
+          ]);
+        })
+        .catch(() => {});
     },
     unFollow() {
       unFollow({
         userId: this.creator.id,
-      }).then(() => {
-        for (let i = 0; i < this.followings.length; i++) {
-          if (this.followings[i] === this.creator.id) {
-            this.followings.splice(i, 1);
-            break;
-          }
-        }
-      });
+      })
+        .then(() => {
+          this.$store.commit(
+            "user/SET_FOLLOWINGLIST",
+            this.$store.getters.myFollowingList.filter((item) => {
+              item.id !== this.creator.id;
+            })
+          );
+        })
+        .catch(() => {});
     },
     toMore(id) {
       this.$router.push(`/thing/${id}`);

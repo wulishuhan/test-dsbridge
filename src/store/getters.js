@@ -12,5 +12,6 @@ const getters = {
   searchKeywords: (state) => state.search.userId,
   userInfo: (state) => state.user.userInfo,
   selectCollectionBox: (state) => state.collection.selectCollectionBox,
+  myFollowingList: (state) => state.user.myFollowingList,
 };
 export default getters;
