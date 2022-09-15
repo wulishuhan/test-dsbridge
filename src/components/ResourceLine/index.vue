@@ -1,7 +1,9 @@
 <template>
   <div class="resource-line-wrapper">
     <div class="userinfo">
-      <div class="avatar"><img :src="avatar" /></div>
+      <router-link :to="'/design/' + authorInfo.id">
+        <div class="avatar"><img :src="avatar" /></div>
+      </router-link>
       <div class="follow-wrapper">
         <div class="username">{{ authorInfo.name }}</div>
         <div class="follow-info">
@@ -64,9 +66,7 @@ export default {
         : this.authorInfo.avatar;
     },
   },
-  mounted() {
-    console.log("myFollowingList", this.myFollowingList);
-  },
+  mounted() {},
   methods: {
     handleFollow() {
       console.log(this.authorInfo);
