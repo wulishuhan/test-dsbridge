@@ -60,7 +60,7 @@
 
       <img
         class="img"
-        v-if="user.cover_image.length > 0"
+        v-if="user.cover_image && user.cover_image.length > 0"
         :src="user.cover_image"
         alt=""
       />
@@ -148,7 +148,7 @@
           type="textarea"
           ref="descRef"
           autosize
-          @change="descChange"
+          @blur="descChange"
           v-show="isDescEdit"
           v-model.trim="user.description"
           @keyup.enter.native="descChange"
@@ -451,12 +451,13 @@
   </div>
 </template>
 <script>
-let lock = false;
+var lock = false;
 
 function throttle(func, delay = 60) {
   if (typeof func !== "function") {
     throw "参数必须是函数";
   }
+
   return () => {
     if (lock) {
       return;
@@ -502,9 +503,9 @@ import {
 import { getToken } from "@/utils/auth";
 import { createNamespacedHelpers } from "vuex";
 import { getResource } from "@/api/resource";
-import PostMakeDialog from "@/views/thing/components/PostMakeDialog.vue";
+import PostMakeDialog from "./components/PostMakeDialog.vue";
 import ElImageViewer from "@/components/ImageViewer";
-import ViewMake from "@/views/thing/components/ViewMake.vue";
+import ViewMake from "./components/ViewMake.vue";
 import { getMakeList } from "@/api/user";
 
 const { mapState } = createNamespacedHelpers("user");
@@ -1307,7 +1308,7 @@ export default {
       }
     },
     getMakeList() {
-      getMakeList({ resId: "1" }).then((res) => {
+      getMakeList({ userId: this.userId }).then((res) => {
         this.makes = res.data.rows;
         this.makes.map((item) => {
           item.url = item.image;
@@ -1556,6 +1557,11 @@ export default {
         font-family: Source Han Sans CN;
         font-weight: 500;
         color: #1a1a1a;
+        overflow: hidden;
+        /* 第二步：让文本不会换行， 在同一行继续 */
+        white-space: nowrap;
+        /* 第三步：用省略号来代表未显示完的文本 */
+        text-overflow: ellipsis;
       }
       .follow {
         margin-top: 12px;

@@ -47,6 +47,7 @@
               </router-link>
             </li>
             <!-- <li class="alert">
+              <div v-show="showDot" class="dot"></div>
               <el-button @click.stop="handleShowNotice">
                 <i class="ortur-icon-alert"></i>
               </el-button>
@@ -149,6 +150,7 @@ const { mapState } = createNamespacedHelpers("user");
 export default {
   data() {
     return {
+      showDot: true,
       defaultAvatar: "",
       keywords: "",
       select: "",
@@ -376,6 +378,15 @@ export default {
             position: absolute;
             top: 57px;
             right: 0;
+          }
+          .dot {
+            position: absolute;
+            top: -1px;
+            left: 13px;
+            width: 8px;
+            height: 8px;
+            background: #ff6161;
+            border-radius: 50%;
           }
         }
 

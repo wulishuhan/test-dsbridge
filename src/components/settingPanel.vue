@@ -44,13 +44,13 @@
                   {{ $t("setting.changeName") }}
                 </div>
               </div>
-              <div class="center">
+              <!-- <div class="center">
                 <div class="title">{{ $t("design.email") }}</div>
                 <div class="name">{{ userInfo.email }}</div>
                 <div class="action" @click="handleChangeEmailClick">
                   {{ $t("setting.changeEmail") }}
                 </div>
-              </div>
+              </div> -->
               <div class="bottom">
                 <div class="title">{{ $t("design.password") }}</div>
                 <div class="name">xxxxxxxxxx</div>
@@ -246,6 +246,7 @@ export default {
         sessionStorage.setItem("isBinding", 1);
         console.log(sessionStorage.getItem("isBinding"));
         this.thirdPartyLogin(item.catalog);
+        // item.switch1 = false;
       } else {
         unbindThird({ userId: item.user_id, catalog: item.catalog })
           .then(() => {
@@ -273,11 +274,13 @@ export default {
       getUserInfo().then((res) => {
         this.third_user = res.data.data.third_user;
         for (const item of this.third_user) {
-          this.bindingInfo[item.catalog].switch1 = true;
-          this.bindingInfo[item.catalog].user_id = item.user_id;
-          this.bindingInfo[item.catalog].email = item.email;
-          this.bindingInfo[item.catalog].username = item.username;
-          this.bindingInfo[item.catalog].catalog = item.catalog;
+          if (item.catalog) {
+            this.bindingInfo[item.catalog].switch1 = true;
+            this.bindingInfo[item.catalog].user_id = item.user_id;
+            this.bindingInfo[item.catalog].email = item.email;
+            this.bindingInfo[item.catalog].username = item.username;
+            this.bindingInfo[item.catalog].catalog = item.catalog;
+          }
         }
         this.dialogFollowersVisible = true;
       });
