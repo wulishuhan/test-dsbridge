@@ -69,7 +69,7 @@ export default {
       type: Number,
       default: 0,
     },
-    makeId: {
+    resId: {
       type: Number,
       default: 0,
     },
@@ -127,9 +127,7 @@ export default {
       this.handlePost();
     },
     handlePost() {
-      // let resId = this.makeId || parseInt(this.$route.params.thingId);
-      let resId = parseInt(this.$route.params.thingId);
-      debugger;
+      let resId = parseInt(this.$route.params.thingId) || this.resId;
       if (this.comment == "") {
         this.$message({
           message: "评论不能为空",

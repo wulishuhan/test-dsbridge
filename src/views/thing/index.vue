@@ -359,7 +359,7 @@ export default {
         collect_count: "",
         creator: {
           avatar: "",
-          name: "UNKNOW",
+          name: "",
         },
         description: "",
         files: [],

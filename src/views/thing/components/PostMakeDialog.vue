@@ -118,8 +118,14 @@ export default {
     },
     uploadBefore(file) {
       console.log("upload before file", file);
+      let whiteList = ["png", "jpg", "jpeg", "svg", "gif"];
       if (file.name.length > 50) {
         this.$message.error("文件名过长！");
+        return false;
+      } else if (
+        !whiteList.includes(file.name.substring(file.name.lastIndexOf(".") + 1))
+      ) {
+        this.$message.error("只接受" + whiteList + "格式");
         return false;
       }
       return true;

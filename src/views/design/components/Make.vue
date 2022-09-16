@@ -10,7 +10,7 @@
         <div class="makes-mask" @click="openMake" v-show="showMask">
           <div class="makes-mask-font-container">
             <span class="ortur-icon-message"></span>
-            12
+            {{ make.comment_count }}
             <span class="el-icon-arrow-right"></span>
           </div>
           <div
@@ -141,11 +141,13 @@ export default {
   .ortur-icon-message {
     position: relative;
     top: 2px;
+    margin-left: 10px;
+  }
+  .el-icon-arrow-right {
   }
   .makes-mask-font-container {
     color: #fff;
     font-size: 16px;
-    margin-left: 25px;
   }
 }
 .more-image-box {
