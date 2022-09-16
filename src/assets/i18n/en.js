@@ -2,7 +2,15 @@ module.exports = {
   login: {
     title: "this title",
     username: "Please enter the user name",
+    usernameLengthLimit: "Username length is limited to 5 to 20 characters",
     password: "Please enter your password",
+    passwordLengthLimit: "Password length is limited to 5 to 50 characters",
+    passwordDifferent: "Please enter the password again",
+    email: "Please enter your email",
+    emailLengthLimit: "Email length is limited to 5 to 50 characters",
+    emailErrorInput: "Please input the correct email address",
+    openLoginRegisterFirst: "Please register first",
+    openLoginLoginFirst: "Please login first",
   },
   header: {
     language: "Language",
@@ -104,5 +112,27 @@ module.exports = {
     changePassword: "Change password",
     changeName: "Change name",
     newName: "New name",
+  },
+  error: {
+    serverDatabaseError: "server database error",
+    serverError: "server error",
+    created: "Created",
+    unauthenticated: "Unauthenticated",
+    forbidden: "Forbidden",
+    notFound: "Not Found",
+    usernameAndPasswordMustEnter: "username and password must be entered",
+    usernameAndPasswordRange:
+      "username or password are not in the specified range",
+    usernameRange: "username is not in the specified range",
+    emailRange: "email is not in the specified range",
+    usernameExist: "The username already exists",
+    emailExist: "The email already exists",
+    accountDeleted: "Sorry, your account has been deleted",
+    accountDisabled:
+      "this account has been disabled. Please contact the administrator",
+    usernameOrEmailError: "Incorrect username or password",
+    tokenExpired: "token expired",
+    deviceNotSupported: "Your device does not support logins",
+    usernameNotExist: "username does not exist",
   },
 };

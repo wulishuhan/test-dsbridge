@@ -76,6 +76,9 @@ export default {
       }
       return sizeText;
     },
+    downloadUrl() {
+      return `${process.env.VUE_APP_BASE_API}/library/resource/download/${this.file.id}?not-from-cache-please`;
+    },
   },
   mounted() {
     let arr = this.file.name.split(".");
@@ -86,16 +89,13 @@ export default {
     download() {
       //?not-from-cache-please是处理google浏览器下载跨域
       axios
-        .get(
-          `/dev-api/library/resource/download/${this.file.id}?not-from-cache-please`,
-          {
-            responseType: "blob",
-            method: "get",
-            headers: {
-              "Access-Control-Allow-Origin": "*",
-            },
-          }
-        )
+        .get(this.downloadUrl, {
+          responseType: "blob",
+          method: "get",
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+          },
+        })
         .then((res) => {
           saveAs(res.data, this.file.name);
           this.downloadNum += 1;

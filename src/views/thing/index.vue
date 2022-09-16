@@ -14,8 +14,12 @@
                     :size="40"
                     :src="avatar"
                     :fit="'cover'"
+                    @click.native="toUserProfileView"
                   ></el-avatar>
-                  <div class="flex flex-column user-name-update-time">
+                  <div
+                    class="flex flex-column user-name-update-time"
+                    @click="toUserProfileView"
+                  >
                     <span class="user-name">{{ detail.creator.name }}</span>
                     <span class="update-time">
                       {{ $d(new Date(detail.update_time), "long") }}</span
@@ -561,7 +565,8 @@ export default {
       }
     },
     toUserProfileView() {
-      this.$router.push(`/design/Favorites/${this.detail.creator.id}`);
+      console.log("test");
+      this.$router.push(`/design/${this.detail.creator.id}`);
     },
     openViewAllDialog(name) {
       this.viewMoreActive = name;
