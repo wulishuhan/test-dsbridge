@@ -312,7 +312,7 @@
                     class="Make"
                     @clickDownMenu="Handler_Down(item)"
                     @clickDelMenu="handleDelClick(item)"
-                    @openMake="openMake"
+                    @openMake="openMake(item)"
                     @getIndex="getIndex"
                     :make="item"
                     :index="index"
@@ -527,6 +527,7 @@ export default {
   },
   data() {
     return {
+      makeId: "",
       defaultAvatar: "",
       // dialogViewMake: false,
       makes: [],
@@ -734,8 +735,10 @@ export default {
       console.log(index);
       this.index = index;
     },
-    openMake() {
+    openMake(item) {
+      this.makeId = item.id;
       this.showMake = true;
+      debugger;
       document.documentElement.style.overflowY = "hidden";
     },
     closeMake() {
