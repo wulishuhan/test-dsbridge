@@ -110,6 +110,7 @@
       <reply-widget
         @closeReplyModal="handleClose('outer')"
         :comment-id="currentCommentId"
+        :makeId="make.id"
       ></reply-widget>
     </el-dialog>
   </div>
