@@ -1,116 +1,63 @@
 <template>
   <div class="comment-wrapper">
-    <div v-if="!comment.replies">暂无评论</div>
-    <div v-else class="comment-count">{{ comment.replies.length }}条回复</div>
-    <div
-      v-for="(commentItem, commentIndex) in commentList"
-      :key="commentItem.id"
-    >
-      <comment-content
-        :comment="commentItem"
-        :showReplyDialog="showReplyOuterDialog"
-        :commentIndex="commentIndex"
-      ></comment-content>
-      <div class="reply-wrapper" v-if="commentItem.replies.length > 0">
-        <div
-          class="reply-item"
-          v-for="(replyItem, replyIndex) in commentItem.replies.slice(0, 3)"
-          :key="replyIndex"
-        >
-          <div class="makes-reply-left-line"></div>
-          <comment-content
-            :comment="replyItem"
-            :showReplyDialog="showReplyOuterDialogFromReply"
-            :commentIndex="commentIndex"
-            :replyIndex="replyIndex"
-          ></comment-content>
-        </div>
-        <el-button
-          @click="showReplyList(commentIndex)"
-          class="reply-list-fold"
-          v-if="commentItem.replies.length > 3"
-        >
-          <span style="font-size: 12px">View all replies </span>
-          <span style="margin-right: 6px; color: #999">{{
-            commentItem.replies ? commentItem.replies.length : 0
-          }}</span>
-          <i class="el-icon-right" style="color: #999"></i>
-        </el-button>
+    <div v-if="!commentListFromId.rows">暂无评论</div>
+    <div v-else class="comment-count">
+      {{ commentListFromId.rows.length }}条回复
+    </div>
+    <div class="userinfo-wrapper">
+      <div class="profile">
+        <span class="user-avatar">
+          <img :src="make.user.avatar" />
+        </span>
+        <span class="nickname">
+          {{ make.user.name }}
+        </span>
+        <span class="release-date">
+          {{ $d(new Date(make.create_time), "long") }}
+        </span>
+      </div>
+      <div class="message-btn" @click="showCommentInnerDialog()">
+        <el-button><i class="ortur-icon-message"></i></el-button>
       </div>
     </div>
-    <el-dialog
-      :title="replyTotalRows"
-      :visible.sync="replyListDialog"
-      width="900px"
-    >
-      <div class="userinfo-wrapper">
-        <div class="profile">
-          <span class="user-avatar">
-            <img :src="currentComment.user.avatar" />
-          </span>
-          <span class="nickname">
-            {{ currentComment.user.name }}
-          </span>
-          <span class="release-date">
-            {{ $d(new Date(currentComment.create_time), "long") }}
-          </span>
-        </div>
-        <div class="message-btn" @click="showCommentInnerDialog()">
-          <el-button><i class="ortur-icon-message"></i></el-button>
-        </div>
-      </div>
-      <div class="comment">{{ currentComment.content }}</div>
-      <div class="reply-list">
-        <div v-for="(replyRow, id) in currentComment.replies" :key="id">
-          <div class="userinfo-wrapper">
-            <div class="profile">
-              <span class="user-avatar"
-                ><img :src="replyRow.user.avatar"
-              /></span>
-              <span class="nickname">{{ replyRow.user.name }}</span>
-              <span class="release-date">
-                {{ $d(new Date(replyRow.create_time), "long") }}
-              </span>
-            </div>
-            <div class="message-btn" @click="showReplyInnerDialog(id)">
-              <el-button><i class="ortur-icon-message"></i></el-button>
-            </div>
+    <div class="comment">{{ make.content }}</div>
+    <div class="reply-list">
+      <div v-for="(replyRow, id) in commentListFromId.rows" :key="id">
+        <div class="userinfo-wrapper">
+          <div class="profile">
+            <span class="user-avatar"><img :src="replyRow.user.avatar" /></span>
+            <span class="nickname">{{ replyRow.user.name }}</span>
+            <span class="release-date">
+              {{ $d(new Date(replyRow.create_time), "long") }}
+            </span>
           </div>
-          <div class="reply-wrapper">
-            <div class="comment-detail">{{ replyRow.content }}</div>
-            <div
-              class="reply-ref-detail"
-              v-if="JSON.stringify(replyRow.refer) != '{}'"
-            >
-              <span class="reply-label">回复</span>
-              &nbsp;
-              <span class="reply-nickname">{{
-                "@" + replyRow.refer.user.name
-              }}</span>
-              &nbsp;
-              <span class="reply-comment">{{ replyRow.refer.content }}</span>
-            </div>
+          <div class="message-btn" @click="showReplyInnerDialog(id)">
+            <el-button><i class="ortur-icon-message"></i></el-button>
+          </div>
+        </div>
+        <div class="reply-wrapper">
+          <div class="comment-detail">{{ replyRow.content }}</div>
+          <div
+            class="reply-ref-detail"
+            v-if="JSON.stringify(replyRow.refer) != '{}'"
+          >
+            <span class="reply-label">回复</span>
+            &nbsp;
+            <span class="reply-nickname">{{
+              "@" + replyRow.refer.user.name
+            }}</span>
+            &nbsp;
+            <span class="reply-comment">{{ replyRow.refer.content }}</span>
           </div>
         </div>
       </div>
-      <el-dialog
-        :title="replyTo"
-        :visible.sync="innerVisible"
-        append-to-body
-        top="35vh"
-      >
-        <reply-widget
-          @closeReplyModal="handleClose('inner')"
-          :comment-id="currentCommentId"
-        ></reply-widget>
-      </el-dialog>
-    </el-dialog>
-
-    <el-dialog :title="replyTo" :visible.sync="outerVisible">
+    </div>
+    <el-dialog :title="replyTo" :visible.sync="innerVisible" top="35vh">
       <reply-widget
-        @closeReplyModal="handleClose('outer')"
+        @closeReplyModal="handleClose('inner')"
         :comment-id="currentCommentId"
         :resId="make.id"
+        :primaryCommentId="make.id"
       ></reply-widget>
     </el-dialog>
   </div>
@@ -118,9 +65,9 @@
 
 <script>
 import ReplyWidget from "@/components/Comment/ReplyWidget.vue";
-import CommentContent from "@/components/Comment/CommentContent.vue";
-import { getMakeDetail } from "@/api/user";
-import { mapGetters } from "vuex";
+// import CommentContent from "@/components/Comment/CommentContent.vue";
+import { mapGetters, mapState } from "vuex";
+import { generatorDefaultAvator } from "@/utils/generateImage";
 export default {
   props: {
     make: {
@@ -133,6 +80,10 @@ export default {
   },
   computed: {
     ...mapGetters(["isLogin"]),
+    ...mapState({
+      userInfo: (state) => state.user.userInfo,
+      commentListFromId: (state) => state.comment.commentListFromId,
+    }),
   },
   data() {
     return {
@@ -156,22 +107,22 @@ export default {
       currentResId: 0,
       keywords: "",
       select: "",
-      commentList: [],
       comment: {},
     };
   },
   components: {
-    CommentContent,
+    // CommentContent,
     ReplyWidget,
   },
   mounted() {
     this.comment = this.make;
-    getMakeDetail({
-      commentId: this.make.id,
-    }).then((res) => {
-      this.comment.replies = res.data.rows;
-      this.commentList.push(this.comment);
-    });
+    if (!this.comment.user.avatar) {
+      this.comment.user.avatar = generatorDefaultAvator(
+        this.comment.user.name,
+        this.comment.user.id
+      );
+    }
+    this.$store.dispatch("comment/getCommentListFromId", this.make.id);
   },
   methods: {
     handleClose(space) {
@@ -180,54 +131,24 @@ export default {
       } else {
         this.outerVisible = false;
       }
-      getMakeDetail({
-        commentId: this.make.id,
-      }).then((res) => {
-        this.comment.replies = res.data.rows;
-        this.commentList = [this.comment];
-        console.log(space, "okok");
-      });
-    },
-    showReplyOuterDialog(index) {
-      if (!this.isLogin) {
-        this.showLoginDialog();
-        this.$emit("closeAll");
-        return;
-      }
-      this.outerVisible = true;
-      this.currentComment = this.commentList[index];
-      this.currentCommentId = this.currentComment.id;
-      this.replyTo = "reply to " + this.currentComment.user.name;
-    },
-    showReplyOuterDialogFromReply(commentIndex, replyIndex) {
-      if (!this.isLogin) {
-        this.showLoginDialog();
-        this.$emit("closeAll");
-        return;
-      }
-      this.outerVisible = true;
-      this.currentComment = this.commentList[commentIndex];
-      console.log("replyIndex:" + replyIndex);
-
-      this.currentCommentId =
-        this.commentList[commentIndex].replies[replyIndex].id;
-      this.replyTo = "reply to " + this.currentComment.user.name;
     },
     showCommentInnerDialog() {
+      if (!this.isLogin) {
+        this.showLoginDialog();
+        this.$emit("closeAll");
+        return;
+      }
       this.innerVisible = true;
-      this.replyTo = "reply to " + this.currentComment.user.name;
-      this.currentCommentId = this.currentComment.id;
+      this.replyTo = "reply to " + this.comment.user.name;
+      this.currentCommentId = this.comment.id;
     },
     showReplyInnerDialog(replyIndex) {
+      console.log("inner dialog with", typeof replyIndex, replyIndex);
       this.innerVisible = true;
+      console.log("inner dialog", this.innerVisible);
       this.replyTo =
-        "reply to " + this.currentComment.replies[replyIndex].user.name;
-      this.currentCommentId = this.currentComment.replies[replyIndex].id;
-    },
-    showReplyList(index) {
-      this.replyListDialog = true;
-      this.currentComment = this.commentList[index];
-      this.replyTotalRows = this.currentComment.replies.length + "条回复";
+        "reply to " + this.commentListFromId.rows[replyIndex].user.name;
+      this.currentCommentId = this.commentListFromId.rows[replyIndex].id;
     },
     showLoginDialog() {
       let payload = { loginDialogVisible: true, isLoginForm: true };

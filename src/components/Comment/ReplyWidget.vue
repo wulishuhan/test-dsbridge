@@ -128,9 +128,6 @@ export default {
     },
     handlePost() {
       let resId = parseInt(this.$route.params.thingId) || this.resId;
-      debugger;
-      // let resId = parseInt(this.$route.params.thingId);
-      debugger;
       if (this.comment == "") {
         this.$message({
           message: "评论不能为空",
