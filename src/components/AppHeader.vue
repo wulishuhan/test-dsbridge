@@ -72,9 +72,7 @@
               <el-dropdown class="el-dropdown-userinfo">
                 <el-button>
                   <span>
-                    <img
-                      :src="userInfo.avatar ? userInfo.avatar : defaultAvatar"
-                    />
+                    <img :src="userInfo.avatar" />
                     <i class="el-icon-arrow-down el-icon--right"></i>
                   </span>
                 </el-button>
@@ -84,9 +82,7 @@
                 >
                   <el-dropdown-item class="header-userinfo">
                     <div class="header-avatar">
-                      <img
-                        :src="userInfo.avatar ? userInfo.avatar : defaultAvatar"
-                      />
+                      <img :src="userInfo.avatar" />
                     </div>
                     <div class="username-and-email">
                       <span class="username">{{ userInfo.nick_name }}</span>
@@ -144,14 +140,12 @@ import Login from "@/components/Login";
 import settingPanel from "@/components/settingPanel";
 import { createNamespacedHelpers } from "vuex";
 import { bindThird } from "@/api/user";
-import { generatorDefaultAvator } from "@/utils/generateImage.js";
 
 const { mapState } = createNamespacedHelpers("user");
 export default {
   data() {
     return {
       showDot: true,
-      defaultAvatar: "",
       keywords: "",
       select: "",
       isThirdPartyRegisterForm: false,
@@ -179,10 +173,6 @@ export default {
     ]),
   },
   mounted() {
-    this.defaultAvatar = generatorDefaultAvator(
-      this.userInfo.nick_name,
-      this.userInfo.user_id
-    );
     let isBinding = sessionStorage.getItem("isBinding");
     console.log("isBinding: ", isBinding);
 

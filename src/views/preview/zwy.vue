@@ -6,6 +6,13 @@
     <editor-content :editor="editor" class="desc-editor" />
     <VEmojiPicker @mousedown="testClick($event)" @select="selectEmoji" />
     <img :src="getImg()" />
+    <div class="test">
+      <div>11</div>
+      <div>11</div>
+      <div>11</div>
+      <div>11</div>
+      <div>11</div>
+    </div>
   </div>
 </template>
 <script>
