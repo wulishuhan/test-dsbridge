@@ -110,7 +110,9 @@
           <img
             class="img"
             v-if="
-              (isYourAccount && userInfo.avatar.length == 0) ||
+              (isYourAccount &&
+                userInfo.avatar &&
+                userInfo.avatar.length == 0) ||
               user.avatar.length == 0
             "
             :src="defaultAvatar"
@@ -119,7 +121,9 @@
             class="img"
             mode="widthFix"
             v-else-if="
-              (isYourAccount && userInfo.avatar.length > 0) ||
+              (isYourAccount &&
+                userInfo.avatar &&
+                userInfo.avatar.length > 0) ||
               user.avatar.length > 0
             "
             :src="isYourAccount ? userInfo.avatar : user.avatar"
@@ -651,7 +655,9 @@ export default {
           console.log(1);
         }
       } else {
-        this.$router.push("/");
+        if (this.isYourAccount) {
+          // this.$router.push("/");
+        }
       }
     },
   },
@@ -685,6 +691,9 @@ export default {
       } else {
         this.getResourceList();
       }
+    }
+    if (this.isYourAccount && !this.isLogin) {
+      this.$router.replace("/");
     }
     this.userId = this.isYourAccount ? this.userInfo.user_id : this.user.userId;
     this.contextMenuData.menulists[0].disabled = !this.isYourAccount;

@@ -38,7 +38,7 @@ const mutations = {
     state.userInfo = payload.user_info;
     // eslint-disable-next-line
     state.userInfo.avatar = !!payload.user_info.avatar
-      ? payload.avatar
+      ? payload.user_info.avatar
       : generatorDefaultAvator(
           payload.user_info.user_name,
           payload.user_info.user_id
