@@ -12,12 +12,14 @@ const routes = [
     redirect: "/main",
     meta: {
       title: "ortur library",
+      keepAlive: true,
     },
     children: [
       {
         path: "/main",
         meta: {
           title: "ortur library",
+          // keepAlive: true,
         },
         component: () => import("@/views/main/index"),
       },
