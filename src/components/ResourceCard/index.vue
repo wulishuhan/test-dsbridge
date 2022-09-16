@@ -62,6 +62,7 @@
             :src="avatar"
             :fit="'cover'"
             slot="reference"
+            @click.native="viewAuthorInfo(thing.creator && thing.creator.id)"
           ></el-avatar>
         </el-popover>
         <div class="card-box-bottom-left-name">
@@ -439,6 +440,9 @@ export default {
 .author:hover {
   border-bottom: solid 1px #000;
   color: #000;
+  cursor: pointer;
+}
+.el-avatar {
   cursor: pointer;
 }
 .card-box:hover {

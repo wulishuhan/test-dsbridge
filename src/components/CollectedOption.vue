@@ -84,6 +84,11 @@ export default {
       return [{ id: 0, name: "Draft" }, ...this.folders];
     },
   },
+  watch: {
+    show(newVal, oldVal) {
+      if (!newVal) this.cancelFolder();
+    },
+  },
   methods: {
     addFolder() {
       this.isNewFileLink = true;

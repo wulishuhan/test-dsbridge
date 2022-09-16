@@ -2,8 +2,14 @@
   <div class="user-card">
     <div class="user-info">
       <div class="user-info-avatar-name">
-        <el-avatar :src="avatar" :size="60"></el-avatar>
-        <span class="name">{{ creator.name }}</span>
+        <el-avatar
+          :src="avatar"
+          :size="60"
+          @click.native="viewAuthorInfo(creator.id)"
+        ></el-avatar>
+        <span class="name" @click="viewAuthorInfo(creator.id)">{{
+          creator.name
+        }}</span>
       </div>
       <el-button v-if="!isFollow" @click="follow"> Follow </el-button>
       <el-button v-else @click="unFollow">Unfollow</el-button>
@@ -98,6 +104,9 @@ export default {
     toMore(id) {
       this.$router.push(`/thing/${id}`);
     },
+    viewAuthorInfo(userId) {
+      this.$router.push(`/design/${userId}`);
+    },
   },
 };
 </script>
@@ -119,6 +128,7 @@ export default {
       display: flex;
       align-items: center;
       justify-content: space-between;
+      cursor: pointer;
       .name {
         font-size: 20px;
         margin-left: 17px;
