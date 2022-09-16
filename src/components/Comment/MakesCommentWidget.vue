@@ -61,7 +61,7 @@
       </div>
       <div class="comment">{{ currentComment.content }}</div>
       <div class="reply-list">
-        <div v-for="(replyRow, id) in commentListFromId.rows" :key="id">
+        <div v-for="(replyRow, id) in currentComment.replies" :key="id">
           <div class="userinfo-wrapper">
             <div class="profile">
               <span class="user-avatar"
@@ -175,15 +175,27 @@ export default {
   },
   mounted() {
     this.comment = this.make;
-    // getMakeDetail({
-    //   commentId: this.make.id,
-    // }).then((res) => {
-    //   this.comment.replies = res.data.rows;
-    //   this.commentList.push(this.comment);
-    // });
-    this.$store.dispatch("comment/getCommentListFromId", this.make.id);
-    this.comment.replies = this.commentListFromId.rows;
-    this.commentList.push(this.comment);
+    if (!this.comment.user.avatar) {
+      this.comment.user.avatar = generatorDefaultAvator(
+        this.comment.user.name,
+        this.comment.user.id
+      );
+    }
+    getMakeDetail({
+      commentId: this.make.id,
+    }).then((res) => {
+      let replies = res.data.rows;
+      for (let i = 0; i < replies.length; i++) {
+        if (!replies[i].user.avatar) {
+          replies[i].user.avatar = generatorDefaultAvator(
+            replies[i].user.name,
+            replies[i].user.id
+          );
+        }
+      }
+      this.comment.replies = replies;
+      this.commentList.push(this.comment);
+    });
   },
   methods: {
     handleClose(space) {
