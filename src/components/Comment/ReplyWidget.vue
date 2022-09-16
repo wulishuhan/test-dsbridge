@@ -69,6 +69,10 @@ export default {
       type: Number,
       default: 0,
     },
+    makeId: {
+      type: Number,
+      default: 0,
+    },
   },
   mounted() {
     this.editor = new Editor({
@@ -123,7 +127,9 @@ export default {
       this.handlePost();
     },
     handlePost() {
+      // let resId = this.makeId || parseInt(this.$route.params.thingId);
       let resId = parseInt(this.$route.params.thingId);
+      debugger;
       if (this.comment == "") {
         this.$message({
           message: "评论不能为空",
