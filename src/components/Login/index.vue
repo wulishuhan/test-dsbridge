@@ -254,7 +254,7 @@ export default {
   data() {
     var validatePass1 = (rule, value, callback) => {
       if (value === "") {
-        callback(new Error("请输入密码"));
+        callback(new Error(this.$t("login.password")));
       } else {
         if (this.registerForm.password !== "") {
           this.$refs.registerForm.validateField("password2");
@@ -264,9 +264,9 @@ export default {
     };
     var validatePass2 = (rule, value, callback) => {
       if (value === "") {
-        callback(new Error("请再次输入密码"));
+        callback(new Error(this.$t("login.password")));
       } else if (value !== this.registerForm.password) {
-        callback(new Error("两次输入密码不一致!"));
+        callback(new Error(this.$t("login.passwordDifferent")));
       } else {
         callback();
       }
@@ -289,12 +289,12 @@ export default {
         if (this.isComplete) {
           callback();
         } else {
-          callback(new Error("please register first"));
+          callback(new Error(this.$t("login.openLoginRegisterFirst")));
         }
       }
       if (this.openLoginMsg === 1021) {
         if (email === value) {
-          callback(new Error("please login first"));
+          callback(new Error(this.$t("login.openLoginLoginFirst")));
         } else {
           callback();
         }
@@ -321,16 +321,16 @@ export default {
       show: true,
       rules: {
         email: [
-          { required: true, message: "请输入邮箱", trigger: "blur" },
+          { required: true, message: this.$t("login.email"), trigger: "blur" },
           {
             min: 5,
             max: 50,
-            message: "长度在 5 到 50 个字符",
+            message: this.$t("login.emailLengthLimit"),
             trigger: "blur",
           },
           {
             type: "email",
-            message: "请输入正确的邮箱地址",
+            message: this.$t("login.emailErrorInput"),
             trigger: ["blur", "change"],
           },
           {
@@ -339,20 +339,28 @@ export default {
           },
         ],
         username: [
-          { required: true, message: "请输入用户名", trigger: "blur" },
+          {
+            required: true,
+            message: this.$t("login.username"),
+            trigger: "blur",
+          },
           {
             min: 5,
             max: 20,
-            message: "长度在 5 到 20 个字符",
+            message: this.$t("login.usernameLengthLimit"),
             trigger: "blur",
           },
         ],
         password: [
-          { required: true, message: "请输入密码", trigger: "blur" },
+          {
+            required: true,
+            message: this.$t("login.password"),
+            trigger: "blur",
+          },
           {
             min: 5,
             max: 20,
-            message: "长度在 5 到 20 个字符",
+            message: this.$t("login.passwordLengthLimit"),
             trigger: "blur",
           },
         ],
@@ -422,6 +430,7 @@ export default {
               }
             })
             .catch((e) => {
+              console.log("ee", e);
               this.registerFormTip = e.msg;
               this.$refs.registerForm.validateField("email");
             });
@@ -469,6 +478,7 @@ export default {
       this.$emit("handleClose");
       this.$refs.loginForm.resetFields();
       this.$refs.registerForm.resetFields();
+      this.registerForm.password = "";
       this.isComplete = false;
       // this.$refs.thirdPartyRegisterForm.resetFields();
     },
