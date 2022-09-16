@@ -802,8 +802,6 @@ export default {
           type: "warning",
         });
       }
-      accept = true;
-
       let fileInfo = {
         uid: file.uid,
         url: "",
@@ -817,11 +815,11 @@ export default {
       //获取缩略图
 
       let res = await this.genThumb(file);
-      console.log("res", res);
-      fileInfo.thumbnail = res.data.data.url;
+      if (res && res.code == 0) {
+        fileInfo.thumbnail = res.data.data.url;
+      }
       this.resourceForm.files.push(fileInfo);
-      console.log(this.resourceForm, res);
-      return accept && res.code == 0;
+      return accept;
     },
     beforeUpload(file) {
       let extension = file.name.substring(file.name.lastIndexOf(".") + 1);
