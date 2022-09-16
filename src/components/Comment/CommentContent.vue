@@ -57,6 +57,9 @@ export default {
       type: Number,
     },
   },
+  mounted() {
+    console.log(this.comment);
+  },
 };
 </script>
 <style lang="scss" scoped>

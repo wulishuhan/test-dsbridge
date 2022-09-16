@@ -10,6 +10,7 @@ const state = {
 
 const mutations = {
   SET_COMMENT_LIST: (state, payload) => {
+    console.log("comment_list", payload);
     state.commentList = payload;
   },
   SET_COMMENT_LIST_FROM_ID: (state, payload) => {
@@ -36,8 +37,8 @@ const actions = {
               : generatorDefaultAvator(item.user.name, item.user.id);
             item.replies.forEach((subItem) => {
               // eslint-disable-next-line
-              subItem.user.avatar = !!item.user.avatar
-                ? item.user.avatar
+              subItem.user.avatar = !!subItem.user.avatar
+                ? subItem.user.avatar
                 : generatorDefaultAvator(subItem.user.name, subItem.user.id);
             });
           });

@@ -13,13 +13,7 @@
         >
           <div class="wrapper">
             <div class="left">
-              <img
-                class="img"
-                alt=""
-                v-if="userInfo.avatar.length > 0"
-                :src="userInfo.avatar"
-              />
-              <img class="img" v-else :src="defaultAvatar" />
+              <img class="img" alt="" :src="userInfo.avatar" />
               <el-upload
                 class="upload-demo"
                 :headers="headers"
@@ -140,7 +134,6 @@ import { getToken } from "@/utils/auth";
 import ChangeEmailPassword from "@/components/ChangeEmailPassword.vue";
 import ChangeName from "@/components/ChangeName.vue";
 import { unbindThird, getUserInfo } from "@/api/user";
-import { generatorDefaultAvator } from "@/utils/generateImage.js";
 
 export default {
   components: {
@@ -149,7 +142,6 @@ export default {
   },
   data() {
     return {
-      defaultAvatar: "",
       third_user: [],
       isChangeNameVisible: false,
       ChangePasswordOrEmail: false,
@@ -222,10 +214,6 @@ export default {
     // getUserInfo().then((e) => {
     //   this.third_user = e.data.data.third_user;
     // });
-    this.defaultAvatar = generatorDefaultAvator(
-      this.userInfo.nick_name,
-      this.userInfo.user_id
-    );
   },
 
   computed: {
@@ -277,21 +265,21 @@ export default {
             this.bindingInfo[item.catalog].catalog = item.catalog;
           }
         }
+        this.headers.Authorization = getToken();
         this.dialogFollowersVisible = true;
       });
     },
-    async handleBeforeImgUpload(file) {
+    handleBeforeImgUpload() {
       // const isJPG = file.type === "image/jpeg";
-      const isLt1M = file.size / 1024 / 1024 < 1;
-
+      // const isLt1M = file.size / 1024 / 1024 < 1;
       // if (!isJPG) {
       //   this.$message.error("上传头像图片只能是 JPG 格式!");
       // }
-      if (!isLt1M) {
-        this.$message.error("上传头像图片大小不能超过 1MB!");
-      }
+      // if (!isLt1M) {
+      //   this.$message.error("上传头像图片大小不能超过 1MB!");
+      // }
       // return isJPG && isLt2M;
-      return isLt1M;
+      // return isLt1M;
     },
 
     handleImgUploadErr(err) {

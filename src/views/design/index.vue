@@ -107,22 +107,12 @@
                 : 'http://dummyimage.com/300x200/96f279/FFF&text=' + user.name
             "
           /> -->
-          <img
-            class="img"
-            v-if="
-              (isYourAccount && userInfo.avatar.length == 0) ||
-              user.avatar.length == 0
-            "
-            :src="defaultAvatar"
-          />
+          <img class="img" v-if="isYourAccount" :src="userInfo.avatar" />
           <img
             class="img"
             mode="widthFix"
-            v-else-if="
-              (isYourAccount && userInfo.avatar.length > 0) ||
-              user.avatar.length > 0
-            "
-            :src="isYourAccount ? userInfo.avatar : user.avatar"
+            v-else
+            :src="user.avatar ? user.avatar : defaultAvatar"
             alt=""
           />
         </div>
@@ -499,7 +489,7 @@ import { getResource } from "@/api/resource";
 // import PostMakeDialog from "./components/PostMakeDialog.vue";
 import ElImageViewer from "@/components/ImageViewer";
 // import ViewMake from "@/views/thing/components/ViewMake.vue";
-import Make from "@/views/thing/components/Make.vue";
+import Make from "./components/Make.vue";
 
 import { getMakeList } from "@/api/user";
 
@@ -651,7 +641,9 @@ export default {
           console.log(1);
         }
       } else {
-        this.$router.push("/");
+        if (this.isYourAccount) {
+          // this.$router.push("/");
+        }
       }
     },
   },
@@ -685,6 +677,9 @@ export default {
       } else {
         this.getResourceList();
       }
+    }
+    if (this.isYourAccount && !this.isLogin) {
+      this.$router.replace("/");
     }
     this.userId = this.isYourAccount ? this.userInfo.user_id : this.user.userId;
     this.contextMenuData.menulists[0].disabled = !this.isYourAccount;
@@ -1177,18 +1172,17 @@ export default {
         text: "",
       });
     },
-    async handleBeforeImgUpload(file) {
+    handleBeforeImgUpload() {
       // const isJPG = file.type === "image/jpeg";
-      const isLt1M = file.size / 1024 / 1024 < 1;
-
+      // const isLt1M = file.size / 1024 / 1024 < 1;
       // if (!isJPG) {
       //   this.$message.error("上传头像图片只能是 JPG 格式!");
       // }
-      if (!isLt1M) {
-        this.$message.error("上传头像图片大小不能超过 1MB!");
-      }
+      // if (!isLt1M) {
+      //   this.$message.error("上传头像图片大小不能超过 1MB!");
+      // }
       // return isJPG && isLt2M;
-      return isLt1M;
+      // return isLt1M;
     },
 
     handleImgUploadErr(err) {
