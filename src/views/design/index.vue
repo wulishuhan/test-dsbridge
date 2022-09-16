@@ -299,13 +299,7 @@
                   :makes="makes"
                   :isShow.sync="dialogViewMake"
                 ></ViewMake> -->
-                <div
-                  style="
-                    display: flex;
-                    flex-wrap: wrap;
-                    justify-content: space-between;
-                  "
-                >
+                <div style="display: flex; flex-wrap: wrap">
                   <Make
                     v-for="(item, index) in makes"
                     :key="item.id"
@@ -1331,6 +1325,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .Make {
+  margin-right: 40px;
   margin-bottom: 45px;
   $width: 228px;
   ::v-deep .more-image {
