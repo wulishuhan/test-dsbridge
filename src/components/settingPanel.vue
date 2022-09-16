@@ -16,7 +16,7 @@
               <img
                 class="img"
                 alt=""
-                v-if="userInfo.avatar.length > 0"
+                v-if="userInfo.avatar && userInfo.avatar.length > 0"
                 :src="userInfo.avatar"
               />
               <img class="img" v-else :src="defaultAvatar" />
@@ -277,21 +277,21 @@ export default {
             this.bindingInfo[item.catalog].catalog = item.catalog;
           }
         }
+        this.headers.Authorization = getToken();
         this.dialogFollowersVisible = true;
       });
     },
-    async handleBeforeImgUpload(file) {
+    handleBeforeImgUpload() {
       // const isJPG = file.type === "image/jpeg";
-      const isLt1M = file.size / 1024 / 1024 < 1;
-
+      // const isLt1M = file.size / 1024 / 1024 < 1;
       // if (!isJPG) {
       //   this.$message.error("上传头像图片只能是 JPG 格式!");
       // }
-      if (!isLt1M) {
-        this.$message.error("上传头像图片大小不能超过 1MB!");
-      }
+      // if (!isLt1M) {
+      //   this.$message.error("上传头像图片大小不能超过 1MB!");
+      // }
       // return isJPG && isLt2M;
-      return isLt1M;
+      // return isLt1M;
     },
 
     handleImgUploadErr(err) {
