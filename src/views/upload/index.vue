@@ -794,8 +794,17 @@ export default {
       this.previewDialogVisible = false;
     },
     async beforeUploadSource(file) {
-      let extension = file.name.substring(file.name.lastIndexOf(".") + 1);
+      let extension = file.name
+        .substring(file.name.lastIndexOf(".") + 1)
+        .toLowerCase();
       let accept = this.acceptType.indexOf(extension) < 0 ? false : true;
+      if (file.name.length > 50) {
+        this.$message({
+          message: this.$t("upload.filenameTooLong"),
+          type: "warning",
+        });
+        return false;
+      }
       if (!accept) {
         this.$message({
           message: "Supported Files:" + this.acceptType,
@@ -822,8 +831,17 @@ export default {
       return accept;
     },
     beforeUpload(file) {
-      let extension = file.name.substring(file.name.lastIndexOf(".") + 1);
+      let extension = file.name
+        .substring(file.name.lastIndexOf(".") + 1)
+        .toLowerCase();
       let accept = this.acceptType.indexOf(extension) < 0 ? false : true;
+      if (file.name.length > 50) {
+        this.$message({
+          message: this.$t("upload.filenameTooLong"),
+          type: "warning",
+        });
+        return false;
+      }
       if (!accept) {
         this.$message({
           message: "Supported Files:" + this.acceptType,

@@ -123,6 +123,9 @@ export default {
       justify-content: space-around;
       height: 100%;
       margin-right: 20px;
+      .username {
+        word-break: break-all;
+      }
       .follow-info {
         font-size: 10px;
         display: flex;

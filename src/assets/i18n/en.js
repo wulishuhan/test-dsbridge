@@ -43,6 +43,7 @@ module.exports = {
     reset: "Reset",
     editOn: "Editd on ",
     source: "source",
+    filenameTooLong: "File name is too Long",
   },
   download: {
     fileNum: "Files",

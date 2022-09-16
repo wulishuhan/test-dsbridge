@@ -32,6 +32,7 @@ const routes = [
         path: "/search/index",
         meta: {
           title: "search",
+          keepAlive: true,
         },
         component: () => import("@/views/search/index"),
       },

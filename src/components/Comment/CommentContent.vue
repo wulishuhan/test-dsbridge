@@ -2,8 +2,12 @@
   <div>
     <div class="userinfo-wrapper">
       <div class="profile">
-        <span class="user-avatar"><img :src="comment.user.avatar" /></span>
-        <span class="nickname">{{ comment.user.name }}</span>
+        <router-link :to="'/design/' + comment.user.id">
+          <span class="user-avatar"><img :src="comment.user.avatar" /></span>
+        </router-link>
+        <router-link :to="'/design/' + comment.user.id">
+          <span class="nickname">{{ comment.user.name }}</span>
+        </router-link>
         <span class="release-date">
           {{ $d(new Date(comment.create_time), "long") }}
         </span>
@@ -92,6 +96,10 @@ export default {
       font-size: 16px;
       font-weight: 500;
       color: #1a1a1a;
+    }
+    .nickname:hover {
+      color: #aaa;
+      text-decoration: underline;
     }
     .release-date {
       color: #999;
