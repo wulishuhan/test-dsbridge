@@ -46,7 +46,7 @@
       <div class="userinfo-wrapper">
         <div class="profile">
           <span class="user-avatar">
-            <img :src="currentComment.user.avatar" />
+            <img :src="avatar" />
           </span>
           <span class="nickname">
             {{ currentComment.user.name }}
@@ -61,7 +61,7 @@
       </div>
       <div class="comment">{{ currentComment.content }}</div>
       <div class="reply-list">
-        <div v-for="(replyRow, id) in currentComment.replies" :key="id">
+        <div v-for="(replyRow, id) in commentListFromId.rows" :key="id">
           <div class="userinfo-wrapper">
             <div class="profile">
               <span class="user-avatar"
@@ -93,15 +93,11 @@
           </div>
         </div>
       </div>
-      <el-dialog
-        :title="replyTo"
-        :visible.sync="innerVisible"
-        append-to-body
-        top="35vh"
-      >
+      <el-dialog :title="replyTo" :visible.sync="innerVisible" top="35vh">
         <reply-widget
           @closeReplyModal="handleClose('inner')"
           :comment-id="currentCommentId"
+          :primaryCommentId="make.id"
         ></reply-widget>
       </el-dialog>
     </el-dialog>
@@ -110,6 +106,7 @@
       <reply-widget
         @closeReplyModal="handleClose('outer')"
         :comment-id="currentCommentId"
+        :primaryCommentId="make.id"
       ></reply-widget>
     </el-dialog>
   </div>
@@ -119,7 +116,8 @@
 import ReplyWidget from "@/components/Comment/ReplyWidget.vue";
 import CommentContent from "@/components/Comment/CommentContent.vue";
 import { getMakeDetail } from "@/api/user";
-import { mapGetters } from "vuex";
+import { mapGetters, mapState } from "vuex";
+import { generatorDefaultAvator } from "@/utils/generateImage";
 export default {
   props: {
     make: {
@@ -132,6 +130,18 @@ export default {
   },
   computed: {
     ...mapGetters(["isLogin"]),
+    ...mapState({
+      userInfo: (state) => state.user.userInfo,
+      commentListFromId: (state) => state.comment.commentListFromId,
+    }),
+    avatar() {
+      return this.currentComment.user.avatar
+        ? this.currentComment.user.avatar
+        : generatorDefaultAvator(
+            this.currentComment.user.name,
+            this.currentComment.user.id
+          );
+    },
   },
   data() {
     return {
@@ -165,12 +175,15 @@ export default {
   },
   mounted() {
     this.comment = this.make;
-    getMakeDetail({
-      commentId: this.make.id,
-    }).then((res) => {
-      this.comment.replies = res.data.rows;
-      this.commentList.push(this.comment);
-    });
+    // getMakeDetail({
+    //   commentId: this.make.id,
+    // }).then((res) => {
+    //   this.comment.replies = res.data.rows;
+    //   this.commentList.push(this.comment);
+    // });
+    this.$store.dispatch("comment/getCommentListFromId", this.make.id);
+    this.comment.replies = this.commentListFromId.rows;
+    this.commentList.push(this.comment);
   },
   methods: {
     handleClose(space) {
@@ -218,7 +231,9 @@ export default {
       this.currentCommentId = this.currentComment.id;
     },
     showReplyInnerDialog(replyIndex) {
+      console.log("inner dialog with");
       this.innerVisible = true;
+      console.log("inner dialog", this.innerVisible);
       this.replyTo =
         "reply to " + this.currentComment.replies[replyIndex].user.name;
       this.currentCommentId = this.currentComment.replies[replyIndex].id;
