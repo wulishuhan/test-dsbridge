@@ -35,6 +35,7 @@ module.exports = {
     reset: "重置",
     editOn: "编辑 ",
     source: "引用资源",
+    filenameTooLong: "文件名过长",
   },
   download: {
     fileNum: "个文件",

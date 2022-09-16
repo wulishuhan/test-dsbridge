@@ -4,8 +4,9 @@
     <app-header></app-header>
     <keep-alive>
       <!-- 需要缓存的视图组件 -->
-      <router-view :key="$route.fullPath" />
+      <router-view v-if="$route.meta.keepAlive" :key="$route.fullPath" />
     </keep-alive>
+    <router-view v-if="!$route.meta.keepAlive" :key="$route.fullPath" />
   </div>
 </template>
 <script>
