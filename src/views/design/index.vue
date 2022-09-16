@@ -107,26 +107,12 @@
                 : 'http://dummyimage.com/300x200/96f279/FFF&text=' + user.name
             "
           /> -->
-          <img
-            class="img"
-            v-if="
-              (isYourAccount &&
-                userInfo.avatar &&
-                userInfo.avatar.length == 0) ||
-              user.avatar.length == 0
-            "
-            :src="defaultAvatar"
-          />
+          <img class="img" v-if="isYourAccount" :src="userInfo.avatar" />
           <img
             class="img"
             mode="widthFix"
-            v-else-if="
-              (isYourAccount &&
-                userInfo.avatar &&
-                userInfo.avatar.length > 0) ||
-              user.avatar.length > 0
-            "
-            :src="isYourAccount ? userInfo.avatar : user.avatar"
+            v-else
+            :src="user.avatar ? user.avatar : defaultAvatar"
             alt=""
           />
         </div>
