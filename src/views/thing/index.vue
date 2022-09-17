@@ -177,7 +177,7 @@
                 <tutorial :step="detail.tutorials"></tutorial>
               </show-more>
             </el-tab-pane>
-            <el-tab-pane label="Remixes" name="third">
+            <el-tab-pane v-if="!detail.ancestor" label="Remixes" name="third">
               <remixes></remixes>
             </el-tab-pane>
             <el-tab-pane label="Makes" name="fourth">
@@ -203,8 +203,15 @@
             <div class="source-box-info">
               <img :src="detail.ancestor.image" />
               <div class="source-box-info-title-name">
-                <p class="source-box-info-title">{{ detail.ancestor.title }}</p>
-                <p>By {{ detail.ancestor.creator.name }}</p>
+                <p class="source-box-info-title">
+                  {{ detail.ancestor ? detail.ancestor.title : "" }}
+                </p>
+                <p>
+                  By
+                  {{
+                    detail.ancestor.creator ? detail.ancestor.creator.name : ""
+                  }}
+                </p>
               </div>
             </div>
             <div class="flex license-box">
