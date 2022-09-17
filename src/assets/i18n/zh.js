@@ -47,6 +47,11 @@ module.exports = {
     source: "引用资源",
     filenameTooLong: "文件名过长",
     supportedFilesError: "Supported Files:{0}",
+    tagTip: "提示:按回车键保存",
+    updateOk: "修改成功",
+    updateFail: "修改失败",
+    saveOk: "保存成功",
+    saveFail: "保存失败",
   },
   comment: {
     empty: "暂无评论",

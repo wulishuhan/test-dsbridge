@@ -47,6 +47,11 @@ module.exports = {
     source: "source",
     filenameTooLong: "File name is too Long",
     supportedFilesError: "Supported Files:{0}",
+    tagTip: "Hint: Press Enter to save",
+    updateOk: "Update ok",
+    updateFail: "Update fail",
+    saveOk: "Save ok",
+    saveFail: "Save fail",
   },
   comment: {
     empty: "No comments",
