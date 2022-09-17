@@ -198,6 +198,44 @@
           </div>
         </div>
         <div class="bottom-content-right">
+          <div
+            v-if="detail.ancestor"
+            style="
+              background-color: #e8ebf4;
+              width: 100%;
+              padding: 15px;
+              border-radius: 5px;
+              margin-bottom: 25px;
+            "
+          >
+            <div
+              style="
+                border-bottom: 1px solid #ccc;
+                padding-bottom: 10px;
+                font-weight: 600;
+              "
+            >
+              Source
+            </div>
+            <div style="display: flex; margin-top: 10px">
+              <img
+                :src="detail.ancestor.image"
+                style="width: 96px; height: 60px"
+              />
+              <div style="margin-left: 5px">
+                <p style="font-weight: 600">{{ detail.ancestor.title }}</p>
+                <p>By {{ detail.ancestor.creator.name }}</p>
+              </div>
+            </div>
+            <div class="flex license-box">
+              <div v-if="licenseIcon.length > 0">
+                <i v-for="item in licenseIcon" :key="item" :class="item"></i>
+              </div>
+              <div v-else>
+                <img v-for="item in licenseImg" :key="item" :src="item" />
+              </div>
+            </div>
+          </div>
           <label-card :LabelArr="detail.tags"></label-card>
           <div class="share-content">
             <div class="bottom-content-right-box-title">Share</div>
@@ -216,7 +254,7 @@
               </a>
             </div>
           </div>
-          <div style="margin-top: 32px">
+          <div class="license-container" v-if="!detail.ancestor">
             <div class="bottom-content-right-box-title">License</div>
             <div class="flex license-box">
               <div v-if="licenseIcon.length > 0">
@@ -880,6 +918,9 @@ a {
   color: #9e9e9e;
   line-height: 25px;
   margin-top: 22px;
+}
+.license-container {
+  margin-top: 32px;
 }
 
 .imageViewer {
