@@ -46,6 +46,7 @@ module.exports = {
     editOn: "Editd on ",
     source: "source",
     filenameTooLong: "File name is too Long",
+    supportedFilesError: "Supported Files:{0}",
   },
   comment: {
     empty: "No comments",
