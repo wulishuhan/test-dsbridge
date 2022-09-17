@@ -218,16 +218,23 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           console.log(this.registerForm);
-          debugger;
           changePassword({
-            newPassword: this.registerForm.currentPassword,
-            oldPassword: this.registerForm.password,
-          }).then(() => {
-            this.$message({
-              type: "success",
-              message: this.$t("design.updSuccess"),
+            newPassword: this.registerForm.password,
+            oldPassword: this.registerForm.currentPassword,
+          })
+            .then(() => {
+              this.$message({
+                type: "success",
+                message: this.$t("design.updSuccess"),
+              });
+              this.handleClose();
+            })
+            .catch((err) => {
+              this.$message({
+                type: "warning",
+                message: err,
+              });
             });
-          });
         } else {
           return false;
         }

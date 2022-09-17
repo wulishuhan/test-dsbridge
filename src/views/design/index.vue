@@ -1277,6 +1277,7 @@ export default {
       });
     },
     async handleResourceClick() {
+      this.openCollectedOption = false;
       if (this.activeName == "first" && this.resourceActiveTab == "first") {
         this.isLogin && !this.isYourAccount && this.getMyLikesList();
 

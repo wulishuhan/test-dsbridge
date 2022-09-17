@@ -28,6 +28,7 @@
       v-if="!isNewFileLink"
       v-model="newFolderName"
       @keyup.enter.native="addFolder"
+      @blur="addFolder"
       class="new-file-input"
       placeholder="press enter to add new folder"
     ></el-input>
