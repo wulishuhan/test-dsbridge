@@ -9,6 +9,8 @@ module.exports = {
     email: "Please enter your email",
     emailLengthLimit: "Email length is limited to 5 to 50 characters",
     emailErrorInput: "Please input the correct email address",
+    unauthenticatedEmail:
+      "The user has not authorized the email, please enter the email",
     openLoginRegisterFirst: "Please register first",
     openLoginLoginFirst: "Please login first",
   },

@@ -214,8 +214,8 @@
               autocomplete="off"
               placeholder="Password"
               show-password
-            ></el-input> </el-form-item
-          >ortur-icon-apple
+            ></el-input>
+          </el-form-item>
           <el-form-item>
             <el-button @click="thridPartyAccountBind('thirdPartyRegisterForm')">
               Complete
@@ -293,7 +293,11 @@ export default {
         if (this.isComplete) {
           callback();
         } else {
-          callback(new Error(this.$t("login.openLoginRegisterFirst")));
+          if (!this.thirdPartyInfo.email) {
+            callback(new Error(this.$t("login.unauthenticatedEmail")));
+          } else {
+            callback(new Error(this.$t("login.openLoginRegisterFirst")));
+          }
         }
       }
       if (this.openLoginMsg === 1021) {
@@ -489,6 +493,9 @@ export default {
     handleOpen() {
       if (this.isThirdPartyRegisterForm) {
         let { code, from, email } = this.$route.query;
+        if (email === "null") {
+          email = "";
+        }
         this.thirdPartyInfo.userId = code;
         this.thirdPartyInfo.catalog = from;
         this.thirdPartyInfo.email = email;
