@@ -810,6 +810,7 @@ export default {
           message: this.$t("upload.supportedFilesError", [this.acceptType]),
           type: "warning",
         });
+        return false;
       }
       let fileInfo = {
         uid: file.uid,
@@ -847,8 +848,9 @@ export default {
           message: "Supported Files:" + this.acceptType,
           type: "warning",
         });
+        return false;
       }
-      accept = true;
+
       return accept;
     },
     resetForm() {
@@ -1032,6 +1034,7 @@ export default {
             })
               .then(() => {
                 this.$message.success("修改成功");
+                this.$router.push("/");
               })
               .catch(() => {
                 this.$message.error("修改失败");
@@ -1045,6 +1048,7 @@ export default {
               .then((res) => {
                 if (res.data.code == 0) {
                   this.$message.success("保存成功");
+                  this.$router.push("/");
                 } else {
                   this.$message.error("保存失败");
                 }

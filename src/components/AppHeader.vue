@@ -264,6 +264,7 @@ export default {
     },
     logout() {
       this.$store.dispatch("user/logout");
+      this.$router.push("/");
     },
     handleCloseDialog() {
       let { code, from, email } = this.$route.query;
