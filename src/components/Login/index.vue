@@ -70,7 +70,11 @@
               </span>
               <span class="login-text privacy-text">
                 By clicking "Create account", I agree to ORTUR's
-                <a href="#">Privacy policy</a>
+                <a
+                  target="_blank"
+                  href="https://www.leadiffer.com/privacy-policy/"
+                  >Privacy policy</a
+                >
                 .
               </span>
             </div>
