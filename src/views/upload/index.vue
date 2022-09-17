@@ -1,3 +1,4 @@
+<!-- eslint-disable prettier/prettier -->
 <template>
   <div class="upload-container" id="upload-container">
     <h1 class="header-title">{{ headerTitle }}</h1>
@@ -127,8 +128,13 @@
                         <span class="path2"></span>
                       </i>
                       <i
-                        class="handle el-icon-s-operation swiper-no-swiping"
-                      ></i>
+                        class="
+                          handle
+                          ortur-icon-settings-gray
+                          swiper-no-swiping
+                        "
+                      >
+                      </i>
                       <el-upload
                         class="cover-edit"
                         :action="baseApi + '/library/resource/upload'"
@@ -139,7 +145,7 @@
                         :before-upload="beforeUpload"
                       >
                         <i
-                          class="el-icon-edit"
+                          class="ortur-icon-pen"
                           @click="currentEditIndex(coverKey)"
                         ></i>
                       </el-upload>
@@ -340,7 +346,7 @@
                         :before-upload="beforeUpload"
                       >
                         <i
-                          class="el-icon-edit"
+                          class="el-icon-pen"
                           @click="
                             currentTutorialEditIndex(
                               tutorialKey,
@@ -1089,6 +1095,7 @@ export default {
   i {
     cursor: pointer;
     display: none;
+    font-size: 20px;
   }
   position: relative;
   .ortur-icon-minus {
@@ -1101,9 +1108,10 @@ export default {
   .cover-edit {
     font-size: 20px;
     position: absolute;
-    top: 35px;
-    left: 90px;
+    top: 30px;
+    left: 95px;
     cursor: pointer;
+    color: #fff;
   }
   .cover-add {
     width: 150px;
@@ -1118,6 +1126,9 @@ export default {
         width: 100%;
       }
     }
+    i {
+      display: block;
+    }
   }
 
   .cover-add:hover {
@@ -1126,10 +1137,10 @@ export default {
   .handle {
     position: absolute;
     bottom: 10px;
-    right: 35px;
-    font-size: 20px;
+    right: 38px;
+    font-size: 14px;
     cursor: move;
-    color: #444;
+    color: #fff;
   }
   img {
     display: block;
