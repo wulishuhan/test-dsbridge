@@ -70,7 +70,11 @@
               </span>
               <span class="login-text privacy-text">
                 By clicking "Create account", I agree to ORTUR's
-                <a href="#">Privacy policy</a>
+                <a
+                  target="_blank"
+                  href="https://www.leadiffer.com/privacy-policy/"
+                  >Privacy policy</a
+                >
                 .
               </span>
             </div>
@@ -210,8 +214,8 @@
               autocomplete="off"
               placeholder="Password"
               show-password
-            ></el-input>
-          </el-form-item>
+            ></el-input> </el-form-item
+          >ortur-icon-apple
           <el-form-item>
             <el-button @click="thridPartyAccountBind('thirdPartyRegisterForm')">
               Complete
@@ -634,5 +638,8 @@ a {
 ::v-deep .el-form-item__error {
   margin-top: 5px;
   position: relative;
+}
+.ortur-icon-apple {
+  display: none;
 }
 </style>
