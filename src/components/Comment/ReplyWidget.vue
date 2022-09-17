@@ -130,7 +130,7 @@ export default {
       let resId = parseInt(this.$route.params.thingId) || this.resId;
       if (this.comment == "") {
         this.$message({
-          message: "评论不能为空",
+          message: this.$t("comment.emptyToast"),
           type: "error",
         });
         return;

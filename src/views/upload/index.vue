@@ -807,7 +807,7 @@ export default {
       }
       if (!accept) {
         this.$message({
-          message: "Supported Files:" + this.acceptType,
+          message: this.$t("upload.supportedFilesError", [this.acceptType]),
           type: "warning",
         });
       }

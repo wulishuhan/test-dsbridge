@@ -111,11 +111,13 @@
 
           <ul class="app-header-nologin" v-else>
             <li>
-              <el-button @click="showLoginDialog('login')"> Log in </el-button>
+              <el-button @click="showLoginDialog('login')">
+                {{ $t("header.logIn") }}
+              </el-button>
             </li>
             <li>
               <el-button @click="showLoginDialog('register')">
-                Sign up
+                {{ $t("header.signUp") }}
               </el-button>
             </li>
           </ul>

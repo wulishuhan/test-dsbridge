@@ -1,8 +1,8 @@
 <template>
   <div class="comment-wrapper">
-    <div v-if="!commentListFromId.rows">暂无评论</div>
+    <div v-if="!commentListFromId.rows">{{ $t("comment.empty") }}</div>
     <div v-else class="comment-count">
-      {{ commentListFromId.rows.length }}条回复
+      {{ $t("comment.replyNum", [commentListFromId.rows.length]) }}
     </div>
     <div class="userinfo-wrapper">
       <div class="profile">
@@ -102,7 +102,6 @@ export default {
         replies: [],
       },
       currentCommentId: 0,
-      replyTotalRows: "0条回复",
       replyTo: "reply to xxxx",
       currentResId: 0,
       keywords: "",

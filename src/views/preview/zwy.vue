@@ -59,9 +59,7 @@ export default {
   beforeDestroy() {
     this.editor.destroy();
   },
-  mounted() {
-    console.log(generatorDefaultAvator("我的", "aaa"));
-  },
+  mounted() {},
   methods: {
     shouldShow({ editor, view, state }) {
       console.log("shouldShow", editor, view, state);

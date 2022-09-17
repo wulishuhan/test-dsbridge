@@ -21,6 +21,8 @@ module.exports = {
     logout: "Logout",
     search: "Please enter your search keyword",
     searchSelect: "Select",
+    logIn: "Log in",
+    signUp: "Sign up",
   },
   upload: {
     title: "Title",
@@ -44,6 +46,11 @@ module.exports = {
     editOn: "Editd on ",
     source: "source",
     filenameTooLong: "File name is too Long",
+  },
+  comment: {
+    empty: "No comments",
+    emptyToast: "Comments cannot be empty",
+    replyNum: "{0} replies",
   },
   download: {
     fileNum: "Files",
