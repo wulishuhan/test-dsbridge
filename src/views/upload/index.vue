@@ -1054,7 +1054,7 @@ export default {
             })
               .then(() => {
                 this.$message.success(this.$t("upload.updateOk"));
-                this.$router.push("/");
+                this.$router.push("/design/fromProfile");
               })
               .catch(() => {
                 this.$message.error(this.$t("upload.updateFail"));
@@ -1068,7 +1068,7 @@ export default {
               .then((res) => {
                 if (res.data.code == 0) {
                   this.$message.success(this.$t("upload.saveOk"));
-                  this.$router.push("/");
+                  this.$router.push("/design/fromProfile");
                 } else {
                   this.$message.error(this.$t("upload.saveFail"));
                 }
