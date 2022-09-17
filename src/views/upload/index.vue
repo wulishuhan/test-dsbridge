@@ -486,12 +486,18 @@ export default {
         licenseIcon: [],
       },
       resourceFormRules: {
-        files: [{ required: true, message: "资源不能为空" }],
-        images: [{ required: true, message: "封面不能为空" }],
-        title: [{ required: true, message: "标题不能为空" }],
-        tags: [{ required: true, message: "标签不能为空" }],
-        license: [{ required: true, message: "不能为空", trigger: "change" }],
-        description: [{ required: true, message: "不能为空" }],
+        files: [{ required: true, message: this.$t("upload.sourceNotEmpty") }],
+        images: [{ required: true, message: this.$t("upload.coverNotEmpty") }],
+        title: [{ required: true, message: this.$t("upload.titleNotEmpty") }],
+        tags: [{ required: true, message: this.$t("upload.tagNotEmpty") }],
+        license: [
+          {
+            required: true,
+            message: this.$t("upload.notEmpty"),
+            trigger: "change",
+          },
+        ],
+        description: [{ required: true, message: this.$t("upload.notEmpty") }],
       },
       resourceForm: {
         images: [],
@@ -596,8 +602,10 @@ export default {
         },
       ],
       tutorialFormRules: {
-        title: [{ required: true, message: "标题不能为空" }],
-        description: [{ required: true, message: "描述不能为空" }],
+        title: [{ required: true, message: this.$t("upload.titleNotEmpty") }],
+        description: [
+          { required: true, message: this.$t("upload.descNotEmpty") },
+        ],
       },
       tutorialForm: [],
       swiperOptions: {
@@ -875,12 +883,12 @@ export default {
     handleInputConfirm() {
       let inputValue = this.inputValue;
       if (this.resourceForm.tags.length >= 12) {
-        this.$message.error("标签至多12个");
+        this.$message.error(this.$t("upload.tagNumError"));
         return;
       }
 
       if (inputValue.length > 32) {
-        this.$message.error("至多32个字符");
+        this.$message.error(this.$t("upload.charNumError"));
         return;
       }
       if (inputValue) {
@@ -1070,7 +1078,7 @@ export default {
               });
           }
         } else {
-          this.$message.error("验证失败!");
+          this.$message.error(this.$t("upload.validateError"));
         }
       });
     },
