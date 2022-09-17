@@ -40,7 +40,7 @@ const mutations = {
     state.userInfo.avatar = !!payload.user_info.avatar
       ? payload.user_info.avatar
       : generatorDefaultAvator(
-          payload.user_info.user_name,
+          payload.user_info.nick_name,
           payload.user_info.user_id
         );
     state.expiresIn = payload.expires_in;
@@ -53,7 +53,7 @@ const mutations = {
     // eslint-disable-next-line
     state.userInfo.avatar = !!payload.avatar
       ? payload.avatar
-      : generatorDefaultAvator(payload.user_name, payload.user_id);
+      : generatorDefaultAvator(payload.nick_name, payload.user_id);
     state.userInfo.email = payload.email;
     state.userInfo.user_name = payload.user_name;
     state.userInfo.third_user = payload.third_user;

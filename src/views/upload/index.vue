@@ -1,3 +1,4 @@
+<!-- eslint-disable prettier/prettier -->
 <template>
   <div class="upload-container" id="upload-container">
     <h1 class="header-title">{{ headerTitle }}</h1>
@@ -127,8 +128,13 @@
                         <span class="path2"></span>
                       </i>
                       <i
-                        class="handle el-icon-s-operation swiper-no-swiping"
-                      ></i>
+                        class="
+                          handle
+                          ortur-icon-settings-gray
+                          swiper-no-swiping
+                        "
+                      >
+                      </i>
                       <el-upload
                         class="cover-edit"
                         :action="baseApi + '/library/resource/upload'"
@@ -139,7 +145,7 @@
                         :before-upload="beforeUpload"
                       >
                         <i
-                          class="el-icon-edit"
+                          class="ortur-icon-pen"
                           @click="currentEditIndex(coverKey)"
                         ></i>
                       </el-upload>
@@ -340,7 +346,7 @@
                         :before-upload="beforeUpload"
                       >
                         <i
-                          class="el-icon-edit"
+                          class="el-icon-pen"
                           @click="
                             currentTutorialEditIndex(
                               tutorialKey,
@@ -480,12 +486,18 @@ export default {
         licenseIcon: [],
       },
       resourceFormRules: {
-        files: [{ required: true, message: "资源不能为空" }],
-        images: [{ required: true, message: "封面不能为空" }],
-        title: [{ required: true, message: "标题不能为空" }],
-        tags: [{ required: true, message: "标签不能为空" }],
-        license: [{ required: true, message: "不能为空", trigger: "change" }],
-        description: [{ required: true, message: "不能为空" }],
+        files: [{ required: true, message: this.$t("upload.sourceNotEmpty") }],
+        images: [{ required: true, message: this.$t("upload.coverNotEmpty") }],
+        title: [{ required: true, message: this.$t("upload.titleNotEmpty") }],
+        tags: [{ required: true, message: this.$t("upload.tagNotEmpty") }],
+        license: [
+          {
+            required: true,
+            message: this.$t("upload.notEmpty"),
+            trigger: "change",
+          },
+        ],
+        description: [{ required: true, message: this.$t("upload.notEmpty") }],
       },
       resourceForm: {
         images: [],
@@ -590,8 +602,10 @@ export default {
         },
       ],
       tutorialFormRules: {
-        title: [{ required: true, message: "标题不能为空" }],
-        description: [{ required: true, message: "描述不能为空" }],
+        title: [{ required: true, message: this.$t("upload.titleNotEmpty") }],
+        description: [
+          { required: true, message: this.$t("upload.descNotEmpty") },
+        ],
       },
       tutorialForm: [],
       swiperOptions: {
@@ -869,12 +883,12 @@ export default {
     handleInputConfirm() {
       let inputValue = this.inputValue;
       if (this.resourceForm.tags.length >= 12) {
-        this.$message.error("标签至多12个");
+        this.$message.error(this.$t("upload.tagNumError"));
         return;
       }
 
       if (inputValue.length > 32) {
-        this.$message.error("至多32个字符");
+        this.$message.error(this.$t("upload.charNumError"));
         return;
       }
       if (inputValue) {
@@ -1040,7 +1054,7 @@ export default {
             })
               .then(() => {
                 this.$message.success(this.$t("upload.updateOk"));
-                this.$router.push("/");
+                this.$router.push("/design/fromProfile");
               })
               .catch(() => {
                 this.$message.error(this.$t("upload.updateFail"));
@@ -1054,7 +1068,7 @@ export default {
               .then((res) => {
                 if (res.data.code == 0) {
                   this.$message.success(this.$t("upload.saveOk"));
-                  this.$router.push("/");
+                  this.$router.push("/design/fromProfile");
                 } else {
                   this.$message.error(this.$t("upload.saveFail"));
                 }
@@ -1064,7 +1078,7 @@ export default {
               });
           }
         } else {
-          this.$message.error("验证失败!");
+          this.$message.error(this.$t("upload.validateError"));
         }
       });
     },
@@ -1089,6 +1103,7 @@ export default {
   i {
     cursor: pointer;
     display: none;
+    font-size: 20px;
   }
   position: relative;
   .ortur-icon-minus {
@@ -1101,9 +1116,10 @@ export default {
   .cover-edit {
     font-size: 20px;
     position: absolute;
-    top: 35px;
-    left: 90px;
+    top: 30px;
+    left: 95px;
     cursor: pointer;
+    color: #fff;
   }
   .cover-add {
     width: 150px;
@@ -1118,6 +1134,9 @@ export default {
         width: 100%;
       }
     }
+    i {
+      display: block;
+    }
   }
 
   .cover-add:hover {
@@ -1126,10 +1145,10 @@ export default {
   .handle {
     position: absolute;
     bottom: 10px;
-    right: 35px;
-    font-size: 20px;
+    right: 38px;
+    font-size: 14px;
     cursor: move;
-    color: #444;
+    color: #fff;
   }
   img {
     display: block;
