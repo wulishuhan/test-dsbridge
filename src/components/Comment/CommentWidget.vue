@@ -1,6 +1,6 @@
 <template>
   <div class="comment-wrapper">
-    <div v-if="commentList.length == 0">暂无评论</div>
+    <div v-if="commentList.length == 0">{{ $t("comment.empty") }}</div>
     <div
       v-for="(commentItem, commentIndex) in commentList"
       :key="commentItem.id"
@@ -159,7 +159,8 @@ export default {
       var total = !!this.commentListFromId.total
         ? this.commentListFromId.total
         : 0;
-      return total + "条回复";
+      console.log(1111111111111111, this.$t("comment.replyNum", [total]));
+      return this.$t("comment.replyNum", [total]);
     },
   },
   methods: {

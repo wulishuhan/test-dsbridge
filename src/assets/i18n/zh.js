@@ -21,6 +21,8 @@ module.exports = {
     logout: "退出",
     search: "请输入搜索关键词",
     searchSelect: "请选择",
+    logIn: "登录",
+    signUp: "注册",
   },
   upload: {
     title: "标题",
@@ -44,6 +46,12 @@ module.exports = {
     editOn: "编辑 ",
     source: "引用资源",
     filenameTooLong: "文件名过长",
+    supportedFilesError: "Supported Files:{0}",
+  },
+  comment: {
+    empty: "暂无评论",
+    emptyToast: "评论不能为空",
+    replyNum: "{0}条回复",
   },
   download: {
     fileNum: "个文件",
