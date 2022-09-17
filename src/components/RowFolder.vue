@@ -281,7 +281,7 @@ export default {
 
     .folderContainer {
       position: relative;
-      margin-right: 32px;
+      margin-right: 57px;
       .moreMenuIcon {
         display: none;
         text-align: center;
