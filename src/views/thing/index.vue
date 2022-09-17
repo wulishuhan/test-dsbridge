@@ -198,32 +198,12 @@
           </div>
         </div>
         <div class="bottom-content-right">
-          <div
-            v-if="detail.ancestor"
-            style="
-              background-color: #e8ebf4;
-              width: 100%;
-              padding: 15px;
-              border-radius: 5px;
-              margin-bottom: 25px;
-            "
-          >
-            <div
-              style="
-                border-bottom: 1px solid #ccc;
-                padding-bottom: 10px;
-                font-weight: 600;
-              "
-            >
-              Source
-            </div>
-            <div style="display: flex; margin-top: 10px">
-              <img
-                :src="detail.ancestor.image"
-                style="width: 96px; height: 60px"
-              />
-              <div style="margin-left: 5px">
-                <p style="font-weight: 600">{{ detail.ancestor.title }}</p>
+          <div v-if="detail.ancestor" class="source-box">
+            <div class="source-box-source-text">Source</div>
+            <div class="source-box-info">
+              <img :src="detail.ancestor.image" />
+              <div class="source-box-info-title-name">
+                <p class="source-box-info-title">{{ detail.ancestor.title }}</p>
                 <p>By {{ detail.ancestor.creator.name }}</p>
               </div>
             </div>
@@ -1161,5 +1141,31 @@ a {
 }
 .post-remix {
   cursor: pointer;
+}
+.source-box {
+  background-color: #e8ebf4;
+  width: 100%;
+  padding: 15px;
+  border-radius: 5px;
+  margin-bottom: 25px;
+  .source-box-source-text {
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 10px;
+    font-weight: 600;
+  }
+  .source-box-info {
+    display: flex;
+    margin-top: 10px;
+    img {
+      width: 96px;
+      height: 60px;
+    }
+    .source-box-info-title-name {
+      margin-left: 5px;
+      .source-box-info-title {
+        font-weight: 600;
+      }
+    }
+  }
 }
 </style>
