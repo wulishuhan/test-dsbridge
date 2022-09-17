@@ -9,6 +9,7 @@ module.exports = {
     email: "请输入邮箱",
     emailLengthLimit: "长度在 5 到 50 个字符",
     emailErrorInput: "请输入正确的邮箱地址",
+    unauthenticatedEmail: "用户未授权邮箱,请重新输入",
     openLoginRegisterFirst: "请先注册",
     openLoginLoginFirst: "账号已存在请先登录",
   },

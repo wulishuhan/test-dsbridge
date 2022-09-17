@@ -70,7 +70,11 @@
               </span>
               <span class="login-text privacy-text">
                 By clicking "Create account", I agree to ORTUR's
-                <a href="#">Privacy policy</a>
+                <a
+                  target="_blank"
+                  href="https://www.leadiffer.com/privacy-policy/"
+                  >Privacy policy</a
+                >
                 .
               </span>
             </div>
@@ -289,7 +293,11 @@ export default {
         if (this.isComplete) {
           callback();
         } else {
-          callback(new Error(this.$t("login.openLoginRegisterFirst")));
+          if (!this.thirdPartyInfo.email) {
+            callback(new Error(this.$t("login.unauthenticatedEmail")));
+          } else {
+            callback(new Error(this.$t("login.openLoginRegisterFirst")));
+          }
         }
       }
       if (this.openLoginMsg === 1021) {
@@ -485,6 +493,9 @@ export default {
     handleOpen() {
       if (this.isThirdPartyRegisterForm) {
         let { code, from, email } = this.$route.query;
+        if (email === "null") {
+          email = "";
+        }
         this.thirdPartyInfo.userId = code;
         this.thirdPartyInfo.catalog = from;
         this.thirdPartyInfo.email = email;
@@ -634,5 +645,8 @@ a {
 ::v-deep .el-form-item__error {
   margin-top: 5px;
   position: relative;
+}
+.ortur-icon-apple {
+  display: none;
 }
 </style>
