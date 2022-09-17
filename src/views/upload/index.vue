@@ -210,6 +210,12 @@
         <el-input v-model="resourceForm.title"></el-input>
       </el-form-item>
       <el-form-item :label="$t('upload.tags')" prop="tags">
+        <template v-slot:label>
+          {{ $t("upload.tags") }}
+          <span style="font-size: 12px; color: #aaa">
+            ({{ $t("upload.tagTip") }})</span
+          >
+        </template>
         <div class="tag-input-wrapper">
           <el-tag
             :key="index"
@@ -485,7 +491,7 @@ export default {
         images: [],
         files: [],
         title: "",
-        tags: ["标签一"],
+        tags: [],
         license: "GNU - LGPL",
         description: "",
       },
@@ -807,9 +813,10 @@ export default {
       }
       if (!accept) {
         this.$message({
-          message: "Supported Files:" + this.acceptType,
+          message: this.$t("upload.supportedFilesError", [this.acceptType]),
           type: "warning",
         });
+        return false;
       }
       let fileInfo = {
         uid: file.uid,
@@ -847,8 +854,9 @@ export default {
           message: "Supported Files:" + this.acceptType,
           type: "warning",
         });
+        return false;
       }
-      accept = true;
+
       return accept;
     },
     resetForm() {
@@ -1031,10 +1039,11 @@ export default {
               tutorials: this.tutorialForm,
             })
               .then(() => {
-                this.$message.success("修改成功");
+                this.$message.success(this.$t("upload.updateOk"));
+                this.$router.push("/");
               })
               .catch(() => {
-                this.$message.error("修改失败");
+                this.$message.error(this.$t("upload.updateFail"));
               });
           } else {
             saveResource({
@@ -1044,9 +1053,10 @@ export default {
             })
               .then((res) => {
                 if (res.data.code == 0) {
-                  this.$message.success("保存成功");
+                  this.$message.success(this.$t("upload.saveOk"));
+                  this.$router.push("/");
                 } else {
-                  this.$message.error("保存失败");
+                  this.$message.error(this.$t("upload.saveFail"));
                 }
               })
               .catch((e) => {

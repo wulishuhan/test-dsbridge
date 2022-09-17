@@ -489,7 +489,7 @@ export default {
   /* margin-top: 96px; */
 }
 .el-image-viewer__img {
-  object-fit: fill;
+  object-fit: contain;
 }
 .left-top-scacel-box {
   width: 120px;
