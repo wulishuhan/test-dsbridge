@@ -10,7 +10,6 @@ const state = {
 
 const mutations = {
   SET_COMMENT_LIST: (state, payload) => {
-    console.log("comment_list", payload);
     state.commentList = payload;
   },
   SET_COMMENT_LIST_FROM_ID: (state, payload) => {

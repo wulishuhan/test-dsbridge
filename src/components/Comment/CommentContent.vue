@@ -61,9 +61,7 @@ export default {
       type: Number,
     },
   },
-  mounted() {
-    console.log(this.comment);
-  },
+  mounted() {},
 };
 </script>
 <style lang="scss" scoped>

@@ -697,7 +697,6 @@ export default {
       .then(() => {
         getResource(this.$route.params.thingId)
           .then((res) => {
-            console.log("getResource", res);
             this.detail = res.data.data;
             this.imageList = res.data.data.images;
             this.isLike = this.likeList.includes(res.data.data.id);
