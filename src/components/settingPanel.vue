@@ -12,7 +12,7 @@
           class="followTapPanel"
         >
           <div class="wrapper">
-            <div class="left">
+            <div class="left" style="margin-right: 63px">
               <img class="img" alt="" :src="userInfo.avatar" />
               <el-upload
                 class="upload-demo"
@@ -47,7 +47,7 @@
               </div> -->
               <div class="bottom">
                 <div class="title">{{ $t("design.password") }}</div>
-                <!-- <div class="name">xxxxxxxxxx</div> -->
+                <div class="name">xxxxxxxxxx</div>
                 <div class="action" @click="handleChangePasswordClick">
                   {{ $t("setting.changePassword") }}
                 </div>
@@ -90,8 +90,9 @@
                     ></span>
                     <span>{{ item.catalog }}</span>
                     <span class="username">{{
-                      item.username ? "item.username" : ""
+                      item.username ? item.username : ""
                     }}</span>
+                    <span v-show="item.username && item.email">|</span>
                     <span class="email">{{ item.email }}</span>
                   </div>
                   <div class="right">
@@ -300,7 +301,7 @@ export default {
   border-top: 1px solid #ccc;
   margin-top: 20px;
   padding-top: 20px;
-  width: 400px;
+  width: 410px;
   .bindItem {
     display: flex;
     justify-content: space-between;
@@ -315,7 +316,12 @@ export default {
         height: 26px;
       }
       .username {
-        margin-left: 20px;
+        margin: 0 10px;
+        color: rgb(153, 153, 153);
+      }
+      .email {
+        margin-left: 10px;
+        color: rgb(153, 153, 153);
       }
     }
     .right {
@@ -350,7 +356,6 @@ export default {
 
 .left {
   display: flex;
-  margin-right: 63px;
   align-items: center;
   flex-direction: column;
   .upload-demo {
