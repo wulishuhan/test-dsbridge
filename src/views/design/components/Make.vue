@@ -30,9 +30,9 @@
             {{ $t("design.Delete") }}
           </div>
 
-          <div class="moreMenuItem" @click.stop="handleDownClick">
+          <!-- <div class="moreMenuItem" @click.stop="handleDownClick">
             {{ $t("design.download") }}
-          </div>
+          </div> -->
         </div>
       </div>
     </div>

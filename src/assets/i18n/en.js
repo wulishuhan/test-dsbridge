@@ -137,6 +137,11 @@ module.exports = {
     changePassword: "Change password",
     changeName: "Change name",
     newName: "New name",
+    currentPasswordRequired: "The current password must be filled",
+    PasswordLen: "The length is 5 to 20 characters",
+    inputPassword: "Please enter the password",
+    inputPasswordAgain: "Please enter the password again",
+    PasswordNoSame: "Two input passwords are inconsistent!",
   },
   error: {
     serverDatabaseError: "server database error",
