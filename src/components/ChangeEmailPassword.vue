@@ -237,7 +237,7 @@ export default {
             .catch((err) => {
               this.$message({
                 type: "warning",
-                message: err,
+                message: err.msg,
               });
             });
         } else {

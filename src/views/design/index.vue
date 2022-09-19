@@ -651,6 +651,7 @@ export default {
   mounted() {
     document.addEventListener("click", () => {
       this.isShowDownPanel = false;
+      this.openCollectedOption = false;
     });
     let userId = this.$route.params.userId;
 

@@ -88,6 +88,9 @@ const actions = {
       })
         .then((res) => {
           let data = res.data.data;
+          data.user_info.avatar = data.user_info.avatar
+            ? data.user_info.avatar + "?timestamp=" + new Date().getTime()
+            : data.user_info.avatar;
           commit("SET_LOGININFO", data);
           setToken(data.access_token);
           resolve();
@@ -105,6 +108,10 @@ const actions = {
           if (res.data.code !== 0) {
             reject(res.data);
           }
+          let data = res.data.data;
+          data.user_info.avatar = data.user_info.avatar
+            ? data.user_info.avatar + "?timestamp=" + new Date().getTime()
+            : data.user_info.avatar;
           commit("SET_LOGININFO", res.data.data);
           setToken(res.data.data.access_token);
           resolve(res.data.data);
@@ -133,7 +140,7 @@ const actions = {
         .then((res) => {
           if (res.data.code == 0) {
             res.data.data.avatar = res.data.data.avatar
-              ? res.data.data.avatar + "?" + Math.random()
+              ? res.data.data.avatar + "?timestamp=" + new Date().getTime()
               : res.data.data.avatar;
             commit("SET_USERINFO", res.data.data);
           }
