@@ -14,6 +14,7 @@
           v-for="item in fileList"
           :file="item"
           :key="item.id"
+          @addDownloadCount="addDownloadCount"
         ></download-card>
       </div>
       <span class="el-icon--left ortur-icon-file-download" style="color: #fff">
@@ -36,19 +37,27 @@ export default {
     DownloadCard,
   },
   data() {
-    return {};
+    return {
+      count: 0,
+    };
   },
   computed: {
     numText() {
+      console.log("tnnd:", this.count);
       let numText = "";
-      if (this.downLoadNum < 0) {
+      if (this.count < 0) {
         numText = "0";
-      } else if (this.downLoadNum < 1000) {
-        numText = "" + this.downLoadNum;
+      } else if (this.count < 1000) {
+        numText = "" + this.count;
       } else {
-        numText = Math.floor(this.downLoadNum / 1000) + "k";
+        numText = Math.floor(this.count / 1000) + "k";
       }
       return numText;
+    },
+  },
+  watch: {
+    downLoadNum() {
+      this.count = this.downLoadNum;
     },
   },
   methods: {
@@ -73,6 +82,9 @@ export default {
       // this.isShowDownPanel = !this.isShowDownPanel;
     },
     stopBublet() {},
+    addDownloadCount() {
+      this.count++;
+    },
   },
   props: {
     fileList: {
