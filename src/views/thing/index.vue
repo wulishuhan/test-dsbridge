@@ -177,7 +177,11 @@
                 <tutorial :step="detail.tutorials"></tutorial>
               </show-more>
             </el-tab-pane>
-            <el-tab-pane v-if="!detail.ancestor" label="Remixes" name="third">
+            <el-tab-pane
+              v-if="JSON.stringify(detail.ancestor) === '{}'"
+              label="Remixes"
+              name="third"
+            >
               <remixes></remixes>
             </el-tab-pane>
             <el-tab-pane label="Makes" name="fourth">
@@ -198,7 +202,10 @@
           </div>
         </div>
         <div class="bottom-content-right">
-          <div v-if="detail.ancestor" class="source-box">
+          <div
+            v-if="JSON.stringify(detail.ancestor) !== '{}'"
+            class="source-box"
+          >
             <div class="source-box-source-text">Source</div>
             <div class="source-box-info">
               <img :src="detail.ancestor.image" />
@@ -206,7 +213,7 @@
                 <p class="source-box-info-title">
                   {{ detail.ancestor ? detail.ancestor.title : "" }}
                 </p>
-                <p>
+                <p class="source-box-info-name">
                   By
                   {{
                     detail.ancestor.creator ? detail.ancestor.creator.name : ""
@@ -241,7 +248,10 @@
               </a>
             </div>
           </div>
-          <div class="license-container" v-if="!detail.ancestor">
+          <div
+            class="license-container"
+            v-if="JSON.stringify(detail.ancestor) === '{}'"
+          >
             <div class="bottom-content-right-box-title">License</div>
             <div class="flex license-box">
               <div v-if="licenseIcon.length > 0">
@@ -385,6 +395,7 @@ export default {
       mouseEnterCarousel: false,
       likeList: [],
       detail: {
+        ancestor: {},
         collect_count: "",
         creator: {
           avatar: "",
@@ -1150,27 +1161,36 @@ a {
   cursor: pointer;
 }
 .source-box {
-  background-color: #e8ebf4;
-  width: 100%;
-  padding: 15px;
-  border-radius: 5px;
-  margin-bottom: 25px;
+  background: #c9daf0;
+  width: 280px;
+  height: 200px;
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 51px;
+  font-family: Source Han Sans CN;
   .source-box-source-text {
     border-bottom: 1px solid #ccc;
-    padding-bottom: 10px;
-    font-weight: 600;
+    padding-bottom: 19px;
+    font-weight: 400;
+    color: #1a1a1a;
   }
   .source-box-info {
     display: flex;
-    margin-top: 10px;
+    margin-top: 15px;
     img {
-      width: 96px;
-      height: 60px;
+      width: 83px;
+      height: 55px;
     }
     .source-box-info-title-name {
-      margin-left: 5px;
+      margin-left: 23px;
       .source-box-info-title {
-        font-weight: 600;
+        color: #1a1a1a;
+        font-weight: 400;
+      }
+      .source-box-info-name {
+        font-size: 14px;
+        font-weight: 400;
+        color: #999999;
       }
     }
   }
