@@ -1,7 +1,8 @@
 import axios from "axios";
-export async function getFileData(id) {
+export async function getFileData(id, env) {
   try {
-    let res = await axios.get(`/dev-api/library/resource/download/${id}`, {
+    console.log("env", env);
+    let res = await axios.get(`${env}/library/resource/download/${id}`, {
       responseType: "blob",
       method: "get",
       headers: {
