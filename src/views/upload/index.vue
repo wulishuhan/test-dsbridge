@@ -37,8 +37,8 @@
               </el-button>
             </el-upload>
           </div>
-          <el-form-item prop="files" v-if="resourceForm.files.length > 0">
-            <div class="list-area">
+          <el-form-item prop="files">
+            <div class="list-area" v-if="resourceForm.files.length > 0">
               <el-divider></el-divider>
               <div class="list-wrapper">
                 <h5 class="list-wrapper-title">
@@ -486,7 +486,12 @@ export default {
         licenseIcon: [],
       },
       resourceFormRules: {
-        files: [{ required: true, message: this.$t("upload.sourceNotEmpty") }],
+        files: [
+          {
+            required: true,
+            message: this.$t("upload.sourceNotEmpty"),
+          },
+        ],
         images: [{ required: true, message: this.$t("upload.coverNotEmpty") }],
         title: [
           { required: true, message: this.$t("upload.titleNotEmpty") },
@@ -697,7 +702,6 @@ export default {
         }
       });
     }
-    console.log("refId", this.parentId);
     if (this.parentId != 0) {
       //调用详解接口
       this.isRefSource = true;
@@ -727,7 +731,6 @@ export default {
 
     this._throttle_tutorial = this.throttle((swiperArrow, curIndex) => {
       //滚动
-      console.log("_throttle_tutorial", swiperArrow, this.$refs);
       this.$refs[swiperArrow][curIndex].click();
     }, 500);
   },
@@ -761,7 +764,6 @@ export default {
       };
     },
     genThumb(srcFile) {
-      console.log("srcFile", srcFile);
       //判断文件类型，如果是图片，则生成截图
       if (srcFile.type.indexOf("image") < 0) {
         return;
@@ -816,9 +818,8 @@ export default {
         };
       });
     },
-    handleSelect(item) {
+    handleSelect() {
       this.$refs["autoInput"].focus();
-      console.log(item);
     },
     querySearch(queryString, cb) {
       getResourceTags({ name: queryString }).then((res) => {
