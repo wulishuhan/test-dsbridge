@@ -177,7 +177,11 @@
                 <tutorial :step="detail.tutorials"></tutorial>
               </show-more>
             </el-tab-pane>
-            <el-tab-pane label="Remixes" name="third">
+            <el-tab-pane
+              v-if="JSON.stringify(detail.ancestor) === '{}'"
+              label="Remixes"
+              name="third"
+            >
               <remixes></remixes>
             </el-tab-pane>
             <el-tab-pane label="Makes" name="fourth">
@@ -198,6 +202,34 @@
           </div>
         </div>
         <div class="bottom-content-right">
+          <div
+            v-if="JSON.stringify(detail.ancestor) !== '{}'"
+            class="source-box"
+          >
+            <div class="source-box-source-text">Source</div>
+            <div class="source-box-info">
+              <img :src="detail.ancestor.image" />
+              <div class="source-box-info-title-name">
+                <p class="source-box-info-title">
+                  {{ detail.ancestor ? detail.ancestor.title : "" }}
+                </p>
+                <p class="source-box-info-name">
+                  By
+                  {{
+                    detail.ancestor.creator ? detail.ancestor.creator.name : ""
+                  }}
+                </p>
+              </div>
+            </div>
+            <div class="flex license-box">
+              <div v-if="licenseIcon.length > 0">
+                <i v-for="item in licenseIcon" :key="item" :class="item"></i>
+              </div>
+              <div v-else>
+                <img v-for="item in licenseImg" :key="item" :src="item" />
+              </div>
+            </div>
+          </div>
           <label-card :LabelArr="detail.tags"></label-card>
           <div class="share-content">
             <div class="bottom-content-right-box-title">Share</div>
@@ -216,7 +248,10 @@
               </a>
             </div>
           </div>
-          <div style="margin-top: 32px">
+          <div
+            class="license-container"
+            v-if="JSON.stringify(detail.ancestor) === '{}'"
+          >
             <div class="bottom-content-right-box-title">License</div>
             <div class="flex license-box">
               <div v-if="licenseIcon.length > 0">
@@ -360,6 +395,7 @@ export default {
       mouseEnterCarousel: false,
       likeList: [],
       detail: {
+        ancestor: {},
         collect_count: "",
         creator: {
           avatar: "",
@@ -881,6 +917,9 @@ a {
   line-height: 25px;
   margin-top: 22px;
 }
+.license-container {
+  margin-top: 32px;
+}
 
 .imageViewer {
 }
@@ -1120,5 +1159,40 @@ a {
 }
 .post-remix {
   cursor: pointer;
+}
+.source-box {
+  background: #c9daf0;
+  width: 280px;
+  height: 200px;
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 51px;
+  font-family: Source Han Sans CN;
+  .source-box-source-text {
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 19px;
+    font-weight: 400;
+    color: #1a1a1a;
+  }
+  .source-box-info {
+    display: flex;
+    margin-top: 15px;
+    img {
+      width: 83px;
+      height: 55px;
+    }
+    .source-box-info-title-name {
+      margin-left: 23px;
+      .source-box-info-title {
+        color: #1a1a1a;
+        font-weight: 400;
+      }
+      .source-box-info-name {
+        font-size: 14px;
+        font-weight: 400;
+        color: #999999;
+      }
+    }
+  }
 }
 </style>
