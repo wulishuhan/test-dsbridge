@@ -65,7 +65,7 @@ export default {
       let zip = new JSZip();
       for (let i = 0; i < this.fileList.length; i++) {
         const element = this.fileList[i];
-        let res = await getFileData(element.id);
+        let res = await getFileData(element.id, process.env.VUE_APP_BASE_API);
         zip.file(element.name, res);
       }
       zip.generateAsync({ type: "blob" }).then((content) => {
