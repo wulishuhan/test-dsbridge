@@ -136,6 +136,11 @@ module.exports = {
     changePassword: "更换密码",
     changeName: "更换名称",
     newName: "新名称",
+    currentPasswordRequired: "当前密码必填",
+    PasswordLen: "长度在 5 到 20 个字符",
+    inputPassword: "请输入密码",
+    inputPasswordAgain: "请再次输入密码",
+    PasswordNoSame: "两次输入密码不一致!",
   },
   error: {
     serverDatabaseError: "服务数据库错误",

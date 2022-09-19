@@ -22,7 +22,7 @@
           <el-form-item prop="password1">
             <el-input
               type="password"
-              v-model="registerForm.password"
+              v-model="registerForm.password1"
               autocomplete="off"
               :placeholder="$t('setting.newPassword')"
               show-password
@@ -110,20 +110,20 @@ export default {
   },
   data() {
     var validatePass1 = (rule, value, callback) => {
-      if (value === "") {
-        callback(new Error("请输入密码"));
+      if (value.length == 0) {
+        callback(new Error(this.$t("setting.inputPassword")));
       } else {
-        if (this.registerForm.password !== "") {
+        if (this.registerForm.currentPassword !== "") {
           this.$refs.registerForm.validateField("password2");
         }
         callback();
       }
     };
     var validatePass2 = (rule, value, callback) => {
-      if (value === "") {
-        callback(new Error("请再次输入密码"));
-      } else if (value !== this.registerForm.password) {
-        callback(new Error("两次输入密码不一致!"));
+      if (value.length == 0) {
+        callback(new Error(this.$t("setting.inputPasswordAgain")));
+      } else if (value !== this.registerForm.password1) {
+        callback(new Error(this.$t("setting.PasswordNoSame")));
       } else {
         callback();
       }
@@ -138,8 +138,8 @@ export default {
       },
       registerForm: {
         username: "",
-        password: "",
         password2: "",
+        password1: "",
         currentPassword: "",
       },
       innerVisible: false,
@@ -172,13 +172,13 @@ export default {
         currentPassword: [
           {
             required: true,
-            message: this.$t("header.search"),
+            message: this.$t("setting.currentPasswordRequired"),
             trigger: "blur",
           },
           {
             min: 5,
             max: 20,
-            message: "长度在 5 到 20 个字符",
+            message: this.$t("setting.PasswordLen"),
             trigger: "blur",
           },
         ],
@@ -224,7 +224,7 @@ export default {
         if (valid) {
           console.log(this.registerForm);
           changePassword({
-            newPassword: this.registerForm.password,
+            newPassword: this.registerForm.password1,
             oldPassword: this.registerForm.currentPassword,
           })
             .then(() => {

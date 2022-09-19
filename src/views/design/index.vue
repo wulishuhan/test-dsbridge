@@ -131,7 +131,7 @@
           v-if="!isDescEdit"
           :class="[{ NoDesc: !user.description }, { descHover: isYourAccount }]"
         >
-          {{ user.description || "add a description" }}
+          {{ descFormat || "add a description" }}
         </div>
         <el-input
           class="descInput"
@@ -140,8 +140,7 @@
           autosize
           @blur="descChange"
           v-show="isDescEdit"
-          v-model.trim="user.description"
-          @keyup.enter.native="descChange"
+          v-model="user.description"
           placeholder=""
         ></el-input>
         <div class="follow">
@@ -719,6 +718,9 @@ export default {
       return this.detail.files.reduce((pre, cur) => {
         return pre + cur.downloadCount;
       }, 0);
+    },
+    descFormat() {
+      return this.user.description;
     },
   },
   methods: {
@@ -1582,6 +1584,7 @@ export default {
         font-family: Source Han Sans CN;
         font-weight: 400;
         color: #1a1a1a;
+        white-space: pre-wrap;
       }
       .descInput {
         margin-top: 12px;
