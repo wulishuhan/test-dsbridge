@@ -99,7 +99,7 @@ export default {
         .then((res) => {
           saveAs(res.data, this.file.name);
           this.downloadNum += 1;
-          console.log("okok", res.data);
+          this.$emit("addDownloadCount");
         })
         .catch(() => {
           console.log("下载失败使用使用自定义方法下载！");

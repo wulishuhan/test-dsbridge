@@ -371,6 +371,7 @@ export default {
           border-radius: 4px;
           margin-bottom: 16px;
           outline-color: #999999;
+          padding: 10px;
         }
         .title {
           width: 112px;
