@@ -163,6 +163,7 @@
           >
             <a
               target="_blank"
+              style="color: #1e78f0"
               v-if="item.text.startsWith('http')"
               :href="item.text"
             >
@@ -295,7 +296,7 @@
                     :key="item.id"
                     class="Make"
                     @clickDownMenu="Handler_Down(item)"
-                    @clickDelMenu="handleDelClick(item)"
+                    @clickDelMenu="handleDelMakeClick(item)"
                     @openMake="openMake(item)"
                     @getIndex="getIndex"
                     :make="item"
@@ -472,6 +473,7 @@ import {
   deleteCollection,
   getLikesList,
   deleteResource,
+  deleteMake,
   addCollection,
   cancelCollectResource,
   updateDiy,
@@ -734,7 +736,7 @@ export default {
       this.showMake = false;
       document.documentElement.style.overflowY = "scroll";
     },
-    handleDelClick(item) {
+    handleDelMakeClick(item) {
       if (!this.$store.getters.isLogin) {
         let payload = { loginDialogVisible: true, isLoginForm: true };
         this.$store.dispatch("user/switchLoginRegisteForm", payload);
@@ -744,12 +746,12 @@ export default {
         confirmButtonText: this.$t("design.confirm"),
         cancelButtonText: this.$t("design.cancel"),
       }).then(() => {
-        deleteResource({ resId: item.id }).then(() => {
+        deleteMake({ resId: item.id }).then(() => {
           this.$message({
             type: "success",
             message: this.$t("design.delSuccess"),
           });
-          this.getResourceList();
+          this.getMakeList();
         });
       });
     },
@@ -1172,17 +1174,16 @@ export default {
         text: "",
       });
     },
-    handleBeforeImgUpload() {
-      // const isJPG = file.type === "image/jpeg";
+    handleBeforeImgUpload(file) {
+      const isJPG = file.type.includes("image");
       // const isLt1M = file.size / 1024 / 1024 < 1;
-      // if (!isJPG) {
-      //   this.$message.error("上传头像图片只能是 JPG 格式!");
-      // }
+      if (!isJPG) {
+        this.$message.error("上传头像只能是图片格式!");
+      }
       // if (!isLt1M) {
       //   this.$message.error("上传头像图片大小不能超过 1MB!");
       // }
-      // return isJPG && isLt2M;
-      // return isLt1M;
+      return isJPG;
     },
 
     handleImgUploadErr(err) {
@@ -1553,7 +1554,7 @@ export default {
       .follow {
         margin-top: 12px;
         .followers {
-          margin-right: 12px;
+          margin-right: 121px;
           cursor: pointer;
         }
         .following {
