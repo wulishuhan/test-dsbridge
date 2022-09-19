@@ -62,6 +62,7 @@ module.exports = {
     tagNumError: "不能超出12个标签",
     charNumError: "不能超出32个字符",
     validateError: "验证失败",
+    titleLengthError: "标题长度不少于{0}个字符,至多{1}个字符",
   },
   comment: {
     empty: "暂无评论",

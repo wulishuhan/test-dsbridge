@@ -63,6 +63,7 @@ module.exports = {
     tagNumError: "Up to 12 tags",
     charNumError: "Up to 32 characters",
     validateError: "Verification failed",
+    titleLengthError: "title must be between {0} and {1} characters",
   },
   comment: {
     empty: "No comments",

@@ -488,7 +488,15 @@ export default {
       resourceFormRules: {
         files: [{ required: true, message: this.$t("upload.sourceNotEmpty") }],
         images: [{ required: true, message: this.$t("upload.coverNotEmpty") }],
-        title: [{ required: true, message: this.$t("upload.titleNotEmpty") }],
+        title: [
+          { required: true, message: this.$t("upload.titleNotEmpty") },
+          {
+            range: true,
+            min: 1,
+            max: 32,
+            message: this.$t("upload.titleLengthError", [1, 32]),
+          },
+        ],
         tags: [{ required: true, message: this.$t("upload.tagNotEmpty") }],
         license: [
           {
@@ -602,7 +610,15 @@ export default {
         },
       ],
       tutorialFormRules: {
-        title: [{ required: true, message: this.$t("upload.titleNotEmpty") }],
+        title: [
+          { required: true, message: this.$t("upload.titleNotEmpty") },
+          {
+            range: true,
+            min: 1,
+            max: 32,
+            message: this.$t("upload.titleLengthError", [1, 32]),
+          },
+        ],
         description: [
           { required: true, message: this.$t("upload.descNotEmpty") },
         ],
