@@ -263,7 +263,7 @@ export default {
     },
     viewerZIndex() {
       if (this.isMake) {
-        return 9999;
+        // return 9999;
       }
       const nextZIndex = PopupManager.nextZIndex();
       return this.zIndex > nextZIndex ? this.zIndex : nextZIndex;

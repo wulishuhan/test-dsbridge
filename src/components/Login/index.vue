@@ -196,6 +196,7 @@
               v-model="registerForm.email"
               autocomplete="off"
               placeholder="Email"
+              @blur="thirdEmailBlur"
             ></el-input>
           </el-form-item>
           <el-form-item prop="password1">
@@ -293,7 +294,7 @@ export default {
         if (this.isComplete) {
           callback();
         } else {
-          if (!this.thirdPartyInfo.email) {
+          if (!this.thirdPartyInfo.email && !this.registerForm.email) {
             callback(new Error(this.$t("login.unauthenticatedEmail")));
           } else {
             callback(new Error(this.$t("login.openLoginRegisterFirst")));
@@ -385,6 +386,19 @@ export default {
     };
   },
   methods: {
+    thirdEmailBlur() {
+      this.thirdPartyInfo.email = this.registerForm.email;
+      this.$store
+        .dispatch("user/openLogin", this.thirdPartyInfo)
+        .then(() => {
+          this.$router.push(this.$route.path + "#");
+        })
+        .catch((data) => {
+          if (data.code === 1021) {
+            this.thirdPartyFormTip = this.$t("error.emailExist");
+          }
+        });
+    },
     handleEnter() {
       this.login("loginForm");
     },

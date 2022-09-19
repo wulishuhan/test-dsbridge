@@ -52,7 +52,12 @@
         </div>
       </div>
     </div>
-    <el-dialog :title="replyTo" :visible.sync="innerVisible" top="35vh">
+    <el-dialog
+      :title="replyTo"
+      :visible.sync="innerVisible"
+      top="35vh"
+      append-to-body
+    >
       <reply-widget
         @closeReplyModal="handleClose('inner')"
         :comment-id="currentCommentId"
