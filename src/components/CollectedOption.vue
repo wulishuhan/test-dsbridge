@@ -91,7 +91,12 @@ export default {
     },
   },
   methods: {
-    addFolder() {
+    addFolder(e) {
+      console.log("e", e);
+      if (e.keyCode === 13) {
+        this.isNewFileLink = true;
+        return;
+      }
       this.isNewFileLink = true;
       if (this.newFolderName !== "") {
         this.$emit("addFolder", this.newFolderName);
