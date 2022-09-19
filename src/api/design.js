@@ -34,6 +34,12 @@ export function deleteResource(params) {
     method: "delete",
   });
 }
+export function deleteMake(params) {
+  return request({
+    url: `/library/comment/${params.resId}`,
+    method: "delete",
+  });
+}
 export function moveResourceToCollection(params) {
   return request({
     url: `/library/collection/${params.collectionId}/resource/${params.resourceId}`,

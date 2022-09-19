@@ -39,9 +39,10 @@
           </el-form-item>
           <el-form-item>
             <div class="submit">
-              <div class="forget" @click="handleClickForget">
+              <!-- <div class="forget" @click="handleClickForget">
                 {{ $t("setting.forgetPassword") }}
-              </div>
+              </div> -->
+              <div></div>
               <el-button @click="changePassword('registerForm')">{{
                 $t("setting.submit")
               }}</el-button>
@@ -168,8 +169,12 @@ export default {
             trigger: "blur",
           },
         ],
-        password: [
-          { required: true, message: "请输入密码", trigger: "blur" },
+        currentPassword: [
+          {
+            required: true,
+            message: this.$t("header.search"),
+            trigger: "blur",
+          },
           {
             min: 5,
             max: 20,

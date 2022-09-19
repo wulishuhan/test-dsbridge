@@ -47,7 +47,7 @@
               </div> -->
               <div class="bottom">
                 <div class="title">{{ $t("design.password") }}</div>
-                <div class="name">xxxxxxxxxx</div>
+                <!-- <div class="name">xxxxxxxxxx</div> -->
                 <div class="action" @click="handleChangePasswordClick">
                   {{ $t("setting.changePassword") }}
                 </div>
@@ -269,17 +269,16 @@ export default {
         this.dialogFollowersVisible = true;
       });
     },
-    handleBeforeImgUpload() {
-      // const isJPG = file.type === "image/jpeg";
+    handleBeforeImgUpload(file) {
+      const isJPG = file.type.includes("image");
       // const isLt1M = file.size / 1024 / 1024 < 1;
-      // if (!isJPG) {
-      //   this.$message.error("上传头像图片只能是 JPG 格式!");
-      // }
+      if (!isJPG) {
+        this.$message.error("上传头像只能是图片格式!");
+      }
       // if (!isLt1M) {
       //   this.$message.error("上传头像图片大小不能超过 1MB!");
       // }
-      // return isJPG && isLt2M;
-      // return isLt1M;
+      return isJPG;
     },
 
     handleImgUploadErr(err) {
