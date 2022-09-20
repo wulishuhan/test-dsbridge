@@ -69,6 +69,7 @@ module.exports = {
     empty: "No comments",
     emptyToast: "Comments cannot be empty",
     replyNum: "{0} replies",
+    sendOk: "Send successfully",
   },
   download: {
     fileNum: "Files",

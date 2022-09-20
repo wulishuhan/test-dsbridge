@@ -116,7 +116,8 @@ export default {
   margin-left: 54px;
   img {
     width: 184px;
-    height: 122px;
+    height: auto;
+    max-height: 300px;
     object-fit: cover;
   }
 }
