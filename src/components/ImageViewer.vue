@@ -262,8 +262,8 @@ export default {
       return style;
     },
     viewerZIndex() {
-      if (this.isMake) {
-        // return 9999;
+      if (this.isMake && document.querySelector(".v-modal")) {
+        return parseInt(document.querySelector(".v-modal").style.zIndex) + 1;
       }
       const nextZIndex = PopupManager.nextZIndex();
       return this.zIndex > nextZIndex ? this.zIndex : nextZIndex;
@@ -456,6 +456,9 @@ export default {
     this.deviceSupportInstall();
     if (this.appendToBody) {
       document.body.appendChild(this.$el);
+    }
+    if (this.isMake) {
+      document.body.parentNode.appendChild(this.$el);
     }
     // add tabindex then wrapper can be focusable via Javascript
     // focus wrapper so arrow key can't cause inner scroll behavior underneath

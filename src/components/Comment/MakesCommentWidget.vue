@@ -165,6 +165,7 @@ export default {
 .comment-wrapper {
   width: 80%;
   margin: 20px auto;
+  word-wrap: break-word;
   .userinfo-wrapper {
     display: flex;
     justify-content: space-between;

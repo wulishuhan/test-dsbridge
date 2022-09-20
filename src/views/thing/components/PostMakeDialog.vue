@@ -35,7 +35,12 @@
           ></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="onSubmit" class="post-make-button">
+          <el-button
+            type="primary"
+            @click="onSubmit"
+            class="post-make-button"
+            :disabled="isDisabled"
+          >
             post
           </el-button>
         </el-form-item>
@@ -71,6 +76,7 @@ export default {
         isMake: "1",
         id: 0,
       },
+      isDisabled: true,
     };
   },
   computed: {
@@ -101,7 +107,6 @@ export default {
     },
     onSubmit() {
       postComment(this.form).then((res) => {
-        console.log(res);
         this.$message({
           message: "post make successfully",
           type: "success",
@@ -115,17 +120,18 @@ export default {
       console.log("uploadSuccessHandler", response);
       this.form.image = response.data.url;
       this.form.url = response.data.url;
+      this.isDisabled = false;
     },
     uploadBefore(file) {
       console.log("upload before file", file);
       let whiteList = ["png", "jpg", "jpeg", "svg", "gif"];
       if (file.name.length > 50) {
-        this.$message.error("文件名过长！");
+        this.$message.error(this.$t("thing.fileNameTooLong"));
         return false;
       } else if (
         !whiteList.includes(file.name.substring(file.name.lastIndexOf(".") + 1))
       ) {
-        this.$message.error("只接受" + whiteList + "格式");
+        this.$message.error(this.$t("thing.acceptFileFormat"));
         return false;
       }
       return true;
@@ -176,8 +182,9 @@ export default {
   padding: 0px 0px 0px 18px;
   height: 56px;
   line-height: 56px;
-  font-size: 20px;
-  font-weight: 500;
+  font-size: 20px !important;
+  font-weight: 500 !important;
+  color: #1a1a1a;
   font-family: Source Han Sans CN;
 }
 ::v-deep .el-dialog__body {
