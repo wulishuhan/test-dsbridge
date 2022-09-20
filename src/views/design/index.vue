@@ -651,6 +651,7 @@ export default {
   mounted() {
     document.addEventListener("click", () => {
       this.isShowDownPanel = false;
+      this.openCollectedOption = false;
     });
     let userId = this.$route.params.userId;
 
@@ -1180,7 +1181,7 @@ export default {
       const isJPG = file.type.includes("image");
       // const isLt1M = file.size / 1024 / 1024 < 1;
       if (!isJPG) {
-        this.$message.error("上传头像只能是图片格式!");
+        this.$message.error(this.$t("design.onlyImg"));
       }
       // if (!isLt1M) {
       //   this.$message.error("上传头像图片大小不能超过 1MB!");

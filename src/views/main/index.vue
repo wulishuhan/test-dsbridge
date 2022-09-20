@@ -5,7 +5,7 @@
         <el-carousel-item v-for="item in bannerImages" :key="item.title">
           <a :href="item.url">
             <img :src="item.image" alt="" />
-            <div class="learn-more">了解更多</div>
+            <div class="learn-more">{{ $t("main.barnerViewMore") }}</div>
           </a>
         </el-carousel-item>
       </el-carousel>
@@ -247,6 +247,7 @@ export default {
       this.openCollectedOption = false;
     },
     moveCollectedOption(folderObject) {
+      console.log("moveCollectedOption", folderObject);
       this.openCollectedOption = false;
       addResourceToCollection({
         resourceId: this.prepareCollectedResId,

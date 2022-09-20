@@ -126,6 +126,7 @@ module.exports = {
     makes: "Makes",
     updSuccess: "Update success",
     emptyCollection: "Empty",
+    onlyImg: "Upload files can only be picture format",
   },
   setting: {
     forgetPassword: "Forget password",
@@ -165,5 +166,8 @@ module.exports = {
     tokenExpired: "token expired",
     deviceNotSupported: "Your device does not support logins",
     usernameNotExist: "username does not exist",
+  },
+  main: {
+    barnerViewMore: "view more",
   },
 };

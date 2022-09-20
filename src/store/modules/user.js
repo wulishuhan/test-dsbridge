@@ -38,7 +38,7 @@ const mutations = {
     state.userInfo = payload.user_info;
     // eslint-disable-next-line
     state.userInfo.avatar = !!payload.user_info.avatar
-      ? payload.user_info.avatar + "?timestamp=" + new Date().getTime()
+      ? payload.user_info.avatar
       : generatorDefaultAvator(
           payload.user_info.nick_name,
           payload.user_info.user_id
@@ -52,7 +52,7 @@ const mutations = {
     state.userInfo.nick_name = payload.nick_name;
     // eslint-disable-next-line
     state.userInfo.avatar = !!payload.avatar
-      ? payload.avatar + "?timestamp=" + new Date().getTime()
+      ? payload.avatar
       : generatorDefaultAvator(payload.nick_name, payload.user_id);
     state.userInfo.email = payload.email;
     state.userInfo.user_name = payload.user_name;

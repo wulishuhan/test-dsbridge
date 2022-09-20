@@ -33,7 +33,9 @@
       placeholder="press enter to add new folder"
     ></el-input>
     <div class="button-group">
-      <el-button class="cancel-button" @click="cancelFolder">Cancel</el-button>
+      <el-button class="cancel-button" @mousedown.native="cancelFolder"
+        >Cancel</el-button
+      >
       <el-button
         class="move-button"
         :class="{ 'input-move-button-background': !isNewFileLink }"
@@ -76,7 +78,7 @@ export default {
   data() {
     return {
       isNewFileLink: true,
-      select: "Draft",
+      select: { id: 0, name: "Draft" },
       newFolderName: "",
     };
   },
@@ -99,14 +101,16 @@ export default {
       this.isNewFileLink = true;
       if (this.newFolderName !== "") {
         this.$emit("addFolder", this.newFolderName);
+        this.newFolderName = "";
       }
     },
-    cancelFolder() {
+    cancelFolder(e) {
       this.newFolderName = "";
       this.isNewFileLink = true;
       this.$emit("close");
     },
     selectFolderToCollected() {
+      console.log("selectFolderToCol", this.select);
       this.$emit("moveFolder", this.select);
     },
     // 阻止冒泡
