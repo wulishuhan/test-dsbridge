@@ -129,6 +129,7 @@ module.exports = {
     uploadSuccess: "上传成功!",
     uploadFail: "上传失败!",
     noCollection: "无收藏文件",
+    changePassword: "修改密码",
   },
   setting: {
     forgetPassword: "忘记密码",

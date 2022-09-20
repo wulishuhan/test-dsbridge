@@ -6,7 +6,7 @@
       :before-close="handleClose"
       :title="
         !ChangePasswordOrEmail
-          ? $t('setting.forgetPassword')
+          ? $t('setting.changePassword')
           : $t('setting.changeEmail')
       "
     >

@@ -130,6 +130,7 @@ module.exports = {
     uploadSuccess: "Successfully upload!",
     uploadFail: "upload failed!",
     noCollection: "No collection file",
+    changePassword: "change Password",
   },
   setting: {
     forgetPassword: "Forget password",
