@@ -68,6 +68,7 @@ module.exports = {
     empty: "暂无评论",
     emptyToast: "评论不能为空",
     replyNum: "{0}条回复",
+    sendOk: "发送成功",
   },
   download: {
     fileNum: "个文件",
@@ -165,5 +166,12 @@ module.exports = {
     tokenExpired: "Token已过期",
     deviceNotSupported: "设备不支持",
     usernameNotExist: "用户名不存在",
+  },
+  main: {
+    barnerViewMore: "了解更多",
+  },
+  thing: {
+    fileNameTooLong: "文件名过长，应该在50个字符以内",
+    acceptFileFormat: "文件只接收png, jpg, jpeg, svg, gif格式",
   },
 };

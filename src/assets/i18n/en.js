@@ -69,6 +69,7 @@ module.exports = {
     empty: "No comments",
     emptyToast: "Comments cannot be empty",
     replyNum: "{0} replies",
+    sendOk: "Send successfully",
   },
   download: {
     fileNum: "Files",
@@ -168,5 +169,13 @@ module.exports = {
     tokenExpired: "token expired",
     deviceNotSupported: "Your device does not support logins",
     usernameNotExist: "username does not exist",
+  },
+  main: {
+    barnerViewMore: "view more",
+  },
+  thing: {
+    fileNameTooLong:
+      "The file name is too long, it should be within 50 characters",
+    acceptFileFormat: "File only accepts png, jpg, jpeg, svg, gif formats",
   },
 };

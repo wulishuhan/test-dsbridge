@@ -142,13 +142,12 @@ export default {
         image: this.commentPic,
       }).then(() => {
         this.$store.dispatch("comment/getCommentList", { resId: resId });
-        console.log("回复评论");
         this.$store.dispatch(
           "comment/getCommentListFromId",
           this.primaryCommentId
         );
         this.$message({
-          message: "发送成功",
+          message: this.$t("comment.sendOk"),
           type: "success",
         });
       });
