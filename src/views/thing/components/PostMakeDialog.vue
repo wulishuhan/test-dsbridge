@@ -182,8 +182,9 @@ export default {
   padding: 0px 0px 0px 18px;
   height: 56px;
   line-height: 56px;
-  font-size: 20px;
-  font-weight: 500;
+  font-size: 20px !important;
+  font-weight: 500 !important;
+  color: #1a1a1a;
   font-family: Source Han Sans CN;
 }
 ::v-deep .el-dialog__body {
