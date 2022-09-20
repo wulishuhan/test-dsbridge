@@ -78,7 +78,7 @@ export default {
   data() {
     return {
       isNewFileLink: true,
-      select: "Draft",
+      select: { id: 0, name: "Draft" },
       newFolderName: "",
     };
   },
@@ -101,6 +101,7 @@ export default {
       this.isNewFileLink = true;
       if (this.newFolderName !== "") {
         this.$emit("addFolder", this.newFolderName);
+        this.newFolderName = "";
       }
     },
     cancelFolder(e) {
@@ -109,6 +110,7 @@ export default {
       this.$emit("close");
     },
     selectFolderToCollected() {
+      console.log("selectFolderToCol", this.select);
       this.$emit("moveFolder", this.select);
     },
     // 阻止冒泡

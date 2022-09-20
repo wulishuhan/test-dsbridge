@@ -166,4 +166,7 @@ module.exports = {
     deviceNotSupported: "Your device does not support logins",
     usernameNotExist: "username does not exist",
   },
+  main: {
+    barnerViewMore: "view more",
+  },
 };

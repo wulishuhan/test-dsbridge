@@ -163,4 +163,7 @@ module.exports = {
     deviceNotSupported: "设备不支持",
     usernameNotExist: "用户名不存在",
   },
+  main: {
+    barnerViewMore: "了解更多",
+  },
 };
