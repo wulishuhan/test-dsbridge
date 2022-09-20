@@ -28,6 +28,7 @@
       v-if="!isNewFileLink"
       v-model="newFolderName"
       @keyup.enter.native="addFolder"
+      @blur="addFolder"
       class="new-file-input"
       placeholder="press enter to add new folder"
     ></el-input>
@@ -91,7 +92,6 @@ export default {
   },
   methods: {
     addFolder(e) {
-      console.log("e", e);
       if (e.keyCode === 13) {
         this.isNewFileLink = true;
         return;
