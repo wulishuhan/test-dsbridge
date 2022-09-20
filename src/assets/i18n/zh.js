@@ -124,6 +124,7 @@ module.exports = {
     makes: "Makes",
     updSuccess: "修改成功",
     emptyCollection: "空收藏夹",
+    onlyImg: "上传文件只能是图片格式",
   },
   setting: {
     forgetPassword: "忘记密码",

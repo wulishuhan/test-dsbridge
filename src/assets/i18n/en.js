@@ -125,6 +125,7 @@ module.exports = {
     makes: "Makes",
     updSuccess: "Update success",
     emptyCollection: "Empty",
+    onlyImg: "Upload files can only be picture format",
   },
   setting: {
     forgetPassword: "Forget password",
