@@ -125,6 +125,9 @@ module.exports = {
     updSuccess: "修改成功",
     emptyCollection: "空收藏夹",
     onlyImg: "上传文件只能是图片格式",
+    uploadSuccess: "上传成功!",
+    uploadFail: "上传失败!",
+    noCollection: "无收藏文件",
   },
   setting: {
     forgetPassword: "忘记密码",

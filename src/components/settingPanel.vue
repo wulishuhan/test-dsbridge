@@ -274,7 +274,7 @@ export default {
       const isJPG = file.type.includes("image");
       // const isLt1M = file.size / 1024 / 1024 < 1;
       if (!isJPG) {
-        this.$message.error("上传头像只能是图片格式!");
+        this.$message.error(this.$t("design.onlyImg"));
       }
       // if (!isLt1M) {
       //   this.$message.error("上传头像图片大小不能超过 1MB!");
@@ -284,13 +284,13 @@ export default {
 
     handleImgUploadErr(err) {
       //console.log(e)
-      this.$message.error("上传失败" + err);
+      this.$message.error(this.$t("design.uploadFail") + err);
     },
     handleImgUploadSuccess() {
       this.$store.dispatch("user/getUserInfo").catch((e) => {
         console.log(e);
       });
-      this.$message.success("上传成功");
+      this.$message.success(this.$t("design.uploadSuccess"));
     },
   },
 };

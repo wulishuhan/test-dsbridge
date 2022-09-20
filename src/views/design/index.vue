@@ -1,100 +1,101 @@
 <template>
-  <div class="container-profile" id="top">
-    <CollectedOption
-      style="z-index: 9999"
-      :show="openCollectedOption"
-      :folders="folders"
-      :style="collectionStyle"
-      @close="closeCollectedOption"
-      @moveFolder="moveCollectedOption"
-      @addFolder="addFolder"
-    ></CollectedOption>
-    <el-dialog :visible.sync="dialogFollowersVisible" class="followDialog">
-      <el-tabs
-        v-model="activeTab"
-        @tab-click="handleFollowTapClick"
-        class="tabsContent"
-      >
-        <el-tab-pane
-          :label="$t('design.follower')"
-          name="first"
-          class="followTapPanel"
+  <div @click="closeAllDialog">
+    <div class="container-profile" id="top">
+      <CollectedOption
+        style="z-index: 9999"
+        :show="openCollectedOption"
+        :folders="folders"
+        :style="collectionStyle"
+        @close="closeCollectedOption"
+        @moveFolder="moveCollectedOption"
+        @addFolder="addFolder"
+      ></CollectedOption>
+      <el-dialog :visible.sync="dialogFollowersVisible" class="followDialog">
+        <el-tabs
+          v-model="activeTab"
+          @tab-click="handleFollowTapClick"
+          class="tabsContent"
         >
-          <IndexFollowPanel
-            :userList="followerList"
-            :myFollowList="myFollowList"
-            :myUserId="userInfo.user_id"
-          ></IndexFollowPanel>
-        </el-tab-pane>
-        <el-tab-pane
-          :label="$t('design.following')"
-          name="second"
-          class="followTapPanel"
-        >
-          <IndexFollowPanel
-            :userList="followingList"
-            :myUserId="userInfo.user_id"
-            :myFollowList="myFollowList"
-          ></IndexFollowPanel>
-        </el-tab-pane>
-      </el-tabs>
-    </el-dialog>
+          <el-tab-pane
+            :label="$t('design.follower')"
+            name="first"
+            class="followTapPanel"
+          >
+            <IndexFollowPanel
+              :userList="followerList"
+              :myFollowList="myFollowList"
+              :myUserId="userInfo.user_id"
+            ></IndexFollowPanel>
+          </el-tab-pane>
+          <el-tab-pane
+            :label="$t('design.following')"
+            name="second"
+            class="followTapPanel"
+          >
+            <IndexFollowPanel
+              :userList="followingList"
+              :myUserId="userInfo.user_id"
+              :myFollowList="myFollowList"
+            ></IndexFollowPanel>
+          </el-tab-pane>
+        </el-tabs>
+      </el-dialog>
 
-    <div class="bg">
-      <span v-if="isYourAccount" class="ortur-icon-pen">
-        <el-upload
-          v-if="isYourAccount"
-          class="upload-bg"
-          :headers="headers"
-          :on-success="handleBgImgUploadSuccess"
-          :on-error="handleImgUploadErr"
-          :before-upload="handleBeforeImgUpload"
-          ref="upload"
-          :action="baseURL + '/library/author/cover'"
-          :auto-upload="true"
-          :show-file-list="false"
-        >
-          <button slot="trigger" size="small" type="primary"></button>
-        </el-upload>
-      </span>
+      <div class="bg">
+        <span v-if="isYourAccount" class="ortur-icon-pen">
+          <el-upload
+            v-if="isYourAccount"
+            class="upload-bg"
+            :headers="headers"
+            :on-success="handleBgImgUploadSuccess"
+            :on-error="handleImgUploadErr"
+            :before-upload="handleBeforeImgUpload"
+            ref="upload"
+            :action="baseURL + '/library/author/cover'"
+            :auto-upload="true"
+            :show-file-list="false"
+          >
+            <button slot="trigger" size="small" type="primary"></button>
+          </el-upload>
+        </span>
 
-      <img
-        class="img"
-        v-if="user.cover_image && user.cover_image.length > 0"
-        :src="user.cover_image"
-        alt=""
-      />
-      <img
-        class="img"
-        v-else
-        src="../../assets/img/Frame 58644504.png"
-        alt=""
-      />
-    </div>
+        <img
+          class="img"
+          v-if="user.cover_image && user.cover_image.length > 0"
+          :src="user.cover_image"
+          alt=""
+        />
+        <img
+          class="img"
+          v-else
+          src="../../assets/img/Frame 58644504.png"
+          alt=""
+        />
+      </div>
 
-    <div class="content">
-      <div class="info">
-        <div class="imgWrap">
-          <span v-if="isYourAccount" class="ortur-icon-pen imgEdit">
-            <el-upload
-              v-if="isYourAccount"
-              class="upload-demo"
-              :headers="headers"
-              :on-success="handleImgUploadSuccess"
-              :on-error="handleImgUploadErr"
-              :before-upload="handleBeforeImgUpload"
-              ref="upload"
-              :action="baseURL + '/system/user/avatar'"
-              :auto-upload="true"
-              :show-file-list="false"
-            >
-              <button slot="trigger" size="small" type="primary">
-                选取文件
-              </button>
-            </el-upload>
-          </span>
+      <div class="content">
+        <div class="info">
+          <div class="imgWrap">
+            <span v-if="isYourAccount" class="ortur-icon-pen imgEdit">
+              <el-upload
+                v-if="isYourAccount"
+                class="upload-demo"
+                :headers="headers"
+                :on-success="handleImgUploadSuccess"
+                :on-error="handleImgUploadErr"
+                :before-upload="handleBeforeImgUpload"
+                ref="upload"
+                :action="baseURL + '/system/user/avatar'"
+                :auto-upload="true"
+                :show-file-list="false"
+              >
+                <button slot="trigger" size="small" type="primary">
+                  选取文件
+                </button>
+              </el-upload>
+            </span>
 
-          <!-- <img
+            <!-- <img
             class="img"
             v-if="
               (isYourAccount && userInfo.avatar.length == 0) ||
@@ -107,129 +108,132 @@
                 : 'http://dummyimage.com/300x200/96f279/FFF&text=' + user.name
             "
           /> -->
-          <img class="img" v-if="isYourAccount" :src="userInfo.avatar" />
-          <img
-            class="img"
-            mode="widthFix"
-            v-else
-            :src="user.avatar ? user.avatar : defaultAvatar"
-            alt=""
-          />
-        </div>
-        <div class="name">
-          {{ isYourAccount ? userInfo.nick_name : user.name }}
-        </div>
-        <FollowButton
-          class="followBtn"
-          v-if="!isYourAccount"
-          :user-id="userId"
-          :follow="myFollowingList.includes(userId - 0)"
-        ></FollowButton>
-        <div
-          class="desc"
-          @click="editDesc"
-          v-if="!isDescEdit"
-          :class="[{ NoDesc: !user.description }, { descHover: isYourAccount }]"
-        >
-          {{ descFormat || "add a description" }}
-        </div>
-        <el-input
-          class="descInput"
-          type="textarea"
-          ref="descRef"
-          autosize
-          @blur="descChange"
-          v-show="isDescEdit"
-          v-model="user.description"
-          placeholder=""
-        ></el-input>
-        <div class="follow">
-          <span class="followers" @click="openFollowDialog('first')"
-            >{{ user.follower_count }}
-            <span style="color: #ccc">{{ $t("design.follower") }}</span>
-          </span>
-          <span class="following" @click="openFollowDialog('second')"
-            >{{ user.following_count
-            }}<span style="color: #ccc"> {{ $t("design.following") }}</span>
-          </span>
-        </div>
-        <div v-for="(item, index) in diyArr" :key="item.id">
+            <img class="img" v-if="isYourAccount" :src="userInfo.avatar" />
+            <img
+              class="img"
+              mode="widthFix"
+              v-else
+              :src="user.avatar ? user.avatar : defaultAvatar"
+              alt=""
+            />
+          </div>
+          <div class="name">
+            {{ isYourAccount ? userInfo.nick_name : user.name }}
+          </div>
+          <FollowButton
+            class="followBtn"
+            v-if="!isYourAccount"
+            :user-id="userId"
+            :follow="myFollowingList.includes(userId - 0)"
+          ></FollowButton>
           <div
             class="desc"
-            @click="editDiy(item, index)"
-            v-if="!item.isEdit"
-            :class="[{ NoDesc: !item.text }, { descHover: isYourAccount }]"
+            @click="editDesc"
+            v-if="!isDescEdit"
+            :class="[
+              { NoDesc: !user.description },
+              { descHover: isYourAccount },
+            ]"
           >
-            <a
-              target="_blank"
-              style="color: #1e78f0"
-              v-if="item.text.startsWith('http')"
-              :href="item.text"
-            >
-              {{ item.text }}
-            </a>
-            <div v-else>{{ item.text || "add something" }}</div>
+            {{ descFormat || "add a description" }}
           </div>
           <el-input
             class="descInput"
-            ref="diyRef"
-            v-on:keyup.enter.native="editChange(item, index)"
-            @blur="editChange(item, index)"
-            v-show="item.isEdit"
-            v-model="item.text"
+            type="textarea"
+            ref="descRef"
+            autosize
+            @blur="descChange"
+            v-show="isDescEdit"
+            v-model="user.description"
             placeholder=""
           ></el-input>
-        </div>
-        <div
-          v-show="isYourAccount && diyArr.length < 3"
-          class="add"
-          @click="addDiy"
-        >
-          +
-        </div>
-      </div>
-      <div class="tabs">
-        <!-- <span class="editTab">edit</span> -->
-        <el-tabs
-          v-model="activeName"
-          @tab-click="handleResourceClick"
-          class="tabsContent"
-        >
-          <el-tab-pane :label="$t('design.resources')" name="first">
-            <el-tabs
-              v-model="resourceActiveTab"
-              @tab-click="handleResourceTabClick"
-              class="resourceTabsContent"
+          <div class="follow">
+            <span class="followers" @click="openFollowDialog('first')"
+              >{{ user.follower_count }}
+              <span style="color: #ccc">{{ $t("design.follower") }}</span>
+            </span>
+            <span class="following" @click="openFollowDialog('second')"
+              >{{ user.following_count
+              }}<span style="color: #ccc"> {{ $t("design.following") }}</span>
+            </span>
+          </div>
+          <div v-for="(item, index) in diyArr" :key="item.id">
+            <div
+              class="desc"
+              @click="editDiy(item, index)"
+              v-if="!item.isEdit"
+              :class="[{ NoDesc: !item.text }, { descHover: isYourAccount }]"
             >
-              <el-tab-pane :label="$t('design.mine')" name="first">
-                <el-row :gutter="20">
-                  <div
-                    class="resourceWrapper"
-                    v-for="(item, index) in resources"
-                    :key="item.thingId"
-                    @contextmenu="showMenu(index, item)"
-                  >
-                    <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                      <resource-card
-                        :key="item.id"
-                        @clickMoveMenu="Handler_MoveTo(item)"
-                        @clickDelMenu="Handler_Del(item)"
-                        @clickDownMenu="Handler_Down(item)"
-                        @openCollection="openCollection"
-                        @deleteCollection="deleteCollection"
-                        :isCollected="myCollects.includes(item.id)"
-                        :thing="item"
-                        :showEdit="isLogin && isYourAccount"
-                        :showMoreMenuBtn="isYourAccount && true"
-                        :showAvatar="false"
-                        :showCollection="!isLogin || !isYourAccount"
-                        :isYourAccount="isYourAccount"
-                        :isLike="myLikes.includes(item.id)"
-                        :showStar="false"
-                      >
-                      </resource-card>
-                    </el-col>
-                    <!-- <vue-context-menu
+              <a
+                target="_blank"
+                style="color: #1e78f0"
+                v-if="item.text.startsWith('http')"
+                :href="item.text"
+              >
+                {{ item.text }}
+              </a>
+              <div v-else>{{ item.text || "add something" }}</div>
+            </div>
+            <el-input
+              class="descInput"
+              ref="diyRef"
+              v-on:keyup.enter.native="editChange(item, index)"
+              @blur="editChange(item, index)"
+              v-show="item.isEdit"
+              v-model="item.text"
+              placeholder=""
+            ></el-input>
+          </div>
+          <div
+            v-show="isYourAccount && diyArr.length < 3"
+            class="add"
+            @click="addDiy"
+          >
+            +
+          </div>
+        </div>
+        <div class="tabs">
+          <!-- <span class="editTab">edit</span> -->
+          <el-tabs
+            v-model="activeName"
+            @tab-click="handleResourceClick"
+            class="tabsContent"
+          >
+            <el-tab-pane :label="$t('design.resources')" name="first">
+              <el-tabs
+                v-model="resourceActiveTab"
+                @tab-click="handleResourceTabClick"
+                class="resourceTabsContent"
+              >
+                <el-tab-pane :label="$t('design.mine')" name="first">
+                  <el-row :gutter="20">
+                    <div
+                      class="resourceWrapper"
+                      v-for="(item, index) in resources"
+                      :key="item.thingId"
+                      @contextmenu="showMenu(index, item)"
+                    >
+                      <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
+                        <resource-card
+                          :key="item.id"
+                          @clickMoveMenu="Handler_MoveTo(item)"
+                          @clickDelMenu="Handler_Del(item)"
+                          @clickDownMenu="Handler_Down(item)"
+                          @openCollection="openCollection"
+                          @deleteCollection="deleteCollection"
+                          :isCollected="myCollects.includes(item.id)"
+                          :thing="item"
+                          :showEdit="isLogin && isYourAccount"
+                          :showMoreMenuBtn="isYourAccount && true"
+                          :showAvatar="false"
+                          :showCollection="!isLogin || !isYourAccount"
+                          :isYourAccount="isYourAccount"
+                          :isLike="myLikes.includes(item.id)"
+                          :showStar="false"
+                        >
+                        </resource-card>
+                      </el-col>
+                      <!-- <vue-context-menu
                       class="contextMenu"
                       :contextMenuData="contextMenuData"
                       :transferIndex="transferIndex"
@@ -237,201 +241,208 @@
                       @Handler2="Handler_MoveTo(item)"
                       @Handler3="Handler_Down(item)"
                     ></vue-context-menu> -->
-                  </div>
-                </el-row>
-              </el-tab-pane>
-              <el-tab-pane :label="$t('design.remixes')" name="second">
-                <el-row :gutter="20">
-                  <div
-                    class="resourceWrapper"
-                    v-for="(item, index) in remixesList"
-                    :key="item.thingId"
-                    @contextmenu="showMenu(index, item)"
-                  >
-                    <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                      <resource-card
-                        :key="item.id"
-                        @clickMoveMenu="Handler_MoveTo(item)"
-                        @clickDelMenu="Handler_Del(item)"
-                        @clickDownMenu="Handler_Down(item)"
-                        @openCollection="openCollection"
-                        @deleteCollection="deleteCollection"
-                        :isCollected="myCollects.includes(item.id)"
-                        :thing="item"
-                        :showEdit="isLogin && isYourAccount"
-                        :showMoreMenuBtn="isYourAccount && true"
-                        :showAvatar="false"
-                        :showCollection="!isLogin || !isYourAccount"
-                        :isYourAccount="isYourAccount"
-                        :isLike="myLikes.includes(item.id)"
-                        :showStar="false"
-                      >
-                      </resource-card>
-                    </el-col>
-                  </div>
-                </el-row>
-              </el-tab-pane>
+                    </div>
+                  </el-row>
+                </el-tab-pane>
+                <el-tab-pane :label="$t('design.remixes')" name="second">
+                  <el-row :gutter="20">
+                    <div
+                      class="resourceWrapper"
+                      v-for="(item, index) in remixesList"
+                      :key="item.thingId"
+                      @contextmenu="showMenu(index, item)"
+                    >
+                      <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
+                        <resource-card
+                          :key="item.id"
+                          @clickMoveMenu="Handler_MoveTo(item)"
+                          @clickDelMenu="Handler_Del(item)"
+                          @clickDownMenu="Handler_Down(item)"
+                          @openCollection="openCollection"
+                          @deleteCollection="deleteCollection"
+                          :isCollected="myCollects.includes(item.id)"
+                          :thing="item"
+                          :showEdit="isLogin && isYourAccount"
+                          :showMoreMenuBtn="isYourAccount && true"
+                          :showAvatar="false"
+                          :showCollection="!isLogin || !isYourAccount"
+                          :isYourAccount="isYourAccount"
+                          :isLike="myLikes.includes(item.id)"
+                          :showStar="false"
+                        >
+                        </resource-card>
+                      </el-col>
+                    </div>
+                  </el-row>
+                </el-tab-pane>
 
-              <el-tab-pane :label="$t('design.makes')" name="third">
-                <!-- <PostMakeDialog
+                <el-tab-pane :label="$t('design.makes')" name="third">
+                  <!-- <PostMakeDialog
                   :isShow.sync="dialogPostMake"
                   :customClass="'make-dialog'"
                 ></PostMakeDialog> -->
-                <ElImageViewer
-                  class="imageViewer"
-                  v-if="showMake"
-                  :on-close="closeMake"
-                  :url-list="makes"
-                  :isMake="true"
-                  :initialIndex="index"
-                ></ElImageViewer>
-                <!-- <ViewMake
+                  <ElImageViewer
+                    class="imageViewer"
+                    v-if="showMake"
+                    :on-close="closeMake"
+                    :url-list="makes"
+                    :isMake="true"
+                    :initialIndex="index"
+                  ></ElImageViewer>
+                  <!-- <ViewMake
                   :makes="makes"
                   :isShow.sync="dialogViewMake"
                 ></ViewMake> -->
-                <div style="display: flex; flex-wrap: wrap">
-                  <Make
-                    v-for="(item, index) in makes"
-                    :key="item.id"
-                    class="Make"
-                    @clickDownMenu="Handler_Down(item)"
-                    @clickDelMenu="handleDelMakeClick(item)"
-                    @openMake="openMake(item)"
-                    @getIndex="getIndex"
-                    :make="item"
-                    :index="index"
-                    :showMoreIcon="true"
-                    :isYourAccount="isYourAccount"
-                  ></Make>
+                  <div style="display: flex; flex-wrap: wrap">
+                    <Make
+                      v-for="(item, index) in makes"
+                      :key="item.id"
+                      class="Make"
+                      @clickDownMenu="Handler_Down(item)"
+                      @clickDelMenu="handleDelMakeClick(item)"
+                      @openMake="openMake(item)"
+                      @getIndex="getIndex"
+                      :make="item"
+                      :index="index"
+                      :showMoreIcon="true"
+                      :isYourAccount="isYourAccount"
+                    ></Make>
+                  </div>
+                </el-tab-pane>
+              </el-tabs>
+            </el-tab-pane>
+            <el-tab-pane :label="$t('design.likes')" name="second">
+              <el-row :gutter="20">
+                <div v-for="item in Likes" :key="item.thingId">
+                  <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
+                    <resource-card
+                      :key="item.id"
+                      :thing="item"
+                      :showEdit="false"
+                      :showStar="true"
+                      @openCollection="openCollection"
+                      :showCollection="!isLogin || !isYourAccount"
+                      :isLike="myLikes.includes(item.id)"
+                      :isCollected="myCollects.includes(item.id)"
+                      @deleteCollection="deleteCollection"
+                    >
+                    </resource-card>
+                  </el-col>
                 </div>
-              </el-tab-pane>
-            </el-tabs>
-          </el-tab-pane>
-          <el-tab-pane :label="$t('design.likes')" name="second">
-            <el-row :gutter="20">
-              <div v-for="item in Likes" :key="item.thingId">
-                <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                  <resource-card
-                    :key="item.id"
-                    :thing="item"
-                    :showEdit="false"
-                    :showStar="true"
-                    @openCollection="openCollection"
-                    :showCollection="!isLogin || !isYourAccount"
-                    :isLike="myLikes.includes(item.id)"
-                    :isCollected="myCollects.includes(item.id)"
-                    @deleteCollection="deleteCollection"
-                  >
-                  </resource-card>
-                </el-col>
-              </div>
-            </el-row>
-          </el-tab-pane>
-          <el-tab-pane :label="$t('design.collection')" name="third">
-            <RowFolder
-              v-show="!dialogCollectionVisible"
-              :isYourAccount="isYourAccount"
-              style="width: 98%; margin-bottom: 20px"
-              :value="rowFolders"
-              :onFolderAdd="onFolderAdd"
-              @clickFolder="handleClickFolder"
-              @delFolder="handleDelFolder"
-            ></RowFolder>
-            <div class="draft" v-show="!dialogCollectionVisible">Draft</div>
-            <div class="nav" v-show="dialogCollectionVisible">
-              <i class="el-icon-back" @click="handleCollectDialogClose"></i>
-              <div>{{ collectionName }}</div>
-            </div>
-            <div class="collectionDialog" v-show="dialogCollectionVisible">
+              </el-row>
+            </el-tab-pane>
+            <el-tab-pane :label="$t('design.collection')" name="third">
+              <RowFolder
+                v-show="!dialogCollectionVisible"
+                :isYourAccount="isYourAccount"
+                style="width: 98%; margin-bottom: 20px"
+                :value="rowFolders"
+                :onFolderAdd="onFolderAdd"
+                @clickFolder="handleClickFolder"
+                @delFolder="handleDelFolder"
+              ></RowFolder>
+              <div class="draft" v-show="!dialogCollectionVisible">Draft</div>
               <div
-                v-for="item in folderCollection"
-                :key="item.thingId"
-                style="width: 33.3%"
+                class="noCollection"
+                v-show="collections.length == 0 && !dialogCollectionVisible"
               >
-                <resource-card
-                  @clickMoveMenu="Handler_MoveTo(item)"
-                  @clickDelMenu="handleCancelCollect(item)"
-                  @clickDownMenu="Handler_Down(item)"
-                  @moveCollectionComplete="handleMoveCollectionComplete"
-                  :isCollected="myCollects.includes(item.id)"
-                  @openCollection="openCollection"
-                  @deleteCollection="deleteCollection"
-                  :thing="item"
-                  :showEdit="false"
-                  :showStar="true"
-                  :showMoreMenuBtn="isYourAccount"
-                  :key="item.id"
-                  :isYourAccount="isYourAccount"
-                  :isLike="myLikes.includes(item.id)"
+                {{ this.$t("design.noCollection") }}
+              </div>
+              <div class="nav" v-show="dialogCollectionVisible">
+                <i class="el-icon-back" @click="handleCollectDialogClose"></i>
+                <div>{{ collectionName }}</div>
+              </div>
+              <div class="collectionDialog" v-show="dialogCollectionVisible">
+                <div
+                  v-for="item in folderCollection"
+                  :key="item.thingId"
+                  style="width: 33.3%"
                 >
-                </resource-card>
-              </div>
-              <div class="noCollection" v-show="folderCollection.length == 0">
-                无收藏文件
-              </div>
-            </div>
-            <div
-              style="display: flex; flex-wrap: wrap"
-              v-show="!dialogCollectionVisible"
-            >
-              <div
-                v-for="item in collections"
-                :key="item.thingId"
-                style="width: 33.3%"
-              >
-                <resource-card
-                  @clickMoveMenu="Handler_MoveTo(item)"
-                  @clickDelMenu="handleCancelCollect(item)"
-                  @clickDownMenu="Handler_Down(item)"
-                  @moveCollectionComplete="handleMoveCollectionComplete"
-                  @openCollection="openCollection"
-                  @deleteCollection="deleteCollection"
-                  :isCollected="myCollects.includes(item.id)"
-                  :thing="item"
-                  :showEdit="false"
-                  :showStar="true"
-                  :showMoreMenuBtn="isYourAccount"
-                  :key="item.id"
-                  :isYourAccount="isYourAccount"
-                  :isLike="myLikes.includes(item.id)"
-                >
-                </resource-card>
-              </div>
-            </div>
-          </el-tab-pane>
-          <el-tab-pane :label="$t('design.histories')" name="fourth">
-            <el-row :gutter="20">
-              <div v-for="item in histories" :key="item.thingId">
-                <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
                   <resource-card
-                    :key="item.id"
-                    :thing="item"
-                    :isLike="myLikes.includes(item.id)"
-                    @openCollection="openCollection"
                     @clickMoveMenu="Handler_MoveTo(item)"
                     @clickDelMenu="handleCancelCollect(item)"
                     @clickDownMenu="Handler_Down(item)"
                     @moveCollectionComplete="handleMoveCollectionComplete"
-                    @deleteCollection="deleteCollection"
                     :isCollected="myCollects.includes(item.id)"
+                    @openCollection="openCollection"
+                    @deleteCollection="deleteFolderCollection"
+                    :thing="item"
+                    :showEdit="false"
+                    :showStar="true"
+                    :showMoreMenuBtn="isYourAccount"
+                    :key="item.id"
+                    :isYourAccount="isYourAccount"
+                    :isLike="myLikes.includes(item.id)"
                   >
                   </resource-card>
-                </el-col>
+                </div>
+                <div class="noCollection" v-show="folderCollection.length == 0">
+                  {{ this.$t("design.noCollection") }}
+                </div>
               </div>
-            </el-row>
-          </el-tab-pane>
-        </el-tabs>
+              <div
+                style="display: flex; flex-wrap: wrap"
+                v-show="!dialogCollectionVisible"
+              >
+                <div
+                  v-for="item in collections"
+                  :key="item.thingId"
+                  style="width: 33.3%"
+                >
+                  <resource-card
+                    @clickMoveMenu="Handler_MoveTo(item)"
+                    @clickDelMenu="handleCancelCollect(item)"
+                    @clickDownMenu="Handler_Down(item)"
+                    @moveCollectionComplete="handleMoveCollectionComplete"
+                    @openCollection="openCollection"
+                    @deleteCollection="deleteFolderCollection"
+                    :isCollected="myCollects.includes(item.id)"
+                    :thing="item"
+                    :showEdit="false"
+                    :showStar="true"
+                    :showMoreMenuBtn="isYourAccount"
+                    :key="item.id"
+                    :isYourAccount="isYourAccount"
+                    :isLike="myLikes.includes(item.id)"
+                  >
+                  </resource-card>
+                </div>
+              </div>
+            </el-tab-pane>
+            <el-tab-pane :label="$t('design.histories')" name="fourth">
+              <el-row :gutter="20">
+                <div v-for="item in histories" :key="item.thingId">
+                  <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
+                    <resource-card
+                      :key="item.id"
+                      :thing="item"
+                      :isLike="myLikes.includes(item.id)"
+                      @openCollection="openCollection"
+                      @clickMoveMenu="Handler_MoveTo(item)"
+                      @clickDelMenu="handleCancelCollect(item)"
+                      @clickDownMenu="Handler_Down(item)"
+                      @moveCollectionComplete="handleMoveCollectionComplete"
+                      @deleteCollection="deleteCollection"
+                      :isCollected="myCollects.includes(item.id)"
+                    >
+                    </resource-card>
+                  </el-col>
+                </div>
+              </el-row>
+            </el-tab-pane>
+          </el-tabs>
+        </div>
       </div>
+      <SrollTopButton :to="'#top'"></SrollTopButton>
+      <DownListPanel
+        :isShowDownPanel="isShowDownPanel"
+        :fileList="detail.files"
+        :fileNum="detail.files.length"
+        :downLoadNum="downloadNumber"
+        :resourceName="detail.title"
+        @click="openShowDownPanel"
+      ></DownListPanel>
     </div>
-    <SrollTopButton :to="'#top'"></SrollTopButton>
-    <DownListPanel
-      :isShowDownPanel="isShowDownPanel"
-      :fileList="detail.files"
-      :fileNum="detail.files.length"
-      :downLoadNum="downloadNumber"
-      :resourceName="detail.title"
-      @click="openShowDownPanel"
-    ></DownListPanel>
   </div>
 </template>
 <script>
@@ -649,10 +660,6 @@ export default {
     },
   },
   mounted() {
-    document.addEventListener("click", () => {
-      this.isShowDownPanel = false;
-      this.openCollectedOption = false;
-    });
     let userId = this.$route.params.userId;
 
     if (userId == "fromLike") {
@@ -725,6 +732,10 @@ export default {
     },
   },
   methods: {
+    closeAllDialog() {
+      this.isShowDownPanel = false;
+      this.openCollectedOption = false;
+    },
     getIndex(index) {
       console.log(index);
       this.index = index;
@@ -774,6 +785,23 @@ export default {
         userId: this.$store.getters.userInfo.user_id,
       }).then((res) => {
         this.folders = res.data.data;
+      });
+    },
+    deleteFolderCollection(id) {
+      deleteCollectionResource({
+        userId: this.$store.getters.userInfo.user_id,
+        resourceId: id,
+      }).then(() => {
+        this.$message({
+          message: this.$t("design.delSuccess"),
+          type: "success",
+        });
+        // this.getAllMyCollectList();
+        if (this.dialogCollectionVisible) {
+          this.getCollectFolderResourceList();
+        } else {
+          this.getMyCollectResourceList();
+        }
       });
     },
     deleteCollection(id) {
@@ -1191,18 +1219,18 @@ export default {
 
     handleImgUploadErr(err) {
       //console.log(e)
-      this.$message.error("上传失败" + err);
+      this.$message.error(this.$t("design.uploadFail") + err);
     },
     handleImgUploadSuccess() {
       this.$store.dispatch("user/getUserInfo").catch((e) => {
         console.log(e);
       });
-      this.$message.success("上传成功");
+      this.$message.success(this.$t("design.uploadSuccess"));
     },
     handleBgImgUploadSuccess(res, file) {
       console.log("res: ", res, file);
       this.user.cover_image = res.data;
-      this.$message.success("上传成功");
+      this.$message.success(this.$t("design.uploadSuccess"));
     },
     getMyFollowList() {
       getFollowingList({ userId: this.userInfo.user_id }).then((result) => {
@@ -1360,12 +1388,17 @@ export default {
   .collectionDialog {
     display: flex;
     flex-wrap: wrap;
-    .noCollection {
-      margin: 10px;
-      // width: 33.3%;
-      text-align: center;
-      margin: 20px auto;
-    }
+  }
+  .noCollection {
+    margin: 10px;
+    // width: 33.3%;
+    text-align: center;
+    margin: 0px auto;
+    margin-top: 40px;
+    font-size: 20px;
+    font-family: Source Han Sans CN;
+    font-weight: 400;
+    color: #999999;
   }
   .followDialog {
     ::v-deep .el-dialog {

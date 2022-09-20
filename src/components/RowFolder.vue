@@ -34,7 +34,7 @@
             <template v-if="item.images && item.images.length > 0">
               <div
                 class="imgArrItem"
-                v-for="subItem in item.images"
+                v-for="subItem in item.images.slice(0, 6)"
                 :key="subItem"
               >
                 <img :src="subItem" alt="" />

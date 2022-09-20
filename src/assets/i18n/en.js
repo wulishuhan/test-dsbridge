@@ -126,6 +126,9 @@ module.exports = {
     updSuccess: "Update success",
     emptyCollection: "Empty",
     onlyImg: "Upload files can only be picture format",
+    uploadSuccess: "Successfully upload!",
+    uploadFail: "upload failed!",
+    noCollection: "No collection file",
   },
   setting: {
     forgetPassword: "Forget password",
