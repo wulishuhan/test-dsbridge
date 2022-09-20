@@ -158,7 +158,7 @@ module.exports = {
     notFound: "Not Found",
     usernameAndPasswordMustEnter: "username and password must be entered",
     usernameAndPasswordRange:
-      "username or password are not in the specified range",
+      " The length of the password is 8-16 characters, must contain two kinds of numbers, letters and characters.",
     usernameRange: "username is not in the specified range",
     emailRange: "email is not in the specified range",
     usernameExist: "The username already exists",
@@ -166,7 +166,7 @@ module.exports = {
     accountDeleted: "Sorry, your account has been deleted",
     accountDisabled:
       "this account has been disabled. Please contact the administrator",
-    usernameOrEmailError: "Incorrect username or password",
+    passwordError: "Old password error",
     tokenExpired: "token expired",
     deviceNotSupported: "Your device does not support logins",
     usernameNotExist: "username does not exist",

@@ -97,7 +97,7 @@ service.interceptors.response.use((res) => {
 
     case 1009:
       return Promise.reject({
-        msg: i18n.t("error.usernameOrEmailError"),
+        msg: i18n.t("error.passwordError"),
       });
     case 1010:
       return Promise.reject({
