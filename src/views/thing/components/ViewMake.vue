@@ -5,6 +5,8 @@
       :width="width"
       :custom-class="customClass"
       :append-to-body="true"
+      @opened="openDialoged"
+      ref="viewMakeDialog"
     >
       <el-button
         class="post-make-button"
@@ -34,6 +36,7 @@
       :url-list="makes"
       :isMake="true"
       :initialIndex="index"
+      :appendToBody="false"
     ></ElImageViewer>
   </div>
 </template>
@@ -100,6 +103,9 @@ export default {
     closeMake() {
       this.showMake = false;
       document.documentElement.style.overflowY = "scroll";
+    },
+    openDialoged() {
+      console.log("test", this.$refs["viewMakeDialog"].updatePopper());
     },
   },
   watch: {

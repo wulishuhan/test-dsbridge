@@ -169,4 +169,9 @@ module.exports = {
   main: {
     barnerViewMore: "view more",
   },
+  thing: {
+    fileNameTooLong:
+      "The file name is too long, it should be within 50 characters",
+    acceptFileFormat: "File only accepts png, jpg, jpeg, svg, gif formats",
+  },
 };
