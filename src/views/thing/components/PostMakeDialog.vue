@@ -22,7 +22,7 @@
             :limit="1"
             list-type="picture"
           >
-            <el-input placeholder="Add Photo (Bulk add supported)">
+            <el-input placeholder="Add Photo">
               <i slot="prefix" class="el-input__icon ortur-icon-image-add"></i>
             </el-input>
           </el-upload>
