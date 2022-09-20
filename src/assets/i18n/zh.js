@@ -68,6 +68,7 @@ module.exports = {
     empty: "暂无评论",
     emptyToast: "评论不能为空",
     replyNum: "{0}条回复",
+    sendOk: "发送成功",
   },
   download: {
     fileNum: "个文件",
