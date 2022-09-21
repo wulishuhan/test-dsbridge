@@ -12,7 +12,7 @@
     </header>
     <div class="content" id="content">
       <el-row class="filter">
-        <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="8">
+        <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
           <div class="select-box">
             <i class="ortur-icon-hourglass icon-hourglass"></i>
             <el-select v-model="value" @change="selectChange" class="select">
@@ -28,12 +28,12 @@
             </el-select>
           </div>
         </el-col>
-        <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4"> </el-col>
-        <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4"> </el-col>
+        <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8"> </el-col>
+        <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8"> </el-col>
       </el-row>
       <el-row class="row">
         <div v-for="item in resources" :key="item.id">
-          <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="6">
+          <el-col :xs="6" :sm="6" :md="6" :lg="6" :xl="6">
             <resource-card
               :thing="item"
               :isLike="comfirmLike(item.id)"
