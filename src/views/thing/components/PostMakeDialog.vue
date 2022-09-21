@@ -117,6 +117,8 @@ export default {
           type: "success",
         });
         this.form.id = res.data.data;
+        let resId = parseInt(this.$route.params.thingId);
+        this.$store.dispatch("comment/getCommentList", { resId: resId });
         this.$emit("addMake", this.form);
         this.close();
       });
