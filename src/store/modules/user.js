@@ -8,6 +8,8 @@ import {
   getFollowingList,
   openLogin,
 } from "@/api/user";
+import { getLikelist } from "@/api/like";
+import { getCollectionResourceList } from "@/api/collection";
 import { getToken, setToken, removeToken } from "@/utils/auth";
 import { generatorDefaultAvator } from "@/utils/generateImage";
 
@@ -23,6 +25,8 @@ const getDefaultState = () => {
       user_name: "",
     },
     myFollowingList: [],
+    myLikesList: [],
+    myCollectionslist: [],
     expiresIn: [],
     isLogin: false,
     accessToken: getToken(),
@@ -61,6 +65,13 @@ const mutations = {
   },
   SET_FOLLOWINGLIST: (state, payload) => {
     state.myFollowingList = payload;
+  },
+  SET_LIKESLIST: (state, payload) => {
+    state.myLikesList = payload;
+  },
+  SET_COLLECTIONSLIST: (state, payload) => {
+    console.log("setting collection", payload);
+    state.myCollectionslist = payload;
   },
   SWITCH_LOGIN_REGISTER_FORM: (state, payload) => {
     state.loginDialogVisible = payload.loginDialogVisible;
@@ -146,6 +157,18 @@ const actions = {
   getMyFollowingList({ commit }, payload) {
     getFollowingList(payload).then((res) => {
       commit("SET_FOLLOWINGLIST", res.data.data);
+    });
+  },
+  getMyLikesList({ commit }, payload) {
+    getLikelist(payload).then((res) => {
+      console.log("getMyLikesList");
+      commit("SET_LIKESLIST", res.data.rows);
+    });
+  },
+  getMyCollectionList({ commit }, payload) {
+    getCollectionResourceList(payload).then((res) => {
+      console.log("getMyCollectionList");
+      commit("SET_COLLECTIONSLIST", res.data.rows);
     });
   },
   logout({ commit, state }) {

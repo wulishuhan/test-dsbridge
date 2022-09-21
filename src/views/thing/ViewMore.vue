@@ -5,8 +5,8 @@
         <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
           <resource-card
             :thing="item"
-            :isLike="likeList.includes(item.id)"
-            :isCollected="collectedList.includes(item.id)"
+            :isLike="comfirmLike(item.id)"
+            :isCollected="comfirmCollection(item.id)"
             @openCollection="openCollection"
             @deleteCollection="deleteCollection"
           ></resource-card>
@@ -28,7 +28,6 @@
 <script>
 import ResourceCard from "@/components/ResourceCard";
 import { throttle } from "@/utils/cache.js";
-import { getLikelist } from "@/api/like";
 import {
   getResourceListById,
   getSimilar,
@@ -37,7 +36,6 @@ import {
 import CollectedOption from "@/components/CollectedOption";
 import { mapGetters } from "vuex";
 import {
-  getCollectionResourceList,
   getCollectionList,
   addCollection,
   addResourceToCollection,
@@ -94,54 +92,41 @@ export default {
   },
   mounted() {
     console.log("mounted", this.isRemixes);
-    getLikelist({
-      userId: this.userInfo.user_id,
-    })
-      .then((res) => {
-        for (let i = 0; i < res.data.rows.length; i++) {
-          const element = res.data.rows[i];
-          this.likeList.push(element.id);
+
+    this.getResourceList();
+
+    let container = this.$refs["more-container"];
+    this.load = throttle(() => {
+      // 距离底部200px时加载一次
+      let bottomOfWindow =
+        container.scrollHeight - container.offsetHeight - container.scrollTop <=
+        200;
+      if (bottomOfWindow && !this.loading && !this.noMore) {
+        this.pagination.pageNum++;
+        if (
+          this.pagination.pageNum <=
+          Math.ceil(this.resourcesTotal / this.pagination.pageSize)
+        ) {
+          this.getResourceList();
         }
-      })
-      .then(() => {
-        getCollectionResourceList({
-          userId: this.userInfo.user_id,
-        }).then((res) => {
-          for (let i = 0; i < res.data.rows.length; i++) {
-            const element = res.data.rows[i];
-            this.collectedList.push(element.id);
-          }
-        });
-      })
-      .then(() => {
-        this.getResourceList();
-      })
-      .then(() => {
-        let container = this.$refs["more-container"];
-        this.load = throttle(() => {
-          // 距离底部200px时加载一次
-          let bottomOfWindow =
-            container.scrollHeight -
-              container.offsetHeight -
-              container.scrollTop <=
-            200;
-          if (bottomOfWindow && !this.loading && !this.noMore) {
-            this.pagination.pageNum++;
-            if (
-              this.pagination.pageNum <=
-              Math.ceil(this.resourcesTotal / this.pagination.pageSize)
-            ) {
-              this.getResourceList();
-            }
-          }
-        }, 1000);
-        container.addEventListener("scroll", this.load);
-      });
+      }
+    }, 1000);
+    container.addEventListener("scroll", this.load);
   },
   beforeDestroy() {
     this.$refs["more-container"].removeEventListener("scroll", this.load);
   },
   methods: {
+    comfirmLike(id) {
+      return this.$store.getters.myLikesList.some((item) => {
+        return item.id === id;
+      });
+    },
+    comfirmCollection(id) {
+      return this.$store.getters.myCollectionslist.some((item) => {
+        return item.id === id;
+      });
+    },
     getResourceList() {
       let parameters = { ...this.pagination, userId: this.creator.id };
       if (this.isRemixes) {
@@ -187,11 +172,12 @@ export default {
           message: "cancel collected successfully",
           type: "success",
         });
-        for (let i = 0; i < this.collectedList.length; i++) {
-          if (this.collectedList[i] === id) {
-            this.collectedList.splice(i, 1);
-          }
-        }
+        this.$store.commit(
+          "user/SET_COLLECTIONSLIST",
+          this.$store.getters.myCollectionslist.filter((item) => {
+            return item.id !== this.prepareCollectedResId;
+          })
+        );
       });
     },
     closeCollectedOption() {
@@ -207,7 +193,10 @@ export default {
           message: "move successfully",
           type: "success",
         });
-        this.collectedList.push(this.prepareCollectedResId);
+        this.$store.commit("user/SET_COLLECTIONSLIST", [
+          ...this.$store.getters.myCollectionslist,
+          { id: this.prepareCollectedResId },
+        ]);
       });
     },
     addFolder(folderName) {

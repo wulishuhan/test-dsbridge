@@ -184,6 +184,12 @@ export default {
     this.$store.dispatch("user/getMyFollowingList", {
       userId: this.userInfo.user_id,
     });
+    this.$store.dispatch("user/getMyLikesList", {
+      userId: this.userInfo.user_id,
+    });
+    this.$store.dispatch("user/getMyCollectionList", {
+      userId: this.userInfo.user_id,
+    });
     let { code, from, email } = this.$route.query;
     if (isBinding == 2) {
       if (code && from && email) {

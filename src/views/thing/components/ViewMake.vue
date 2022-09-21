@@ -11,13 +11,16 @@
       <el-button
         class="post-make-button"
         type="text"
-        @click="showPostForm = true"
+        @click="openPostMakeDialog"
         slot="title"
       >
         <i class="el-icon-plus"></i>
         post make
       </el-button>
-      <PostMakeDialog :isShow.sync="showPostForm"></PostMakeDialog>
+      <PostMakeDialog
+        :isShow.sync="showPostForm"
+        @addMake="addMake"
+      ></PostMakeDialog>
       <el-row>
         <el-col :span="6" v-for="(item, index) in makes" :key="item.id">
           <make
@@ -106,6 +109,20 @@ export default {
     },
     openDialoged() {
       console.log("test", this.$refs["viewMakeDialog"].updatePopper());
+    },
+    openPostMakeDialog() {
+      if (!this.$store.getters.isLogin) {
+        this.showLoginDialog();
+        return;
+      }
+      this.showPostForm = true;
+    },
+    showLoginDialog() {
+      let payload = { loginDialogVisible: true, isLoginForm: true };
+      this.$store.dispatch("user/switchLoginRegisteForm", payload);
+    },
+    addMake() {
+      this.$emit("addMake");
     },
   },
   watch: {

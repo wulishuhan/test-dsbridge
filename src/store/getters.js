@@ -13,5 +13,7 @@ const getters = {
   userInfo: (state) => state.user.userInfo,
   selectCollectionBox: (state) => state.collection.selectCollectionBox,
   myFollowingList: (state) => state.user.myFollowingList,
+  myLikesList: (state) => state.user.myLikesList,
+  myCollectionslist: (state) => state.user.myCollectionslist,
 };
 export default getters;
