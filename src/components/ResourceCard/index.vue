@@ -1,5 +1,5 @@
 <template>
-  <div class="card-box" @mouseenter="enter" @mouseleave="leave">
+  <div class="card-box" @mouseenter="enter" @mouseleave="leave(thing)">
     <div style="position: relative">
       <div class="resource-show-image-box">
         <img
@@ -385,6 +385,7 @@ export default {
     },
     leave() {
       this.isCollectIconShow = false;
+      this.showMoreMenu = false;
     },
     userRecommendation() {
       this.showUserRecommendation = true;
