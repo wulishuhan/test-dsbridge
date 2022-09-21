@@ -317,6 +317,12 @@ export default {
             });
             this.likes = Number(this.likes) - 1;
             this.loadLike = false;
+            this.$store.commit(
+              "user/SET_LIKESLIST",
+              this.$store.getters.myLikesList.filter((item) => {
+                return item.id !== this.thing.id;
+              })
+            );
             if (this.likes < 0) {
               this.likes = 0;
             }
@@ -339,6 +345,10 @@ export default {
             });
             this.loadLike = false;
             this.likes = 1 + Number(this.likes);
+            this.$store.commit("user/SET_LIKESLIST", [
+              ...this.$store.getters.myLikesList,
+              { id: this.thing.id },
+            ]);
           })
           .catch((err) => {
             console.log(err);

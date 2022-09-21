@@ -21,6 +21,8 @@
             :headers="headers"
             :limit="1"
             list-type="picture"
+            :disabled="isDisabled"
+            :multiple="false"
           >
             <el-input placeholder="Add Photo">
               <i slot="prefix" class="el-input__icon ortur-icon-image-add"></i>
@@ -39,7 +41,7 @@
             type="primary"
             @click="onSubmit"
             class="post-make-button"
-            :disabled="isDisabled"
+            :disabled="isUploadComplete"
           >
             post
           </el-button>
@@ -51,6 +53,7 @@
 <script>
 import { getToken } from "@/utils/auth";
 import { postComment } from "@/api/user";
+import { mapGetters } from "vuex";
 export default {
   name: "PostMakeDialog",
   props: {
@@ -76,7 +79,8 @@ export default {
         isMake: "1",
         id: 0,
       },
-      isDisabled: true,
+      isDisabled: false,
+      isUploadComplete: true,
     };
   },
   computed: {
@@ -97,6 +101,7 @@ export default {
     uploadUrl() {
       return `${process.env.VUE_APP_BASE_API}/library/resource/upload`;
     },
+    ...mapGetters(["isLogin"]),
   },
   methods: {
     handleRemove(file, fileList) {
@@ -112,6 +117,8 @@ export default {
           type: "success",
         });
         this.form.id = res.data.data;
+        let resId = parseInt(this.$route.params.thingId);
+        this.$store.dispatch("comment/getCommentList", { resId: resId });
         this.$emit("addMake", this.form);
         this.close();
       });
@@ -120,18 +127,21 @@ export default {
       console.log("uploadSuccessHandler", response);
       this.form.image = response.data.url;
       this.form.url = response.data.url;
-      this.isDisabled = false;
+      this.isUploadComplete = false;
     },
     uploadBefore(file) {
       console.log("upload before file", file);
+      this.isDisabled = true;
       let whiteList = ["png", "jpg", "jpeg", "svg", "gif"];
       if (file.name.length > 50) {
         this.$message.error(this.$t("thing.fileNameTooLong"));
+        this.isDisabled = false;
         return false;
       } else if (
         !whiteList.includes(file.name.substring(file.name.lastIndexOf(".") + 1))
       ) {
         this.$message.error(this.$t("thing.acceptFileFormat"));
+        this.isDisabled = false;
         return false;
       }
       return true;
@@ -139,6 +149,8 @@ export default {
     close() {
       this.$emit("update:isShow", false);
       this.$refs["upload-make-file"].clearFiles();
+      this.isDisabled = false;
+      this.isUploadComplete = true;
       this.form = {
         image: "",
         content: "",

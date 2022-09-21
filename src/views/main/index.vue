@@ -12,7 +12,7 @@
     </header>
     <div class="content" id="content">
       <el-row class="filter">
-        <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="8">
+        <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
           <div class="select-box">
             <i class="ortur-icon-hourglass icon-hourglass"></i>
             <el-select v-model="value" @change="selectChange" class="select">
@@ -28,16 +28,16 @@
             </el-select>
           </div>
         </el-col>
-        <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4"> </el-col>
-        <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4"> </el-col>
+        <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8"> </el-col>
+        <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8"> </el-col>
       </el-row>
       <el-row class="row">
         <div v-for="item in resources" :key="item.id">
-          <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="6">
+          <el-col :xs="6" :sm="6" :md="6" :lg="6" :xl="6">
             <resource-card
               :thing="item"
               :isLike="comfirmLike(item.id)"
-              :isCollected="collectedList.includes(item.id)"
+              :isCollected="comfirmCollection(item.id)"
               @openCollection="openCollection"
               @deleteCollection="deleteCollection"
             ></resource-card>
@@ -125,7 +125,6 @@ export default {
 
   watch: {
     "$store.getters.isLogin": function () {
-      console.log("change login status");
       if (this.$store.getters.isLogin) {
         getLikelist({
           userId: this.userInfo.user_id,
@@ -149,45 +148,25 @@ export default {
     },
   },
   mounted() {
-    getLikelist({
-      userId: this.userInfo.user_id,
-    })
-      .then((res) => {
-        this.likeList = res.data.rows;
-      })
-      .then(() => {
-        getCollectionResourceList({
-          userId: this.userInfo.user_id,
-        }).then((res) => {
-          for (let i = 0; i < res.data.rows.length; i++) {
-            const element = res.data.rows[i];
-            this.collectedList.push(element.id);
-          }
-        });
-      })
-      .then(() => {
-        this.getResourceList();
-      })
-      .then(() => {
-        this.load = throttle(() => {
-          // 距离底部200px时加载一次
-          let bottomOfWindow =
-            document.documentElement.offsetHeight -
-              document.documentElement.scrollTop -
-              window.innerHeight <=
-            200;
-          if (bottomOfWindow && !this.loading && !this.noMore) {
-            this.pagination.pageNum++;
-            if (
-              this.pagination.pageNum <=
-              Math.ceil(this.resourcesTotal / this.pagination.pageSize)
-            ) {
-              this.getResourceList();
-            }
-          }
-        }, 1000);
-        window.addEventListener("scroll", this.load);
-      });
+    this.getResourceList();
+    this.load = throttle(() => {
+      // 距离底部200px时加载一次
+      let bottomOfWindow =
+        document.documentElement.offsetHeight -
+          document.documentElement.scrollTop -
+          window.innerHeight <=
+        200;
+      if (bottomOfWindow && !this.loading && !this.noMore) {
+        this.pagination.pageNum++;
+        if (
+          this.pagination.pageNum <=
+          Math.ceil(this.resourcesTotal / this.pagination.pageSize)
+        ) {
+          this.getResourceList();
+        }
+      }
+    }, 1000);
+    window.addEventListener("scroll", this.load);
     getBanner().then((res) => {
       this.bannerImages = res.data.data;
     });
@@ -197,7 +176,12 @@ export default {
   },
   methods: {
     comfirmLike(id) {
-      return this.likeList.some((item) => {
+      return this.$store.getters.myLikesList.some((item) => {
+        return item.id === id;
+      });
+    },
+    comfirmCollection(id) {
+      return this.$store.getters.myCollectionslist.some((item) => {
         return item.id === id;
       });
     },
@@ -236,18 +220,18 @@ export default {
           message: "cancel collected successfully",
           type: "success",
         });
-        for (let i = 0; i < this.collectedList.length; i++) {
-          if (this.collectedList[i] === id) {
-            this.collectedList.splice(i, 1);
-          }
-        }
+        this.$store.commit(
+          "user/SET_COLLECTIONSLIST",
+          this.$store.getters.myCollectionslist.filter((item) => {
+            return item.id !== this.prepareCollectedResId;
+          })
+        );
       });
     },
     closeCollectedOption() {
       this.openCollectedOption = false;
     },
     moveCollectedOption(folderObject) {
-      console.log("moveCollectedOption", folderObject);
       this.openCollectedOption = false;
       addResourceToCollection({
         resourceId: this.prepareCollectedResId,
@@ -257,7 +241,10 @@ export default {
           message: "move successfully",
           type: "success",
         });
-        this.collectedList.push(this.prepareCollectedResId);
+        this.$store.commit("user/SET_COLLECTIONSLIST", [
+          ...this.$store.getters.myCollectionslist,
+          { id: this.prepareCollectedResId },
+        ]);
       });
     },
     addFolder(folderName) {

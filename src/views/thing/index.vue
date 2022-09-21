@@ -34,12 +34,12 @@
               >
                 <StarButton
                   :starNum="detail.like_count"
-                  :isStar="isLike"
+                  :isStar="comfirmLike"
                   @click="like"
                 ></StarButton>
                 <div class="collected-box">
                   <CollectButton
-                    :isCollect="isCollected"
+                    :isCollect="comfirmCollection"
                     :collectionNum="detail.collect_count"
                     @click="collect"
                   >
@@ -509,6 +509,16 @@ export default {
             this.detail.creator.id
           );
     },
+    comfirmLike() {
+      return this.$store.getters.myLikesList.some((item) => {
+        return item.id === this.detail.id;
+      });
+    },
+    comfirmCollection() {
+      return this.$store.getters.myCollectionslist.some((item) => {
+        return item.id === this.detail.id;
+      });
+    },
   },
   methods: {
     openMake() {
@@ -560,6 +570,12 @@ export default {
             this.likeDisabled = false;
             this.isLike = false;
             this.detail.like_count = this.detail.like_count - 1;
+            this.$store.commit(
+              "user/SET_LIKESLIST",
+              this.$store.getters.myLikesList.filter((item) => {
+                return item.id !== this.detail.id;
+              })
+            );
           })
           .catch((err) => {
             this.likeDisabled = false;
@@ -577,6 +593,10 @@ export default {
             this.likeDisabled = false;
             this.isLike = true;
             this.detail.like_count = this.detail.like_count + 1;
+            this.$store.commit("user/SET_LIKESLIST", [
+              ...this.$store.getters.myLikesList,
+              { id: this.detail.id },
+            ]);
           })
           .catch((err) => {
             this.likeDisabled = false;
@@ -653,6 +673,12 @@ export default {
         });
         this.isCollected = false;
         this.detail.collect_count -= 1;
+        this.$store.commit(
+          "user/SET_COLLECTIONSLIST",
+          this.$store.getters.myCollectionslist.filter((item) => {
+            return item.id !== this.detail.id;
+          })
+        );
       });
     },
     closeCollectedOption() {
@@ -672,6 +698,10 @@ export default {
         });
         this.detail.collect_count += 1;
         this.isCollected = true;
+        this.$store.commit("user/SET_COLLECTIONSLIST", [
+          ...this.$store.getters.myCollectionslist,
+          { id: this.detail.id },
+        ]);
       });
     },
     addFolder(folderName) {
