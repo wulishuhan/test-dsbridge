@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="make-link-box">
-      <a class="more-font post-make" @click="dialogPostMake = true">
+      <a class="more-font post-make" @click="openPostMakeDialog">
         <i class="el-icon-plus"></i>
         Post a make
       </a>
@@ -34,7 +34,11 @@
       :isMake="true"
       :initialIndex="index"
     ></ElImageViewer>
-    <ViewMake :makes="makes" :isShow.sync="dialogViewMake"></ViewMake>
+    <ViewMake
+      :makes="makes"
+      :isShow.sync="dialogViewMake"
+      @addMake="addMake"
+    ></ViewMake>
   </div>
 </template>
 <script>
@@ -86,6 +90,17 @@ export default {
           item.url = item.image;
         });
       });
+    },
+    openPostMakeDialog() {
+      if (!this.$store.getters.isLogin) {
+        this.showLoginDialog();
+        return;
+      }
+      this.dialogPostMake = true;
+    },
+    showLoginDialog() {
+      let payload = { loginDialogVisible: true, isLoginForm: true };
+      this.$store.dispatch("user/switchLoginRegisteForm", payload);
     },
   },
 };
