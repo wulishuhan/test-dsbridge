@@ -396,6 +396,12 @@ p {
 }
 
 @media screen and (max-width: 768px) {
+  .row {
+    width: 100%;
+  }
+  .main {
+    width: 100%;
+  }
   .content {
     width: 100%;
   }

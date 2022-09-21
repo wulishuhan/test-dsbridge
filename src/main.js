@@ -18,6 +18,7 @@ import "@/style/index.scss";
 import "@/assets/css/icon.css";
 import VueContextMenu from "vue-contextmenu";
 import Ads from "vue-google-adsense";
+// import "@/utils/iosScale";
 
 Vue.use(VEmojiPicker);
 Vue.use(require("vue-script2"));
