@@ -743,7 +743,6 @@ export default {
     openMake(item) {
       this.makeId = item.id;
       this.showMake = true;
-      debugger;
       document.documentElement.style.overflowY = "hidden";
     },
     closeMake() {

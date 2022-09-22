@@ -1,5 +1,5 @@
 <template>
-  <div class="card-box" @mouseenter="enter" @mouseleave="leave">
+  <div class="card-box" @mouseenter="enter" @mouseleave="leave(thing)">
     <div style="position: relative">
       <div class="resource-show-image-box">
         <img
@@ -395,6 +395,7 @@ export default {
     },
     leave() {
       this.isCollectIconShow = false;
+      this.showMoreMenu = false;
     },
     userRecommendation() {
       this.showUserRecommendation = true;
@@ -461,24 +462,27 @@ export default {
 .card-box {
   border: 1px solid #f5f5f5;
   position: relative;
-  width: 344px;
+  width: 100%;
   border-radius: 8px;
   padding: 7px;
+  margin: 0 auto;
 }
 .resource-show-image {
-  width: 328px;
-  height: 200px;
+  /* width: 328px; */
+  /* height: 200px; */
+  width: 100%;
+  height: 100%;
   border-radius: 8px;
   object-fit: cover;
 }
 .resource-show-image-box {
-  width: 326px;
+  width: 100%;
   height: 200px;
   border-radius: 8px;
   border: solid 1px #c2c4cc;
 }
 .resource-show-image-box:hover {
-  width: 326px;
+  width: 100%;
   height: 200px;
   border-radius: 8px;
   border: solid 1px #c2c4cc;

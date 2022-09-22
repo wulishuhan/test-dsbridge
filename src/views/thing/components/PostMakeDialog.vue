@@ -132,7 +132,7 @@ export default {
     uploadBefore(file) {
       console.log("upload before file", file);
       this.isDisabled = true;
-      let whiteList = ["png", "jpg", "jpeg", "svg", "gif"];
+      let whiteList = ["png", "jpg", "jpeg", "gif"];
       if (file.name.length > 50) {
         this.$message.error(this.$t("thing.fileNameTooLong"));
         this.isDisabled = false;
@@ -142,6 +142,9 @@ export default {
       ) {
         this.$message.error(this.$t("thing.acceptFileFormat"));
         this.isDisabled = false;
+        return false;
+      } else if (file.size < 1024 * 10) {
+        this.$message.error(this.$t("thing.acceptFileSize"));
         return false;
       }
       return true;

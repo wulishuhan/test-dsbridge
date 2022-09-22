@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div @mouseleave="handleMouseLeave">
     <div style="display: flex; justify-content: space-between; flex-wrap: wrap">
       <div
         style="position: relative"
@@ -76,6 +76,9 @@ export default {
     };
   },
   methods: {
+    handleMouseLeave() {
+      this.showMoreMenu = false;
+    },
     handleDownClick() {
       if (!this.$store.getters.isLogin) {
         let payload = { loginDialogVisible: true, isLoginForm: true };

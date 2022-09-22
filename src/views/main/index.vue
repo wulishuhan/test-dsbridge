@@ -395,8 +395,18 @@ p {
   color: #ffffff;
 }
 
-@media screen and (max-width: 768px) {
+@media only screen and (max-width: 768px) {
+  .row {
+    width: 100%;
+    display: none;
+  }
+  .main {
+    width: 100%;
+  }
   .content {
+    width: 100%;
+  }
+  .el-row {
     width: 100%;
   }
 }
