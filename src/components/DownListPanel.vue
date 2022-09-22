@@ -6,9 +6,12 @@
           <span class="fileNum">
             {{ fileNum }}{{ $t("download.fileNum") }}
           </span>
-          <a style="color: #1e78f0" @click="downLoadAll">{{
-            $t("download.downloadAll")
-          }}</a>
+          <a
+            class="a"
+            :style="[{ color: fileList.length > 0 ? '#1e78f0' : 'gray' }]"
+            @click="downLoadAll"
+            >{{ $t("download.downloadAll") }}</a
+          >
         </div>
         <download-card
           v-for="item in fileList"
@@ -30,7 +33,12 @@ export default {
     DownloadCard,
   },
   data() {
-    return {};
+    return {
+      colorGray: {
+        color: "black",
+        // cursor: "not-allowed",
+      },
+    };
   },
   mounted() {},
   computed: {
@@ -48,19 +56,23 @@ export default {
   },
   methods: {
     async downLoadAll() {
-      let zip = new JSZip();
-      for (let i = 0; i < this.fileList.length; i++) {
-        const element = this.fileList[i];
-        let res = await getFileData(element.id);
-        // if (!res) {
-        //   return;
-        // }
-        zip.file(element.name, res);
+      if (this.fileList.length == 0) {
+        return false;
+      } else {
+        let zip = new JSZip();
+        for (let i = 0; i < this.fileList.length; i++) {
+          const element = this.fileList[i];
+          let res = await getFileData(element.id);
+          // if (!res) {
+          //   return;
+          // }
+          zip.file(element.name, res);
+        }
+        zip.generateAsync({ type: "blob" }).then((content) => {
+          // see FileSaver.js
+          saveAs(content, this.resourceName + ".zip");
+        });
       }
-      zip.generateAsync({ type: "blob" }).then((content) => {
-        // see FileSaver.js
-        saveAs(content, this.resourceName + ".zip");
-      });
     },
     closeDownPanel() {
       //console.log(e)
@@ -75,24 +87,7 @@ export default {
     fileList: {
       type: Array,
       default: () => {
-        return [
-          {
-            name: 111,
-            size: "20kb",
-            updatedTime: 2012,
-            downloadNumber: 111,
-            url: "https://cdn.thingiverse.com/assets/a0/23/4c/6f/68/medium_thumb_Headset_Holder_v1.png",
-            type: "png",
-          },
-          {
-            name: 111,
-            size: "20kb",
-            updatedTime: 2012,
-            downloadNumber: 111,
-            url: "https://cdn.thingiverse.com/assets/a0/23/4c/6f/68/medium_thumb_Headset_Holder_v1.png",
-            type: "stl",
-          },
-        ];
+        return [];
       },
     },
     downLoadNum: {
@@ -141,6 +136,10 @@ export default {
     border-radius: 20px;
     overflow: auto;
     z-index: 9;
+    .a {
+      color: #1e78f0;
+      cursor: pointer;
+    }
     .downLoadAll {
       .fileNum {
         font-size: 12px;
