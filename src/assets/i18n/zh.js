@@ -173,6 +173,6 @@ module.exports = {
   },
   thing: {
     fileNameTooLong: "文件名过长，应该在50个字符以内",
-    acceptFileFormat: "文件只接收png, jpg, jpeg, svg, gif格式",
+    acceptFileFormat: "文件只接收png, jpg, jpeg, gif格式",
   },
 };
