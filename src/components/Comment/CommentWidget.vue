@@ -159,7 +159,6 @@ export default {
       var total = !!this.commentListFromId.total
         ? this.commentListFromId.total
         : 0;
-      console.log(1111111111111111, this.$t("comment.replyNum", [total]));
       return this.$t("comment.replyNum", [total]);
     },
   },

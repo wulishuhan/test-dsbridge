@@ -22,7 +22,7 @@
         :action="baseApi + '/library/resource/upload'"
         :show-file-list="false"
         :on-success="upSuccess"
-        :headers="headers()"
+        :headers="headers"
         :accept="acceptType"
         :before-upload="beforeUpload"
         ref="uploadFile"
@@ -48,7 +48,6 @@ import { mapState } from "vuex";
 import { Editor, EditorContent } from "@tiptap/vue-2";
 import Placeholder from "@tiptap/extension-placeholder";
 import StarterKit from "@tiptap/starter-kit";
-import { getToken } from "@/utils/auth";
 export default {
   data() {
     return {
@@ -109,17 +108,13 @@ export default {
       userInfo: (state) => state.user.userInfo,
       commentListFromId: (state) => state.comment.commentListFromId,
       isLogin: (state) => state.user.isLogin,
+      headers: (state) => state.user.headers,
     }),
     baseApi() {
       return process.env.VUE_APP_BASE_API;
     },
   },
   methods: {
-    headers() {
-      return {
-        Authorization: "Bearer " + getToken(),
-      };
-    },
     selectEmoji(emoji) {
       this.editor.chain().focus().insertContent(emoji.data).run();
     },

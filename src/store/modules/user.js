@@ -30,6 +30,9 @@ const getDefaultState = () => {
     expiresIn: [],
     isLogin: false,
     accessToken: getToken(),
+    headers: {
+      Authorization: "Bearer " + getToken(),
+    },
   };
 };
 const state = getDefaultState();
@@ -50,6 +53,10 @@ const mutations = {
     state.expiresIn = payload.expires_in;
     state.accessToken = payload.access_token;
     state.isLogin = true;
+    setToken(payload.access_token);
+    state.headers = {
+      Authorization: "Bearer " + payload.access_token,
+    };
   },
   SET_USERINFO: (state, payload) => {
     state.userInfo.user_id = payload.user_id;
@@ -62,6 +69,10 @@ const mutations = {
     state.userInfo.user_name = payload.user_name;
     state.userInfo.third_user = payload.third_user;
     state.isLogin = true;
+    state.headers = {
+      Authorization: "Bearer " + getToken(),
+    };
+    state.accessToken = getToken();
   },
   SET_FOLLOWINGLIST: (state, payload) => {
     state.myFollowingList = payload;
@@ -99,9 +110,7 @@ const actions = {
       })
         .then((res) => {
           let data = res.data.data;
-
           commit("SET_LOGININFO", data);
-          setToken(data.access_token);
           resolve();
         })
         .catch((error) => {

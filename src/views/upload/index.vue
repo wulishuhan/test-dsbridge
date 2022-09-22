@@ -362,7 +362,7 @@
                         :show-file-list="showFile"
                         class="cover-add"
                         :on-success="handleTutorialAddSuccess"
-                        :headers="headers()"
+                        :headers="headers"
                         accept=".png,.jpg,.svg,.jpeg"
                         :before-upload="beforeUpload"
                       >
@@ -443,7 +443,7 @@
 <script>
 import draggable from "vuedraggable";
 import Preview from "@/components/Preview";
-import { getToken } from "@/utils/auth";
+import { mapState } from "vuex";
 import {
   saveResource,
   getResource,
@@ -648,6 +648,9 @@ export default {
     };
   },
   computed: {
+    ...mapState({
+      headers: (state) => state.user.headers,
+    }),
     headerTitle() {
       if (this.sourceId != 0) {
         return this.$t("upload.editProject");
@@ -730,11 +733,6 @@ export default {
     }, 500);
   },
   methods: {
-    headers() {
-      return {
-        Authorization: "Bearer " + getToken(),
-      };
-    },
     drop(event) {
       event.preventDefault();
     },
