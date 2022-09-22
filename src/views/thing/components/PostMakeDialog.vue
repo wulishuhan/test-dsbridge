@@ -51,9 +51,8 @@
   </div>
 </template>
 <script>
-import { getToken } from "@/utils/auth";
 import { postComment } from "@/api/user";
-import { mapGetters } from "vuex";
+import { mapGetters, mapState } from "vuex";
 export default {
   name: "PostMakeDialog",
   props: {
@@ -93,15 +92,13 @@ export default {
         this.$emit("update:isShow", false);
       },
     },
-    headers() {
-      return {
-        Authorization: "Bearer " + getToken(),
-      };
-    },
     uploadUrl() {
       return `${process.env.VUE_APP_BASE_API}/library/resource/upload`;
     },
     ...mapGetters(["isLogin"]),
+    ...mapState({
+      headers: (state) => state.user.headers,
+    }),
   },
   methods: {
     handleRemove(file, fileList) {
