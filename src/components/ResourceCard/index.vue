@@ -309,7 +309,6 @@ export default {
       this.$router.push(`/upload/${id}`);
     },
     toDetail(id) {
-      console.log("toDetail");
       if (!this.isTouch) {
         this.$router.push(`/thing/${id}`);
       }
@@ -409,12 +408,10 @@ export default {
     },
     enter() {
       this.isCollectIconShow = true;
-      console.log("enter");
     },
     leave() {
       this.isCollectIconShow = false;
       this.showMoreMenu = false;
-      console.log("leave");
     },
     userRecommendation() {
       this.showUserRecommendation = true;

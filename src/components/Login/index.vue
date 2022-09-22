@@ -258,8 +258,19 @@ export default {
   },
   data() {
     var validatePass1 = (rule, value, callback) => {
+      // eslint-disable-next-line
+      let pattern =
+        // eslint-disable-next-line
+        /^(?![0-9]+$)(?![a-z]+$)(?![A-Z]+$)(?![,\.#%'\+\*\-:;^_`]+$)[,\.#%'\+\*\-:;^_`0-9A-Za-z]{8,16}$/;
+
       if (value === "") {
         callback(new Error(this.$t("login.password")));
+      } else if (!pattern.test(this.registerForm.password)) {
+        callback(
+          new Error(
+            "The length of the password is 8-16 characters, must contain two kinds of numbers, letters and characters."
+          )
+        );
       } else {
         if (this.registerForm.password !== "") {
           this.$refs.registerForm.validateField("password2");

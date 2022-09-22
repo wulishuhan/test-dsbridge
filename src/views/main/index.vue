@@ -167,9 +167,18 @@ export default {
       }
     }, 1000);
     window.addEventListener("scroll", this.load);
-    getBanner().then((res) => {
-      this.bannerImages = res.data.data;
-    });
+    getBanner()
+      .then((res) => {
+        this.bannerImages = res.data.data;
+      })
+      .then(() => {
+        this.$store.dispatch("user/getMyLikesList", {
+          userId: this.userInfo.user_id,
+        });
+        this.$store.dispatch("user/getMyCollectionList", {
+          userId: this.userInfo.user_id,
+        });
+      });
   },
   beforeDestroy() {
     window.removeEventListener("scroll", this.load);
