@@ -20,7 +20,8 @@
       </div>
     </div>
     <div class="comment-pic" v-if="comment.image != '' && comment.image">
-      <img :src="comment.image" />
+      <el-image :src="comment.image" :preview-src-list="[comment.image]">
+      </el-image>
     </div>
     <div class="comment-detail">
       {{ comment.content }}
@@ -114,9 +115,8 @@ export default {
 
 .comment-pic {
   margin-left: 54px;
-  img {
-    width: 184px;
-    height: auto;
+  ::v-deep .el-image__inner {
+    width: auto;
     max-height: 300px;
     object-fit: cover;
   }

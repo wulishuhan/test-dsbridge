@@ -22,7 +22,7 @@
         :action="baseApi + '/library/resource/upload'"
         :show-file-list="false"
         :on-success="upSuccess"
-        :headers="headers"
+        :headers="headers()"
         :accept="acceptType"
         :before-upload="beforeUpload"
         ref="uploadFile"
@@ -48,7 +48,6 @@ import { mapState } from "vuex";
 import { Editor, EditorContent } from "@tiptap/vue-2";
 import Placeholder from "@tiptap/extension-placeholder";
 import StarterKit from "@tiptap/starter-kit";
-
 import { getToken } from "@/utils/auth";
 export default {
   data() {
@@ -109,17 +108,18 @@ export default {
     ...mapState({
       userInfo: (state) => state.user.userInfo,
       commentListFromId: (state) => state.comment.commentListFromId,
+      isLogin: (state) => state.user.isLogin,
     }),
-    headers() {
-      return {
-        Authorization: "Bearer " + getToken(),
-      };
-    },
     baseApi() {
       return process.env.VUE_APP_BASE_API;
     },
   },
   methods: {
+    headers() {
+      return {
+        Authorization: "Bearer " + getToken(),
+      };
+    },
     selectEmoji(emoji) {
       this.editor.chain().focus().insertContent(emoji.data).run();
     },
@@ -161,6 +161,11 @@ export default {
       this.editor.commands.focus();
     },
     beforeUpload(file) {
+      if (!this.isLogin) {
+        let payload = { loginDialogVisible: true, isLoginForm: true };
+        this.$store.dispatch("user/switchLoginRegisteForm", payload);
+        return false;
+      }
       let extension = file.name.substring(file.name.lastIndexOf(".") + 1);
       let accept = this.acceptType.indexOf(extension) < 0 ? false : true;
       if (!accept) {
@@ -169,7 +174,6 @@ export default {
           type: "warning",
         });
       }
-      accept = true;
       return accept;
     },
     handleRemovePic() {

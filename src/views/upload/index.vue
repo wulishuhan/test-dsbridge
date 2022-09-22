@@ -362,7 +362,7 @@
                         :show-file-list="showFile"
                         class="cover-add"
                         :on-success="handleTutorialAddSuccess"
-                        :headers="headers"
+                        :headers="headers()"
                         accept=".png,.jpg,.svg,.jpeg"
                         :before-upload="beforeUpload"
                       >
@@ -648,11 +648,6 @@ export default {
     };
   },
   computed: {
-    headers() {
-      return {
-        Authorization: "Bearer " + getToken(),
-      };
-    },
     headerTitle() {
       if (this.sourceId != 0) {
         return this.$t("upload.editProject");
@@ -735,6 +730,11 @@ export default {
     }, 500);
   },
   methods: {
+    headers() {
+      return {
+        Authorization: "Bearer " + getToken(),
+      };
+    },
     drop(event) {
       event.preventDefault();
     },
