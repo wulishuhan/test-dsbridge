@@ -117,7 +117,7 @@ export default {
   margin-left: 54px;
   ::v-deep .el-image__inner {
     width: auto;
-    max-width: 128px;
+    max-width: 100%;
     max-height: 300px;
     object-fit: cover;
   }
