@@ -26,6 +26,8 @@
         :accept="acceptType"
         :before-upload="beforeUpload"
         ref="uploadFile"
+        :disabled="!isLogin"
+        @click.native="checkLogin($event)"
       >
         <el-button class="btn-uppic" style="margin-right: 18px">
           <i class="ortur-icon-image-add"></i>
@@ -115,6 +117,13 @@ export default {
     },
   },
   methods: {
+    checkLogin() {
+      if (!this.isLogin) {
+        let payload = { loginDialogVisible: true, isLoginForm: true };
+        this.$store.dispatch("user/switchLoginRegisteForm", payload);
+      }
+      return this.isLogin;
+    },
     selectEmoji(emoji) {
       this.editor.chain().focus().insertContent(emoji.data).run();
     },

@@ -47,7 +47,11 @@ module.exports = {
     reset: "Reset",
     editOn: "Editd on ",
     source: "source",
-    filenameTooLong: "File name is too Long",
+    filenameTooLong:
+      "The file name is too long, it should be within 50 characters",
+
+    fileTooLarge: "The size of a single file cannot exceed {0}",
+    fileExceed: "A maximum of {0} files can be uploaded",
     supportedFilesError: "Supported Files:{0}",
     tagTip: "Hint: Press Enter to save",
     updateOk: "Update ok",
@@ -64,6 +68,7 @@ module.exports = {
     charNumError: "Up to 32 characters",
     validateError: "Verification failed",
     titleLengthError: "title must be between {0} and {1} characters",
+    fileSizeTipError: "The file is too large to upload failed",
   },
   comment: {
     empty: "No comments",

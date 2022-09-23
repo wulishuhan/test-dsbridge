@@ -16,10 +16,14 @@
             <el-upload
               :action="baseApi + '/library/resource/upload'"
               :show-file-list="showFile"
+              :file-list="resourceForm.files"
               multiple
+              :limit="config.fileLimit"
+              :on-exceed="handleExceed"
               drag
               :on-progress="handleSourceProgress"
               :on-success="handleSourceSuccess"
+              :on-error="handleSourceError"
               :headers="headers"
               :accept="acceptType"
               :before-upload="beforeUploadSource"
@@ -27,7 +31,7 @@
             >
               <i class="ortur-icon-file" style="font-size: 60px"></i>
               <span style="font-size: 20px; color: #ccc">
-                {{ $t("upload.dragFileTip") }} (&lt;12MB)
+                {{ $t("upload.dragFileTip") }} (&lt;10MB)
               </span>
               <span style="font-size: 20px; color: #ccc">
                 {{ $t("upload.or") }}
@@ -51,44 +55,56 @@
                   >
                     <div class="fileinfo-wrapper">
                       <div class="fileicon">
-                        <i class="ortur-icon-file" style="font-size: 40px"></i>
+                        <i class="ortur-icon-file" style="font-size: 36px"></i>
                       </div>
                       <div class="fileinfo">
-                        <span class="filename">{{ source.name }}</span>
+                        <span class="filename" :title="source.name">
+                          {{ source.name }}
+                        </span>
                         <div class="fileinfo-tag">
-                          <span class="filesize">{{
-                            formatFileSize(source.size)
-                          }}</span>
-                          <span class="filetype">{{
-                            source.name.substring(
-                              source.name.lastIndexOf(".") + 1
-                            )
-                          }}</span>
+                          <span class="filesize">
+                            {{ formatFileSize(source.size) }}
+                          </span>
+                          <span
+                            class="filetype"
+                            :title="
+                              source.name.substring(
+                                source.name.lastIndexOf('.') + 1
+                              )
+                            "
+                            >{{
+                              source.name.substring(
+                                source.name.lastIndexOf(".") + 1
+                              )
+                            }}</span
+                          >
                         </div>
                       </div>
                     </div>
                     <el-progress
                       :percentage="source.percent"
                       :format="format"
-                      v-if="source.percent != 100"
+                      v-if="source.percent != 100 && source.upStatus < 2"
                     ></el-progress>
+                    <div class="upload-error-tip" v-if="source.upStatus >= 2">
+                      <i class="el-icon-warning"></i>
+                      <span class="error-tip-text">
+                        {{ $t("upload.fileSizeTipError") }}
+                      </span>
+                    </div>
                     <div
-                      v-if="source.percent == 100"
+                      v-if="source.upStatus >= 2 || source.upStatus == 0"
                       class="fileinfo-remove-icon"
                     >
                       <span
                         class="ortur-icon-minus"
-                        style="font-size: 24px; cursor: pointer"
                         @click="handleRemoveSource(sourceIndex)"
                       >
                         <span class="path1"></span>
                         <span class="path2"></span>
                       </span>
                     </div>
-                    <div
-                      v-if="source.percent != 100"
-                      class="fileinfo-abort-icon"
-                    >
+                    <div v-else class="fileinfo-abort-icon">
                       <span
                         class="el-icon-close"
                         style="font-size: 24px; cursor: pointer"
@@ -464,7 +480,6 @@ export default {
       sourceId: 0,
       parentId: 0,
       isRefSource: false,
-      fileList: [],
       acceptType: ".jpg,.png,.svg,.dxf,.gc,.nc,.jpeg",
       tutorialValidateResult: true,
       tutorialSwiper: "tutorialSwiper",
@@ -650,6 +665,7 @@ export default {
   computed: {
     ...mapState({
       headers: (state) => state.user.headers,
+      config: (state) => state.user.config,
     }),
     headerTitle() {
       if (this.sourceId != 0) {
@@ -670,7 +686,6 @@ export default {
     },
   },
   created() {
-    console.log(this.baseApi);
     this.sourceId = this.$route.params.sourceId || 0;
     this.parentId = this.$route.query.refId || 0;
     //refId不为空则为POST Remix
@@ -683,6 +698,7 @@ export default {
         this.resourceForm.files = detail.files;
         this.resourceForm.files.forEach((item) => {
           item.percent = 100;
+          item.upStatus = 0; //0:ok,1:等待上传,2:失败，3:文件超出大小
         });
         this.resourceForm.images = detail.images;
         this.resourceForm.tags = detail.tags;
@@ -828,11 +844,17 @@ export default {
     closePreviewDialog() {
       this.previewDialogVisible = false;
     },
-    async beforeUploadSource(file) {
+    handleExceed() {
+      this.$message({
+        message: this.$t("upload.fileExceed", [this.config.fileLimit]),
+        type: "warning",
+      });
+    },
+    beforeUploadSource(file) {
       let extension = file.name
         .substring(file.name.lastIndexOf(".") + 1)
         .toLowerCase();
-      let accept = this.acceptType.indexOf(extension) < 0 ? false : true;
+      var accept = this.acceptType.indexOf(extension) < 0 ? false : true;
       if (file.name.length > 50) {
         this.$message({
           message: this.$t("upload.filenameTooLong"),
@@ -840,6 +862,7 @@ export default {
         });
         return false;
       }
+
       if (!accept) {
         this.$message({
           message: this.$t("upload.supportedFilesError", [this.acceptType]),
@@ -847,7 +870,7 @@ export default {
         });
         return false;
       }
-      let fileInfo = {
+      var fileInfo = {
         uid: file.uid,
         url: "",
         id: 0,
@@ -856,14 +879,30 @@ export default {
         percent: 0,
         file: file,
         thumbnail: "",
+        upStatus: 1, //0:ok,1:等待上传,2:失败，3:文件超出大小
       };
-      //获取缩略图
 
-      let res = await this.genThumb(file);
-      if (res && res.code == 0) {
-        fileInfo.thumbnail = res.data.data.url;
+      //校验文件大小
+      if (file.size > this.config.maxFileSize) {
+        this.$message({
+          message: this.$t("upload.fileTooLarge", [
+            this.formatFileSize(this.config.maxPictureSize, 0),
+          ]),
+          type: "warning",
+        });
+        accept = false;
+        fileInfo.upStatus = 3;
       }
       this.resourceForm.files.push(fileInfo);
+      //获取缩略图
+      if (accept) {
+        this.genThumb(file).then((res) => {
+          if (res && res.data.code == 0) {
+            fileInfo.thumbnail = res.data.data.url;
+          }
+        });
+      }
+
       return accept;
     },
     beforeUpload(file) {
@@ -874,6 +913,17 @@ export default {
       if (file.name.length > 50) {
         this.$message({
           message: this.$t("upload.filenameTooLong"),
+          type: "warning",
+        });
+        return false;
+      }
+
+      //校验文件大小
+      if (file.size > this.config.maxPictureSize) {
+        this.$message({
+          message: this.$t("upload.fileTooLarge", [
+            this.formatFileSize(this.config.maxPictureSize, 0),
+          ]),
           type: "warning",
         });
         return false;
@@ -913,7 +963,7 @@ export default {
       this.inputValue = "";
     },
 
-    formatFileSize(filesize) {
+    formatFileSize(filesize, rad = 2) {
       var units = "Byte";
       if (filesize / 1024 > 1) {
         filesize = filesize / 1024;
@@ -928,28 +978,21 @@ export default {
         filesize = filesize / 1024;
         units = "GB";
       }
-      return filesize.toFixed(2) + units;
+      return filesize.toFixed(rad) + units;
     },
     handleSourceProgress(event, file) {
-      for (const index in this.resourceForm.files) {
-        var item = this.resourceForm.files[index];
-        if (file.uid == item.uid) {
-          item.percent = parseInt(event.percent.toFixed(0));
-          return;
-        }
-      }
+      console.log("上传中", file.uid, file);
+      file.percent = parseInt(event.percent.toFixed(0));
     },
     handleSourceSuccess(response, file) {
-      console.log("file", file);
-      for (const index in this.resourceForm.files) {
-        var item = this.resourceForm.files[index];
-        if (file.uid == item.uid) {
-          item.url = response.data.url;
-          item.percent = 100;
-          item.id = response.data.id;
-          break;
-        }
-      }
+      file.url = response.data.url;
+      file.percent = 100;
+      file.id = response.data.id;
+      file.upStatus = 0;
+      console.log(this.resourceForm.files, "成功");
+    },
+    handleSourceError(err, file) {
+      file.upStatus = 2;
     },
     handleRemoveSource(sourceIndex) {
       this.resourceForm.files.splice(sourceIndex, 1);
@@ -999,8 +1042,7 @@ export default {
       };
       this.tutorialForm[this.currentTutorialKey].images.push(imgInfo);
     },
-    handleTutorialEditSuccess(response, file, fileList) {
-      console.log(response, file, fileList);
+    handleTutorialEditSuccess(response) {
       let imgInfo = {
         id: response.data.id,
         url: response.data.url,
@@ -1228,11 +1270,14 @@ export default {
           align-items: center;
           flex-direction: row;
           .fileinfo-wrapper {
-            width: 12%;
             display: flex;
             align-items: center;
+            margin-right: 32px;
+            .fileicon i {
+              vertical-align: middle;
+            }
             .fileinfo {
-              width: 100%;
+              width: 120px;
               margin-left: 10px;
               display: flex;
               flex-direction: column;
@@ -1240,28 +1285,29 @@ export default {
                 overflow: hidden;
                 text-overflow: ellipsis;
                 white-space: nowrap;
+                font-size: 14px;
+                line-height: 24px;
               }
-
               .fileinfo-tag {
                 width: 100%;
                 display: flex;
                 align-items: center;
+                font-size: 12px;
+                line-height: 22px;
+                justify-content: space-around;
                 .filesize {
                   color: #777;
-                  width: 80px;
-                  display: inline-block;
-                  margin-right: 20px;
                 }
                 .filetype {
-                  display: inline-block;
-                  width: 60px;
-                  height: 20px;
-                  line-height: 20px;
+                  max-width: 60px;
+                  padding: 0 8px;
+                  margin-left: 10px;
                   background: #000;
                   color: #fff;
-                  font-size: 12px;
-                  text-align: center;
                   border-radius: 4px;
+                  text-overflow: ellipsis;
+                  white-space: nowrap;
+                  overflow: hidden;
                 }
               }
             }
@@ -1269,10 +1315,24 @@ export default {
 
           .el-progress {
             width: 60%;
-            margin-left: 70px;
+            margin-right: 32px;
+          }
+          .upload-error-tip {
+            margin-right: 32px;
+            color: #ff5e5e;
+            font-size: 14px;
+            font-weight: 400;
+            .error-tip-text {
+              margin-left: 10px;
+            }
           }
           .fileinfo-remove-icon {
-            margin-left: 70px;
+            margin-right: 32px;
+            .ortur-icon-minus {
+              font-size: 24px;
+              cursor: pointer;
+              vertical-align: middle;
+            }
           }
         }
       }
