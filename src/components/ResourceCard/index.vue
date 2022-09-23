@@ -1,5 +1,10 @@
 <template>
-  <div class="card-box" @mouseenter="enter" @mouseleave="leave(thing)">
+  <div
+    class="card-box"
+    @mouseenter="enter"
+    @mouseleave="leave(thing)"
+    @touchstart="touchstart"
+  >
     <div style="position: relative">
       <div class="resource-show-image-box">
         <img
@@ -244,6 +249,8 @@ export default {
       loadLike: false,
       showUserRecommendation: false,
       isViewMorePage: false,
+      touchNum: 0,
+      isTouch: false,
     };
   },
   mounted() {
@@ -269,6 +276,10 @@ export default {
     },
   },
   methods: {
+    touchstart() {
+      this.touchNum++;
+      this.isTouch = true;
+    },
     handleDownClick() {
       this.showMoreMenu = false;
       this.$emit("clickDownMenu", this.thing);
@@ -298,7 +309,12 @@ export default {
       this.$router.push(`/upload/${id}`);
     },
     toDetail(id) {
-      this.$router.push(`/thing/${id}`);
+      if (!this.isTouch) {
+        this.$router.push(`/thing/${id}`);
+      }
+      if (this.touchNum >= 2 && this.isTouch) {
+        this.$router.push(`/thing/${id}`);
+      }
     },
     like() {
       if (this.loadLike) {
