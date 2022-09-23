@@ -46,7 +46,9 @@ module.exports = {
     reset: "重置",
     editOn: "编辑 ",
     source: "引用资源",
-    filenameTooLong: "文件名过长",
+    filenameTooLong: "文件名过长,应该在50个字符以内",
+    fileTooLarge: "单个文件体积不超过{0}",
+    fileExceed: "最多上传文件数量不超过{0}个",
     supportedFilesError: "Supported Files:{0}",
     tagTip: "提示:按回车键保存",
     updateOk: "修改成功",
@@ -63,6 +65,7 @@ module.exports = {
     charNumError: "不能超出32个字符",
     validateError: "验证失败",
     titleLengthError: "标题长度不少于{0}个字符,至多{1}个字符",
+    fileSizeTipError: "大小超限，上传失败",
   },
   comment: {
     empty: "暂无评论",

@@ -33,6 +33,13 @@ const getDefaultState = () => {
     headers: {
       Authorization: "Bearer " + getToken(),
     },
+    config: {
+      maxPictureSize: 10 * 1024 * 1024, //10M
+      maxFileSize: 100 * 1024 * 1024, //100M
+      sourceAcceptType: ".jpg,.png,.svg,.dxf,.gc,.nc,.jpeg",
+      pictureAcceptType: ".jpg,.png.svg.jpeg",
+      fileLimit: 2,
+    },
   };
 };
 const state = getDefaultState();
