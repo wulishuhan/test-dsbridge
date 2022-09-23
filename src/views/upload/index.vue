@@ -31,7 +31,8 @@
             >
               <i class="ortur-icon-file" style="font-size: 60px"></i>
               <span style="font-size: 20px; color: #ccc">
-                {{ $t("upload.dragFileTip") }} (&lt;10MB)
+                {{ $t("upload.dragFileTip") }}
+                (&lt;{{ formatFileSize(config.maxFileSize, 0) }})
               </span>
               <span style="font-size: 20px; color: #ccc">
                 {{ $t("upload.or") }}
