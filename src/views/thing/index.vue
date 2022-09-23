@@ -1050,13 +1050,19 @@ a {
 
 .carousel {
   position: relative;
+  /* width: 805px; */
   width: 807px;
   height: 496px;
   img {
     width: 100%;
     height: 100%;
     object-fit: contain;
+    border-radius: 12px;
+    /* border: 1px solid #f0f3fa; */
   }
+  /* img:hover {
+    border: 1px solid #ccc;
+  } */
 }
 
 .like-red {
