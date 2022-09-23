@@ -71,14 +71,32 @@
           ></el-avatar>
         </el-popover>
         <div class="card-box-bottom-left-name">
-          <div class="thing-name">{{ thing.title }}</div>
-          <span
+          <!-- <div class="thing-name">{{ thing.title }}</div> -->
+          <el-tooltip effect="light" placement="bottom">
+            <div slot="content">
+              {{ thing.title }}
+            </div>
+            <div class="thing-name">{{ thing.title }}</div>
+          </el-tooltip>
+          <el-tooltip effect="light" placement="bottom">
+            <div slot="content">
+              {{ thing.creator.name }}
+            </div>
+            <span
+              v-if="showAvatar"
+              class="author"
+              @click="viewAuthorInfo(thing.creator && thing.creator.id)"
+            >
+              {{ thing.creator && thing.creator.name }}
+            </span>
+          </el-tooltip>
+          <!-- <span
             v-if="showAvatar"
             class="author"
             @click="viewAuthorInfo(thing.creator && thing.creator.id)"
           >
             {{ thing.creator && thing.creator.name }}
-          </span>
+          </span> -->
         </div>
       </div>
       <div class="card-box-bottom-right">
@@ -463,6 +481,10 @@ export default {
   font-family: Source Han Sans CN;
   font-weight: 400;
   color: #999999;
+  width: 81px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .author:hover {
   border-bottom: solid 1px #000;
@@ -599,6 +621,10 @@ img:hover {
   font-family: Source Han Sans CN;
   font-weight: 400;
   color: #1a1a1a;
+  width: 81px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .share-box:hover {
   color: #000;

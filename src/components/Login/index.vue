@@ -257,6 +257,19 @@ export default {
     },
   },
   data() {
+    var validatePassword = (rule, value, callback) => {
+      let pattern =
+        // eslint-disable-next-line
+        /^(?![0-9]+$)(?![a-z]+$)(?![A-Z]+$)(?![,\.#%'\+\*\-:;^_`]+$)[,\.#%'\+\*\-:;^_`0-9A-Za-z]{8,16}$/;
+      if (!pattern.test(this.loginForm.password)) {
+        callback(
+          new Error(
+            "The length of the password is 8-16 characters, must contain two kinds of numbers, letters and characters."
+          )
+        );
+      }
+      callback();
+    };
     var validatePass1 = (rule, value, callback) => {
       // eslint-disable-next-line
       let pattern =
@@ -293,9 +306,9 @@ export default {
         callback(new Error(this.thirdPartyFormTip));
         this.thirdPartyFormTip = "";
       }
-      if (this.loginFormTip != "") {
-        callback(new Error(this.loginFormTip));
-        this.loginFormTip = "";
+      if (this.loginFormTipCode === 1009 || this.loginFormTipCode === 1006) {
+        callback(new Error(this.$t("error.usernameOrPasswordError")));
+        this.loginFormTipCode = "";
       }
       if (this.registerFormTip != "") {
         callback(new Error(this.registerFormTip));
@@ -323,7 +336,7 @@ export default {
     };
     return {
       isComplete: false,
-      loginFormTip: "",
+      loginFormTipCode: "",
       registerFormTip: "",
       loginForm: {
         username: "",
@@ -383,6 +396,7 @@ export default {
             message: this.$t("login.passwordLengthLimit"),
             trigger: "blur",
           },
+          { validator: validatePassword, trigger: "blur" },
         ],
         password1: [{ validator: validatePass1, trigger: "blur" }],
         password2: [{ validator: validatePass2, trigger: "blur" }],
@@ -436,9 +450,10 @@ export default {
             })
             .catch((error) => {
               // this.$message.error(error.msg);
-              this.loginFormTip = error.msg;
+              this.loginFormTipCode = error.code;
               this.innerVisible = false;
               this.$refs.loginForm.validateField("email");
+              this.$refs.loginForm.validateField("password");
             });
         } else {
           console.log("error submit!!");

@@ -35,10 +35,12 @@ service.interceptors.response.use((res) => {
       return Promise.resolve(res);
     case 1:
       return Promise.reject({
+        code: 1,
         msg: i18n.t("error.serverDatabaseError"),
       });
     case 2:
       return Promise.reject({
+        code: 2,
         msg: i18n.t("error.serverError"),
       });
 
@@ -47,68 +49,82 @@ service.interceptors.response.use((res) => {
 
     case 201:
       return Promise.reject({
+        code: 201,
         msg: i18n.t("error.created"),
       });
 
     case 401:
       return Promise.reject({
+        code: 401,
         msg: i18n.t("error.unauthenticated"),
       });
 
     case 403:
       return Promise.reject({
+        code: 403,
         msg: i18n.t("error.forbidden"),
       });
 
     case 404:
       return Promise.reject({
+        code: 404,
         msg: i18n.t("error.notFound"),
       });
 
     case 1002:
       return Promise.reject({
+        code: 1002,
         msg: i18n.t("error.usernameAndPasswordMustEnter"),
       });
 
     case 1003:
       return Promise.reject({
+        code: 1003,
         msg: i18n.t("error.usernameRange"),
       });
 
     case 1004:
       return Promise.reject({
+        code: 1004,
         msg: i18n.t("error.usernameAndPasswordRange"),
       });
 
     case 1006:
       return Promise.reject({
+        code: 1006,
         msg: i18n.t("error.usernameNotExist"),
       });
 
     case 1007:
       return Promise.reject({
+        code: 1007,
         msg: i18n.t("error.accountDeleted"),
       });
 
     case 1008:
       return Promise.reject({
+        code: 1008,
         msg: i18n.t("error.accountDisabled"),
       });
 
     case 1009:
       return Promise.reject({
         msg: i18n.t("error.passwordError"),
+        code: 1009,
       });
     case 1010:
       return Promise.reject({
         msg: i18n.t("error.usernameAndPasswordMustEnter"),
+        code: 1010,
       });
     case 1011:
       return Promise.reject({
+        code: 1011,
         msg: i18n.t("error.usernameExist"),
       });
     case 1012:
       return Promise.reject({
+        code: 1012,
         msg: i18n.t("error.emailExist"),
       });
     case 1013:
@@ -127,6 +143,7 @@ service.interceptors.response.use((res) => {
       });
     case 1016:
       return Promise.reject({
+        code: 1016,
         msg: i18n.t("error.deviceNotSupported"),
       });
   }
