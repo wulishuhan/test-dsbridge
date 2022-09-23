@@ -69,6 +69,7 @@ module.exports = {
     validateError: "Verification failed",
     titleLengthError: "title must be between {0} and {1} characters",
     fileSizeTipError: "The file is too large to upload failed",
+    uploadfailed: "Upload failed",
   },
   comment: {
     empty: "No comments",

@@ -89,7 +89,11 @@
                     <div class="upload-error-tip" v-if="source.upStatus >= 2">
                       <i class="el-icon-warning"></i>
                       <span class="error-tip-text">
-                        {{ $t("upload.fileSizeTipError") }}
+                        {{
+                          source.upStatus == 3
+                            ? $t("upload.fileSizeTipError")
+                            : $t("upload.uploadfailed")
+                        }}
                       </span>
                     </div>
                     <div
