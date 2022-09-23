@@ -132,6 +132,7 @@ export default {
       .name {
         font-size: 20px;
         margin-left: 17px;
+        width: 115px;
       }
     }
     .el-button {

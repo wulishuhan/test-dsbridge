@@ -28,48 +28,7 @@
       </el-tabs>
     </div>
     <div>
-      <!-- <div style="width: 486px; border: solid">
-        <div style="display: flex; justify-content: space-between">
-          <span
-            style="
-              font-size: 18px;
-              font-family: Source Han Sans CN;
-              font-weight: 400;
-              color: #1a1a1a;
-            "
-            >该创作者的更多作品</span
-          >
-          <a
-            style="
-              font-size: 15px;
-              font-family: Source Han Sans CN;
-              font-weight: 400;
-              color: #1e78f0;
-            "
-            >查看全部</a
-          >
-        </div>
-        <div
-          style="
-            display: flex;
-            justify-content: space-between;
-            margin-top: 31px;
-          "
-        >
-          <el-image
-            style="width: 138px; height: 84px"
-            src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
-          ></el-image>
-          <el-image
-            style="width: 138px; height: 84px"
-            src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
-          ></el-image>
-          <el-image
-            style="width: 138px; height: 84px"
-            src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
-          ></el-image>
-        </div>
-      </div> -->
+
     </div>
     <div>
       <h1>login组件</h1>
@@ -106,35 +65,6 @@
       @addFolder="addFolder"
     ></CollectedOption>
 
-    <!-- <div style="margin-top: 50px"></div>
-    <div v-swiper:mySwiper="swiperOptions">
-      <div class="swiper-wrapper">
-        <div class="swiper-slide" v-for="(item, index) in urls" :key="item">
-          <img @click="imgIndex(index)" :src="item" alt="" />
-        </div>
-      </div>
-      <div class="swiper-scrollbar"></div>
-      <div class="up">
-        <i class="ortur-icon-arrow-up"></i>
-      </div>
-      <div class="down">
-        <i class="ortur-icon-arrow-down"></i>
-      </div>
-    </div> -->
-    <el-tabs type="border-card" :stretch="true" style="width: 360px">
-      <el-tab-pane>
-        <div class="tab-items" slot="label">aaa</div>
-        bbb
-      </el-tab-pane>
-      <el-tab-pane>
-        <div class="tab-items" slot="label">bbb</div>
-        ccc
-      </el-tab-pane>
-      <el-tab-pane>
-        <div class="tab-items" slot="label">ccc</div>
-        ddd
-      </el-tab-pane>
-    </el-tabs>
     <div>
       <h1>CollectedOption组件</h1>
       <p>控制收藏框显示隐藏属性： show 类型:boolean</p>
@@ -143,16 +73,6 @@
       <p>点击move按钮事件： moveFolder 类型:function</p>
       <p>添加文件夹事件：addFolder 类型:function</p>
     </div>
-    <!-- <el-button @click="openCollectedOption = !openCollectedOption"
-      >CollectedOption组件点击显示隐藏</el-button
-    > -->
-    <!-- <CollectedOption
-      :show="openCollectedOption"
-      :folders="folders"
-      @close="closeCollectedOption"
-      @moveFolder="moveCollectedOption"
-      @addFolder="addFolder"
-    ></CollectedOption> -->
     <el-popover popper-class="user-popover" placement="bottom" trigger="click">
       <UserRecommendation></UserRecommendation>
       <el-avatar :size="40" slot="reference"></el-avatar>
@@ -169,6 +89,10 @@
         12345
       </div>
     </el-popover>
+    <form action="https://thingiverse-production-new.s3.amazonaws.com/" enctype="multipart/form-data">
+      <input type="file" id="upload" name="upload">
+      <input type="submit" value="Upload">
+    </form>
   </div>
 </template>
 <script>

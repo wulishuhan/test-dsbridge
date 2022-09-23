@@ -140,7 +140,7 @@ export default {
         this.$message.error(this.$t("thing.acceptFileFormat"));
         this.isDisabled = false;
         return false;
-      } else if (file.size < 1024 * 10) {
+      } else if (file.size / 1000 / 1000 >= 10) {
         this.$message.error(this.$t("thing.acceptFileSize"));
         return false;
       }

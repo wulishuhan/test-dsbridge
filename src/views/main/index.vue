@@ -348,7 +348,7 @@ p {
   height: 48px;
 }
 ::v-deep .el-input__inner:hover {
-  border: none;
+  /* border: none; */
 }
 ::v-deep .el-input__inner::before {
   content: "\e93f";
@@ -383,7 +383,7 @@ p {
   text-align: center;
 }
 .select:hover {
-  border: 1px solid #c2c4cc;
+  /* border: 1px solid #c2c4cc; */
 }
 .option {
   width: 150px;
