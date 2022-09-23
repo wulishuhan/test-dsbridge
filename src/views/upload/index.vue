@@ -82,9 +82,9 @@
                       </div>
                     </div>
                     <el-progress
-                      :percentage="source.percentage"
+                      :percentage="source.percent"
                       :format="format"
-                      v-if="source.percentage != 100 && source.upStatus < 2"
+                      v-if="source.percent != 100 && source.upStatus < 2"
                     ></el-progress>
                     <div class="upload-error-tip" v-if="source.upStatus >= 2">
                       <i class="el-icon-warning"></i>
@@ -697,6 +697,7 @@ export default {
         this.resourceForm.title = detail.title;
         this.resourceForm.files = detail.files;
         this.resourceForm.files.forEach((item) => {
+          item.percent = 100;
           item.upStatus = 0; //0:ok,1:等待上传,2:失败，3:文件超出大小
         });
         this.resourceForm.images = detail.images;
@@ -981,6 +982,7 @@ export default {
     },
     handleSourceProgress(event, file) {
       console.log("上传中", file.uid, file);
+      file.percent = parseInt(event.percent.toFixed(0));
     },
     handleSourceSuccess(response, file) {
       file.url = response.data.url;
