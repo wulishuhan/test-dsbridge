@@ -778,12 +778,13 @@ export default {
       };
     },
     genThumb(srcFile) {
-      //判断文件类型，如果是图片，则生成截图
-      if (srcFile.type.indexOf("image") < 0) {
-        return;
-      }
       //
       return new Promise((resolve, reject) => {
+        //判断文件类型，如果是图片，则生成截图
+        if (srcFile.type.indexOf("image") < 0) {
+          reject("error");
+          return;
+        }
         const image = new Image();
         image.src = URL.createObjectURL(srcFile);
         image.setAttribute("crossOrigin", "Anonymous");
