@@ -38,7 +38,7 @@ module.exports = {
     editProject: "Edit project",
     dragFileTip: "Drag your file & photo here,up to {0} files",
     or: "Or",
-    selectFile: "Select file",
+    selectFile: "Add file",
     supportedFiles: "Supported Files",
     addStepTitle: "Add step title",
     addStepDesc: "Add step desctription",

@@ -38,6 +38,7 @@
                 {{ $t("upload.or") }}
               </span>
               <el-button size="small" type="primary">
+                <i class="el-icon-plus"></i> &nbsp;
                 {{ $t("upload.selectFile") }}
               </el-button>
             </el-upload>
@@ -1255,6 +1256,10 @@ export default {
           width: 160px;
           font-size: 20px;
           padding: 20px;
+          color: #1a1a1a;
+          border-color: #999;
+          border-radius: 8px;
+          background: unset;
         }
       }
       .el-upload-dragger:hover {
