@@ -5,6 +5,7 @@ function resolve(dir) {
   return path.join(__dirname, dir);
 }
 module.exports = defineConfig({
+  productionSourceMap: false,
   transpileDependencies: true,
   // chainWebpack: (config) => {
   //   config.plugin("html").tap((args) => {
