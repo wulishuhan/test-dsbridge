@@ -35,7 +35,7 @@ module.exports = {
     resourceCover: "资源封面",
     createProject: "创建项目",
     editProject: "编辑项目",
-    dragFileTip: "拖拽你的文件和照片放在这里",
+    dragFileTip: "将文件或照片拖拽此处,最多上传{0}个文件",
     or: "或",
     selectFile: "选择文件",
     supportedFiles: "支持文件类型",

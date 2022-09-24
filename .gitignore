@@ -2,6 +2,7 @@
 node_modules
 /dist
 sz.pem
+hk.pem
 
 
 # local env files

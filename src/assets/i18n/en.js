@@ -36,7 +36,7 @@ module.exports = {
     resourceCover: "The resource cover",
     createProject: "Create project",
     editProject: "Edit project",
-    dragFileTip: "Drag your file & photo here",
+    dragFileTip: "Drag your file & photo here,up to {0} files",
     or: "Or",
     selectFile: "Select file",
     supportedFiles: "Supported Files",

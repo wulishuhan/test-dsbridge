@@ -31,7 +31,7 @@
             >
               <i class="ortur-icon-file" style="font-size: 60px"></i>
               <span style="font-size: 20px; color: #ccc">
-                {{ $t("upload.dragFileTip") }}
+                {{ $t("upload.dragFileTip",[config.fileLimit]) }}
                 (&lt;{{ formatFileSize(config.maxFileSize, 0) }})
               </span>
               <span style="font-size: 20px; color: #ccc">
@@ -892,7 +892,7 @@ export default {
       if (file.size > this.config.maxFileSize) {
         this.$message({
           message: this.$t("upload.fileTooLarge", [
-            this.formatFileSize(this.config.maxPictureSize, 0),
+            this.formatFileSize(this.config.maxFileSize, 0),
           ]),
           type: "warning",
         });
