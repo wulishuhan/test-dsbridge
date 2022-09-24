@@ -1660,10 +1660,10 @@ export default {
       .imgEdit {
         position: absolute;
         top: 0;
-        font-size: 40px;
-        line-height: 100px;
+        font-size: 36px;
+        line-height: 119px;
         color: white;
-        opacity: 0.5;
+        /* opacity: 0.5; */
         width: 120px;
         height: 119px;
         border-radius: 50%;
@@ -1677,7 +1677,7 @@ export default {
     }
     .imgWrap:hover .imgEdit {
       display: inline-block;
-      background-color: rgba(0, 0, 0, 0.3);
+      background-color: rgba(0, 0, 0, 0.4);
       cursor: pointer;
     }
     .descHover:hover {

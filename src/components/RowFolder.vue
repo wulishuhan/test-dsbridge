@@ -351,7 +351,7 @@ export default {
           display: flex;
           flex-wrap: wrap;
           width: 256px;
-          height: 184px;
+          height: 276px;
           border-radius: 12px;
           padding: 5px;
           background: #f0f3fa;
