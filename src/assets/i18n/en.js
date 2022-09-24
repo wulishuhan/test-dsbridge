@@ -36,7 +36,9 @@ module.exports = {
     resourceCover: "The resource cover",
     createProject: "Create project",
     editProject: "Edit project",
-    dragFileTip: "Drag your file & photo here,up to {0} files",
+    dragFileTip: "Drag your file & photo here",
+    draFileTipDesc:
+      "A maximum of {0} files can be upload,and the size of a single file should not exceed {1}",
     or: "Or",
     selectFile: "Add file",
     supportedFiles: "Supported Files",

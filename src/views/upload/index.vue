@@ -30,10 +30,19 @@
               ref="uploadFile"
             >
               <i class="ortur-icon-file" style="font-size: 60px"></i>
-              <span style="font-size: 20px; color: #ccc">
-                {{ $t("upload.dragFileTip", [config.fileLimit]) }}
-                (&lt;{{ formatFileSize(config.maxFileSize, 0) }})
-              </span>
+              <div>
+                <div style="font-size: 20px; color: #ccc">
+                  {{ $t("upload.dragFileTip") }}
+                </div>
+                <div style="font-size: 16px; color: #ccc">
+                  {{
+                    $t("upload.draFileTipDesc", [
+                      config.fileLimit,
+                      formatFileSize(config.maxFileSize,0),
+                    ])
+                  }}
+                </div>
+              </div>
               <span style="font-size: 20px; color: #ccc">
                 {{ $t("upload.or") }}
               </span>
@@ -363,7 +372,11 @@
                           <span class="path2"></span>
                         </i>
                         <i
-                          class="handle ortur-icon-settings-gray swiper-no-swiping"
+                          class="
+                            handle
+                            ortur-icon-settings-gray
+                            swiper-no-swiping
+                          "
                         ></i>
                         <el-upload
                           class="cover-edit"
@@ -374,7 +387,6 @@
                           accept=".png,.jpg,.svg,.jpeg"
                           :before-upload="beforeUpload"
                         >
-                        
                           <i
                             class="ortur-icon-pen"
                             @click="
