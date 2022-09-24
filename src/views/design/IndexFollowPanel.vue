@@ -2,7 +2,7 @@
   <div class="wrapper">
     <div class="container" v-for="item in userList" :key="item.userId">
       <div class="left">
-        <img class="img" :src="item.avatar" alt="" />
+        <img class="img" :src="avatar(item)" alt="" />
         <div class="center">
           <div class="name">{{ item.name }}</div>
         </div>
@@ -22,13 +22,20 @@
 
 <script>
 import FollowButton from "@/components/FollowButton.vue";
-
+import { generatorDefaultAvator } from "@/utils/generateImage";
 export default {
   components: {
     FollowButton,
   },
   mounted() {},
-  methods: {},
+  methods: {
+    avatar(userInfo) {
+      console.log("userInfo: " + userInfo);
+      return userInfo.avatar
+        ? userInfo.avatar
+        : generatorDefaultAvator(userInfo.name, userInfo.id);
+    },
+  },
   props: {
     myUserId: [String, Number],
     userList: {

@@ -1573,6 +1573,7 @@ export default {
       .add {
         font-size: 30px;
         text-align: center;
+        cursor: pointer;
       }
       .name {
         margin-top: 12px;
