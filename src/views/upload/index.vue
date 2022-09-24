@@ -363,7 +363,7 @@
                           <span class="path2"></span>
                         </i>
                         <i
-                          class="handle el-icon-s-operation swiper-no-swiping"
+                          class="handle ortur-icon-settings-gray swiper-no-swiping"
                         ></i>
                         <el-upload
                           class="cover-edit"
@@ -374,8 +374,9 @@
                           accept=".png,.jpg,.svg,.jpeg"
                           :before-upload="beforeUpload"
                         >
+                        
                           <i
-                            class="el-icon-pen"
+                            class="ortur-icon-pen"
                             @click="
                               currentTutorialEditIndex(
                                 tutorialKey,
@@ -1169,6 +1170,12 @@ export default {
 .swiper-button-next,
 .swiper-button-prev {
   width: 0;
+}
+.swiper-button-next {
+  right: 12px;
+}
+.swiper-button-prev {
+  left: 12px;
 }
 
 .swiper-slide {
