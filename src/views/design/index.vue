@@ -1497,6 +1497,7 @@ export default {
   .tabs {
     width: 1072px;
     position: relative;
+    margin-top: 34px;
     .editTab {
       position: absolute;
       top: 12px;
@@ -1676,6 +1677,8 @@ export default {
     }
     .imgWrap:hover .imgEdit {
       display: inline-block;
+      background-color: rgba(0, 0, 0, 0.3);
+      cursor: pointer;
     }
     .descHover:hover {
       border: 1px solid #ccc;

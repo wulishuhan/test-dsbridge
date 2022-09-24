@@ -263,8 +263,15 @@ export default {
     margin: auto 0;
     width: 256px;
     text-align: center;
-    height: 130px;
-    line-height: 130px;
+    height: 184px;
+    line-height: 184px;
+    margin-top: 25px;
+    border: solid 1px #f0f3fa;
+  }
+  .plus:hover {
+    border: solid 1px #ccc;
+    border-radius: 12px;
+    cursor: pointer;
   }
 
   .folderWrapper {
@@ -282,6 +289,9 @@ export default {
     .folderContainer {
       position: relative;
       margin-right: 57px;
+      .moreMenuIcon:hover {
+        cursor: pointer;
+      }
       .moreMenuIcon {
         display: none;
         text-align: center;
@@ -334,11 +344,14 @@ export default {
         justify-content: center;
         align-items: center;
         margin-right: 5px;
-
+        .imgArr:hover {
+          cursor: pointer;
+        }
         .imgArr {
           display: flex;
           flex-wrap: wrap;
           width: 256px;
+          height: 184px;
           border-radius: 12px;
           padding: 5px;
           background: #f0f3fa;

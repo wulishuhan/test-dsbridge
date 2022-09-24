@@ -76,5 +76,6 @@ export default {
 .white {
   background-color: #fff;
   color: #000;
+  width: 102px;
 }
 </style>

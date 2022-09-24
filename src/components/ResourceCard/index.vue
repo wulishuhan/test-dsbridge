@@ -80,7 +80,7 @@
           </el-tooltip>
           <el-tooltip effect="light" placement="bottom">
             <div slot="content">
-              {{ thing.creator.name }}
+              {{ thing.creator && thing.creator.name }}
             </div>
             <span
               v-if="showAvatar"
