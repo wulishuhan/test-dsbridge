@@ -28,6 +28,7 @@
 import { getMoreByThisCreator } from "@/api/resource";
 import { follow, unFollow } from "@/api/design";
 import { generatorDefaultAvator } from "@/utils/generateImage";
+import { mapState } from "vuex";
 export default {
   name: "UserRecommendation",
   props: {
@@ -60,6 +61,7 @@ export default {
   data() {
     return {
       moreCreateList: [],
+      isLock: false,
     };
   },
   computed: {
@@ -73,9 +75,16 @@ export default {
         ? this.creator.avatar
         : generatorDefaultAvator(this.creator.name, this.creator.id);
     },
+    ...mapState({
+      userInfo: (state) => state.user.userInfo,
+    }),
   },
   methods: {
     follow() {
+      if (this.isLock) {
+        return;
+      }
+      this.isLock = true;
       follow({
         userId: this.creator.id,
       })
@@ -84,10 +93,20 @@ export default {
             ...this.$store.getters.myFollowingList,
             this.creator,
           ]);
+          this.isLock = false;
         })
-        .catch(() => {});
+        .catch(() => {
+          this.$store.dispatch("user/getMyFollowingList", {
+            userId: this.userInfo.user_id,
+          });
+          this.isLock = false;
+        });
     },
     unFollow() {
+      if (this.isLock) {
+        return;
+      }
+      this.isLock = true;
       unFollow({
         userId: this.creator.id,
       })
@@ -98,8 +117,14 @@ export default {
               item.id !== this.creator.id;
             })
           );
+          this.isLock = false;
         })
-        .catch(() => {});
+        .catch(() => {
+          this.$store.dispatch("user/getMyFollowingList", {
+            userId: this.userInfo.user_id,
+          });
+          this.isLock = false;
+        });
     },
     toMore(id) {
       this.$router.push(`/thing/${id}`);
