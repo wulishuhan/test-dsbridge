@@ -31,7 +31,7 @@
             >
               <i class="ortur-icon-file" style="font-size: 60px"></i>
               <span style="font-size: 20px; color: #ccc">
-                {{ $t("upload.dragFileTip",[config.fileLimit]) }}
+                {{ $t("upload.dragFileTip", [config.fileLimit]) }}
                 (&lt;{{ formatFileSize(config.maxFileSize, 0) }})
               </span>
               <span style="font-size: 20px; color: #ccc">
@@ -1234,7 +1234,9 @@ export default {
 .upload-wrapper {
   padding: 40px;
   min-height: 568px;
-  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  // box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  background: #e8ebf4;
+  border-radius: 12px;
   .select-area {
     font-size: 24px;
     color: #777;
@@ -1361,13 +1363,17 @@ export default {
 }
 .tutorial {
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-  padding: 10px;
+  padding: 2px 10px;
 
   .tutorial-item {
     position: relative;
-    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+    // box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
     padding: 10px;
     margin: 20px auto;
+    border: 1px solid #cccccc;
+    border-radius: 6px;
+    background: #e8ebf4;
+
     .el-button {
       position: absolute;
       border: none;
@@ -1419,6 +1425,7 @@ export default {
   .ref-resource-info {
     padding: 10px;
     background: #e8ebf4;
+    border-radius: 10px;
     h4 {
       line-height: 24px;
       font-size: 16px;
@@ -1427,6 +1434,8 @@ export default {
     }
     .el-divider--horizontal {
       margin: 10px 0;
+      background: #999 !important;
+      border-top: unset !important;
     }
     .resource-info-wrapper {
       line-height: 24px;
