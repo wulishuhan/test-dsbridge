@@ -142,35 +142,39 @@
                       :key="coverKey"
                     >
                       <img :src="coverImage.url" />
-                      <i
-                        class="ortur-icon-minus"
-                        @click="handleRemoveCover(coverKey)"
-                      >
-                        <span class="path1"></span>
-                        <span class="path2"></span>
-                      </i>
-                      <i
-                        class="
-                          handle
-                          ortur-icon-settings-gray
-                          swiper-no-swiping
-                        "
-                      >
-                      </i>
-                      <el-upload
-                        class="cover-edit"
-                        :action="baseApi + '/library/resource/upload'"
-                        :show-file-list="showFile"
-                        :on-success="handleCoverEditSuccess"
-                        :headers="headers"
-                        accept=".png,.jpg,.svg,.jpeg"
-                        :before-upload="beforeUpload"
-                      >
+                      <!-- img-toolbar  -->
+                      <div class="img-toolbar">
                         <i
-                          class="ortur-icon-pen"
-                          @click="currentEditIndex(coverKey)"
-                        ></i>
-                      </el-upload>
+                          class="ortur-icon-minus"
+                          @click="handleRemoveCover(coverKey)"
+                        >
+                          <span class="path1"></span>
+                          <span class="path2"></span>
+                        </i>
+                        <i
+                          class="
+                            handle
+                            ortur-icon-settings-gray
+                            swiper-no-swiping
+                          "
+                        >
+                        </i>
+                        <el-upload
+                          class="cover-edit"
+                          :action="baseApi + '/library/resource/upload'"
+                          :show-file-list="showFile"
+                          :on-success="handleCoverEditSuccess"
+                          :headers="headers"
+                          accept=".png,.jpg,.svg,.jpeg"
+                          :before-upload="beforeUpload"
+                        >
+                          <i
+                            class="ortur-icon-pen"
+                            @click="currentEditIndex(coverKey)"
+                          ></i>
+                        </el-upload>
+                      </div>
+                      <!-- // tootbar -->
                     </div>
                     <div class="swiper-slide">
                       <el-upload
@@ -348,35 +352,39 @@
                       :key="tutorialImgKey"
                     >
                       <img :src="tutorialImage.url" />
-                      <i
-                        class="ortur-icon-minus"
-                        @click="removeTutorialImg(tutorialKey, tutorialImgKey)"
-                      >
-                        <span class="path1"></span>
-                        <span class="path2"></span>
-                      </i>
-                      <i
-                        class="handle el-icon-s-operation swiper-no-swiping"
-                      ></i>
-                      <el-upload
-                        class="cover-edit"
-                        :action="baseApi + '/library/resource/upload'"
-                        :show-file-list="showFile"
-                        :on-success="handleTutorialEditSuccess"
-                        :headers="headers"
-                        accept=".png,.jpg,.svg,.jpeg"
-                        :before-upload="beforeUpload"
-                      >
+                      <div class="img-toolbar">
                         <i
-                          class="el-icon-pen"
+                          class="ortur-icon-minus"
                           @click="
-                            currentTutorialEditIndex(
-                              tutorialKey,
-                              tutorialImgKey
-                            )
+                            removeTutorialImg(tutorialKey, tutorialImgKey)
                           "
+                        >
+                          <span class="path1"></span>
+                          <span class="path2"></span>
+                        </i>
+                        <i
+                          class="handle el-icon-s-operation swiper-no-swiping"
                         ></i>
-                      </el-upload>
+                        <el-upload
+                          class="cover-edit"
+                          :action="baseApi + '/library/resource/upload'"
+                          :show-file-list="showFile"
+                          :on-success="handleTutorialEditSuccess"
+                          :headers="headers"
+                          accept=".png,.jpg,.svg,.jpeg"
+                          :before-upload="beforeUpload"
+                        >
+                          <i
+                            class="el-icon-pen"
+                            @click="
+                              currentTutorialEditIndex(
+                                tutorialKey,
+                                tutorialImgKey
+                              )
+                            "
+                          ></i>
+                        </el-upload>
+                      </div>
                     </div>
                     <div class="swiper-slide">
                       <el-upload
@@ -486,7 +494,7 @@ export default {
       sourceId: 0,
       parentId: 0,
       isRefSource: false,
-      acceptType: ".jpg,.png,.svg,.dxf,.gc,.nc,.jpeg",
+      acceptType: ".jpg,.png,.svg,.dxf,.gc,.nc,.jpeg,.gcode",
       tutorialValidateResult: true,
       tutorialSwiper: "tutorialSwiper",
       showFile: false,
@@ -1164,32 +1172,54 @@ export default {
 }
 
 .swiper-slide {
-  i {
-    cursor: pointer;
-    display: none;
-    font-size: 20px;
-  }
   position: relative;
-  .ortur-icon-minus {
-    font-size: 20px;
+  .img-toolbar {
+    display: none;
+    width: 150px;
+    height: 90px;
+    margin: 0 auto;
     position: absolute;
-    top: 10px;
-    right: 35px;
-    cursor: pointer;
-  }
-  .cover-edit {
-    font-size: 20px;
-    position: absolute;
-    top: 30px;
-    left: 95px;
-    cursor: pointer;
-    color: #fff;
+    top: 0;
+    left: 50%;
+    margin-left: -75px;
+    background: rgba(0, 0, 0, 0.4);
+    i {
+      cursor: pointer;
+      display: none;
+      font-size: 20px;
+    }
+    .ortur-icon-minus {
+      font-size: 20px;
+      position: absolute;
+      top: 5px;
+      right: 10px;
+      cursor: pointer;
+    }
+    .cover-edit {
+      font-size: 20px;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      margin-left: -12px;
+      margin-top: -20px;
+      cursor: pointer;
+      color: #fff;
+    }
+    .handle {
+      position: absolute;
+      bottom: 5px;
+      right: 10px;
+      font-size: 14px;
+      cursor: move;
+      color: #fff;
+    }
   }
   .cover-add {
     width: 150px;
     font-size: 34px;
     border: 1px dashed #aaa;
     height: 90px;
+    margin: auto;
     .el-upload {
       width: 100%;
       height: 100%;
@@ -1206,14 +1236,7 @@ export default {
   .cover-add:hover {
     border: 1px dashed #409eff;
   }
-  .handle {
-    position: absolute;
-    bottom: 10px;
-    right: 38px;
-    font-size: 14px;
-    cursor: move;
-    color: #fff;
-  }
+
   img {
     display: block;
     margin: 0px auto;
@@ -1225,6 +1248,9 @@ export default {
 
 .swiper-slide:hover {
   i {
+    display: block;
+  }
+  .img-toolbar {
     display: block;
   }
 }
