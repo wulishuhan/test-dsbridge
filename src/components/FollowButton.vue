@@ -78,4 +78,7 @@ export default {
   color: #000;
   width: 102px;
 }
+.el-button--primary {
+  width: 102px;
+}
 </style>
