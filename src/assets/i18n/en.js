@@ -20,6 +20,7 @@ module.exports = {
     profile: "Profile",
     history: "History",
     setting: "Setting",
+    likes: "Likes",
     logout: "Logout",
     search: "Please enter your search keyword",
     searchSelect: "Select",

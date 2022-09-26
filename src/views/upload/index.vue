@@ -1234,7 +1234,9 @@ export default {
       right: 10px;
       font-size: 14px;
       cursor: move;
-      color: #fff;
+    }
+    .handle:before {
+      color: #eee;
     }
   }
   .cover-add {

@@ -18,6 +18,7 @@ module.exports = {
     upload: "上传",
     profile: "概况",
     history: "历史",
+    likes: "喜爱",
     setting: "设置",
     logout: "退出",
     search: "请输入搜索关键词",

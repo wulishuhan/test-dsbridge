@@ -39,13 +39,13 @@
                 </el-button>
               </router-link>
             </li>
-            <li>
+            <!-- <li>
               <router-link to="/design/fromLike">
                 <el-button>
                   <i class="ortur-icon-collected"></i>
                 </el-button>
               </router-link>
-            </li>
+            </li> -->
             <!-- <li class="alert">
               <div v-show="showDot" class="dot"></div>
               <el-button @click.stop="handleShowNotice">
@@ -92,6 +92,11 @@
                   <el-dropdown-item @click.native="handleProfileClick">
                     <i class="el-icon-user-solid"></i>&nbsp;
                     {{ $t("header.profile") }}
+                  </el-dropdown-item>
+                  <el-dropdown-item @click.native="handleLikeClick">
+                    <i class="el-icon-star-off" style="font-size: 12px"></i>
+                    &nbsp;
+                    {{ $t("header.likes") }}
                   </el-dropdown-item>
                   <el-dropdown-item @click.native="handleHistoryClick">
                     <i class="el-icon-collection-tag"></i>&nbsp;
@@ -230,6 +235,11 @@ export default {
     handleSettingClick() {
       this.$refs.settingPanel.showPanel();
     },
+    handleLikeClick() {
+      this.$router.push("/design/fromLike").catch((err) => {
+        err;
+      });
+    },
     search() {
       this.$router
         .push({
@@ -356,12 +366,14 @@ export default {
       margin-left: auto;
       padding: 0 1.5rem 0 0;
       ul.app-header-dots {
-        width: 400px;
         list-style-type: none;
         display: flex;
         flex-direction: row;
         align-items: center;
         justify-content: space-between;
+        li + li {
+          margin-left: 50px;
+        }
         .el-dropdown-link {
           cursor: pointer;
           color: #fff;
