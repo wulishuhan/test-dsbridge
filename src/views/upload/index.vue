@@ -766,7 +766,6 @@ export default {
             break;
           }
         }
-        console.log("refResource", this.refResource);
       });
     }
     this._throttle = this.throttle((swiperArrow) => {
@@ -1013,7 +1012,6 @@ export default {
       return filesize.toFixed(rad) + units;
     },
     handleSourceProgress(event, file) {
-      console.log("上传中", file.uid, file);
       file.percent = parseInt(event.percent.toFixed(0));
     },
     handleSourceSuccess(response, file) {
@@ -1021,7 +1019,6 @@ export default {
       file.percent = 100;
       file.id = response.data.id;
       file.upStatus = 0;
-      console.log(this.resourceForm.files, "成功");
     },
     handleSourceError(err, file) {
       file.upStatus = 2;
@@ -1035,7 +1032,6 @@ export default {
       this.resourceForm.files.splice(sourceIndex, 1);
     },
     handleRemoveCover(removeKey) {
-      console.log(removeKey);
       this.resourceForm.images.splice(removeKey, 1);
     },
     handleCoverAddSuccess(response) {
@@ -1057,12 +1053,10 @@ export default {
       this.resourceForm.images.splice(this.coverEditIndex, 1, imgInfo);
     },
     currentTutorialEditIndex(tutorialKey, tutorialImgKey) {
-      console.log(tutorialKey, tutorialImgKey);
       this.currentTutorialKey = tutorialKey;
       this.currentTutorialImgKey = tutorialImgKey;
     },
     removeTutorialImg(tutorialKey, tutorialImgKey) {
-      console.log(tutorialKey, tutorialImgKey);
       this.tutorialForm[tutorialKey].images.splice(tutorialImgKey, 1);
     },
     handleTutorialAddSuccess(response) {
@@ -1089,12 +1083,9 @@ export default {
     },
 
     currentEditIndex(coverEditIndex) {
-      console.log(coverEditIndex);
       this.coverEditIndex = coverEditIndex;
     },
-    tutorialChange() {
-      console.log(this.tutorialForm);
-    },
+    tutorialChange() {},
     addTutorialItem(tutorialKey) {
       var index = tutorialKey;
       if (tutorialKey === false) {
@@ -1163,7 +1154,7 @@ export default {
                 }
               })
               .catch((e) => {
-                console.log(e);
+                e;
               });
           }
         } else {
