@@ -38,7 +38,7 @@
                   {{
                     $t("upload.draFileTipDesc", [
                       config.fileLimit,
-                      formatFileSize(config.maxFileSize,0),
+                      formatFileSize(config.maxFileSize, 0),
                     ])
                   }}
                 </div>
@@ -221,7 +221,11 @@
             <el-divider></el-divider>
             <div class="support-file-area__text">
               <span>
-                {{ $t("upload.supportedFiles") }}: jpg、png、svg、dxf、.gc、.nc
+                {{
+                  $t("upload.supportedFiles") +
+                  ": " +
+                  acceptType.replace(/,/g, "、")
+                }}
               </span>
             </div>
           </div>
@@ -1418,7 +1422,7 @@ export default {
   .tutorial-item {
     position: relative;
     // box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-    padding: 10px;
+    padding: 20px 10px;
     margin: 20px auto;
     border: 1px solid #cccccc;
     border-radius: 6px;
