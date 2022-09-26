@@ -165,6 +165,7 @@ export default {
       this.isRename = true;
       this.$nextTick(() => {
         console.log(this.$refs.folderInputs[0].focus());
+        this.$refs.folderInputs[0].focus();
         // [this.folders.length - 1].focus();
       });
     },
@@ -224,6 +225,7 @@ export default {
       });
       this.$nextTick(() => {
         console.log(this.$refs.folderInputs[0].focus());
+        this.$refs.folderInputs[0].focus();
         // [this.folders.length - 1].focus();
       });
     },
