@@ -63,3 +63,17 @@ export function generatorDefaultAvator(text, serNum = 0, size = 255, bgcolor) {
   context.fillText(nickname.charAt(0), fontSize, fontSize);
   return canvas.toDataURL("image/png");
 }
+
+/*
+ *生成缩略图, 返回base64url
+ * @param {html tag object} image： html tag
+ * @param {number} width： width of the thumbnail
+ * @param {number} height： height of the thumbnail
+ * @return {string}  base64: url of the thumbnail
+ */
+export function generatorThumbnail(image, width, height) {
+  let canvas = document.createElement("canvas");
+  let context = canvas.getContext("2d");
+  context.drawImage(image, 0, 0, width, height);
+  return context.toDataURL();
+}
