@@ -13,16 +13,18 @@
           <el-upload
             ref="upload-make-file"
             class="upload-demo"
-            :action="uploadUrl"
+            :action="'test'"
             :on-preview="handlePreview"
             :on-remove="handleRemove"
             :on-success="uploadSuccessHandler"
             :before-upload="uploadBefore"
+            :on-progress="uploadProgress"
             :headers="headers"
             :limit="1"
             list-type="picture"
             :disabled="isDisabled"
             :multiple="false"
+            :http-request="httpRequest"
           >
             <el-input placeholder="Add Photo">
               <i slot="prefix" class="el-input__icon ortur-icon-image-add"></i>
@@ -51,8 +53,9 @@
   </div>
 </template>
 <script>
-import { postComment } from "@/api/user";
+import { postComment, getCommentUploadS3Url } from "@/api/user";
 import { mapGetters, mapState } from "vuex";
+import axios from "axios";
 export default {
   name: "PostMakeDialog",
   props: {
@@ -93,7 +96,7 @@ export default {
       },
     },
     uploadUrl() {
-      return `${process.env.VUE_APP_BASE_API}/library/resource/upload`;
+      return `${process.env.VUE_APP_BASE_API}/library/comment/upload`;
     },
     ...mapGetters(["isLogin"]),
     ...mapState({
@@ -101,6 +104,40 @@ export default {
     }),
   },
   methods: {
+    uploadProgress(progressEvent, file, fileList) {
+      fileList[0].percentage =
+        (progressEvent.loaded / progressEvent.total) * 100;
+    },
+    httpRequest(param) {
+      this.getS3Url(param.file, param);
+    },
+    getS3Url(file, param) {
+      getCommentUploadS3Url({
+        name: file.name,
+        size: file.size,
+        type: file.type,
+      })
+        .then((res) => {
+          console.log("preSingedUrl", res);
+          this.form.image = res.data.data.url;
+          this.form.url = res.data.data.url;
+          return axios.put(res.data.data.presignUrl, file, {
+            headers: {
+              "Content-Type": file.type,
+            },
+            onUploadProgress: function (progressEvent) {
+              // 处理原生进度事件
+              param.onProgress(progressEvent);
+            },
+          });
+        })
+        .then(() => {
+          param.onSuccess(this.form.url);
+        })
+        .catch((err) => {
+          param.onError(err);
+        });
+    },
     handleRemove(file, fileList) {
       console.log(file, fileList);
     },
@@ -120,10 +157,8 @@ export default {
         this.close();
       });
     },
-    uploadSuccessHandler(response) {
-      console.log("uploadSuccessHandler", response);
-      this.form.image = response.data.url;
-      this.form.url = response.data.url;
+    uploadSuccessHandler(res) {
+      console.log("uploadSuccessHandler", res);
       this.isUploadComplete = false;
     },
     uploadBefore(file) {
@@ -142,6 +177,7 @@ export default {
         return false;
       } else if (file.size / 1000 / 1000 >= 10) {
         this.$message.error(this.$t("thing.acceptFileSize"));
+        this.isDisabled = false;
         return false;
       }
       return true;
