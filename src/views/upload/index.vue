@@ -27,6 +27,7 @@
               :headers="headers"
               :accept="acceptType"
               :before-upload="beforeUploadSource"
+              :http-request="handleUpload"
               ref="uploadFile"
             >
               <i class="ortur-icon-file" style="font-size: 60px"></i>
@@ -881,6 +882,9 @@ export default {
         type: "warning",
       });
     },
+    handleUpload(file) {
+      console.log(file);
+    },
     beforeUploadSource(file) {
       let extension = file.name
         .substring(file.name.lastIndexOf(".") + 1)
@@ -927,11 +931,11 @@ export default {
       this.resourceForm.files.push(fileInfo);
       //获取缩略图
       if (accept) {
-        this.genThumb(file).then((res) => {
-          if (res && res.data.code == 0) {
-            fileInfo.thumbnail = res.data.data.url;
-          }
-        });
+        // this.genThumb(file).then((res) => {
+        //   if (res && res.data.code == 0) {
+        //     fileInfo.thumbnail = res.data.data.url;
+        //   }
+        // });
       }
 
       return accept;

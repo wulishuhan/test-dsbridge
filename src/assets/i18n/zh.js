@@ -27,7 +27,7 @@ module.exports = {
     signUp: "注册",
   },
   upload: {
-    title: "标题",
+    title: "资源名",
     tags: "标签",
     license: "许可证",
     tutorial: "教程",

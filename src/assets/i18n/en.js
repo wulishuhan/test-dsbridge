@@ -28,7 +28,7 @@ module.exports = {
     signUp: "Sign up",
   },
   upload: {
-    title: "Title",
+    title: "Name",
     tags: "Tags",
     license: "License",
     tutorial: "Tutorial",
