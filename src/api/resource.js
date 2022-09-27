@@ -74,3 +74,11 @@ export function uploadFile(formData) {
     data: formData,
   });
 }
+
+export function getResouceUploadS3Url(data) {
+  return request({
+    url: "/library/resource/uploadS3",
+    method: "post",
+    data,
+  });
+}

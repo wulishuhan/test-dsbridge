@@ -146,6 +146,11 @@ service.interceptors.response.use((res) => {
         code: 1016,
         msg: i18n.t("error.deviceNotSupported"),
       });
+    case 2001:
+      return Promise.reject({
+        cdoe: 2001,
+        msg: i18n.t("error.2001"),
+      });
   }
   return Promise.resolve(res);
 });
