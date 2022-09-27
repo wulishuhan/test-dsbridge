@@ -476,7 +476,7 @@ export default {
 <style lang="scss" scoped>
 .author {
   color: #5c5959;
-  border-bottom: solid 1px #fff;
+  border-bottom: solid 1px #f0f3fa;
   font-size: 12px;
   font-family: Source Han Sans CN;
   font-weight: 400;
@@ -504,6 +504,7 @@ export default {
   border-radius: 8px;
   padding: 7px;
   margin: 0 auto;
+  width: 344px;
 }
 .resource-show-image {
   /* width: 328px; */

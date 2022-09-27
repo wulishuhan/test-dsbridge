@@ -1049,6 +1049,7 @@ a {
 }
 
 .carousel {
+  border: #ccc 1px solid;
   position: relative;
   /* width: 805px; */
   width: 807px;
