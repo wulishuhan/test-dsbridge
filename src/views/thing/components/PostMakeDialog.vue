@@ -104,9 +104,10 @@ export default {
     }),
   },
   methods: {
-    uploadProgress(progressEvent, file, fileList) {
-      fileList[0].percentage =
-        (progressEvent.loaded / progressEvent.total) * 100;
+    uploadProgress(progressEvent) {
+      progressEvent.percent = parseInt(
+        ((progressEvent.loaded / progressEvent.total) * 100).toFixed(0)
+      );
     },
     httpRequest(param) {
       this.getS3Url(param.file, param);
@@ -125,8 +126,8 @@ export default {
             headers: {
               "Content-Type": file.type,
             },
+            // 处理原生进度事件
             onUploadProgress: function (progressEvent) {
-              // 处理原生进度事件
               param.onProgress(progressEvent);
             },
           });
