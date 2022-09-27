@@ -27,6 +27,7 @@
               :headers="headers"
               :accept="acceptType"
               :before-upload="beforeUploadSource"
+              :http-request="handleUpload"
               ref="uploadFile"
             >
               <i class="ortur-icon-file" style="font-size: 60px"></i>
@@ -497,7 +498,9 @@ import {
   updateResource,
   getResourceTags,
   uploadFile,
+  getResouceUploadS3Url,
 } from "@/api/resource";
+import axios from "axios";
 export default {
   // eslint-disable-next-line
   name: "upload",
@@ -881,6 +884,32 @@ export default {
         type: "warning",
       });
     },
+    handleUpload({ file, onProgress, onSuccess }) {
+      var data;
+      getResouceUploadS3Url({
+        name: file.name,
+        size: file.size,
+        type: file.type,
+      })
+        .then((res) => {
+          if (res.data.code == 0) {
+            let presignUrl = res.data.data.presignUrl;
+
+            data = res.data.data;
+            return axios.put(presignUrl, file, {
+              headers: {
+                "Content-Type": file.type,
+              },
+              onUploadProgress: (progressEvent) => {
+                onProgress(progressEvent);
+              },
+            });
+          }
+        })
+        .then(() => {
+          onSuccess(data);
+        });
+    },
     beforeUploadSource(file) {
       let extension = file.name
         .substring(file.name.lastIndexOf(".") + 1)
@@ -927,11 +956,11 @@ export default {
       this.resourceForm.files.push(fileInfo);
       //获取缩略图
       if (accept) {
-        this.genThumb(file).then((res) => {
-          if (res && res.data.code == 0) {
-            fileInfo.thumbnail = res.data.data.url;
-          }
-        });
+        // this.genThumb(file).then((res) => {
+        //   if (res && res.data.code == 0) {
+        //     fileInfo.thumbnail = res.data.data.url;
+        //   }
+        // });
       }
 
       return accept;
@@ -989,6 +1018,7 @@ export default {
       }
       if (inputValue) {
         this.resourceForm.tags.push(inputValue);
+        this.resourceForm.tags = Array.from(new Set(this.resourceForm.tags));
       }
       this.inputVisible = false;
       this.inputValue = "";
@@ -1012,13 +1042,15 @@ export default {
       return filesize.toFixed(rad) + units;
     },
     handleSourceProgress(event, file) {
-      file.percent = parseInt(event.percent.toFixed(0));
+      file.percent = parseInt(((event.loaded / event.total) * 100).toFixed(0));
     },
     handleSourceSuccess(response, file) {
-      file.url = response.data.url;
-      file.percent = 100;
-      file.id = response.data.id;
       file.upStatus = 0;
+      file.url = response.url;
+      file.percent = 100;
+      file.id = response.id;
+      file.percentage = 0;
+      console.log(this.resourceForm.files);
     },
     handleSourceError(err, file) {
       file.upStatus = 2;
@@ -1136,8 +1168,8 @@ export default {
                 this.$message.success(this.$t("upload.updateOk"));
                 this.$router.push("/design/fromProfile");
               })
-              .catch(() => {
-                this.$message.error(this.$t("upload.updateFail"));
+              .catch((res) => {
+                this.$message.error(res.msg);
               });
           } else {
             saveResource({
@@ -1154,7 +1186,8 @@ export default {
                 }
               })
               .catch((e) => {
-                e;
+                console.log(e);
+                this.$message.error(this.$t("upload.validateError"));
               });
           }
         } else {

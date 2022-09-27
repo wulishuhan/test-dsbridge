@@ -28,7 +28,7 @@ module.exports = {
     signUp: "Sign up",
   },
   upload: {
-    title: "Title",
+    title: "Name",
     tags: "Tags",
     license: "License",
     tutorial: "Tutorial",
@@ -197,6 +197,7 @@ module.exports = {
     1012: "The email already exists",
     1013: "token expired",
     1016: "Your device does not support logins",
+    2001: "you are not the author of this resource",
   },
   main: {
     barnerViewMore: "view more",

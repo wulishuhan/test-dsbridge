@@ -27,7 +27,7 @@ module.exports = {
     signUp: "注册",
   },
   upload: {
-    title: "标题",
+    title: "资源名",
     tags: "标签",
     license: "许可证",
     tutorial: "教程",
@@ -191,6 +191,7 @@ module.exports = {
     1012: "邮箱已存在",
     1013: "token过期",
     1016: "你的设备不支持登录",
+    2001: "你不是当前资源作者",
   },
   main: {
     barnerViewMore: "了解更多",

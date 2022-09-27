@@ -39,7 +39,7 @@ const getDefaultState = () => {
       maxFileSize: 100 * 1024 * 1024, //100M
       sourceAcceptType: ".jpg,.png,.svg,.dxf,.gc,.nc,.jpeg",
       pictureAcceptType: ".jpg,.png.svg.jpeg",
-      fileLimit: 20,
+      fileLimit: 2,
     },
   };
 };
