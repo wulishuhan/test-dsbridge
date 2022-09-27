@@ -121,6 +121,14 @@ export function getMakeDetail(params) {
   });
 }
 
+export function getCommentUploadS3Url(data) {
+  return request({
+    url: "/library/comment/uploadS3",
+    method: "post",
+    data,
+  });
+}
+
 export function openLogin(data) {
   return request({
     url: "/auth/user/openLogin",

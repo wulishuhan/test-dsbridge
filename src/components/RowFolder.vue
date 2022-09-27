@@ -64,7 +64,7 @@
         </div>
       </div>
       <div class="plus" @click="addFolder" v-show="isYourAccount && !isEdit">
-        +
+        <div class="plus-icon">+</div>
       </div>
     </div>
   </div>
@@ -165,6 +165,7 @@ export default {
       this.isRename = true;
       this.$nextTick(() => {
         console.log(this.$refs.folderInputs[0].focus());
+        this.$refs.folderInputs[0].focus();
         // [this.folders.length - 1].focus();
       });
     },
@@ -224,6 +225,7 @@ export default {
       });
       this.$nextTick(() => {
         console.log(this.$refs.folderInputs[0].focus());
+        this.$refs.folderInputs[0].focus();
         // [this.folders.length - 1].focus();
       });
     },
@@ -263,10 +265,11 @@ export default {
     margin: auto 0;
     width: 256px;
     text-align: center;
-    height: 184px;
-    line-height: 184px;
+    height: 276px;
+    line-height: 273px;
     margin-top: 25px;
-    border: solid 1px #f0f3fa;
+    border: solid 1px #ccc;
+    border-radius: 12px;
   }
   .plus:hover {
     border: solid 1px #ccc;

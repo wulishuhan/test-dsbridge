@@ -27,9 +27,7 @@
         <el-tab-pane label="制作" name="third">制作</el-tab-pane>
       </el-tabs>
     </div>
-    <div>
-
-    </div>
+    <div></div>
     <div>
       <h1>login组件</h1>
       登录拟态框：<a href="#" @click="showDialog('login')"> login</a>
@@ -89,13 +87,12 @@
         12345
       </div>
     </el-popover>
-    <form action="https://thingiverse-production-new.s3.amazonaws.com/" enctype="multipart/form-data">
-      <input type="file" id="upload" name="upload">
-      <input type="submit" value="Upload">
-    </form>
+    <input type="file" id="upload" name="upload" @change="uploadTestFile" />
   </div>
 </template>
 <script>
+import { getCommentUploadS3Url } from "@/api/user";
+// import { getToken } from "@/utils/auth";
 import ShareSocialMedia from "@/components/ShareCard";
 import Login from "@/components/Login";
 import ShowMore from "@/components/ShowMore.vue";
@@ -207,6 +204,34 @@ export default {
     };
   },
   methods: {
+    uploadTestFile(event) {
+      this.getS3Url(event.target.files[0]);
+    },
+    getS3Url(file) {
+      getCommentUploadS3Url({
+        name: file.name,
+        size: file.size,
+        type: file.type,
+      })
+        .then((res) => {
+          console.log("preSingedUrl", res);
+          return axios.put(res.data.data.presignUrl, file, {
+            headers: {
+              "Content-Type": file.type,
+            },
+            onUploadProgress: function (progressEvent) {
+              // 处理原生进度事件
+              console.log(
+                "Upload",
+                (progressEvent.loaded / progressEvent.total) * 100 + "%"
+              );
+            },
+          });
+        })
+        .then((res) => {
+          console.log("put", res);
+        });
+    },
     prev() {
       this.$refs.nop.prev();
     },

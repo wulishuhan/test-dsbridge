@@ -32,6 +32,7 @@ const getDefaultState = () => {
     accessToken: getToken(),
     headers: {
       Authorization: "Bearer " + getToken(),
+      "Access-Control-Allow-Origin": "*",
     },
     config: {
       maxPictureSize: 10 * 1024 * 1024, //10M

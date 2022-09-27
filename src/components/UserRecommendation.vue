@@ -7,9 +7,17 @@
           :size="60"
           @click.native="viewAuthorInfo(creator.id)"
         ></el-avatar>
-        <span class="name" @click="viewAuthorInfo(creator.id)">{{
+        <!-- <span class="name" @click="viewAuthorInfo(creator.id)">{{
           creator.name
-        }}</span>
+        }}</span> -->
+        <el-tooltip effect="light" placement="bottom">
+          <div slot="content">
+            {{ creator.name }}
+          </div>
+          <span class="name" @click="viewAuthorInfo(creator.id)">{{
+            creator.name
+          }}</span>
+        </el-tooltip>
       </div>
       <el-button v-if="!isFollow" @click="follow"> Follow </el-button>
       <el-button v-else @click="unFollow">Unfollow</el-button>
@@ -158,6 +166,9 @@ export default {
         font-size: 20px;
         margin-left: 17px;
         width: 115px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
     }
     .el-button {
