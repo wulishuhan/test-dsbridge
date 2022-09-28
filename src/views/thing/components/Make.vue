@@ -6,7 +6,7 @@
         @mouseenter="showMask = true"
         @mouseleave="showMask = false"
       >
-        <el-image class="more-image" :src="make.url"> </el-image>
+        <el-image class="more-image" :src="make.url" fit="contain"> </el-image>
         <div class="makes-mask" @click="openMake" v-show="showMask">
           <div class="makes-mask-font-container">
             <span class="ortur-icon-message"></span>
@@ -164,6 +164,7 @@ export default {
   width: 184px;
   height: 112px;
   margin-top: 5px;
+  background: #e8ebf4;
 }
 
 ::v-deep .el-image-viewer__img {

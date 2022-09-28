@@ -13,6 +13,7 @@
         class="more-image"
         :src="item.image"
         @click="toMore(item.id)"
+        fit="contain"
       ></el-image>
     </div>
   </div>
@@ -64,7 +65,6 @@ export default {
 }
 .more-image-box {
   margin-top: 31px;
-  cursor: pointer;
   display: grid;
   grid-template-columns: repeat(3, 184px);
   justify-content: space-between;
@@ -74,5 +74,7 @@ export default {
   height: 112px;
   margin-top: 5px;
   border-radius: 4px;
+  background: #e8ebf4;
+  cursor: pointer;
 }
 </style>

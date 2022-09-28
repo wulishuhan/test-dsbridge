@@ -211,7 +211,7 @@ export default {
   .reply-wrapper {
     padding: 5px 10px;
     margin-left: 52px;
-    background: #e8ebf4;
+    /* background: #e8ebf4; */
     border-radius: 8px;
     font-size: 14px;
     .comment-detail {

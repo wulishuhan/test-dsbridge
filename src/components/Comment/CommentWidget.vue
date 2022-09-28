@@ -74,7 +74,7 @@
               <el-button><i class="ortur-icon-message"></i></el-button>
             </div>
           </div>
-          <div class="reply-wrapper">
+          <div class="reply-wrapper-view-all">
             <div class="comment-detail">{{ replyRow.content }}</div>
             <div
               class="reply-ref-detail"
@@ -254,6 +254,51 @@ export default {
     padding: 5px 10px;
     margin-left: 52px;
     background: #e8ebf4;
+    border-radius: 8px;
+    font-size: 14px;
+    .comment-detail {
+      margin: 10px auto;
+      font-size: 16px;
+      font-weight: 400;
+      color: #1a1a1a;
+    }
+    .reply-ref-detail {
+      font-size: 16px;
+      color: #1a1a1a;
+      background: #dadde6;
+      border-radius: 8px;
+      padding: 10px 20px;
+      .reply-label {
+        color: #999;
+      }
+      .reply-nickname {
+        color: #1e78f0;
+      }
+    }
+    .reply-list-fold {
+      color: #1e78f0;
+      background: none;
+      border: none;
+      width: 104px;
+      height: 40px;
+      .reply-label {
+        color: #1e78f0;
+      }
+    }
+    .reply-item {
+      padding: 5px 10px;
+      .reply-detail {
+        margin: 0px 54px;
+        font-size: 16px;
+        font-weight: 400;
+        color: #1a1a1a;
+      }
+    }
+  }
+  .reply-wrapper-view-all {
+    padding: 5px 10px;
+    margin-left: 52px;
+    background: none;
     border-radius: 8px;
     font-size: 14px;
     .comment-detail {
