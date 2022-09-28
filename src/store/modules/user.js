@@ -38,7 +38,7 @@ const getDefaultState = () => {
       maxPictureSize: 10 * 1024 * 1024, //10M
       maxFileSize: 100 * 1024 * 1024, //100M
       sourceAcceptType: ".jpg,.png,.svg,.dxf,.gc,.nc,.jpeg",
-      pictureAcceptType: ".jpg,.png.svg.jpeg",
+      pictureAcceptType: ".jpg,.png,.svg,.jpeg",
       fileLimit: 2,
     },
   };
