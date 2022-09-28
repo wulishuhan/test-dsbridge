@@ -1208,14 +1208,16 @@ export default {
   cursor: pointer;
 }
 .tutorial {
-  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-  padding: 2px 10px;
+  // box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 8px;
 
   .tutorial-item {
     position: relative;
     // box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-    padding: 20px 10px;
-    margin: 20px auto;
+    padding: 8px;
+    margin: 0px auto 16px;
     border: 1px solid #cccccc;
     border-radius: 6px;
     background: #e8ebf4;
