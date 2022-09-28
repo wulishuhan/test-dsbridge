@@ -1228,11 +1228,21 @@ export default {
       top: 50%;
     }
     .add-btn {
-      right: -80px;
+      width: 32px;
+      height: 32px;
+      right: -70px;
       bottom: 10px;
+      padding: unset;
+      background: rgba(232, 235, 244, 0.3);
+      border-radius: 6px;
+    }
+    .add-btn:hover {
+      background: #e8ebf4;
+      color: #aaa;
     }
     .remove-btn {
-      right: -80px;
+      right: -70px;
+      border-radius: 6px;
       top: 50%;
       width: 32px;
       height: 32px;
