@@ -1,9 +1,6 @@
 <template>
   <div class="container" id="container">
     <div id="folderWrapper" class="folderWrapper">
-      <div class="plus" @click="addFolder" v-show="isYourAccount && !isEdit">
-        <div class="plus-icon">+</div>
-      </div>
       <div
         class="folderContainer"
         v-for="(item, index) in folders"
@@ -65,6 +62,9 @@
             v-else
           />
         </div>
+      </div>
+      <div class="plus" @click="addFolder" v-show="isYourAccount && !isEdit">
+        <div class="plus-icon">+</div>
       </div>
     </div>
   </div>
