@@ -262,7 +262,7 @@
           class="tutorial"
           draggable=".tutorial-item"
           handle=".drag-btn"
-          @change="tutorialChange"
+          v-model="tutorialForm"
         >
           <div
             class="tutorial-item"
@@ -961,11 +961,7 @@ export default {
     currentEditIndex(coverEditIndex) {
       this.coverEditIndex = coverEditIndex;
     },
-    tutorialChange(args) {
-      console.log("==========", args);
-    },
     addTutorialItem(tutorialKey) {
-      console.log("add tutorialKey ==========", tutorialKey);
       var index = tutorialKey;
       if (tutorialKey === false) {
         index = 0;
@@ -1238,6 +1234,14 @@ export default {
     .remove-btn {
       right: -80px;
       top: 50%;
+      width: 32px;
+      height: 32px;
+      background: rgba(255, 94, 94, 0.3);
+      padding: unset;
+    }
+    .remove-btn:hover {
+      color: #fff;
+      background: #ff5e5e;
     }
   }
 }

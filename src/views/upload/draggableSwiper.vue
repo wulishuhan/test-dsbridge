@@ -49,6 +49,7 @@
     </draggable>
     <div
       ref="swiperPrev"
+      style="opacity: 0"
       class="swiper-button-prev swiper-button-black"
       @drop="drop($event)"
       @dragover="allowDrop($event, 'swiperPrev')"
@@ -56,6 +57,7 @@
     <!-- 白色 -->
     <div
       ref="swiperNext"
+      style="opacity: 0"
       @drop="drop($event)"
       @dragover="allowDrop($event, 'swiperNext')"
       class="swiper-button-next swiper-button-black"
@@ -260,13 +262,13 @@ export default {
   position: relative;
   .img-toolbar {
     display: none;
-    width: 150px;
-    height: 90px;
+    width: 184px;
+    height: 122px;
     margin: 0 auto;
     position: absolute;
     top: 0;
     left: 50%;
-    margin-left: -75px;
+    margin-left: -92px;
     background: rgba(0, 0, 0, 0.4);
     i {
       cursor: pointer;
@@ -302,16 +304,17 @@ export default {
     }
   }
   .cover-add {
-    width: 150px;
+    width: 184px;
+    height: 100%;
+    border: 1px solid #cccccc;
+    border-radius: 6px;
     font-size: 34px;
-    border: 1px dashed #aaa;
-    height: 90px;
     margin: auto;
     ::v-deep .el-upload {
       width: 100%;
       height: 100%;
       .el-icon-plus {
-        line-height: 90px;
+        line-height: 122px;
         width: 100%;
       }
     }
@@ -320,15 +323,11 @@ export default {
     }
   }
 
-  .cover-add:hover {
-    border: 1px dashed #409eff;
-  }
-
   img {
     display: block;
     margin: 0px auto;
-    width: 150px;
-    height: 90px;
+    width: 184px;
+    height: 122px;
     object-fit: cover;
   }
 }
