@@ -13,14 +13,14 @@
     <div class="content" id="content">
       <el-row class="filter">
         <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+          <!-- <div
+            class="select-box"
+            @mouseenter="enter"
+            @mouseleave="leave(thing)"
+          > -->
           <div class="select-box">
             <i class="ortur-icon-hourglass icon-hourglass"></i>
-            <el-select
-              v-model="value"
-              @change="selectChange"
-              class="select"
-              placeholder="select"
-            >
+            <el-select v-model="value" @change="selectChange" class="select">
               <el-option
                 v-for="item in options"
                 :key="item.value"
@@ -105,7 +105,7 @@ export default {
         //   label: "Only folowing",
         // },
       ],
-      value: "",
+      value: "popular",
       load: () => {},
       resources: [],
       loading: false,
@@ -324,7 +324,6 @@ p {
   img {
     width: 100%;
     height: 100%;
-    border-radius: 10px;
   }
   a {
     position: relative;
@@ -353,11 +352,8 @@ p {
   font-size: 14px;
   height: 48px;
 }
-::v-deep .el-input__inner {
-  border: none;
-}
 ::v-deep .el-input__inner:hover {
-  border: 1px solid #c2c4cc;
+  /* border: none; */
 }
 ::v-deep .el-input__inner::before {
   content: "\e93f";

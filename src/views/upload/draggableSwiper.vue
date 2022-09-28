@@ -1,0 +1,346 @@
+<template>
+  <div v-swiper:[swiperName]="swiperOptions">
+    <draggable class="swiper-wrapper" handle=".handle" v-model="itemList">
+      <div
+        class="swiper-slide"
+        v-for="(item, itemKey) in itemList"
+        :key="itemKey"
+      >
+        <img :src="item.url" />
+        <!-- img-toolbar  -->
+        <div class="img-toolbar">
+          <i class="ortur-icon-minus" @click="remove(itemKey, groupKey)">
+            <span class="path1"></span>
+            <span class="path2"></span>
+          </i>
+          <i class="handle ortur-icon-settings-gray swiper-no-swiping"> </i>
+          <el-upload
+            class="cover-edit"
+            action=""
+            :show-file-list="showFile"
+            :on-success="onEditSuccess"
+            :headers="headers"
+            :accept="config.pictureAcceptType"
+            :before-upload="beforeUpload"
+            :http-request="handleRequest"
+          >
+            <i
+              class="ortur-icon-pen"
+              @click="setCurrentKeyList([itemKey, groupKey])"
+            ></i>
+          </el-upload>
+        </div>
+        <!-- // tootbar -->
+      </div>
+      <div class="swiper-slide">
+        <el-upload
+          action=""
+          :show-file-list="showFile"
+          class="cover-add"
+          :on-success="onAddSuccess"
+          :headers="headers"
+          accept=".png,.jpg,.svg,.jpeg"
+          :before-upload="beforeUpload"
+          :http-request="handleRequest"
+        >
+          <i class="el-icon-plus"></i>
+        </el-upload>
+      </div>
+    </draggable>
+    <div
+      ref="swiperPrev"
+      class="swiper-button-prev swiper-button-black"
+      @drop="drop($event)"
+      @dragover="allowDrop($event, 'swiperPrev')"
+    ></div>
+    <!-- 白色 -->
+    <div
+      ref="swiperNext"
+      @drop="drop($event)"
+      @dragover="allowDrop($event, 'swiperNext')"
+      class="swiper-button-next swiper-button-black"
+    ></div>
+    <!-- 黑色 -->
+  </div>
+</template>
+
+<script>
+import { mapState } from "vuex";
+import draggable from "vuedraggable";
+import { getResouceUploadS3Url } from "@/api/resource";
+import axios from "axios";
+export default {
+  model: {
+    prop: "data",
+    // 随便命名事件，对应下面$emit即可
+    event: "changeData",
+  },
+  data() {
+    return {
+      swiperOptions: {
+        observer: true,
+        slidesPerView: 5,
+        navigation: {
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev",
+        },
+      },
+      itemList: [],
+    };
+  },
+  components: {
+    draggable,
+  },
+  props: {
+    swiperName: {
+      type: String,
+      required: true,
+    },
+    groupKey: {
+      type: Number,
+      default: 0,
+    },
+    showFile: {
+      type: Boolean,
+      default: false,
+    },
+    data: {
+      type: Array,
+    },
+    onAddSuccess: {
+      type: Function,
+      required: true,
+    },
+    onEditSuccess: {
+      type: Function,
+      required: true,
+    },
+    remove: {
+      type: Function,
+      required: true,
+    },
+    currentKeyList: {
+      type: Array,
+      default: () => {
+        return [0, 0];
+      },
+    },
+  },
+  watch: {
+    itemList: function (val) {
+      console.log("watch:", val);
+      this.$emit("changeData", val);
+    },
+  },
+  created() {
+    this.itemList = this.data;
+    this._throttle = this.throttle((swiperArrow) => {
+      //滚动
+      this.$refs[swiperArrow].click();
+    }, 500);
+
+    this._throttle_tutorial = this.throttle((swiperArrow, curIndex) => {
+      //滚动
+      this.$refs[swiperArrow][curIndex].click();
+    }, 500);
+  },
+  computed: {
+    ...mapState({
+      headers: (state) => state.user.headers,
+      config: (state) => state.user.config,
+    }),
+  },
+  methods: {
+    setCurrentKeyList(keyList) {
+      this.$emit("update:currentKeyList", keyList);
+    },
+    drop(event) {
+      event.preventDefault();
+    },
+    allowDrop(event, swiperArrow, curIndex) {
+      if (/^tutorial/.test(swiperArrow)) {
+        this._throttle_tutorial(swiperArrow, curIndex);
+      } else {
+        this._throttle(swiperArrow);
+      }
+      event.preventDefault();
+    },
+    throttle(func, delay) {
+      delay = delay || 1000;
+      var previousDate = new Date();
+      var previous = previousDate.getTime(); // 初始化一个时间，也作为高频率事件判断事件间隔的变量，通过闭包进行保存。
+
+      return function (...args) {
+        var context = this;
+        var nowDate = new Date();
+        var now = nowDate.getTime();
+        if (now - previous >= delay) {
+          // 如果本次触发和上次触发的时间间隔超过设定的时间
+          func.apply(context, args); // 就执行事件处理函数 （eventHandler）
+          previous = now; // 然后将本次的触发时间，作为下次触发事件的参考时间。
+        }
+      };
+    },
+    handleRequest({ file, onProgress, onSuccess }) {
+      var data;
+      getResouceUploadS3Url({
+        name: file.name,
+        size: file.size,
+        type: file.type,
+      })
+        .then((res) => {
+          if (res.data.code == 0) {
+            let presignUrl = res.data.data.presignUrl;
+
+            data = res.data.data;
+            return axios.put(presignUrl, file, {
+              headers: {
+                "Content-Type": file.type,
+              },
+              onUploadProgress: (progressEvent) => {
+                onProgress(progressEvent);
+              },
+            });
+          }
+        })
+        .then(() => {
+          onSuccess(data);
+        });
+    },
+    beforeUpload(file) {
+      console.log(file);
+      let extension = file.name
+        .substring(file.name.lastIndexOf(".") + 1)
+        .toLowerCase();
+      let accept =
+        this.config.pictureAcceptType.indexOf(extension) < 0 ? false : true;
+      if (file.name.length > 50) {
+        this.$message({
+          message: this.$t("upload.filenameTooLong"),
+          type: "warning",
+        });
+        return false;
+      }
+
+      //校验文件大小
+      if (file.size > this.config.maxPictureSize) {
+        this.$message({
+          message: this.$t("upload.fileTooLarge", [
+            this.formatFileSize(this.config.maxPictureSize, 0),
+          ]),
+          type: "warning",
+        });
+        return false;
+      }
+      if (!accept) {
+        this.$message({
+          message: "Supported Files:" + this.acceptType,
+          type: "warning",
+        });
+        return false;
+      }
+
+      return accept;
+    },
+  },
+};
+</script>
+
+<style lang="scss" scoped>
+.swiper-button-next,
+.swiper-button-prev {
+  width: 0;
+}
+.swiper-button-next {
+  right: 12px;
+}
+.swiper-button-prev {
+  left: 12px;
+}
+
+.swiper-slide {
+  position: relative;
+  .img-toolbar {
+    display: none;
+    width: 150px;
+    height: 90px;
+    margin: 0 auto;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    margin-left: -75px;
+    background: rgba(0, 0, 0, 0.4);
+    i {
+      cursor: pointer;
+      display: none;
+      font-size: 20px;
+    }
+    .ortur-icon-minus {
+      font-size: 20px;
+      position: absolute;
+      top: 5px;
+      right: 10px;
+      cursor: pointer;
+    }
+    .cover-edit {
+      font-size: 20px;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      margin-left: -12px;
+      margin-top: -14px;
+      cursor: pointer;
+      color: #fff;
+    }
+    .handle {
+      position: absolute;
+      bottom: 5px;
+      right: 10px;
+      font-size: 14px;
+      cursor: move;
+    }
+    .handle:before {
+      color: #eee;
+    }
+  }
+  .cover-add {
+    width: 150px;
+    font-size: 34px;
+    border: 1px dashed #aaa;
+    height: 90px;
+    margin: auto;
+    ::v-deep .el-upload {
+      width: 100%;
+      height: 100%;
+      .el-icon-plus {
+        line-height: 90px;
+        width: 100%;
+      }
+    }
+    i {
+      display: block;
+    }
+  }
+
+  .cover-add:hover {
+    border: 1px dashed #409eff;
+  }
+
+  img {
+    display: block;
+    margin: 0px auto;
+    width: 150px;
+    height: 90px;
+    object-fit: cover;
+  }
+}
+
+.swiper-slide:hover {
+  i {
+    display: block;
+  }
+  .img-toolbar {
+    display: block;
+  }
+}
+</style>
