@@ -43,7 +43,7 @@
           :before-upload="beforeUpload"
           :http-request="handleRequest"
         >
-          <i class="el-icon-plus"></i>
+          <i class="el-icon-plus" @click="setCurrentKeyList([0, groupKey])"></i>
         </el-upload>
       </div>
     </draggable>
@@ -128,7 +128,6 @@ export default {
   },
   watch: {
     itemList: function (val) {
-      console.log("watch:", val);
       this.$emit("changeData", val);
     },
   },
@@ -208,7 +207,6 @@ export default {
         });
     },
     beforeUpload(file) {
-      console.log(file);
       let extension = file.name
         .substring(file.name.lastIndexOf(".") + 1)
         .toLowerCase();
