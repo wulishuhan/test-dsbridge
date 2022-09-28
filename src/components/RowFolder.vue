@@ -193,6 +193,16 @@ export default {
 
         return;
       }
+      if (item.name.length > 31) {
+        this.$message({
+          message: "The name cannot exceed 32 characters",
+          type: "fail",
+        });
+        item.isEdit = true;
+        this.isEdit = true;
+
+        return;
+      }
       this.onFolderAdd(item).then(() => {
         item.isEdit = false;
         this.isEdit = false;
@@ -392,6 +402,7 @@ export default {
         }
         .title {
           width: 112px;
+          height: 19px;
           font-size: 14px;
           text-align: center;
           font-family: Source Han Sans CN;
@@ -406,7 +417,7 @@ export default {
           /* 3.设置盒子属性为-webkit-box  必须的 */
           display: -webkit-box;
           /* 4.-webkit-line-clamp 设置为2，表示超出2行的部分显示省略号，如果设置为3，那么就是超出3行部分显示省略号 */
-          -webkit-line-clamp: 2;
+          -webkit-line-clamp: 1;
           /* 5.字面意思：单词破坏：破坏英文单词的整体性，在英文单词还没有在一行完全展示时就换行  即一个单词可能会被分成两行展示 */
           word-break: break-all;
           // /* 6.盒子实现多行显示的必要条件，文字是垂直展示，即文字是多行展示的情况下使用 */
