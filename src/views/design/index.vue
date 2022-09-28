@@ -55,7 +55,12 @@
             :auto-upload="true"
             :show-file-list="false"
           >
-            <button slot="trigger" size="small" type="primary"></button>
+            <button
+              slot="trigger"
+              size="small"
+              type="primary"
+              style="opacity: 0"
+            ></button>
           </el-upload>
         </span>
 
@@ -1374,6 +1379,7 @@ export default {
 .img {
   width: 100%;
   height: 100%;
+  border-radius: 10px;
 }
 .container-profile {
   width: 1440px;
@@ -1409,6 +1415,9 @@ export default {
   }
 
   .tabsContent {
+    ::v-deep .el-tabs__nav-wrap::after {
+      background-color: #f0f3fa;
+    }
     ::v-deep .resourceTabsContent {
       .el-tabs__nav-wrap::after {
         height: 0px;
@@ -1433,12 +1442,14 @@ export default {
         color: white !important;
         // padding: 0 20px;
         font-size: 16px;
+        margin-top: 16px;
         font-family: Source Han Sans CN;
         font-weight: 400;
       }
     }
     ::v-deep .el-tabs__item {
       font-size: 20px;
+      padding-right: 122px;
       font-family: Source Han Sans CN;
       font-weight: 400;
       color: #999999;
@@ -1536,10 +1547,13 @@ export default {
       // right: 12px;
       // top: 12px;
       position: absolute;
-      opacity: 0;
-      width: 100%;
-      height: 100%;
-      top: 0;
+      top: -11px;
+      left: -9px;
+      width: 48px;
+      height: 48px;
+      background: #1a1a1a;
+      opacity: 0.3;
+      border-radius: 6px;
       ::v-deep .el-upload--text {
         width: 100%;
         height: 100%;
@@ -1548,14 +1562,16 @@ export default {
       }
     }
     .ortur-icon-pen {
-      right: 12px;
-      top: 12px;
+      width: 22px;
+      height: 22px;
+      right: 27px;
+      top: 27px;
       position: absolute;
-      color: black;
-      background-color: #bfbfc1;
+      color: #f3f5ff;
       padding: 5px;
+      // flex: 99;
     }
-    .ortur-icon-pen:hover {
+    .upload-bg:hover {
       background-color: gainsboro;
     }
   }
@@ -1572,6 +1588,7 @@ export default {
       width: 350px;
       .add {
         font-size: 30px;
+        margin-top: 18px;
         text-align: center;
         cursor: pointer;
       }
@@ -1590,6 +1607,7 @@ export default {
       }
       .follow {
         margin-top: 12px;
+        padding-left: 13px;
         .followers {
           margin-right: 121px;
           cursor: pointer;
