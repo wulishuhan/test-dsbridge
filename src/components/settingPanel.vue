@@ -38,16 +38,16 @@
                   {{ $t("setting.changeName") }}
                 </div>
               </div>
-              <!-- <div class="center">
+              <div class="center">
                 <div class="title">{{ $t("design.email") }}</div>
                 <div class="name">{{ userInfo.email }}</div>
                 <div class="action" @click="handleChangeEmailClick">
                   {{ $t("setting.changeEmail") }}
                 </div>
-              </div> -->
+              </div>
               <div class="bottom">
                 <div class="title">{{ $t("design.password") }}</div>
-                <div class="name">xxxxxxxxxx</div>
+                <div class="name"></div>
                 <div class="action" @click="handleChangePasswordClick">
                   {{ $t("setting.changePassword") }}
                 </div>

@@ -51,17 +51,23 @@
         </el-form>
       </div>
       <div v-show="isLogin">
-        <el-form :model="loginForm" ref="loginForm" :rules="rules">
+        <el-form :model="changeEmailForm" ref="changeEmailForm" :rules="rules">
+          <el-form-item>
+            <p style="color: #999">
+              We'll send an email to your new address with instructions on
+              completing the change
+            </p>
+          </el-form-item>
           <el-form-item prop="email">
             <el-input
-              v-model="loginForm.email"
+              v-model="changeEmailForm.email"
               autocomplete="off"
               :placeholder="$t('setting.newEmail')"
             ></el-input>
           </el-form-item>
           <el-form-item prop="password">
             <el-input
-              v-model="loginForm.password"
+              v-model="changeEmailForm.password"
               autocomplete="off"
               :placeholder="$t('setting.confirmPassword')"
               show-password
@@ -73,7 +79,7 @@
               <div class="forget" @click="handleClickForget">
                 {{ $t("setting.forgetPassword") }}
               </div>
-              <el-button @click="changeEmail('loginForm')">{{
+              <el-button @click="changeEmail('changeEmailForm')">{{
                 $t("setting.submit")
               }}</el-button>
             </div>
@@ -87,7 +93,7 @@
   </div>
 </template>
 <script>
-import { changePassword } from "@/api/setting.js";
+import { changePassword, changeEmail } from "@/api/setting.js";
 export default {
   name: "ChangePassword",
   props: {
@@ -129,9 +135,9 @@ export default {
       }
     };
     return {
-      loginFormTip: "",
+      changeEmailFormTip: "",
       registerFormTip: "",
-      loginForm: {
+      changeEmailForm: {
         username: "",
         password: "",
         email: "",
@@ -147,25 +153,33 @@ export default {
       show: true,
       rules: {
         email: [
-          { required: true, message: "请输入邮箱", trigger: "blur" },
+          {
+            required: true,
+            message: this.$t("setting.email"),
+            trigger: "blur",
+          },
           {
             min: 5,
             max: 20,
-            message: "长度在 5 到 20 个字符",
+            message: this.$t("setting.emailLengthLimit"),
             trigger: "blur",
           },
           {
             type: "email",
-            message: "请输入正确的邮箱地址",
+            message: this.$t("setting.emailErrorInput"),
             trigger: ["blur", "change"],
           },
         ],
         username: [
-          { required: true, message: "请输入用户名", trigger: "blur" },
+          {
+            required: true,
+            message: this.$t("setting.username"),
+            trigger: "blur",
+          },
           {
             min: 5,
             max: 20,
-            message: "长度在 5 到 20 个字符",
+            message: this.$t("setting.usernameLengthLimit"),
             trigger: "blur",
           },
         ],
@@ -193,29 +207,23 @@ export default {
       this.$emit("handleClickForget");
     },
     handleEnter() {
-      this.login("loginForm");
+      this.login("changeEmailForm");
     },
 
     changeEmail(formName) {
       this.$refs[formName].validate((valid) => {
-        this.loginForm.username = this.loginForm.email;
         if (valid) {
-          this.innerVisible = true;
-          this.$store
-            .dispatch("user/login", {
-              loginForm: this.loginForm,
-            })
-            .then(() => {
-              this.innerVisible = false;
-              this.handleClose();
-            })
-            .catch((error) => {
-              this.$message.error(error.msg);
-              this.innerVisible = false;
+          changeEmail({
+            newEmail: this.changeEmailForm.email,
+            oldPassword: this.changeEmailForm.password,
+          }).then((res) => {
+            console.log("--------------------------------", res);
+            this.$message({
+              message: this.$t("setting.changeEmailSuccess"),
+              type: "success",
             });
-        } else {
-          console.log("error submit!!");
-          return false;
+            this.handleClose();
+          });
         }
       });
     },

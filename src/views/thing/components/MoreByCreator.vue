@@ -71,5 +71,6 @@ export default {
   width: 184px;
   height: 112px;
   margin-top: 5px;
+  border-radius: 4px;
 }
 </style>
