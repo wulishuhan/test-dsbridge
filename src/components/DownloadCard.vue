@@ -195,7 +195,9 @@ export default {
   img {
     width: 88px;
     height: 56px;
+    object-fit: contain;
     margin-right: 10px;
+    background: #e8ebf4;
   }
   span {
     font-size: 14px;
@@ -216,7 +218,7 @@ export default {
   padding: 17px;
 }
 .download-text {
-  color: #fff;
+  color: #fff !important;
   margin-left: 10px;
   font-size: 16px !important;
 }
