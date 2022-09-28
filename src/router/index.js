@@ -331,14 +331,6 @@ const routes = [
     },
   },
   {
-    path: "/preview/lzc",
-    name: "lzc",
-    component: () => import("@/views/preview/lzc"),
-    meta: {
-      title: "preview",
-    },
-  },
-  {
     path: "*",
     name: "404",
     component: () => import("@/views/error/404"),
