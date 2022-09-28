@@ -1,6 +1,9 @@
 <template>
   <div class="container" id="container">
     <div id="folderWrapper" class="folderWrapper">
+      <div class="plus" @click="addFolder" v-show="isYourAccount && !isEdit">
+        <div class="plus-icon">+</div>
+      </div>
       <div
         class="folderContainer"
         v-for="(item, index) in folders"
@@ -62,9 +65,6 @@
             v-else
           />
         </div>
-      </div>
-      <div class="plus" @click="addFolder" v-show="isYourAccount && !isEdit">
-        <div class="plus-icon">+</div>
       </div>
     </div>
   </div>
@@ -263,13 +263,14 @@ export default {
     font-size: 26px;
     font-weight: 400;
     margin: auto 0;
-    width: 256px;
+    width: 258px;
     text-align: center;
-    height: 276px;
+    height: 278px;
     line-height: 273px;
     margin-top: 25px;
     border: solid 1px #ccc;
     border-radius: 12px;
+    margin-right: 60px;
   }
   .plus:hover {
     border: solid 1px #ccc;
