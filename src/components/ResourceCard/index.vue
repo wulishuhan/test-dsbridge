@@ -584,6 +584,7 @@ export default {
   align-items: center;
   color: #999999;
   font-size: 14px;
+  font-family: Source Han Sans CN;
 }
 .card-box-bottom-right-like-box {
   margin-right: 8px;

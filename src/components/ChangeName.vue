@@ -7,10 +7,10 @@
       :title="$t('setting.changeName')"
     >
       <div>
-        <el-form :model="registerForm" ref="registerForm">
-          <el-form-item prop="currentPassword">
+        <el-form :model="registerForm" ref="registerForm" :rules="rules">
+          <el-form-item prop="name">
             <el-input
-              v-model="registerForm.Name"
+              v-model="registerForm.name"
               autocomplete="off"
               :placeholder="$t('setting.newName')"
             ></el-input>
@@ -52,10 +52,20 @@ export default {
   data() {
     return {
       registerForm: {
-        Name: "",
+        name: "",
       },
       innerVisible: false,
       loading: true,
+      rules: {
+        name: [
+          {
+            required: true,
+            min: 1,
+            max: 32,
+            trigger: "blur",
+          },
+        ],
+      },
     };
   },
   methods: {
@@ -65,9 +75,13 @@ export default {
 
     changePassword() {
       console.log(this.registerForm);
-      changeName({ nickName: this.registerForm.Name }).then(() => {
+      changeName({ nickName: this.registerForm.name }).then(() => {
         this.$store.dispatch("user/getUserInfo").catch((e) => {
           console.log(e);
+          this.$message({
+            message: this.$t("setting.changeNickNameSucess"),
+            type: "success",
+          });
         });
         this.handleClose();
       });

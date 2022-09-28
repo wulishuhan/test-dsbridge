@@ -20,3 +20,11 @@ export function changePassword(data) {
     data,
   });
 }
+
+export function changeEmail(data) {
+  return request({
+    url: `system/user/changeEmail`,
+    method: "post",
+    data,
+  });
+}
