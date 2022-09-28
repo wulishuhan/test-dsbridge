@@ -258,7 +258,9 @@
           <span class="path1"></span>
           <span class="path2"></span>
         </span>
+        <el-divider v-if="tutorialForm.length <= 0"></el-divider>
         <draggable
+          v-else
           class="tutorial"
           draggable=".tutorial-item"
           handle=".drag-btn"
