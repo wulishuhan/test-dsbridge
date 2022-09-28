@@ -13,7 +13,6 @@
                   <el-avatar
                     :size="40"
                     :src="avatar"
-                    :fit="'cover'"
                     @click.native="toUserProfileView"
                   ></el-avatar>
                   <div

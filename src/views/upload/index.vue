@@ -162,11 +162,7 @@
                           <span class="path2"></span>
                         </i>
                         <i
-                          class="
-                            handle
-                            ortur-icon-settings-gray
-                            swiper-no-swiping
-                          "
+                          class="handle ortur-icon-settings-gray swiper-no-swiping"
                         >
                         </i>
                         <el-upload
@@ -377,11 +373,7 @@
                           <span class="path2"></span>
                         </i>
                         <i
-                          class="
-                            handle
-                            ortur-icon-settings-gray
-                            swiper-no-swiping
-                          "
+                          class="handle ortur-icon-settings-gray swiper-no-swiping"
                         ></i>
                         <el-upload
                           class="cover-edit"

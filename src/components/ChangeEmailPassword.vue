@@ -52,12 +52,13 @@
       </div>
       <div v-show="isLogin">
         <el-form :model="changeEmailForm" ref="changeEmailForm" :rules="rules">
-          <el-form-item>
-            <p style="color: #999">
-              We'll send an email to your new address with instructions on
-              completing the change
-            </p>
-          </el-form-item>
+          <!-- <el-form-item>
+            <span style="color: #999">
+              We'll send an email to your new address with
+              <br />
+              instructions on completing the change
+            </span>
+          </el-form-item> -->
           <el-form-item prop="email">
             <el-input
               v-model="changeEmailForm.email"

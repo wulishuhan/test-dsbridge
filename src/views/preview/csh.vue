@@ -88,6 +88,16 @@
       </div>
     </el-popover>
     <input type="file" id="upload" name="upload" @change="uploadTestFile" />
+    <el-button @click="dialogVertifyEmailVisible = true">open</el-button>
+    <el-dialog :visible.sync="dialogVertifyEmailVisible" :width="'500px'">
+      <h2 style="text-align: center">Verify your email</h2>
+      <p>
+        Click the verification button in the email we sent to {{ email }}. This
+        helps keep your account secure. No email in your inbox or spam folder?
+        Let's resend it. Wrong address? Log out to sign in with adifferent
+        email. If you mistyped your emailwhen signing up, create a new account.
+      </p>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -201,6 +211,7 @@ export default {
         left: "0px",
         top: "0px",
       },
+      dialogVertifyEmailVisible: false,
     };
   },
   methods: {
