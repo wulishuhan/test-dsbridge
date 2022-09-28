@@ -1,5 +1,5 @@
 <template>
-  <div style="display: flex">
+  <div>
     <FloatingMenu
       ref="test"
       :editor="editor"
@@ -29,6 +29,15 @@
       <el-button>aaa</el-button>
     </div>
     <editor-content :editor="editor" class="desc-editor" />
+
+    <draggable-swiper
+      v-model="data"
+      :on-add-success="onCoverAddSuccess"
+      :on-edit-success="onCoverEditSuccess"
+      :remove="handleRemoveCover"
+      :currentKey.sync="currentCoverEditKey"
+    ></draggable-swiper>
+    <div v-for="(item, index) in data" :key="index">{{ item.url }}</div>
   </div>
 </template>
 <script>
@@ -37,17 +46,21 @@ import Placeholder from "@tiptap/extension-placeholder";
 import StarterKit from "@tiptap/starter-kit";
 import Focus from "@tiptap/extension-focus";
 import { generatorDefaultAvator } from "@/utils/generateImage";
+import draggableSwiper from "@/views/upload/draggableSwiper";
 export default {
   // eslint-disable-next-line
   name: "zwy",
   data() {
     return {
       editor: null,
+      data: [],
+      currentCoverEditKey: 0,
     };
   },
   components: {
     EditorContent,
     FloatingMenu,
+    draggableSwiper,
   },
   created() {
     this.editor = new Editor({
@@ -77,6 +90,28 @@ export default {
   },
   mounted() {},
   methods: {
+    onCoverAddSuccess(response) {
+      console.log("=============", response);
+      let imgInfo = {
+        id: response.id,
+        url: response.url,
+        name: response.name,
+        size: response.size,
+      };
+      this.data.push(imgInfo);
+    },
+    handleRemoveCover(removeKey) {
+      this.data.splice(removeKey, 1);
+    },
+    onCoverEditSuccess(response) {
+      let imgInfo = {
+        id: response.id,
+        url: response.url,
+        name: response.name,
+        size: response.size,
+      };
+      this.data.splice(this.currentCoverEditKey, 1, imgInfo);
+    },
     handleClick() {
       console.log(21);
     },
