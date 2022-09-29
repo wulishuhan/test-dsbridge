@@ -277,7 +277,7 @@ export default {
   .img-toolbar {
     display: none;
     width: 184px;
-    height: 122px;
+    height: 112px;
     margin: 0 auto;
     position: absolute;
     top: 0;
@@ -328,7 +328,7 @@ export default {
       width: 100%;
       height: 100%;
       .el-icon-plus {
-        line-height: 122px;
+        line-height: 112px;
         width: 100%;
       }
     }
@@ -341,7 +341,7 @@ export default {
     display: block;
     margin: 0px auto;
     width: 184px;
-    height: 122px;
+    height: 112px;
     object-fit: cover;
     border-radius: 10px;
     border: 1px solid #eee;
