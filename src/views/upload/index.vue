@@ -1092,9 +1092,9 @@ export default {
         justify-content: space-around;
         align-items: center;
         .el-button {
-          width: 160px;
+          width: 144px;
+          height: 56px;
           font-size: 20px;
-          padding: 20px;
           color: #1a1a1a;
           border-color: #999;
           border-radius: 8px;
@@ -1349,5 +1349,19 @@ export default {
   width: 90px;
   margin-left: 10px;
   vertical-align: bottom;
+}
+.el-select-dropdown {
+  .el-scrollbar {
+    .el-select-dropdown__wrap {
+      .el-select-dropdown__item.selected {
+        background: #409eff !important;
+        color: #fff !important;
+      }
+      .el-select-dropdown__item.hover {
+        background: #409eff !important;
+        color: #fff !important;
+      }
+    }
+  }
 }
 </style>

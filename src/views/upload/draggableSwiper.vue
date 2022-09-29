@@ -63,6 +63,7 @@
       class="swiper-button-next swiper-button-black"
     ></div>
     <!-- 黑色 -->
+    <div class="swiper-scrollbar"></div>
   </div>
 </template>
 
@@ -85,6 +86,9 @@ export default {
         navigation: {
           nextEl: ".swiper-button-next",
           prevEl: ".swiper-button-prev",
+        },
+        scrollbar: {
+          el: ".swiper-scrollbar",
         },
       },
       itemList: [],
@@ -329,6 +333,8 @@ export default {
     width: 184px;
     height: 122px;
     object-fit: cover;
+    border-radius: 10px;
+    border: 1px solid #eee;
   }
 }
 
