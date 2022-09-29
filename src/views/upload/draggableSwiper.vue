@@ -1,8 +1,15 @@
 <template>
   <div v-swiper:[swiperName]="swiperOptions">
-    <draggable class="swiper-wrapper" handle=".handle" v-model="itemList">
+    <draggable
+      class="swiper-wrapper"
+      handle=".handle"
+      draggable=".swiper-slide.draggable"
+      v-model="itemList"
+      :move="onMoveCallback"
+      :style="itemList.length > 4 ? 'padding: 0px 0px 16px' : ''"
+    >
       <div
-        class="swiper-slide"
+        class="swiper-slide draggable"
         v-for="(item, itemKey) in itemList"
         :key="itemKey"
       >
@@ -43,12 +50,13 @@
           :before-upload="beforeUpload"
           :http-request="handleRequest"
         >
-          <i class="el-icon-plus"></i>
+          <i class="el-icon-plus" @click="setCurrentKeyList([0, groupKey])"></i>
         </el-upload>
       </div>
     </draggable>
     <div
       ref="swiperPrev"
+      style="opacity: 0"
       class="swiper-button-prev swiper-button-black"
       @drop="drop($event)"
       @dragover="allowDrop($event, 'swiperPrev')"
@@ -56,11 +64,13 @@
     <!-- 白色 -->
     <div
       ref="swiperNext"
+      style="opacity: 0"
       @drop="drop($event)"
       @dragover="allowDrop($event, 'swiperNext')"
       class="swiper-button-next swiper-button-black"
     ></div>
     <!-- 黑色 -->
+    <div class="swiper-scrollbar"></div>
   </div>
 </template>
 
@@ -83,6 +93,9 @@ export default {
         navigation: {
           nextEl: ".swiper-button-next",
           prevEl: ".swiper-button-prev",
+        },
+        scrollbar: {
+          el: ".swiper-scrollbar",
         },
       },
       itemList: [],
@@ -128,7 +141,6 @@ export default {
   },
   watch: {
     itemList: function (val) {
-      console.log("watch:", val);
       this.$emit("changeData", val);
     },
   },
@@ -151,6 +163,9 @@ export default {
     }),
   },
   methods: {
+    onMoveCallback() {
+      //   console.log("移动事件", evt, originalEvent);
+    },
     setCurrentKeyList(keyList) {
       this.$emit("update:currentKeyList", keyList);
     },
@@ -208,7 +223,6 @@ export default {
         });
     },
     beforeUpload(file) {
-      console.log(file);
       let extension = file.name
         .substring(file.name.lastIndexOf(".") + 1)
         .toLowerCase();
@@ -262,13 +276,13 @@ export default {
   position: relative;
   .img-toolbar {
     display: none;
-    width: 150px;
-    height: 90px;
+    width: 184px;
+    height: 122px;
     margin: 0 auto;
     position: absolute;
     top: 0;
     left: 50%;
-    margin-left: -75px;
+    margin-left: -92px;
     background: rgba(0, 0, 0, 0.4);
     i {
       cursor: pointer;
@@ -304,16 +318,17 @@ export default {
     }
   }
   .cover-add {
-    width: 150px;
+    width: 184px;
+    height: 100%;
+    border: 1px solid #cccccc;
+    border-radius: 6px;
     font-size: 34px;
-    border: 1px dashed #aaa;
-    height: 90px;
     margin: auto;
     ::v-deep .el-upload {
       width: 100%;
       height: 100%;
       .el-icon-plus {
-        line-height: 90px;
+        line-height: 122px;
         width: 100%;
       }
     }
@@ -322,16 +337,14 @@ export default {
     }
   }
 
-  .cover-add:hover {
-    border: 1px dashed #409eff;
-  }
-
   img {
     display: block;
     margin: 0px auto;
-    width: 150px;
-    height: 90px;
+    width: 184px;
+    height: 122px;
     object-fit: cover;
+    border-radius: 10px;
+    border: 1px solid #eee;
   }
 }
 

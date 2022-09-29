@@ -14,7 +14,7 @@
         <div class="upload-wrapper">
           <div class="select-area">
             <el-upload
-              :action="baseApi + '/library/resource/upload'"
+              action=""
               :show-file-list="showFile"
               :file-list="resourceForm.files"
               multiple
@@ -140,81 +140,14 @@
                 <h5 class="list-wrapper-title">
                   {{ $t("upload.resourceCover") }}
                 </h5>
-                <div v-swiper:coverSwiper="swiperOptions">
-                  <draggable
-                    class="swiper-wrapper"
-                    handle=".handle"
-                    v-model="resourceForm.images"
-                  >
-                    <div
-                      class="swiper-slide"
-                      v-for="(coverImage, coverKey) in resourceForm.images"
-                      :key="coverKey"
-                    >
-                      <img :src="coverImage.url" />
-                      <!-- img-toolbar  -->
-                      <div class="img-toolbar">
-                        <i
-                          class="ortur-icon-minus"
-                          @click="handleRemoveCover(coverKey)"
-                        >
-                          <span class="path1"></span>
-                          <span class="path2"></span>
-                        </i>
-                        <i
-                          class="
-                            handle
-                            ortur-icon-settings-gray
-                            swiper-no-swiping
-                          "
-                        >
-                        </i>
-                        <el-upload
-                          class="cover-edit"
-                          :action="baseApi + '/library/resource/upload'"
-                          :show-file-list="showFile"
-                          :on-success="handleCoverEditSuccess"
-                          :headers="headers"
-                          accept=".png,.jpg,.svg,.jpeg"
-                          :before-upload="beforeUpload"
-                        >
-                          <i
-                            class="ortur-icon-pen"
-                            @click="currentEditIndex(coverKey)"
-                          ></i>
-                        </el-upload>
-                      </div>
-                      <!-- // tootbar -->
-                    </div>
-                    <div class="swiper-slide">
-                      <el-upload
-                        :action="baseApi + '/library/resource/upload'"
-                        :show-file-list="showFile"
-                        class="cover-add"
-                        :on-success="handleCoverAddSuccess"
-                        :headers="headers"
-                        accept=".png,.jpg,.svg,.jpeg"
-                        :before-upload="beforeUpload"
-                      >
-                        <i class="el-icon-plus"></i>
-                      </el-upload>
-                    </div>
-                  </draggable>
-                  <div
-                    ref="swiperPrev"
-                    class="swiper-button-prev swiper-button-black"
-                    @drop="drop($event)"
-                    @dragover="allowDrop($event, 'swiperPrev')"
-                  ></div>
-                  <!-- 白色 -->
-                  <div
-                    ref="swiperNext"
-                    @drop="drop($event)"
-                    @dragover="allowDrop($event, 'swiperNext')"
-                    class="swiper-button-next swiper-button-black"
-                  ></div>
-                  <!-- 黑色 -->
-                </div>
+                <draggable-swiper
+                  v-model="resourceForm.images"
+                  swiper-name="coverSwiper"
+                  :on-add-success="onCoverAddSuccess"
+                  :on-edit-success="onCoverEditSuccess"
+                  :remove="handleRemoveCover"
+                  :currentKeyList.sync="currentEditKeyList"
+                ></draggable-swiper>
               </div>
             </div>
           </el-form-item>
@@ -325,17 +258,18 @@
           <span class="path1"></span>
           <span class="path2"></span>
         </span>
+        <el-divider v-if="tutorialForm.length <= 0"></el-divider>
         <draggable
+          v-else
           class="tutorial"
           draggable=".tutorial-item"
           handle=".drag-btn"
-          @change="tutorialChange()"
           v-model="tutorialForm"
         >
           <div
             class="tutorial-item"
             v-for="(tutorialItem, tutorialKey) in tutorialForm"
-            :key="tutorialKey"
+            :key="tutorialItem.id"
           >
             <el-form
               ref="tutorialForm"
@@ -349,97 +283,15 @@
                 ></el-input>
               </el-form-item>
               <el-form-item style="margin: 20px auto">
-                <div
-                  v-swiper:[tutorialSwiper+tutorialKey]="tutorialSwiperOptions"
-                  @someSwiperEvent="callback"
-                >
-                  <draggable
-                    class="swiper-wrapper"
-                    handle=".handle"
-                    v-model="tutorialItem.images"
-                  >
-                    <div
-                      class="swiper-slide"
-                      v-for="(
-                        tutorialImage, tutorialImgKey
-                      ) in tutorialItem.images"
-                      :key="tutorialImgKey"
-                    >
-                      <img :src="tutorialImage.url" />
-                      <div class="img-toolbar">
-                        <i
-                          class="ortur-icon-minus"
-                          @click="
-                            removeTutorialImg(tutorialKey, tutorialImgKey)
-                          "
-                        >
-                          <span class="path1"></span>
-                          <span class="path2"></span>
-                        </i>
-                        <i
-                          class="
-                            handle
-                            ortur-icon-settings-gray
-                            swiper-no-swiping
-                          "
-                        ></i>
-                        <el-upload
-                          class="cover-edit"
-                          :action="baseApi + '/library/resource/upload'"
-                          :show-file-list="showFile"
-                          :on-success="handleTutorialEditSuccess"
-                          :headers="headers"
-                          accept=".png,.jpg,.svg,.jpeg"
-                          :before-upload="beforeUpload"
-                        >
-                          <i
-                            class="ortur-icon-pen"
-                            @click="
-                              currentTutorialEditIndex(
-                                tutorialKey,
-                                tutorialImgKey
-                              )
-                            "
-                          ></i>
-                        </el-upload>
-                      </div>
-                    </div>
-                    <div class="swiper-slide">
-                      <el-upload
-                        :action="baseApi + '/library/resource/upload'"
-                        :show-file-list="showFile"
-                        class="cover-add"
-                        :on-success="handleTutorialAddSuccess"
-                        :headers="headers"
-                        accept=".png,.jpg,.svg,.jpeg"
-                        :before-upload="beforeUpload"
-                      >
-                        <i
-                          class="el-icon-plus"
-                          @click="currentTutorialEditIndex(tutorialKey, -1)"
-                        ></i>
-                      </el-upload>
-                    </div>
-                  </draggable>
-                  <div
-                    class="swiper-button-prev swiper-button-black"
-                    ref="tutorialSwiperPrev"
-                    @drop="drop($event)"
-                    @dragover="
-                      allowDrop($event, 'tutorialSwiperPrev', tutorialKey)
-                    "
-                  ></div>
-                  <!-- 白色 -->
-                  <div
-                    class="swiper-button-next swiper-button-black"
-                    ref="tutorialSwiperNext"
-                    @drop="drop($event)"
-                    @dragover="
-                      allowDrop($event, 'tutorialSwiperNext', tutorialKey)
-                    "
-                  ></div>
-                  <!-- 黑色 -->
-                </div>
+                <draggable-swiper
+                  v-model="tutorialItem.images"
+                  :swiper-name="tutorialSwiper + tutorialKey"
+                  :on-add-success="onTutorialAddSuccess"
+                  :on-edit-success="onTutorialEditSuccess"
+                  :remove="removeTutorialImg"
+                  :currentKeyList.sync="currentEditKeyList"
+                  :group-key="tutorialKey"
+                ></draggable-swiper>
               </el-form-item>
               <el-form-item label="" prop="description">
                 <el-input
@@ -501,15 +353,19 @@ import {
   getResouceUploadS3Url,
 } from "@/api/resource";
 import axios from "axios";
+import draggableSwiper from "@/views/upload/draggableSwiper";
+import { throttle } from "@/utils/common";
 export default {
   // eslint-disable-next-line
   name: "upload",
   components: {
     draggable,
     Preview,
+    draggableSwiper,
   },
   data() {
     return {
+      currentEditKeyList: [0, 0],
       previewDialogVisible: false,
       sourceId: 0,
       parentId: 0,
@@ -518,7 +374,6 @@ export default {
       tutorialValidateResult: true,
       tutorialSwiper: "tutorialSwiper",
       showFile: false,
-      dialogImageUrl: "",
       inputValue: "",
       searchSuggestions: "",
       dialogVisible: false,
@@ -551,7 +406,13 @@ export default {
             message: this.$t("upload.titleLengthError", [1, 32]),
           },
         ],
-        tags: [{ required: true, message: this.$t("upload.tagNotEmpty") }],
+        tags: [
+          {
+            required: true,
+            message: this.$t("upload.tagNotEmpty"),
+            trigger: "blur",
+          },
+        ],
         license: [
           {
             required: true,
@@ -771,12 +632,12 @@ export default {
         }
       });
     }
-    this._throttle = this.throttle((swiperArrow) => {
+    this._throttle = throttle((swiperArrow) => {
       //滚动
       this.$refs[swiperArrow].click();
     }, 500);
 
-    this._throttle_tutorial = this.throttle((swiperArrow, curIndex) => {
+    this._throttle_tutorial = throttle((swiperArrow, curIndex) => {
       //滚动
       this.$refs[swiperArrow][curIndex].click();
     }, 500);
@@ -794,22 +655,6 @@ export default {
       event.preventDefault();
     },
 
-    throttle(func, delay) {
-      delay = delay || 1000;
-      var previousDate = new Date();
-      var previous = previousDate.getTime(); // 初始化一个时间，也作为高频率事件判断事件间隔的变量，通过闭包进行保存。
-
-      return function (...args) {
-        var context = this;
-        var nowDate = new Date();
-        var now = nowDate.getTime();
-        if (now - previous >= delay) {
-          // 如果本次触发和上次触发的时间间隔超过设定的时间
-          func.apply(context, args); // 就执行事件处理函数 （eventHandler）
-          previous = now; // 然后将本次的触发时间，作为下次触发事件的参考时间。
-        }
-      };
-    },
     genThumb(srcFile) {
       //
       return new Promise((resolve, reject) => {
@@ -1066,49 +911,50 @@ export default {
     handleRemoveCover(removeKey) {
       this.resourceForm.images.splice(removeKey, 1);
     },
-    handleCoverAddSuccess(response) {
+    onCoverAddSuccess(response) {
       let imgInfo = {
-        id: response.data.id,
-        url: response.data.url,
-        name: response.data.name,
-        size: response.data.size,
+        id: response.id,
+        url: response.url,
+        name: response.name,
+        size: response.size,
       };
       this.resourceForm.images.push(imgInfo);
     },
-    handleCoverEditSuccess(response) {
+    onCoverEditSuccess(response) {
       let imgInfo = {
-        id: response.data.id,
-        url: response.data.url,
-        name: response.data.name,
-        size: response.data.size,
+        id: response.id,
+        url: response.url,
+        name: response.name,
+        size: response.size,
       };
-      this.resourceForm.images.splice(this.coverEditIndex, 1, imgInfo);
+      this.resourceForm.images.splice(this.currentEditKeyList[0], 1, imgInfo);
     },
     currentTutorialEditIndex(tutorialKey, tutorialImgKey) {
       this.currentTutorialKey = tutorialKey;
       this.currentTutorialImgKey = tutorialImgKey;
     },
-    removeTutorialImg(tutorialKey, tutorialImgKey) {
+    removeTutorialImg(tutorialImgKey, tutorialKey) {
       this.tutorialForm[tutorialKey].images.splice(tutorialImgKey, 1);
     },
-    handleTutorialAddSuccess(response) {
+    onTutorialAddSuccess(response) {
       let imgInfo = {
-        id: response.data.id,
-        url: response.data.url,
-        name: response.data.name,
-        size: response.data.size,
+        id: response.id,
+        url: response.url,
+        name: response.name,
+        size: response.size,
       };
-      this.tutorialForm[this.currentTutorialKey].images.push(imgInfo);
+      console.log("上传成功", this.currentEditKeyList);
+      this.tutorialForm[this.currentEditKeyList[1]].images.push(imgInfo);
     },
-    handleTutorialEditSuccess(response) {
+    onTutorialEditSuccess(response) {
       let imgInfo = {
-        id: response.data.id,
-        url: response.data.url,
-        name: response.data.name,
-        size: response.data.size,
+        id: response.id,
+        url: response.url,
+        name: response.name,
+        size: response.size,
       };
-      this.tutorialForm[this.currentTutorialKey].images.splice(
-        this.currentTutorialImgKey,
+      this.tutorialForm[this.currentEditKeyList[1]].images.splice(
+        this.currentEditKeyList[0],
         1,
         imgInfo
       );
@@ -1117,7 +963,6 @@ export default {
     currentEditIndex(coverEditIndex) {
       this.coverEditIndex = coverEditIndex;
     },
-    tutorialChange() {},
     addTutorialItem(tutorialKey) {
       var index = tutorialKey;
       if (tutorialKey === false) {
@@ -1126,14 +971,18 @@ export default {
         index += 1;
       }
 
-      this.tutorialForm.splice(index, 0, {
-        id: Date.now(),
-        description: "",
-        title: "",
-        images: [],
+      this.$nextTick(() => {
+        this.tutorialForm.splice(index, 0, {
+          id: Date.now(),
+          description: "",
+          title: "",
+          images: [],
+        });
       });
+      console.log(this.tutorialForm);
     },
     removeTutorialItem(tutorialKey) {
+      console.log("tutorialKey=======", tutorialKey, this.tutorialForm);
       if (tutorialKey !== false) {
         this.tutorialForm.splice(tutorialKey, 1);
       } else {
@@ -1218,91 +1067,6 @@ export default {
   left: 12px;
 }
 
-.swiper-slide {
-  position: relative;
-  .img-toolbar {
-    display: none;
-    width: 150px;
-    height: 90px;
-    margin: 0 auto;
-    position: absolute;
-    top: 0;
-    left: 50%;
-    margin-left: -75px;
-    background: rgba(0, 0, 0, 0.4);
-    i {
-      cursor: pointer;
-      display: none;
-      font-size: 20px;
-    }
-    .ortur-icon-minus {
-      font-size: 20px;
-      position: absolute;
-      top: 5px;
-      right: 10px;
-      cursor: pointer;
-    }
-    .cover-edit {
-      font-size: 20px;
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      margin-left: -12px;
-      margin-top: -20px;
-      cursor: pointer;
-      color: #fff;
-    }
-    .handle {
-      position: absolute;
-      bottom: 5px;
-      right: 10px;
-      font-size: 14px;
-      cursor: move;
-    }
-    .handle:before {
-      color: #eee;
-    }
-  }
-  .cover-add {
-    width: 150px;
-    font-size: 34px;
-    border: 1px dashed #aaa;
-    height: 90px;
-    margin: auto;
-    .el-upload {
-      width: 100%;
-      height: 100%;
-      .el-icon-plus {
-        line-height: 90px;
-        width: 100%;
-      }
-    }
-    i {
-      display: block;
-    }
-  }
-
-  .cover-add:hover {
-    border: 1px dashed #409eff;
-  }
-
-  img {
-    display: block;
-    margin: 0px auto;
-    width: 150px;
-    height: 90px;
-    object-fit: cover;
-  }
-}
-
-.swiper-slide:hover {
-  i {
-    display: block;
-  }
-  .img-toolbar {
-    display: block;
-  }
-}
 .upload-container {
   width: 1136px;
   margin: 0px auto;
@@ -1328,9 +1092,9 @@ export default {
         justify-content: space-around;
         align-items: center;
         .el-button {
-          width: 160px;
+          width: 144px;
+          height: 56px;
           font-size: 20px;
-          padding: 20px;
           color: #1a1a1a;
           border-color: #999;
           border-radius: 8px;
@@ -1442,14 +1206,16 @@ export default {
   cursor: pointer;
 }
 .tutorial {
-  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-  padding: 2px 10px;
+  // box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 8px;
 
   .tutorial-item {
     position: relative;
     // box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-    padding: 20px 10px;
-    margin: 20px auto;
+    padding: 8px;
+    margin: 0px auto 16px;
     border: 1px solid #cccccc;
     border-radius: 6px;
     background: #e8ebf4;
@@ -1464,12 +1230,30 @@ export default {
       top: 50%;
     }
     .add-btn {
-      right: -80px;
+      width: 32px;
+      height: 32px;
+      right: -70px;
       bottom: 10px;
+      padding: unset;
+      background: rgba(232, 235, 244, 0.3);
+      border-radius: 6px;
+    }
+    .add-btn:hover {
+      background: #e8ebf4;
+      color: #aaa;
     }
     .remove-btn {
-      right: -80px;
+      right: -70px;
+      border-radius: 6px;
       top: 50%;
+      width: 32px;
+      height: 32px;
+      background: rgba(255, 94, 94, 0.3);
+      padding: unset;
+    }
+    .remove-btn:hover {
+      color: #fff;
+      background: #ff5e5e;
     }
   }
 }
@@ -1565,5 +1349,19 @@ export default {
   width: 90px;
   margin-left: 10px;
   vertical-align: bottom;
+}
+.el-select-dropdown {
+  .el-scrollbar {
+    .el-select-dropdown__wrap {
+      .el-select-dropdown__item.selected {
+        background: #8ab5ef !important;
+        color: #fff !important;
+      }
+      .el-select-dropdown__item.hover {
+        background: #8ab5ef !important;
+        color: #fff !important;
+      }
+    }
+  }
 }
 </style>
