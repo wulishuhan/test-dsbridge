@@ -209,7 +209,7 @@ export default {
       if (item.name == "") {
         this.$message({
           message: this.$t("design.folderNameRequire"),
-          type: "fail",
+          type: "warning",
         });
         item.isEdit = true;
         this.isEdit = true;
