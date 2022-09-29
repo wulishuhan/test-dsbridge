@@ -1,427 +1,422 @@
 <template>
-  <div id="top" class="main" @click="closeCollectedOptionBox">
-    <header class="groups-header">
-      <el-carousel height="392px" indicator-position="outside">
-        <el-carousel-item v-for="item in bannerImages" :key="item.title">
-          <a :href="item.url">
-            <img :src="item.image" alt="" />
-            <div class="learn-more">{{ $t("main.barnerViewMore") }}</div>
-          </a>
-        </el-carousel-item>
-      </el-carousel>
-    </header>
-    <div class="content" id="content">
-      <el-row class="filter">
-        <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-          <!-- <div
-            class="select-box"
-            @mouseenter="enter"
-            @mouseleave="leave(thing)"
-          > -->
-          <div class="select-box">
-            <i class="ortur-icon-hourglass icon-hourglass"></i>
-            <el-select v-model="value" @change="selectChange" class="select">
-              <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-                style="font-size: 12px"
-                class="option"
+  <div>
+    <el-dialog :visible.sync="dialogFollowersVisible" class="followDialog">
+      <el-tabs
+        v-model="activeTab"
+        @tab-click="handleFollowTapClick"
+        class="tabsContent"
+      >
+        <el-tab-pane
+          :label="$t('design.Account')"
+          name="first"
+          class="followTapPanel"
+        >
+          <div class="wrapper">
+            <div class="left" style="margin-right: 63px">
+              <img class="img" alt="" :src="userInfo.avatar" />
+              <el-upload
+                class="upload-demo"
+                :headers="headers"
+                :on-success="handleImgUploadSuccess"
+                :on-error="handleImgUploadErr"
+                :before-upload="handleBeforeImgUpload"
+                ref="upload"
+                :action="baseURL + '/system/user/avatar'"
+                :auto-upload="true"
+                :show-file-list="false"
               >
-              </el-option>
-            </el-select>
+                <span slot="trigger" class="choose">
+                  {{ $t("design.chooseImg") }}
+                </span>
+              </el-upload>
+            </div>
+            <div class="right">
+              <div class="top">
+                <div class="title">{{ $t("design.name") }}</div>
+                <div class="name">{{ userInfo.nick_name }}</div>
+                <div class="action" @click="handleChangeNameClick">
+                  {{ $t("setting.changeName") }}
+                </div>
+              </div>
+              <div class="center">
+                <div class="title">{{ $t("design.email") }}</div>
+                <div class="name">{{ userInfo.email }}</div>
+                <div class="action" @click="handleChangeEmailClick">
+                  {{ $t("setting.changeEmail") }}
+                </div>
+                <div class="action">{{ $t("setting.Activate") }}</div>
+              </div>
+              <div class="bottom">
+                <div class="title">{{ $t("design.password") }}</div>
+                <div class="name"></div>
+                <div class="action" @click="handleChangePasswordClick">
+                  {{ $t("setting.changePassword") }}
+                </div>
+              </div>
+              <div class="border"></div>
+
+              <div class="binding">
+                <div
+                  style="
+                    font-size: 16px;
+                    font-family: Source Han Sans CN;
+                    font-weight: 400;
+                    color: #999999;
+                    margin-bottom: 30px;
+                  "
+                >
+                  {{ $t("design.accountBinding") }}
+                </div>
+                <div
+                  class="bindItem"
+                  v-for="item in bindingInfo"
+                  :key="item.id"
+                >
+                  <div class="left">
+                    <span
+                      v-if="
+                        item.switch1 &&
+                        item.catalog !== 'tiktok' &&
+                        item.catalog !== 'google'
+                      "
+                      class="icon"
+                      :class="item.iconClassLight"
+                    ></span>
+                    <span
+                      v-if="item.switch1 && item.catalog == 'tiktok'"
+                      class="ortur-icon-tiktok-light icon"
+                      ><span class="path1"></span><span class="path2"></span
+                      ><span class="path3"></span
+                    ></span>
+                    <span
+                      v-if="item.switch1 && item.catalog == 'google'"
+                      class="ortur-icon-google-light icon"
+                      ><span class="path1"></span><span class="path2"></span
+                      ><span class="path3"></span><span class="path4"></span
+                    ></span>
+                    <span
+                      v-else-if="!item.switch1"
+                      class="icon"
+                      :class="item.iconClass"
+                    ></span>
+                    <span>{{ item.catalog }}</span>
+                    <span class="username">{{
+                      item.username ? item.username : ""
+                    }}</span>
+                    <span v-show="item.username && item.email">|</span>
+                    <span class="email">{{ item.email }}</span>
+                  </div>
+                  <div class="right">
+                    <el-switch
+                      v-model="item.switch1"
+                      @change="handleSwitch1Change(item.switch1, item)"
+                    >
+                    </el-switch>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-        </el-col>
-        <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8"> </el-col>
-        <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8"> </el-col>
-      </el-row>
-      <el-row class="row">
-        <div v-for="item in resources" :key="item.id">
-          <el-col :xs="6" :sm="6" :md="6" :lg="6" :xl="6">
-            <resource-card
-              :thing="item"
-              :isLike="comfirmLike(item.id)"
-              :isCollected="comfirmCollection(item.id)"
-              @openCollection="openCollection"
-              @deleteCollection="deleteCollection"
-            ></resource-card>
-          </el-col>
-        </div>
-      </el-row>
-      <p v-if="loading">loading...</p>
-      <p v-if="noMore">no more</p>
-      <sroll-top-button></sroll-top-button>
-    </div>
-    <CollectedOption
-      :style="collectionStyle"
-      :show="openCollectedOption"
-      :folders="folders"
-      @close="closeCollectedOption"
-      @moveFolder="moveCollectedOption"
-      @addFolder="addFolder"
-    ></CollectedOption>
+        </el-tab-pane>
+        <el-tab-pane
+          :label="$t('design.private')"
+          name="second"
+          class="followTapPanel"
+        >
+          222
+        </el-tab-pane>
+      </el-tabs>
+    </el-dialog>
+    <ChangeEmailPassword
+      @handleClose="isChangePasswordVisible = false"
+      :visible="isChangePasswordVisible"
+      :ChangePasswordOrEmail="ChangePasswordOrEmail"
+    ></ChangeEmailPassword>
+    <ChangeName
+      @handleClose="isChangeNameVisible = false"
+      :visible="isChangeNameVisible"
+    ></ChangeName>
   </div>
 </template>
+
 <script>
-import ResourceCard from "@/components/ResourceCard";
-import CollectedOption from "@/components/CollectedOption";
-import SrollTopButton from "@/components/SrollTopButton";
-import { throttle } from "@/utils/cache.js";
-// import { getThingList } from "@/api/thing";
-import { getResourceList } from "@/api/resource";
-import { getBanner } from "@/api/banner";
-import { getLikelist } from "@/api/like";
-import { mapGetters } from "vuex";
-import {
-  getCollectionResourceList,
-  getCollectionList,
-  addCollection,
-  addResourceToCollection,
-  deleteCollectionResource,
-} from "@/api/collection";
+import { createNamespacedHelpers } from "vuex";
+const { mapState } = createNamespacedHelpers("user");
+import { getToken } from "@/utils/auth";
+import ChangeEmailPassword from "@/components/ChangeEmailPassword.vue";
+import ChangeName from "@/components/ChangeName.vue";
+import { unbindThird, getUserInfo } from "@/api/user";
+
 export default {
-  // eslint-disable-next-line
-  name: "Main",
-  components: { ResourceCard, SrollTopButton, CollectedOption },
+  components: {
+    ChangeEmailPassword,
+    ChangeName,
+  },
   data() {
     return {
-      total: 0,
-      pagination: {
-        pageSize: 10,
-        pageNum: 1,
-      },
-      options: [
-        {
-          value: "popular",
-          label: "The popular",
+      third_user: [],
+      isChangeNameVisible: false,
+      ChangePasswordOrEmail: false,
+      isChangePasswordVisible: false,
+      bindingInfo: {
+        facebook: {
+          catalog: "facebook",
+          switch1: false,
+          username: "",
+          email: "",
+          user_id: "",
+          iconClassLight: "ortur-icon-facebook-light",
+          iconClass: "ortur-icon-facebook",
         },
-        {
-          value: "newest",
-          label: "The newest",
+        github: {
+          catalog: "github",
+          user_id: "",
+          switch1: false,
+          username: "",
+          email: "",
+          iconClassLight: "ortur-icon-github-light",
+          iconClass: "ortur-icon-github",
         },
-        // {
-        //   value: "folowing",
-        //   label: "Only folowing",
+        google: {
+          catalog: "google",
+          user_id: "",
+          switch1: false,
+          username: "",
+          email: "",
+          iconClassLight: "ortur-icon-google-light",
+          iconClass: "ortur-icon-google",
+        },
+        // whatsApp: {
+        //   catalog: "whatsApp",
+        //   user_id: "",
+        //   switch1: false,
+        //   username: "",
+        //   email: "",
+        //   iconClassLight: "ortur-icon-whatsapp-light",
+        //   iconClass: "ortur-icon-whats-app",
         // },
-      ],
-      value: "popular",
-      load: () => {},
-      resources: [],
-      loading: false,
-      resourcesTotal: 0,
-      noMore: false,
-      bannerImages: [],
-      likeList: [],
-      collectedList: [],
-      openCollectedOption: false,
-      collectionStyle: {
-        position: "absolute",
-        left: "0px",
-        top: "0px",
+        twitter: {
+          catalog: "twitter",
+          user_id: "",
+          switch1: false,
+          username: "",
+          email: "",
+          iconClassLight: "ortur-icon-twitter-light",
+          iconClass: "ortur-icon-twitter",
+        },
+        tiktok: {
+          catalog: "tiktok",
+          user_id: "",
+          switch1: false,
+          username: "",
+          email: "",
+          iconClassLight: "ortur-icon-tiktok-light",
+          iconClass: "ortur-icon-tiktok",
+        },
       },
-      folders: [],
-      prepareCollectedResId: 0,
+
+      dialogFollowersVisible: false,
+      activeTab: "first",
+      headers: {
+        Authorization: getToken(),
+      },
     };
   },
-  computed: {
-    ...mapGetters(["userInfo"]),
+  mounted() {
+    // getUserInfo().then((e) => {
+    //   this.third_user = e.data.data.third_user;
+    // });
   },
 
-  watch: {
-    "$store.getters.isLogin": function () {
-      if (this.$store.getters.isLogin) {
-        getLikelist({
-          userId: this.userInfo.user_id,
-        })
-          .then((res) => {
-            this.likeList = res.data.rows;
-          })
-          .then(() => {
-            getCollectionResourceList({
-              userId: this.userInfo.user_id,
-            }).then((res) => {
-              for (let i = 0; i < res.data.rows.length; i++) {
-                const element = res.data.rows[i];
-                this.collectedList.push(element.id);
-              }
-            });
-          });
-      } else {
-        this.$router.go(0);
-      }
-    },
-  },
-  mounted() {
-    this.getResourceList();
-    this.load = throttle(() => {
-      // 距离底部200px时加载一次
-      let bottomOfWindow =
-        document.documentElement.offsetHeight -
-          document.documentElement.scrollTop -
-          window.innerHeight <=
-        200;
-      if (bottomOfWindow && !this.loading && !this.noMore) {
-        this.pagination.pageNum++;
-        if (
-          this.pagination.pageNum <=
-          Math.ceil(this.resourcesTotal / this.pagination.pageSize)
-        ) {
-          this.getResourceList();
-        }
-      }
-    }, 1000);
-    window.addEventListener("scroll", this.load);
-    getBanner()
-      .then((res) => {
-        this.bannerImages = res.data.data;
-      })
-      .then(() => {
-        this.$store.dispatch("user/getMyLikesList", {
-          userId: this.userInfo.user_id,
-        });
-        this.$store.dispatch("user/getMyCollectionList", {
-          userId: this.userInfo.user_id,
-        });
-      });
-  },
-  beforeDestroy() {
-    window.removeEventListener("scroll", this.load);
+  computed: {
+    ...mapState(["userInfo"]),
   },
   methods: {
-    comfirmLike(id) {
-      return this.$store.getters.myLikesList.some((item) => {
-        return item.id === id;
-      });
+    thirdPartyLogin(from) {
+      let redirectUrl = window.location.href.split("?")[0];
+      window.location.href = `https://sso.leadiffer.com/oauth/thirdParty?from=${from}&redirect_url=${redirectUrl}`;
     },
-    comfirmCollection(id) {
-      return this.$store.getters.myCollectionslist.some((item) => {
-        return item.id === id;
-      });
-    },
-    getResourceList() {
-      getResourceList({ ...this.pagination, sort: this.value })
-        .then((res) => {
-          console.log("getResourceList:", res);
-          let resource = res.data.rows;
-          this.resources.push(...resource);
-          this.resourcesTotal = res.data.total;
-          this.loading = false;
-        })
-        .catch(() => {
-          this.loading = false;
-          this.noMore = true;
-        });
-    },
-    openCollection(id, left, top) {
-      this.openCollectedOption = true;
-      this.collectionStyle.left = left + "px";
-      this.collectionStyle.top = top + "px";
-      this.prepareCollectedResId = id;
-      getCollectionList({
-        userId: this.$store.getters.userInfo.user_id,
-      }).then((res) => {
-        this.folders = res.data.data;
-      });
-    },
-    deleteCollection(id) {
-      this.openCollectedOption = false;
-      deleteCollectionResource({
-        userId: this.$store.getters.userInfo.user_id,
-        resourceId: id,
-      }).then(() => {
-        this.$message({
-          message: "cancel collected successfully",
-          type: "success",
-        });
-        this.$store.commit(
-          "user/SET_COLLECTIONSLIST",
-          this.$store.getters.myCollectionslist.filter((item) => {
-            return item.id !== this.prepareCollectedResId;
+    handleSwitch1Change(willBind, item) {
+      if (willBind) {
+        sessionStorage.setItem("isBinding", 1);
+        console.log(sessionStorage.getItem("isBinding"));
+        this.thirdPartyLogin(item.catalog);
+        // item.switch1 = false;
+      } else {
+        unbindThird({ userId: item.user_id, catalog: item.catalog })
+          .then(() => {
+            this.$message({
+              message: this.$t("unbindThird successfully"),
+              type: "success",
+            });
           })
-        );
+          .catch(() => {
+            this.$message("unbindThird fail");
+            item.switch1 = true;
+          });
+      }
+    },
+    handleChangeNameClick() {
+      this.isChangeNameVisible = true;
+    },
+    handleChangeEmailClick() {
+      this.ChangePasswordOrEmail = true;
+      this.isChangePasswordVisible = true;
+    },
+    handleChangePasswordClick() {
+      this.ChangePasswordOrEmail = false;
+      this.isChangePasswordVisible = true;
+    },
+    handleFollowTapClick() {},
+    showPanel() {
+      getUserInfo().then((res) => {
+        this.third_user = res.data.data.third_user;
+        for (const item of this.third_user) {
+          if (item.catalog) {
+            this.bindingInfo[item.catalog].switch1 = true;
+            this.bindingInfo[item.catalog].user_id = item.user_id;
+            this.bindingInfo[item.catalog].email = item.email;
+            this.bindingInfo[item.catalog].username = item.username;
+            this.bindingInfo[item.catalog].catalog = item.catalog;
+          }
+        }
+        this.headers.Authorization = getToken();
+        this.dialogFollowersVisible = true;
       });
     },
-    closeCollectedOption() {
-      this.openCollectedOption = false;
+    handleBeforeImgUpload(file) {
+      const isJPG = file.type.includes("image");
+      // const isLt1M = file.size / 1024 / 1024 < 1;
+      if (!isJPG) {
+        this.$message.error(this.$t("design.onlyImg"));
+      }
+      // if (!isLt1M) {
+      //   this.$message.error("上传头像图片大小不能超过 1MB!");
+      // }
+      return isJPG;
     },
-    moveCollectedOption(folderObject) {
-      this.openCollectedOption = false;
-      addResourceToCollection({
-        resourceId: this.prepareCollectedResId,
-        collectionId: folderObject.id,
-      }).then(() => {
-        this.$message({
-          message: "move successfully",
-          type: "success",
-        });
-        this.$store.commit("user/SET_COLLECTIONSLIST", [
-          ...this.$store.getters.myCollectionslist,
-          { id: this.prepareCollectedResId },
-        ]);
+
+    handleImgUploadErr(err) {
+      //console.log(e)
+      this.$message.error(this.$t("design.uploadFail") + err);
+    },
+    handleImgUploadSuccess() {
+      this.$store.dispatch("user/getUserInfo").catch((e) => {
+        console.log(e);
       });
-    },
-    addFolder(folderName) {
-      addCollection({
-        name: folderName,
-        userId: this.$store.getters.userInfo.user_id,
-      })
-        .then(() => {
-          this.$message({
-            message: "add folder successfully",
-            type: "success",
-          });
-        })
-        .then(() => {
-          getCollectionList({
-            userId: this.$store.getters.userInfo.user_id,
-          }).then((res) => {
-            this.folders = res.data.data;
-          });
-        });
-    },
-    selectChange(value) {
-      this.value = value;
-      this.resources = [];
-      this.pagination.pageNum = 1;
-      this.getResourceList();
-    },
-    closeCollectedOptionBox() {
-      this.closeCollectedOption();
+      this.$message.success(this.$t("design.uploadSuccess"));
     },
   },
 };
 </script>
 
-<style lang="scss" scoped>
-.main {
-  /* text-align: center; */
-  /* background-color: #f5f5f5; */
-  background: #f0f3fa;
-}
-.content {
-  /* width: 1200px; */
-  width: 1440px;
-  margin: 0 auto;
-}
-.filter {
-  margin: 20px auto;
-}
-a {
-  text-decoration-line: none;
-  color: #303133;
-}
-p {
-  text-align: center;
-}
-.groups-header {
-  /* width: 1200px; */
-  width: 1440px;
-  height: 392px;
-  margin: 0 auto;
-  color: #f0f3fa;
-  position: relative;
-  img {
-    width: 100%;
-    height: 100%;
-  }
-  a {
-    position: relative;
-    .learn-more {
-      position: absolute;
-      width: 84px;
-      height: 36px;
-      background: #1a1a1a;
-      opacity: 0.3;
-      border-radius: 5px;
-      bottom: 12px;
-      right: 12px;
-      font-size: 12px;
-      font-family: Source Han Sans CN;
-      font-weight: 400;
-      color: #ffffff;
-      line-height: 36px;
-      text-align: center;
-      cursor: pointer;
+<style scoped lang="scss">
+.binding {
+  border-top: 1px solid #ccc;
+  margin-top: 20px;
+  padding-top: 20px;
+  width: 410px;
+  .bindItem {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 21px;
+    .left {
+      display: flex;
+      flex-direction: row;
+      .icon {
+        margin-right: 18px;
+        font-size: 26px;
+        width: 30px;
+        height: 26px;
+      }
+      .username {
+        margin: 0 10px;
+        color: rgb(153, 153, 153);
+      }
+      .email {
+        margin-left: 10px;
+        color: rgb(153, 153, 153);
+      }
+    }
+    .right {
     }
   }
 }
-::v-deep .el-input__inner,
-.el-input,
-.el-select {
-  font-size: 14px;
-  height: 48px;
+.followDialog {
+  ::v-deep .el-dialog {
+    width: 816px;
+    background: #ffffff;
+    border-radius: 20px;
+    .el-dialog__header {
+      padding: 10px;
+    }
+  }
+  ::v-deep .tabsContent {
+    top: -165px;
+    padding: 0 64px;
+  }
+  ::v-deep .el-dialog__body {
+    padding: 0 0 30px 0;
+  }
+  top: -115px;
 }
-::v-deep .el-input__inner:hover {
-  /* border: none; */
-}
-::v-deep .el-input__inner::before {
-  content: "\e93f";
-}
-::v-deep .el-input__inner::placeholder {
-  text-align: center;
-  color: #1a1a1a;
-  font-size: 11px;
-}
-.select-box {
-  position: relative;
-  height: 48px;
-}
-.icon-hourglass {
-  position: absolute;
-  top: 12px;
-  left: 10px;
-  z-index: 2;
-  font-size: 22px;
-}
-.select {
-  width: 160px;
-  height: 36px;
-  border-radius: 5px;
-  font-size: 12px;
-  position: absolute;
-  top: 0px;
-  left: 0px;
-}
-::v-deep .el-input__inner {
-  background: #f0f3fa;
-  text-align: center;
-}
-.select:hover {
-  /* border: 1px solid #c2c4cc; */
-}
-.option {
-  width: 150px;
-  height: 48px;
-  margin: 0 auto;
-  border-radius: 6px;
-  font-size: 14px;
-  font-family: Source Han Sans CN;
-  font-weight: 400;
+.wrapper {
+  width: 100%;
+  text-align: left;
   box-sizing: border-box;
-  text-align: center;
-  padding: 0px;
-  overflow: visible;
-  line-height: 48px;
-}
-.option:hover {
-  background: #8ab5ef;
-  color: #ffffff;
+  display: flex;
+  /* justify-content: space-around; */
 }
 
-@media only screen and (max-width: 768px) {
-  .row {
-    width: 100%;
-    display: none;
+.left {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  .upload-demo {
+    margin-top: 10px;
+    .choose {
+      font-size: 16px;
+      font-family: Source Han Sans CN;
+      font-weight: 500;
+      color: #999999;
+    }
   }
-  .main {
-    width: 100%;
+  .img {
+    margin-top: 10px;
+    width: 129px;
+    height: 129px;
+    border-radius: 50%;
   }
-  .content {
-    width: 100%;
+}
+.right {
+  .top {
   }
-  .el-row {
-    width: 100%;
+  .center {
+    margin-top: 62px;
+  }
+  .bottom {
+    margin-top: 62px;
+  }
+  .title {
+    font-size: 16px;
+    font-family: Source Han Sans CN;
+    font-weight: 400;
+    color: #999999;
+  }
+  .name {
+    font-size: 16px;
+    font-family: Source Han Sans CN;
+    font-weight: 400;
+    color: #1a1a1a;
+    margin-top: 15px;
+  }
+  .action {
+    font-size: 16px;
+    font-family: Source Han Sans CN;
+    font-weight: 400;
+    color: #1e78f0;
+    margin-top: 15px;
+    cursor: pointer;
   }
 }
 </style>

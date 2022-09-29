@@ -199,6 +199,16 @@ export default {
 
         return;
       }
+      if (item.name.length > 31) {
+        this.$message({
+          message: "The name cannot exceed 32 characters",
+          type: "error",
+        });
+        item.isEdit = true;
+        this.isEdit = true;
+
+        return;
+      }
       this.onFolderAdd(item).then(() => {
         item.isEdit = false;
         this.isEdit = false;
