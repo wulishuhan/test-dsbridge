@@ -417,8 +417,9 @@ export default {
       this.previewDialogVisible = false;
     },
     resetForm() {
-      this.resourceForm = this.$options.data().resourceForm;
-      this.tutorialForm = this.$options.data().tutorialForm;
+      this.$refs["resourceForm"].resetFields();
+      console.log(this.$refs["tutorialForm"]);
+      this.tutorialForm = [];
     },
     handleCloseTag(tag) {
       this.resourceForm.tags.splice(this.resourceForm.tags.indexOf(tag), 1);
