@@ -244,7 +244,10 @@ export default {
       } else {
         unbindThird({ userId: item.user_id, catalog: item.catalog })
           .then(() => {
-            this.$message("unbindThird successfully");
+            this.$message({
+              message: this.$t("unbindThird successfully"),
+              type: "success",
+            });
           })
           .catch(() => {
             this.$message("unbindThird fail");
