@@ -1354,11 +1354,11 @@ export default {
   .el-scrollbar {
     .el-select-dropdown__wrap {
       .el-select-dropdown__item.selected {
-        background: #409eff !important;
+        background: #8ab5ef !important;
         color: #fff !important;
       }
       .el-select-dropdown__item.hover {
-        background: #409eff !important;
+        background: #8ab5ef !important;
         color: #fff !important;
       }
     }

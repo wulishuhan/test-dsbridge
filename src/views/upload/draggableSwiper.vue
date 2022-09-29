@@ -1,6 +1,11 @@
 <template>
   <div v-swiper:[swiperName]="swiperOptions">
-    <draggable class="swiper-wrapper" handle=".handle" v-model="itemList">
+    <draggable
+      class="swiper-wrapper"
+      handle=".handle"
+      v-model="itemList"
+      :style="itemList.length > 4 ? 'padding: 0px 0px 16px' : ''"
+    >
       <div
         class="swiper-slide"
         v-for="(item, itemKey) in itemList"
