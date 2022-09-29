@@ -13,6 +13,7 @@
         class="more-image"
         :src="item.image"
         @click="toMore(item.id)"
+        fit="contain"
       ></el-image>
     </div>
   </div>

@@ -151,3 +151,19 @@ export function unbindThird(data) {
     data,
   });
 }
+
+export function activeUserSendEmail(data) {
+  return request({
+    url: "/auth/user/active",
+    method: "post",
+    data,
+  });
+}
+
+export function activeAccount(data) {
+  return request({
+    url: "/auth/user/active",
+    method: "post",
+    data,
+  });
+}

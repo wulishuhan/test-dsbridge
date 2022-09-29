@@ -4,13 +4,9 @@
       width="396px"
       :visible.sync="dialogVisible"
       :before-close="handleClose"
-      :title="
-        !ChangePasswordOrEmail
-          ? $t('setting.changePassword')
-          : $t('setting.changeEmail')
-      "
+      :title="title"
     >
-      <div v-show="!isLogin">
+      <div v-show="!isLogin && !forgetPasswordVisible">
         <el-form :model="registerForm" :rules="rules" ref="registerForm">
           <el-form-item prop="currentPassword">
             <el-input
@@ -39,9 +35,9 @@
           </el-form-item>
           <el-form-item>
             <div class="submit">
-              <!-- <div class="forget" @click="handleClickForget">
+              <div class="forget" @click="handleClickForget">
                 {{ $t("setting.forgetPassword") }}
-              </div> -->
+              </div>
               <div></div>
               <el-button @click="changePassword('registerForm')">{{
                 $t("setting.submit")
@@ -50,7 +46,7 @@
           </el-form-item>
         </el-form>
       </div>
-      <div v-show="isLogin">
+      <div v-show="isLogin && !forgetPasswordVisible">
         <el-form :model="changeEmailForm" ref="changeEmailForm" :rules="rules">
           <!-- <el-form-item>
             <span style="color: #999">
@@ -87,6 +83,13 @@
           </el-form-item>
         </el-form>
       </div>
+      <div v-if="forgetPasswordVisible">
+        <h2 style="text-align: center">Change Password</h2>
+        <span>
+          Change Password We' II sent an email to {{ email }} with instructions
+          to reset your password!
+        </span>
+      </div>
       <el-dialog width="396px" :visible.sync="innerVisible" append-to-body>
         <div class="loading-box" v-loading="loading"></div>
       </el-dialog>
@@ -106,6 +109,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    email: {
+      type: String,
+      default: "",
+    },
   },
   computed: {
     dialogVisible: function () {
@@ -113,6 +120,14 @@ export default {
     },
     isLogin: function () {
       return this.ChangePasswordOrEmail;
+    },
+    title: function () {
+      if (this.forgetPasswordVisible) {
+        return "";
+      }
+      return !this.ChangePasswordOrEmail
+        ? this.$t("setting.changePassword")
+        : this.$t("setting.changeEmail");
     },
   },
   data() {
@@ -136,6 +151,7 @@ export default {
       }
     };
     return {
+      forgetPasswordVisible: false,
       changeEmailFormTip: "",
       registerFormTip: "",
       changeEmailForm: {
@@ -205,7 +221,10 @@ export default {
   },
   methods: {
     handleClickForget() {
-      this.$emit("handleClickForget");
+      this.forgetPasswordVisible = true;
+      // 此处发送邮件的请求
+      // this.$emit("handleClickForget");
+      console.log("email send ");
     },
     handleEnter() {
       this.login("changeEmailForm");
@@ -255,6 +274,7 @@ export default {
       });
     },
     handleClose() {
+      this.forgetPasswordVisible = false;
       this.$emit("handleClose");
     },
   },

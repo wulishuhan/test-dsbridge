@@ -28,6 +28,7 @@
         :key="item.id"
         :src="item.image"
         @click="toMore(item.id)"
+        :fit="'contain'"
       ></el-image>
     </div>
   </div>
@@ -195,6 +196,7 @@ export default {
       height: 59px;
       border-radius: 5px;
       cursor: pointer;
+      background-color: #e8ebf4;
     }
   }
 }
