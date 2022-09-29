@@ -478,7 +478,6 @@ export default {
         name: response.name,
         size: response.size,
       };
-      console.log("上传成功", this.currentEditKeyList);
       this.tutorialForm[this.currentEditKeyList[1]].images.push(imgInfo);
     },
     onTutorialEditSuccess(response) {

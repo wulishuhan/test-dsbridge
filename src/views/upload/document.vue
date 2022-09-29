@@ -277,6 +277,7 @@ export default {
     handleSourceSuccess(response, file) {
       file.upStatus = 0;
       file.url = response.url;
+      file.thumbnail = response.thumbnail;
       file.percent = 100;
       file.id = response.id;
       file.percentage = 0;

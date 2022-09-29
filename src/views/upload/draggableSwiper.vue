@@ -198,6 +198,7 @@ export default {
     },
     handleRequest({ file, onProgress, onSuccess }) {
       var data;
+      var tmpFile;
       getResouceUploadS3Url({
         name: file.name,
         size: file.size,
@@ -216,11 +217,97 @@ export default {
                 onProgress(progressEvent);
               },
             });
+          } else {
+            return Promise.reject("error");
           }
         })
         .then(() => {
+          //生成缩略图
+          console.log("开始生成缩略图", file, this.genThumb(file));
+          return this.genThumb(file);
+        })
+        .then((thumbFile) => {
+          console.log("捕获文件", thumbFile);
+          tmpFile = thumbFile;
+          //上传缩略图
+          return getResouceUploadS3Url({
+            name: thumbFile.name,
+            size: thumbFile.size,
+            type: thumbFile.type,
+          });
+        })
+        .then((res) => {
+          if (res.data.code == 0) {
+            let presignUrl = res.data.data.presignUrl;
+            data.thumbnail = res.data.data.url;
+            return axios.put(presignUrl, tmpFile, {
+              headers: {
+                "Content-Type": tmpFile.type,
+              },
+            });
+          } else {
+            return Promise.reject("error");
+          }
+        })
+        .then(() => {
+          // console.log("上传成功", data);
           onSuccess(data);
+        })
+        .catch((e) => {
+          console.log("error:", e);
         });
+    },
+    genThumb(srcFile) {
+      //
+      return new Promise((resolve, reject) => {
+        //判断文件类型，如果是图片，则生成截图
+        if (srcFile.type.indexOf("image") < 0) {
+          reject("error");
+          return;
+        }
+        const image = new Image();
+        image.src = URL.createObjectURL(srcFile);
+        image.setAttribute("crossOrigin", "Anonymous");
+
+        image.onload = () => {
+          var canvas = document.createElement("canvas");
+          var ctx = canvas.getContext("2d");
+          var maxw = 400;
+          var maxh = 300;
+
+          var cw = image.width;
+          var ch = image.height;
+          var w = image.width;
+          var h = image.height;
+          canvas.width = w;
+          canvas.height = h;
+          if (cw > maxw && cw > ch) {
+            w = maxw;
+            h = (maxw * ch) / cw;
+            canvas.width = w;
+            canvas.height = h;
+          }
+          if (ch > maxh && ch > cw) {
+            h = maxh;
+            w = (maxh * cw) / ch;
+            canvas.width = w;
+            canvas.height = h;
+          }
+          ctx.drawImage(image, 0, 0, w, h);
+          try {
+            canvas.toBlob((blob) => {
+              var thumbFile = new File([blob], srcFile.name, {
+                type: srcFile.type,
+              });
+
+              resolve(thumbFile);
+              //上传缩略图
+            }, srcFile.type);
+          } catch (e) {
+            reject(e);
+          }
+        };
+      });
     },
     beforeUpload(file) {
       let extension = file.name
@@ -248,7 +335,7 @@ export default {
       }
       if (!accept) {
         this.$message({
-          message: "Supported Files:" + this.acceptType,
+          message: "Supported Files:" + this.config.pictureAcceptType,
           type: "warning",
         });
         return false;
