@@ -3,11 +3,13 @@
     <draggable
       class="swiper-wrapper"
       handle=".handle"
+      draggable=".swiper-slide.draggable"
       v-model="itemList"
+      :move="onMoveCallback"
       :style="itemList.length > 4 ? 'padding: 0px 0px 16px' : ''"
     >
       <div
-        class="swiper-slide"
+        class="swiper-slide draggable"
         v-for="(item, itemKey) in itemList"
         :key="itemKey"
       >
@@ -161,6 +163,9 @@ export default {
     }),
   },
   methods: {
+    onMoveCallback() {
+      //   console.log("移动事件", evt, originalEvent);
+    },
     setCurrentKeyList(keyList) {
       this.$emit("update:currentKeyList", keyList);
     },
