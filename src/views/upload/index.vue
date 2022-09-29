@@ -88,18 +88,7 @@
         </div>
       </el-form-item>
       <el-form-item :label="$t('upload.license')" prop="license">
-        <el-select
-          v-model="resourceForm.license"
-          placeholder="Select license"
-          style="width: 100%"
-        >
-          <el-option
-            v-for="(licenseItem, licenseKey) in licenseSelectList"
-            :label="licenseItem.label"
-            :value="licenseItem.value"
-            :key="licenseKey"
-          ></el-option>
-        </el-select>
+        <license-select v-model="resourceForm.license"></license-select>
       </el-form-item>
       <el-form-item :label="$t('upload.description')" prop="description">
         <el-input
@@ -220,6 +209,7 @@ import {
 
 import draggableSwiper from "@/views/upload/draggableSwiper";
 import document from "@/views/upload/document";
+import licenseSelect from "@/views/upload/licenseSelect";
 import { throttle } from "@/utils/common";
 export default {
   // eslint-disable-next-line
@@ -229,6 +219,7 @@ export default {
     Preview,
     draggableSwiper,
     document,
+    licenseSelect,
   },
   data() {
     return {
@@ -297,100 +288,6 @@ export default {
         license: "GNU - LGPL",
         description: "",
       },
-
-      licenseSelectList: [
-        {
-          label: "Creative Commons - Attribution",
-          value: "Creative Commons - Attribution",
-          url: "https://creativecommons.org/licenses/by/4.0/",
-          icon: [
-            "/license-img/Creative Commons.png",
-            "/license-img/Attribution.png",
-          ],
-        },
-        {
-          label: "Creative Commons - Attribution - Share Alike",
-          value: "Creative Commons - Attribution - Share Alike",
-          url: "https://creativecommons.org/licenses/by-sa/4.0/",
-          icon: [
-            "/license-img/Creative Commons.png",
-            "/license-img/Attribution.png",
-            "/license-img/Share Alike.png",
-          ],
-        },
-        {
-          label: "Creative Commons - Attribution - No Derivatives",
-          value: "Creative Commons - Attribution - No Derivatives",
-          url: "https://creativecommons.org/licenses/by-nd/4.0/",
-          icon: [
-            "/license-img/Creative Commons.png",
-            "/license-img/Attribution.png",
-            "/license-img/No Derivatives.png",
-          ],
-        },
-        {
-          label: "Creative Commons - Attribution - Non-Commercial",
-          value: "Creative Commons - Attribution - Non-Commercial",
-          url: "https://creativecommons.org/licenses/by-nc/4.0/",
-          icon: [
-            "/license-img/Creative Commons.png",
-            "/license-img/Attribution.png",
-            "/license-img/Non-Commercial.png",
-          ],
-        },
-        {
-          label:
-            "Creative Commons - Attribution - Non-Commercial - Share Alike",
-          value:
-            "Creative Commons - Attribution - Non-Commercial - Share Alike",
-          url: "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-          icon: [
-            "/license-img/Creative Commons.png",
-            "/license-img/Attribution.png",
-            "/license-img/Non-Commercial.png",
-            "/license-img/Share Alike.png",
-          ],
-        },
-        {
-          label:
-            "Creative Commons - Attribution - Non-Commercial - No Derivatives ",
-          value:
-            "Creative Commons - Attribution - Non-Commercial - No Derivatives ",
-          url: "https://creativecommons.org/licenses/by-nc-nd/4.0/",
-          icon: [
-            "/license-img/Creative Commons.png",
-            "/license-img/Attribution.png",
-            "/license-img/Non-Commercial.png",
-            "/license-img/No Derivatives.png",
-          ],
-        },
-        {
-          label: "Creative Commons - Public Domain Dedication",
-          value: "Creative Commons - Public Domain Dedication",
-          url: "https://creativecommons.org/share-your-work/public-domain/cc0/",
-          icon: [
-            "/license-img/Creative Commons - Public Domain Dedication.png",
-          ],
-        },
-        {
-          label: "GNU - GPL",
-          value: "GNU - GPL",
-          url: "https://www.gnu.org/licenses/gpl-3.0.html",
-          icon: ["/license-img/GNU - GPL.png"],
-        },
-        {
-          label: "GNU - LGPL",
-          value: "GNU - LGPL",
-          url: "https://www.gnu.org/licenses/lgpl-3.0.html",
-          icon: ["/license-img/GNU - LGPL.png"],
-        },
-        {
-          label: "BSD License",
-          value: "BSD License",
-          url: "https://opensource.org/licenses/BSD-3-Clause",
-          icon: ["/license-img/BSD.png"],
-        },
-      ],
       tutorialFormRules: {
         title: [
           { required: true, message: this.$t("upload.titleNotEmpty") },
@@ -442,9 +339,6 @@ export default {
         tutorials: this.tutorialForm,
         editDatetime: this.$t("upload.editOn") + this.$d(new Date(), "short"),
       };
-    },
-    baseApi() {
-      return process.env.VUE_APP_BASE_API;
     },
   },
   created() {
@@ -510,17 +404,6 @@ export default {
     }, 500);
   },
   methods: {
-    drop(event) {
-      event.preventDefault();
-    },
-    allowDrop(event, swiperArrow, curIndex) {
-      if (/^tutorial/.test(swiperArrow)) {
-        this._throttle_tutorial(swiperArrow, curIndex);
-      } else {
-        this._throttle(swiperArrow);
-      }
-      event.preventDefault();
-    },
     handleSelect() {
       this.$refs["autoInput"].focus();
     },
@@ -559,45 +442,6 @@ export default {
       this.inputValue = "";
     },
 
-    formatFileSize(filesize, rad = 2) {
-      var units = "Byte";
-      if (filesize / 1024 > 1) {
-        filesize = filesize / 1024;
-        units = "KB";
-      }
-      if (filesize / 1024 > 1) {
-        filesize = filesize / 1024;
-        units = "MB";
-      }
-
-      if (filesize / 1024 > 1) {
-        filesize = filesize / 1024;
-        units = "GB";
-      }
-      return filesize.toFixed(rad) + units;
-    },
-    handleSourceProgress(event, file) {
-      file.percent = parseInt(((event.loaded / event.total) * 100).toFixed(0));
-    },
-    handleSourceSuccess(response, file) {
-      file.upStatus = 0;
-      file.url = response.url;
-      file.percent = 100;
-      file.id = response.id;
-      file.percentage = 0;
-      console.log(this.resourceForm.files);
-    },
-    handleSourceError(err, file) {
-      file.upStatus = 2;
-    },
-    handleRemoveSource(sourceIndex) {
-      this.resourceForm.files.splice(sourceIndex, 1);
-    },
-    //中止上传
-    handleabortUpload(sourceIndex) {
-      this.$refs.uploadFile.abort(this.resourceForm.files[sourceIndex].file);
-      this.resourceForm.files.splice(sourceIndex, 1);
-    },
     handleRemoveCover(removeKey) {
       this.resourceForm.images.splice(removeKey, 1);
     },
@@ -679,13 +523,7 @@ export default {
         this.tutorialForm = [];
       }
     },
-    callback() {},
-    format(percentage) {
-      return `${percentage}%`;
-    },
-    formatStatus(percentage) {
-      return percentage === 100 ? "success" : "exception";
-    },
+
     handleSave() {
       this.$refs["resourceForm"].validate((valid) => {
         const tutorialFormList = this.$refs["tutorialForm"] ?? [];
@@ -932,19 +770,5 @@ export default {
   width: 90px;
   margin-left: 10px;
   vertical-align: bottom;
-}
-.el-select-dropdown {
-  .el-scrollbar {
-    .el-select-dropdown__wrap {
-      .el-select-dropdown__item.selected {
-        background: #8ab5ef !important;
-        color: #fff !important;
-      }
-      .el-select-dropdown__item.hover {
-        background: #8ab5ef !important;
-        color: #fff !important;
-      }
-    }
-  }
 }
 </style>

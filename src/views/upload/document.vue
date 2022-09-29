@@ -280,7 +280,6 @@ export default {
       file.percent = 100;
       file.id = response.id;
       file.percentage = 0;
-      console.log(this.resourceForm.files);
     },
     handleSourceError(err, file) {
       file.upStatus = 2;
