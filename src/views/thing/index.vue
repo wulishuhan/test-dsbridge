@@ -795,14 +795,20 @@ export default {
     width: 184px;
     .swiper-slide {
       width: 184px;
+      background: #e8ebf4;
       img {
         height: 112px;
         width: 100%;
         cursor: pointer;
         object-fit: contain;
+        border: 1px solid #CCCCCC;
+        border-radius: 4px;
       }
     }
   }
+  ::v-deep .swiper-scrollbar{
+      display: none;
+    }
   .swiper-container-button {
     text-align: center;
     width: 100%;
@@ -1054,6 +1060,8 @@ a {
   /* width: 805px; */
   width: 807px;
   height: 496px;
+  border-radius: 10px;
+  background: #e8ebf4;
   img {
     width: 100%;
     height: 100%;
