@@ -18,7 +18,7 @@ export default {
   },
   data() {
     return {
-      license: "Creative Commons - Attribution",
+      license: "",
       licenseSelectList: [
         {
           label: "Creative Commons - Attribution",
@@ -114,13 +114,15 @@ export default {
       ],
     };
   },
-  created() {
+  mounted() {
     this.license = this.data;
   },
   watch: {
     license: function (val) {
-      console.log("变更数据");
       this.$emit("changeData", val);
+    },
+    data: function (val) {
+      this.license = val;
     },
   },
   props: {

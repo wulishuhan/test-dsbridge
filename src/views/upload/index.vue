@@ -285,7 +285,7 @@ export default {
         files: [],
         title: "",
         tags: [],
-        license: "GNU - LGPL",
+        license: "",
         description: "",
       },
       tutorialFormRules: {
