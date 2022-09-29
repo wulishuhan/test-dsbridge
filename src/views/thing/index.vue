@@ -1109,7 +1109,9 @@ a {
   padding-left: 0px;
   padding-right: 0px;
 }
-
+::v-deep .el-image-viewer__canvas{
+  border-radius: 16px;
+}
 ::v-deep .comment-wrapper {
   width: 100%;
 }

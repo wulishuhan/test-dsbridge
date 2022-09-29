@@ -73,7 +73,11 @@
                 >
                   <div class="left">
                     <span
-                      v-if="item.switch1 && item.catalog !== 'tiktok'"
+                      v-if="
+                        item.switch1 &&
+                        item.catalog !== 'tiktok' &&
+                        item.catalog !== 'google'
+                      "
                       class="icon"
                       :class="item.iconClassLight"
                     ></span>
@@ -82,6 +86,12 @@
                       class="ortur-icon-tiktok-light icon"
                       ><span class="path1"></span><span class="path2"></span
                       ><span class="path3"></span
+                    ></span>
+                    <span
+                      v-if="item.switch1 && item.catalog == 'google'"
+                      class="ortur-icon-google-light icon"
+                      ><span class="path1"></span><span class="path2"></span
+                      ><span class="path3"></span><span class="path4"></span
                     ></span>
                     <span
                       v-else-if="!item.switch1"
