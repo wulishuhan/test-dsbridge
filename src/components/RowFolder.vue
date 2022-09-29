@@ -45,22 +45,28 @@
               <div class="noImg">{{ $t("design.emptyCollection") }}</div>
             </div>
           </div>
-          <div class="title" v-if="!item.isEdit" @click="handleEdit(item)">
-            {{ item.name }}
-          </div>
-          <input
-            ref="folderInputs"
-            @click.stop="return false;"
-            @keyup.enter="
-              item.isEdit = false;
-              isEdit = false;
-            "
-            @blur="isRename ? handleRenamed(item) : handleEdited(item)"
-            class="editInput"
-            type="text"
-            v-model="item.name"
-            v-else
-          />
+          <el-tooltip effect="light" placement="bottom">
+            <div slot="content">
+              {{ item.name }}
+            </div>
+            <!-- <el-tooltip class="item" effect="dark" placement="bottom"> -->
+            <div class="title" v-if="!item.isEdit" @click="handleEdit(item)">
+              {{ item.name }}
+            </div>
+            <input
+              ref="folderInputs"
+              @click.stop="return false;"
+              @keyup.enter="
+                item.isEdit = false;
+                isEdit = false;
+              "
+              @blur="isRename ? handleRenamed(item) : handleEdited(item)"
+              class="editInput"
+              type="text"
+              v-model="item.name"
+              v-else
+            />
+          </el-tooltip>
         </div>
       </div>
       <div class="plus" @click="addFolder" v-show="isYourAccount && !isEdit">
@@ -193,16 +199,6 @@ export default {
 
         return;
       }
-      if (item.name.length > 31) {
-        this.$message({
-          message: "The name cannot exceed 32 characters",
-          type: "fail",
-        });
-        item.isEdit = true;
-        this.isEdit = true;
-
-        return;
-      }
       this.onFolderAdd(item).then(() => {
         item.isEdit = false;
         this.isEdit = false;
@@ -217,6 +213,16 @@ export default {
         });
         item.isEdit = true;
         this.isEdit = true;
+        return;
+      }
+      if (item.name.length > 31) {
+        this.$message({
+          message: "The name cannot exceed 32 characters",
+          type: "error",
+        });
+        item.isEdit = true;
+        this.isEdit = true;
+
         return;
       }
       renameCollection(item).then(() => {
