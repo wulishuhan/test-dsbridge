@@ -275,7 +275,9 @@
   </div>
 </template>
 <script>
-import { bindThird, activeUserSendEmail } from "@/api/user";
+/* eslint-disable */
+import { bindThird, activeUserSendEmail, openRegister } from "@/api/user";
+import { broserInfo } from "@/utils/navigator.js";
 export default {
   props: {
     loadLoginDialog: {
@@ -459,6 +461,7 @@ export default {
         userId: "",
         catalog: "",
         email: "",
+        name: "",
       },
       verifyEmailDialogVisible: false,
     };
@@ -466,8 +469,16 @@ export default {
   methods: {
     thirdEmailBlur() {
       this.thirdPartyInfo.email = this.registerForm.email;
+      let params = {
+        catalog: this.thirdPartyInfo.catalog,
+        client_subtype: broserInfo(),
+        client_type: "web",
+        email: this.registerForm.email,
+        id: this.thirdPartyInfo.userId,
+        name: this.registerForm.nickname,
+      };
       this.$store
-        .dispatch("user/openLogin", this.thirdPartyInfo)
+        .dispatch("user/openLogin", params)
         .then(() => {
           this.$router.push(this.$route.path + "#");
         })
@@ -505,7 +516,7 @@ export default {
               // this.$message.error(error.msg);
               // console.log("err", error);
               if (error.data.code === 1023) {
-                this.sendEmail();
+                this.sendEmail(this.loginForm.email);
                 this.verifyEmailDialogVisible = true;
               }
               this.loginFormTipCode = error.code;
@@ -541,7 +552,7 @@ export default {
             .then((res) => {
               if (res.code == 0) {
                 this.verifyEmailDialogVisible = true;
-                this.sendEmail();
+                this.sendEmail(this.registerForm.email);
                 // this.handleClose();
               }
             })
@@ -568,31 +579,24 @@ export default {
               (date.getMonth() + 1) +
               date.getDate();
           }
-          this.$store
-            .dispatch("user/register", {
-              auto_login: true,
-              client_subtype: "Windows",
-              client_type: "pc",
-              ...this.registerForm,
-            })
-            .then((res) => {
-              if (res.code == 0) {
-                bindThird(this.thirdPartyInfo)
-                  .then((res) => {
-                    console.log("bindThird successfully", res);
-                    this.$router.push(this.$route.path + "#");
-                    this.handleClose();
-                  })
-                  .catch((err) => {
-                    console.log(err);
-                  });
-              }
-            })
-            .catch((e) => {
-              this.thirdPartyFormTip = e.msg;
-              this.$refs.thirdPartyRegisterForm.validateField("email");
-              console.log(e);
-            });
+          openRegister({
+            client_subtype: broserInfo(),
+            client_type: "web",
+            email: this.registerForm.email,
+            nickname: this.thirdPartyInfo.name,
+            openUserId: this.thirdPartyInfo.userId,
+            password: this.registerForm.password,
+            username: this.registerForm.email,
+          }).then((res) => {
+            console.log("open register", res);
+            if (res.data.code === 0) {
+              this.$store.commit("user/SET_LOGININFO", res.data.data);
+              this.handleClose();
+            }
+            if (res.data.code === 1024) {
+              this.$message.error("Please do not re-register");
+            }
+          });
         } else {
           return false;
         }
@@ -609,12 +613,13 @@ export default {
     },
     handleOpen() {
       if (this.isThirdPartyRegisterForm) {
-        let { code, from, email } = this.$route.query;
+        let { code, from, email, name } = this.$route.query;
         if (email === "null") {
           email = "";
         }
         this.thirdPartyInfo.userId = code;
         this.thirdPartyInfo.catalog = from;
+        this.registerForm.nickname = name;
         this.thirdPartyInfo.email = email;
         this.registerForm.email = email;
         this.registerForm.username = email;
@@ -624,7 +629,7 @@ export default {
       sessionStorage.setItem("isBinding", 2);
 
       let redirectUrl = window.location.href.split("?")[0];
-      window.location.href = `https://sso.leadiffer.com/oauth/thirdParty?from=${from}&redirect_url=${redirectUrl}`;
+      window.location.href = `https://test.leadiffer.com/oauth/thirdParty?from=${from}&redirect_url=${redirectUrl}`;
     },
     enter(val) {
       this.activeIcon = val;
@@ -632,9 +637,9 @@ export default {
     leave() {
       this.activeIcon = "";
     },
-    sendEmail() {
+    sendEmail(email) {
       activeUserSendEmail({
-        email: this.registerForm.email,
+        email: email,
       }).then((res) => {
         console.log(res);
         this.$message.success("send email successfully");

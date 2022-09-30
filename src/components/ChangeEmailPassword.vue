@@ -98,6 +98,7 @@
 </template>
 <script>
 import { changePassword, changeEmail } from "@/api/setting.js";
+import { resetPasswordSendEmail } from "@/api/user.js";
 export default {
   name: "ChangePassword",
   props: {
@@ -224,6 +225,7 @@ export default {
       this.forgetPasswordVisible = true;
       // 此处发送邮件的请求
       // this.$emit("handleClickForget");
+      resetPasswordSendEmail({ email: this.email });
       console.log("email send ");
     },
     handleEnter() {

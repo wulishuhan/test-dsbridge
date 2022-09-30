@@ -147,7 +147,7 @@ import Login from "@/components/Login";
 import settingPanel from "@/components/settingPanel";
 import { createNamespacedHelpers } from "vuex";
 import { bindThird } from "@/api/user";
-
+import { broserInfo } from "@/utils/navigator.js";
 const { mapState } = createNamespacedHelpers("user");
 export default {
   data() {
@@ -160,6 +160,7 @@ export default {
         id: "",
         catalog: "",
         email: "",
+        name: "",
       },
       openLoginInfo: 0,
     };
@@ -201,8 +202,17 @@ export default {
         this.thirdPartyInfo.id = code;
         this.thirdPartyInfo.catalog = from;
         this.thirdPartyInfo.email = email;
+
+        let params = {
+          catalog: this.thirdPartyInfo.catalog,
+          client_subtype: broserInfo(),
+          client_type: "web",
+          email: this.thirdPartyInfo.email,
+          id: this.thirdPartyInfo.id,
+          name: this.thirdPartyInfo.name,
+        };
         this.$store
-          .dispatch("user/openLogin", this.thirdPartyInfo)
+          .dispatch("user/openLogin", params)
           .then(() => {
             this.$router.push(this.$route.path + "#");
             this.handleCloseDialog();
