@@ -31,7 +31,7 @@ const routes = [
         component: () => import("@/views/upload/index"),
       },
       {
-        path: "/search/index",
+        path: "/search",
         meta: {
           title: "search",
           keepAlive: true,

@@ -95,6 +95,11 @@ export default {
       font-size: 16px;
       font-weight: 500;
       color: #1a1a1a;
+      display: inline-block;
+      max-width: 180px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
     }
     .nickname:hover {
       color: #aaa;
@@ -142,6 +147,11 @@ export default {
     color: #999;
   }
   .reply-nickname {
+    display: inline-block;
+    max-width: 180px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
     color: #1e78f0;
   }
 }

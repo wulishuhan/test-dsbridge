@@ -31,7 +31,7 @@ export default {
   methods: {
     // eslint-disable-next-line
     onBaseButtonClick(tag) {
-      // this.$router.push("/search/index?keywords=" + tag);
+      // this.$router.push("/search?keywords=" + tag);
     },
   },
 };

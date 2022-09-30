@@ -1,7 +1,7 @@
 <template>
   <el-select v-model="license" placeholder="Select license" style="width: 100%">
     <el-option
-      v-for="(licenseItem, licenseKey) in licenseSelectList"
+      v-for="(licenseItem, licenseKey) in config.licenseSelectList"
       :label="licenseItem.label"
       :value="licenseItem.value"
       :key="licenseKey"
@@ -10,6 +10,7 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   model: {
     prop: "data",
@@ -19,100 +20,12 @@ export default {
   data() {
     return {
       license: "",
-      licenseSelectList: [
-        {
-          label: "Creative Commons - Attribution",
-          value: "Creative Commons - Attribution",
-          url: "https://creativecommons.org/licenses/by/4.0/",
-          icon: [
-            "/license-img/Creative Commons.png",
-            "/license-img/Attribution.png",
-          ],
-        },
-        {
-          label: "Creative Commons - Attribution - Share Alike",
-          value: "Creative Commons - Attribution - Share Alike",
-          url: "https://creativecommons.org/licenses/by-sa/4.0/",
-          icon: [
-            "/license-img/Creative Commons.png",
-            "/license-img/Attribution.png",
-            "/license-img/Share Alike.png",
-          ],
-        },
-        {
-          label: "Creative Commons - Attribution - No Derivatives",
-          value: "Creative Commons - Attribution - No Derivatives",
-          url: "https://creativecommons.org/licenses/by-nd/4.0/",
-          icon: [
-            "/license-img/Creative Commons.png",
-            "/license-img/Attribution.png",
-            "/license-img/No Derivatives.png",
-          ],
-        },
-        {
-          label: "Creative Commons - Attribution - Non-Commercial",
-          value: "Creative Commons - Attribution - Non-Commercial",
-          url: "https://creativecommons.org/licenses/by-nc/4.0/",
-          icon: [
-            "/license-img/Creative Commons.png",
-            "/license-img/Attribution.png",
-            "/license-img/Non-Commercial.png",
-          ],
-        },
-        {
-          label:
-            "Creative Commons - Attribution - Non-Commercial - Share Alike",
-          value:
-            "Creative Commons - Attribution - Non-Commercial - Share Alike",
-          url: "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-          icon: [
-            "/license-img/Creative Commons.png",
-            "/license-img/Attribution.png",
-            "/license-img/Non-Commercial.png",
-            "/license-img/Share Alike.png",
-          ],
-        },
-        {
-          label:
-            "Creative Commons - Attribution - Non-Commercial - No Derivatives ",
-          value:
-            "Creative Commons - Attribution - Non-Commercial - No Derivatives ",
-          url: "https://creativecommons.org/licenses/by-nc-nd/4.0/",
-          icon: [
-            "/license-img/Creative Commons.png",
-            "/license-img/Attribution.png",
-            "/license-img/Non-Commercial.png",
-            "/license-img/No Derivatives.png",
-          ],
-        },
-        {
-          label: "Creative Commons - Public Domain Dedication",
-          value: "Creative Commons - Public Domain Dedication",
-          url: "https://creativecommons.org/share-your-work/public-domain/cc0/",
-          icon: [
-            "/license-img/Creative Commons - Public Domain Dedication.png",
-          ],
-        },
-        {
-          label: "GNU - GPL",
-          value: "GNU - GPL",
-          url: "https://www.gnu.org/licenses/gpl-3.0.html",
-          icon: ["/license-img/GNU - GPL.png"],
-        },
-        {
-          label: "GNU - LGPL",
-          value: "GNU - LGPL",
-          url: "https://www.gnu.org/licenses/lgpl-3.0.html",
-          icon: ["/license-img/GNU - LGPL.png"],
-        },
-        {
-          label: "BSD License",
-          value: "BSD License",
-          url: "https://opensource.org/licenses/BSD-3-Clause",
-          icon: ["/license-img/BSD.png"],
-        },
-      ],
     };
+  },
+  computed: {
+    ...mapState({
+      config: (state) => state.user.config,
+    }),
   },
   mounted() {
     this.license = this.data;

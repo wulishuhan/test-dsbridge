@@ -67,7 +67,7 @@ export default {
   computed: {
     ...mapGetters(["userInfo"]),
     searchText() {
-      return 'Result for "' + this.$route.query.keywords + '"';
+      return 'Result for  "' + this.$route.query.w + '"';
     },
   },
   mounted() {},
@@ -92,9 +92,8 @@ export default {
         document.documentElement.scrollHeight -
         document.documentElement.clientHeight;
       if (rollupHeight - scrollTop <= 20) {
-        console.log("触发");
         getResourceList({
-          keywords: this.$route.query.keywords,
+          keywords: this.$route.query.w,
           pageNum: ++this.pageNum,
           pageSize: 12,
         }).then((res) => {
@@ -112,7 +111,7 @@ export default {
       this._debounce = debounce(this.handleSourceScroll, 1000);
       window.addEventListener("scroll", this._debounce);
       getResourceList({
-        keywords: this.$route.query.keywords,
+        keywords: this.$route.query.w,
         pageNum: 1,
         pageSize: this.pageSize,
       }).then((res) => {
@@ -155,9 +154,8 @@ export default {
         document.documentElement.scrollHeight -
         document.documentElement.clientHeight;
       if (rollupHeight - scrollTop <= 20) {
-        console.log("触发");
         getAuthorList({
-          keywords: this.$route.query.keywords,
+          keywords: this.$route.query.w,
           pageNum: ++this.pageNum,
           pageSize: this.pageSize,
         }).then((res) => {
@@ -172,7 +170,7 @@ export default {
       this._debounce = debounce(this.handleAuthorScroll, 1000);
       window.addEventListener("scroll", this._debounce);
       getAuthorList({
-        keywords: this.$route.query.keywords,
+        keywords: this.$route.query.w,
         pageNum: this.pageNum,
         pageSize: this.pageSize,
       }).then((res) => {

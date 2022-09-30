@@ -359,11 +359,11 @@ export default {
         this.resourceForm.images = detail.images;
         this.resourceForm.tags = detail.tags;
         this.resourceForm.license = detail.license;
-        this.tutorialForm = detail.tutorials;
+
         if (Object.keys(detail.ancestor).length > 0) {
           this.isRefSource = true;
           this.refResource = detail.ancestor;
-          for (const item of this.licenseSelectList) {
+          for (const item of this.config.licenseSelectList) {
             if (item.value == this.refResource.license) {
               this.refResource.licenseIcon = item.icon;
               break;
@@ -385,7 +385,7 @@ export default {
           creator: resData.creator,
         };
 
-        for (const item of this.licenseSelectList) {
+        for (const item of this.config.licenseSelectList) {
           if (item.value == this.refResource.license) {
             this.refResource.licenseIcon = item.icon;
             break;
@@ -417,8 +417,9 @@ export default {
       this.previewDialogVisible = false;
     },
     resetForm() {
-      this.resourceForm = this.$options.data().resourceForm;
-      this.tutorialForm = this.$options.data().tutorialForm;
+      this.$refs["resourceForm"].resetFields();
+      console.log(this.$refs["tutorialForm"]);
+      this.tutorialForm = [];
     },
     handleCloseTag(tag) {
       this.resourceForm.tags.splice(this.resourceForm.tags.indexOf(tag), 1);
@@ -477,7 +478,6 @@ export default {
         name: response.name,
         size: response.size,
       };
-      console.log("上传成功", this.currentEditKeyList);
       this.tutorialForm[this.currentEditKeyList[1]].images.push(imgInfo);
     },
     onTutorialEditSuccess(response) {

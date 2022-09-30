@@ -40,6 +40,99 @@ const getDefaultState = () => {
       sourceAcceptType: ".jpg,.png,.svg,.dxf,.gc,.nc,.jpeg",
       pictureAcceptType: ".jpg,.png,.svg,.jpeg",
       fileLimit: 20,
+      licenseSelectList: [
+        {
+          label: "Creative Commons - Attribution",
+          value: "Creative Commons - Attribution",
+          url: "https://creativecommons.org/licenses/by/4.0/",
+          icon: [
+            "/license-img/Creative Commons.png",
+            "/license-img/Attribution.png",
+          ],
+        },
+        {
+          label: "Creative Commons - Attribution - Share Alike",
+          value: "Creative Commons - Attribution - Share Alike",
+          url: "https://creativecommons.org/licenses/by-sa/4.0/",
+          icon: [
+            "/license-img/Creative Commons.png",
+            "/license-img/Attribution.png",
+            "/license-img/Share Alike.png",
+          ],
+        },
+        {
+          label: "Creative Commons - Attribution - No Derivatives",
+          value: "Creative Commons - Attribution - No Derivatives",
+          url: "https://creativecommons.org/licenses/by-nd/4.0/",
+          icon: [
+            "/license-img/Creative Commons.png",
+            "/license-img/Attribution.png",
+            "/license-img/No Derivatives.png",
+          ],
+        },
+        {
+          label: "Creative Commons - Attribution - Non-Commercial",
+          value: "Creative Commons - Attribution - Non-Commercial",
+          url: "https://creativecommons.org/licenses/by-nc/4.0/",
+          icon: [
+            "/license-img/Creative Commons.png",
+            "/license-img/Attribution.png",
+            "/license-img/Non-Commercial.png",
+          ],
+        },
+        {
+          label:
+            "Creative Commons - Attribution - Non-Commercial - Share Alike",
+          value:
+            "Creative Commons - Attribution - Non-Commercial - Share Alike",
+          url: "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+          icon: [
+            "/license-img/Creative Commons.png",
+            "/license-img/Attribution.png",
+            "/license-img/Non-Commercial.png",
+            "/license-img/Share Alike.png",
+          ],
+        },
+        {
+          label:
+            "Creative Commons - Attribution - Non-Commercial - No Derivatives ",
+          value:
+            "Creative Commons - Attribution - Non-Commercial - No Derivatives ",
+          url: "https://creativecommons.org/licenses/by-nc-nd/4.0/",
+          icon: [
+            "/license-img/Creative Commons.png",
+            "/license-img/Attribution.png",
+            "/license-img/Non-Commercial.png",
+            "/license-img/No Derivatives.png",
+          ],
+        },
+        {
+          label: "Creative Commons - Public Domain Dedication",
+          value: "Creative Commons - Public Domain Dedication",
+          url: "https://creativecommons.org/share-your-work/public-domain/cc0/",
+          icon: [
+            "/license-img/Creative Commons - Public Domain Dedication.png",
+          ],
+        },
+        {
+          label: "GNU - GPL",
+          value: "GNU - GPL",
+          url: "https://www.gnu.org/licenses/gpl-3.0.html",
+          icon: ["/license-img/GNU - GPL.png"],
+        },
+        {
+          label: "GNU - LGPL",
+          value: "GNU - LGPL",
+          url: "https://www.gnu.org/licenses/lgpl-3.0.html",
+          icon: ["/license-img/GNU - LGPL.png"],
+        },
+        {
+          label: "BSD License",
+          value: "BSD License",
+          url: "https://opensource.org/licenses/BSD-3-Clause",
+          icon: ["/license-img/BSD.png"],
+        },
+      ],
     },
   };
 };

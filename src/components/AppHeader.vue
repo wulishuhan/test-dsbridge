@@ -243,8 +243,8 @@ export default {
     search() {
       this.$router
         .push({
-          path: "/search/index",
-          query: { keywords: this.keywords },
+          path: "/search",
+          query: { w: this.keywords },
         })
         .catch((err) => {
           console.log(err);
