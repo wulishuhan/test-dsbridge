@@ -100,7 +100,11 @@
                     ></span>
                     <div class="textspan">
                       <span>{{ item.catalog }}</span>
-                      <el-tooltip effect="light" placement="bottom">
+                      <el-tooltip
+                        effect="light"
+                        placement="bottom"
+                        v-if="item.username !== ''"
+                      >
                         <div slot="content">
                           {{ item.username }}
                         </div>
@@ -109,7 +113,11 @@
                         }}</span>
                       </el-tooltip>
                       <span v-show="item.username && item.email">|</span>
-                      <el-tooltip effect="light" placement="bottom">
+                      <el-tooltip
+                        effect="light"
+                        placement="bottom"
+                        v-if="item.email !== ''"
+                      >
                         <div slot="content">
                           {{ item.email }}
                         </div>
