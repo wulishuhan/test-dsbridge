@@ -151,3 +151,35 @@ export function unbindThird(data) {
     data,
   });
 }
+
+export function activeUserSendEmail(data) {
+  return request({
+    url: "/auth/user/active",
+    method: "post",
+    data,
+  });
+}
+
+export function activeAccount(data) {
+  return request({
+    url: "/auth/user/active",
+    method: "post",
+    data,
+  });
+}
+
+export function resetPasswordSendEmail(data) {
+  return request({
+    url: "/auth/user/reset",
+    method: "post",
+    data,
+  });
+}
+
+export function openRegister(data) {
+  return request({
+    url: "/auth/user/openRegister",
+    method: "post",
+    data,
+  });
+}

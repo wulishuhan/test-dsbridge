@@ -6,12 +6,17 @@
     </div>
     <div class="userinfo-wrapper">
       <div class="profile">
-        <span class="user-avatar">
+        <span class="user-avatar" @click="viewAuthorInfo(make.user.id)">
           <img :src="make.user.avatar" />
         </span>
-        <span class="nickname">
-          {{ make.user.name }}
-        </span>
+        <el-tooltip effect="light" placement="bottom">
+          <div slot="content">
+            {{ make.user.name }}
+          </div>
+          <span class="nickname">
+            {{ make.user.name }}
+          </span>
+        </el-tooltip>
         <span class="release-date">
           {{ $d(new Date(make.create_time), "long") }}
         </span>
@@ -25,8 +30,18 @@
       <div v-for="(replyRow, id) in commentListFromId.rows" :key="id">
         <div class="userinfo-wrapper">
           <div class="profile">
-            <span class="user-avatar"><img :src="replyRow.user.avatar" /></span>
-            <span class="nickname">{{ replyRow.user.name }}</span>
+            <span class="user-avatar" @click="viewAuthorInfo(replyRow.user.id)">
+              <img :src="replyRow.user.avatar" />
+            </span>
+            <!-- <span class="nickname">{{ replyRow.user.name }}</span> -->
+            <el-tooltip effect="light" placement="bottom">
+              <div slot="content">
+                {{ replyRow.user.name }}
+              </div>
+              <span class="nickname">
+                {{ replyRow.user.name }}
+              </span>
+            </el-tooltip>
             <span class="release-date">
               {{ $d(new Date(replyRow.create_time), "long") }}
             </span>
@@ -158,6 +173,9 @@ export default {
       let payload = { loginDialogVisible: true, isLoginForm: true };
       this.$store.dispatch("user/switchLoginRegisteForm", payload);
     },
+    viewAuthorInfo(userId) {
+      this.$router.push(`/design/${userId}`);
+    },
   },
 };
 </script>
@@ -191,9 +209,16 @@ export default {
           height: 100%;
         }
       }
+      .user-avatar:hover {
+        cursor: pointer;
+      }
       .nickname {
         font-size: 16px;
         font-weight: 500;
+        max-width: 170px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
         color: #1a1a1a;
       }
       .release-date {
@@ -211,7 +236,7 @@ export default {
   .reply-wrapper {
     padding: 5px 10px;
     margin-left: 52px;
-    background: #e8ebf4;
+    /* background: #e8ebf4; */
     border-radius: 8px;
     font-size: 14px;
     .comment-detail {

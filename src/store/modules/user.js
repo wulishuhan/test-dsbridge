@@ -32,10 +32,9 @@ const getDefaultState = () => {
     accessToken: getToken(),
     headers: {
       Authorization: "Bearer " + getToken(),
-      "Access-Control-Allow-Origin": "*",
     },
     config: {
-      maxPictureSize: 10 * 1024 * 1024, //10M
+      maxPictureSize: 10 * 1024 * 1024, //10MD
       maxFileSize: 100 * 1024 * 1024, //100M
       sourceAcceptType: ".jpg,.png,.svg,.dxf,.gc,.nc,.jpeg",
       pictureAcceptType: ".jpg,.png,.svg,.jpeg",
@@ -210,6 +209,11 @@ const actions = {
         username: loginForm.username,
       })
         .then((res) => {
+          console.log("test", res.data.code);
+          if (res.data.code === 1023) {
+            console.log("----");
+            return reject(res);
+          }
           let data = res.data.data;
           commit("SET_LOGININFO", data);
           resolve();
@@ -237,12 +241,13 @@ const actions = {
         });
     });
   },
+  // eslint-disable-next-line
   register({ commit }, payload) {
     return new Promise((resolve, reject) => {
       register(payload)
         .then((res) => {
-          commit("SET_LOGININFO", res.data.data);
-          setToken(res.data.data.access_token);
+          // commit("SET_LOGININFO", res.data.data);
+          // setToken(res.data.data.access_token);
           resolve(res.data);
         })
         .catch((err) => {

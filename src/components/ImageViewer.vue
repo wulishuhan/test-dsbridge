@@ -64,7 +64,6 @@
             @load="handleImgLoad"
             @error="handleImgError"
             @mousedown="handleMouseDown"
-            :class="[isMake ? 'make-canvas-img' : 'canvas-img']"
           />
         </div>
         <template v-if="!isSingle">
@@ -142,9 +141,9 @@
             </div>
           </div>
         </el-menu>
-        <div v-if="isMake" class="left-top-scacel-box">
+        <!-- <div v-if="isMake" class="left-top-scacel-box">
           scacel {{ Math.floor(this.transform.scale * 100) }}%
-        </div>
+        </div> -->
       </div>
     </div>
   </transition>
@@ -259,7 +258,9 @@ export default {
       if (this.mode === Mode.CONTAIN) {
         style.maxWidth = style.maxHeight = "100%";
       }
-      return style;
+      // return style;
+      // 禁止缩放
+      return {};
     },
     viewerZIndex() {
       if (this.isMake && document.querySelector(".v-modal")) {
@@ -479,7 +480,13 @@ export default {
   /* height: 880px; */
   margin: 0 auto;
   /* margin-top: 96px; */
-  background: rgba(255, 255, 255, 0.8);
+  background: #fff;
+  position: fixed;
+  margin: auto;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
 }
 .make-canvas-img {
   width: 1440px !important;
@@ -488,11 +495,12 @@ export default {
 }
 .canvas-img {
   width: 1432px !important;
-  height: 880px !important;
+  height: 896px !important;
   /* margin-top: 96px; */
 }
 .el-image-viewer__img {
   object-fit: contain;
+  height: 892px;
 }
 .left-top-scacel-box {
   width: 120px;

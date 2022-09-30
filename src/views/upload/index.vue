@@ -359,11 +359,11 @@ export default {
         this.resourceForm.images = detail.images;
         this.resourceForm.tags = detail.tags;
         this.resourceForm.license = detail.license;
-
+        this.tutorialForm = detail.tutorials;
         if (Object.keys(detail.ancestor).length > 0) {
           this.isRefSource = true;
           this.refResource = detail.ancestor;
-          for (const item of this.config.licenseSelectList) {
+          for (const item of this.licenseSelectList) {
             if (item.value == this.refResource.license) {
               this.refResource.licenseIcon = item.icon;
               break;
@@ -385,7 +385,7 @@ export default {
           creator: resData.creator,
         };
 
-        for (const item of this.config.licenseSelectList) {
+        for (const item of this.licenseSelectList) {
           if (item.value == this.refResource.license) {
             this.refResource.licenseIcon = item.icon;
             break;

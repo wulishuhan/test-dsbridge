@@ -151,7 +151,7 @@ export default {
     border-radius: 20px;
     top: 60px;
     /* left: -358px; */
-    right: 0px;
+    right: -2px;
     overflow: auto;
     z-index: 9;
     .downLoadAll {

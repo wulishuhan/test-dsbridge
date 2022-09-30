@@ -396,7 +396,7 @@ export default {
       this.isShare = !this.isShare;
     },
     viewAuthorInfo(userId) {
-      this.$store.commit("filterCard/SET_SELECTPROFILE", "Designs");
+      // this.$store.commit("filterCard/SET_SELECTPROFILE", "Designs");
       this.$router.push(`/design/${userId}`);
     },
     addCollection() {

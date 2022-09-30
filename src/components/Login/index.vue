@@ -7,223 +7,267 @@
       @opened="handleOpen"
       append-to-body
     >
-      <div v-show="!isLogin && !isThirdPartyRegisterForm">
-        <el-form :model="registerForm" :rules="rules" ref="registerForm">
-          <el-form-item>
-            <div class="continue-with">Continue with</div>
-            <div class="icon-box">
-              <a @click="thirdPartyLogin('facebook')">
-                <i class="ortur-icon-facebook icon"></i>
-              </a>
-              <a @click="thirdPartyLogin('github')">
-                <i class="ortur-icon-github icon"></i>
-              </a>
-              <a @click="thirdPartyLogin('tiktok')">
-                <i class="ortur-icon-tiktok icon"></i>
-              </a>
-              <a @click="thirdPartyLogin('google')">
-                <i class="ortur-icon-google icon"></i>
-              </a>
-              <a>
-                <i class="ortur-icon-apple icon disabled-icon"></i>
-              </a>
-            </div>
-          </el-form-item>
-          <el-form-item>
-            <div class="or">or</div>
-          </el-form-item>
-          <el-form-item prop="email">
-            <el-input
-              v-model="registerForm.email"
-              autocomplete="off"
-              placeholder="Email"
-            ></el-input>
-          </el-form-item>
-          <el-form-item prop="password1">
-            <el-input
-              type="password"
-              v-model="registerForm.password"
-              autocomplete="off"
-              placeholder="Password"
-              show-password
-            ></el-input>
-          </el-form-item>
-          <el-form-item prop="password2">
-            <el-input
-              type="password"
-              v-model="registerForm.password2"
-              autocomplete="off"
-              placeholder="Password"
-              show-password
-            ></el-input>
-          </el-form-item>
-          <el-form-item>
-            <el-button @click="createAccount('registerForm')"
-              >Create Account</el-button
-            >
-          </el-form-item>
-          <el-form-item>
-            <div class="privacy-text-box">
-              <span class="login-text">
-                Already have an account?
-                <a @click="switchLoginAndRegister('login')"> &nbsp; Log in </a>
-              </span>
-              <span class="login-text privacy-text">
-                By clicking "Create account", I agree to ORTUR's
+      <div v-show="!verifyEmailDialogVisible">
+        <div v-show="!isLogin && !isThirdPartyRegisterForm">
+          <el-form :model="registerForm" :rules="rules" ref="registerForm">
+            <el-form-item>
+              <div class="continue-with">Continue with</div>
+              <div class="icon-box">
+                <a @click="thirdPartyLogin('facebook')">
+                  <i class="ortur-icon-facebook icon"></i>
+                </a>
+                <a @click="thirdPartyLogin('github')">
+                  <i class="ortur-icon-github icon"></i>
+                </a>
+                <a @click="thirdPartyLogin('tiktok')">
+                  <i class="ortur-icon-tiktok icon"></i>
+                </a>
+                <a @click="thirdPartyLogin('google')">
+                  <i class="ortur-icon-google icon"></i>
+                </a>
+                <a>
+                  <i class="ortur-icon-apple icon disabled-icon"></i>
+                </a>
+              </div>
+            </el-form-item>
+            <el-form-item>
+              <div class="or">or</div>
+            </el-form-item>
+            <el-form-item prop="name">
+              <el-input
+                v-model="registerForm.nickname"
+                autocomplete="off"
+                placeholder="Name"
+              ></el-input>
+            </el-form-item>
+            <el-form-item prop="email">
+              <el-input
+                v-model="registerForm.email"
+                autocomplete="off"
+                placeholder="Email"
+              ></el-input>
+            </el-form-item>
+            <el-form-item prop="password1">
+              <el-input
+                type="password"
+                v-model="registerForm.password"
+                autocomplete="off"
+                placeholder="Password"
+                show-password
+              ></el-input>
+            </el-form-item>
+            <el-form-item prop="password2">
+              <el-input
+                type="password"
+                v-model="registerForm.password2"
+                autocomplete="off"
+                placeholder="Password"
+                show-password
+              ></el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button @click="createAccount('registerForm')"
+                >Create Account</el-button
+              >
+            </el-form-item>
+            <el-form-item>
+              <div class="privacy-text-box">
+                <span class="login-text">
+                  Already have an account?
+                  <a @click="switchLoginAndRegister('login')">
+                    &nbsp; Log in
+                  </a>
+                </span>
+                <span class="login-text privacy-text">
+                  By clicking "Create account", I agree to ORTUR's
+                  <a
+                    target="_blank"
+                    href="https://www.leadiffer.com/privacy-policy/"
+                    >Privacy policy</a
+                  >
+                  .
+                </span>
+              </div>
+            </el-form-item>
+          </el-form>
+        </div>
+        <div v-show="isLogin && !isThirdPartyRegisterForm">
+          <el-form :model="loginForm" ref="loginForm" :rules="rules">
+            <el-form-item>
+              <div class="continue-with">Continue with</div>
+              <div class="icon-box">
                 <a
-                  target="_blank"
-                  href="https://www.leadiffer.com/privacy-policy/"
-                  >Privacy policy</a
+                  @click="thirdPartyLogin('facebook')"
+                  @mouseenter="enter('facebook')"
+                  @mouseleave="leave"
                 >
-                .
-              </span>
-            </div>
-          </el-form-item>
-        </el-form>
-      </div>
-      <div v-show="isLogin && !isThirdPartyRegisterForm">
-        <el-form :model="loginForm" ref="loginForm" :rules="rules">
-          <el-form-item>
-            <div class="continue-with">Continue with</div>
-            <div class="icon-box">
-              <a
-                @click="thirdPartyLogin('facebook')"
-                @mouseenter="enter('facebook')"
-                @mouseleave="leave"
-              >
-                <i
-                  class="ortur-icon-facebook icon"
-                  :class="[
-                    activeIcon === 'facebook'
-                      ? 'ortur-icon-facebook-light'
-                      : '',
-                  ]"
-                ></i>
-              </a>
-              <a
-                @click="thirdPartyLogin('github')"
-                @mouseenter="enter('github')"
-                @mouseleave="leave"
-              >
-                <i
-                  class="ortur-icon-github icon"
-                  :class="[
-                    activeIcon === 'github' ? 'ortur-icon-github-light' : '',
-                  ]"
-                ></i>
-              </a>
-              <a
-                @click="thirdPartyLogin('tiktok')"
-                @mouseenter="enter('tiktok')"
-                @mouseleave="leave"
-              >
-                <i
-                  class="ortur-icon-tiktok icon"
-                  v-if="activeIcon !== 'tiktok'"
-                ></i>
-                <span v-else class="ortur-icon-tiktok-light icon"
-                  ><span class="path1"></span><span class="path2"></span
-                  ><span class="path3"></span
-                ></span>
-              </a>
-              <a
-                @click="thirdPartyLogin('google')"
-                @mouseenter="enter('google')"
-                @mouseleave="leave"
-              >
-                <i
-                  v-if="activeIcon !== 'google'"
-                  class="ortur-icon-google icon"
-                ></i>
-                <span v-else class="ortur-icon-google-light icon"
-                  ><span class="path1"></span><span class="path2"></span
-                  ><span class="path3"></span><span class="path4"></span
-                ></span>
-              </a>
-              <a>
-                <i class="ortur-icon-apple icon disabled-icon"></i>
-              </a>
-            </div>
-          </el-form-item>
-          <el-form-item>
-            <div class="or">or</div>
-          </el-form-item>
+                  <i
+                    class="ortur-icon-facebook icon"
+                    :class="[
+                      activeIcon === 'facebook'
+                        ? 'ortur-icon-facebook-light'
+                        : '',
+                    ]"
+                  ></i>
+                </a>
+                <a
+                  @click="thirdPartyLogin('github')"
+                  @mouseenter="enter('github')"
+                  @mouseleave="leave"
+                >
+                  <i
+                    class="ortur-icon-github icon"
+                    :class="[
+                      activeIcon === 'github' ? 'ortur-icon-github-light' : '',
+                    ]"
+                  ></i>
+                </a>
+                <a
+                  @click="thirdPartyLogin('tiktok')"
+                  @mouseenter="enter('tiktok')"
+                  @mouseleave="leave"
+                >
+                  <i
+                    class="ortur-icon-tiktok icon"
+                    v-if="activeIcon !== 'tiktok'"
+                  ></i>
+                  <span v-else class="ortur-icon-tiktok-light icon"
+                    ><span class="path1"></span><span class="path2"></span
+                    ><span class="path3"></span
+                  ></span>
+                </a>
+                <a
+                  @click="thirdPartyLogin('google')"
+                  @mouseenter="enter('google')"
+                  @mouseleave="leave"
+                >
+                  <i
+                    v-if="activeIcon !== 'google'"
+                    class="ortur-icon-google icon"
+                  ></i>
+                  <span v-else class="ortur-icon-google-light icon"
+                    ><span class="path1"></span><span class="path2"></span
+                    ><span class="path3"></span><span class="path4"></span
+                  ></span>
+                </a>
+                <a>
+                  <i class="ortur-icon-apple icon disabled-icon"></i>
+                </a>
+              </div>
+            </el-form-item>
+            <el-form-item>
+              <div class="or">or</div>
+            </el-form-item>
 
-          <el-form-item prop="email">
-            <el-input
-              v-model="loginForm.email"
-              autocomplete="off"
-              placeholder="Email"
-            ></el-input>
-          </el-form-item>
-          <el-form-item prop="password">
-            <el-input
-              v-model="loginForm.password"
-              autocomplete="off"
-              placeholder="Password"
-              show-password
-              @keyup.enter.native="handleEnter"
-            ></el-input>
-          </el-form-item>
-          <el-form-item>
-            <el-button @click="login('loginForm')">Log in</el-button>
-          </el-form-item>
-          <el-form-item>
-            <div class="login-text-nav">
-              <span class="login-text">
-                Forget password?
-                <a href="#">&nbsp; Reset it</a>
-              </span>
-              <span class="login-text">
-                No account?
-                <a @click="switchLoginAndRegister('register')">Create one</a>
-              </span>
-            </div>
-          </el-form-item>
-        </el-form>
+            <el-form-item prop="email">
+              <el-input
+                v-model="loginForm.email"
+                autocomplete="off"
+                placeholder="Email"
+              ></el-input>
+            </el-form-item>
+            <el-form-item prop="password">
+              <el-input
+                v-model="loginForm.password"
+                autocomplete="off"
+                placeholder="Password"
+                show-password
+                @keyup.enter.native="handleEnter"
+              ></el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button @click="login('loginForm')">Log in</el-button>
+            </el-form-item>
+            <el-form-item>
+              <div class="login-text-nav">
+                <span class="login-text">
+                  Forget password?
+                  <a
+                    href="https://sso.ortur.cn/oauth/forget_password"
+                    target="_blank"
+                  >
+                    &nbsp; Reset it
+                  </a>
+                </span>
+                <span class="login-text">
+                  No account?
+                  <a @click="switchLoginAndRegister('register')">Create one</a>
+                </span>
+              </div>
+            </el-form-item>
+          </el-form>
+        </div>
+        <div v-show="isThirdPartyRegisterForm">
+          <el-form
+            :model="registerForm"
+            :rules="rules"
+            ref="thirdPartyRegisterForm"
+          >
+            <el-form-item>
+              <div class="continue-with">Complete your information</div>
+            </el-form-item>
+            <el-form-item prop="name">
+              <el-input
+                v-model="registerForm.nickname"
+                autocomplete="off"
+                placeholder="Name"
+              ></el-input>
+            </el-form-item>
+            <el-form-item prop="email">
+              <el-input
+                v-model="registerForm.email"
+                autocomplete="off"
+                placeholder="Email"
+                @blur="thirdEmailBlur"
+              ></el-input>
+            </el-form-item>
+            <el-form-item prop="password1">
+              <el-input
+                type="password"
+                v-model="registerForm.password"
+                autocomplete="off"
+                placeholder="Password"
+                show-password
+              ></el-input>
+            </el-form-item>
+            <el-form-item prop="password2">
+              <el-input
+                type="password"
+                v-model="registerForm.password2"
+                autocomplete="off"
+                placeholder="Password"
+                show-password
+              ></el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button
+                @click="thridPartyAccountBind('thirdPartyRegisterForm')"
+              >
+                Complete
+              </el-button>
+            </el-form-item>
+          </el-form>
+        </div>
       </div>
-      <div v-show="isThirdPartyRegisterForm">
-        <el-form
-          :model="registerForm"
-          :rules="rules"
-          ref="thirdPartyRegisterForm"
-        >
-          <el-form-item>
-            <div class="continue-with">Complete your information</div>
-          </el-form-item>
-          <el-form-item prop="email">
-            <el-input
-              v-model="registerForm.email"
-              autocomplete="off"
-              placeholder="Email"
-              @blur="thirdEmailBlur"
-            ></el-input>
-          </el-form-item>
-          <el-form-item prop="password1">
-            <el-input
-              type="password"
-              v-model="registerForm.password"
-              autocomplete="off"
-              placeholder="Password"
-              show-password
-            ></el-input>
-          </el-form-item>
-          <el-form-item prop="password2">
-            <el-input
-              type="password"
-              v-model="registerForm.password2"
-              autocomplete="off"
-              placeholder="Password"
-              show-password
-            ></el-input>
-          </el-form-item>
-          <el-form-item>
-            <el-button @click="thridPartyAccountBind('thirdPartyRegisterForm')">
-              Complete
-            </el-button>
-          </el-form-item>
-        </el-form>
+      <div v-show="verifyEmailDialogVisible">
+        <h2 style="text-align: center">Verify your email</h2>
+        <p style="font-family: Source Han Sans CN; font-size: 16px">
+          Click the verification button in the email we sent to
+          {{ registerForm.email }}. This helps keep your account secure.
+          <br />
+          <br />
+          No email in your inbox or spam folder?
+          <a @click="sendEmail">Let's resend it. </a>
+          <br />
+          <br />
+          Wrong address?
+          <a @click="handleClose"> Log out </a>
+
+          to sign in with adifferent email. If you mistyped your emailwhen
+          signing up, create a new account.
+        </p>
       </div>
+
       <el-dialog width="396px" :visible.sync="innerVisible" append-to-body>
         <div class="loading-box" v-loading="loading"></div>
       </el-dialog>
@@ -231,7 +275,9 @@
   </div>
 </template>
 <script>
-import { bindThird } from "@/api/user";
+/* eslint-disable */
+import { bindThird, activeUserSendEmail, openRegister } from "@/api/user";
+import { broserInfo } from "@/utils/navigator.js";
 export default {
   props: {
     loadLoginDialog: {
@@ -344,6 +390,7 @@ export default {
         email: "",
       },
       registerForm: {
+        nickname: "",
         username: "",
         password: "",
         password2: "",
@@ -353,6 +400,13 @@ export default {
       loading: true,
       show: true,
       rules: {
+        name: [
+          {
+            min: 2,
+            max: 31,
+            trigger: "blur",
+          },
+        ],
         email: [
           { required: true, message: this.$t("login.email"), trigger: "blur" },
           {
@@ -407,14 +461,24 @@ export default {
         userId: "",
         catalog: "",
         email: "",
+        name: "",
       },
+      verifyEmailDialogVisible: false,
     };
   },
   methods: {
     thirdEmailBlur() {
       this.thirdPartyInfo.email = this.registerForm.email;
+      let params = {
+        catalog: this.thirdPartyInfo.catalog,
+        client_subtype: broserInfo(),
+        client_type: "web",
+        email: this.registerForm.email,
+        id: this.thirdPartyInfo.userId,
+        name: this.registerForm.nickname,
+      };
       this.$store
-        .dispatch("user/openLogin", this.thirdPartyInfo)
+        .dispatch("user/openLogin", params)
         .then(() => {
           this.$router.push(this.$route.path + "#");
         })
@@ -450,6 +514,11 @@ export default {
             })
             .catch((error) => {
               // this.$message.error(error.msg);
+              // console.log("err", error);
+              if (error.data.code === 1023) {
+                this.sendEmail(this.loginForm.email);
+                this.verifyEmailDialogVisible = true;
+              }
               this.loginFormTipCode = error.code;
               this.innerVisible = false;
               this.$refs.loginForm.validateField("email");
@@ -464,17 +533,27 @@ export default {
     createAccount(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
+          if (this.registerForm.nickname === "") {
+            let date = new Date();
+            this.registerForm.nickname =
+              "Explorer" +
+              date.getFullYear() +
+              (date.getMonth() + 1) +
+              date.getDate();
+          }
           this.registerForm.username = this.registerForm.email;
           this.$store
             .dispatch("user/register", {
-              auto_login: true,
+              auto_login: false,
               client_subtype: "Windows",
               client_type: "pc",
               ...this.registerForm,
             })
             .then((res) => {
               if (res.code == 0) {
-                this.handleClose();
+                this.verifyEmailDialogVisible = true;
+                this.sendEmail(this.registerForm.email);
+                // this.handleClose();
               }
             })
             .catch((e) => {
@@ -492,31 +571,32 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           this.registerForm.username = this.registerForm.email;
-          this.$store
-            .dispatch("user/register", {
-              auto_login: true,
-              client_subtype: "Windows",
-              client_type: "pc",
-              ...this.registerForm,
-            })
-            .then((res) => {
-              if (res.code == 0) {
-                bindThird(this.thirdPartyInfo)
-                  .then((res) => {
-                    console.log("bindThird successfully", res);
-                    this.$router.push(this.$route.path + "#");
-                    this.handleClose();
-                  })
-                  .catch((err) => {
-                    console.log(err);
-                  });
-              }
-            })
-            .catch((e) => {
-              this.thirdPartyFormTip = e.msg;
-              this.$refs.thirdPartyRegisterForm.validateField("email");
-              console.log(e);
-            });
+          if (this.registerForm.nickname === "") {
+            let date = new Date();
+            this.registerForm.nickname =
+              "Explorer" +
+              date.getFullYear() +
+              (date.getMonth() + 1) +
+              date.getDate();
+          }
+          openRegister({
+            client_subtype: broserInfo(),
+            client_type: "web",
+            email: this.registerForm.email,
+            nickname: this.thirdPartyInfo.name,
+            openUserId: this.thirdPartyInfo.userId,
+            password: this.registerForm.password,
+            username: this.registerForm.email,
+          }).then((res) => {
+            console.log("open register", res);
+            if (res.data.code === 0) {
+              this.$store.commit("user/SET_LOGININFO", res.data.data);
+              this.handleClose();
+            }
+            if (res.data.code === 1024) {
+              this.$message.error("Please do not re-register");
+            }
+          });
         } else {
           return false;
         }
@@ -528,16 +608,18 @@ export default {
       this.$refs.registerForm.resetFields();
       this.registerForm.password = "";
       this.isComplete = false;
+      this.verifyEmailDialogVisible = false;
       // this.$refs.thirdPartyRegisterForm.resetFields();
     },
     handleOpen() {
       if (this.isThirdPartyRegisterForm) {
-        let { code, from, email } = this.$route.query;
+        let { code, from, email, name } = this.$route.query;
         if (email === "null") {
           email = "";
         }
         this.thirdPartyInfo.userId = code;
         this.thirdPartyInfo.catalog = from;
+        this.registerForm.nickname = name;
         this.thirdPartyInfo.email = email;
         this.registerForm.email = email;
         this.registerForm.username = email;
@@ -545,7 +627,6 @@ export default {
     },
     thirdPartyLogin(from) {
       sessionStorage.setItem("isBinding", 2);
-
       let redirectUrl = window.location.href.split("?")[0];
       window.location.href = `https://sso.leadiffer.com/oauth/thirdParty?from=${from}&redirect_url=${redirectUrl}`;
     },
@@ -555,6 +636,17 @@ export default {
     leave() {
       this.activeIcon = "";
     },
+    sendEmail(email) {
+      activeUserSendEmail({
+        email: email,
+      }).then((res) => {
+        console.log(res);
+        this.$message.success("send email successfully");
+      });
+    },
+  },
+  mounted() {
+    console.log("process.env.NODE_ENV", process.env.NODE_ENV);
   },
 };
 </script>
