@@ -390,6 +390,7 @@ export default {
             this.showLikeStar = false;
           });
       }
+      this.$emit("getLikesList", this.thing.id);
     },
     share() {
       this.isShare = !this.isShare;

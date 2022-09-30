@@ -98,12 +98,26 @@
                       class="icon"
                       :class="item.iconClass"
                     ></span>
-                    <span>{{ item.catalog }}</span>
-                    <span class="username">{{
-                      item.username ? item.username : ""
-                    }}</span>
-                    <span v-show="item.username && item.email">|</span>
-                    <span class="email">{{ item.email }}</span>
+                    <div class="textspan">
+                      <span>{{ item.catalog }}</span>
+                      <el-tooltip effect="light" placement="bottom">
+                        <div slot="content">
+                          {{ item.username }}
+                        </div>
+                        <span class="username">{{
+                          item.username ? item.username : ""
+                        }}</span>
+                      </el-tooltip>
+                      <span v-show="item.username && item.email">|</span>
+                      <el-tooltip effect="light" placement="bottom">
+                        <div slot="content">
+                          {{ item.email }}
+                        </div>
+                        <span class="email" v-if="!item.email">{{
+                          item.email
+                        }}</span>
+                      </el-tooltip>
+                    </div>
                   </div>
                   <div class="right">
                     <el-switch
@@ -328,13 +342,38 @@ export default {
         width: 30px;
         height: 26px;
       }
-      .username {
-        margin: 0 10px;
-        color: rgb(153, 153, 153);
-      }
-      .email {
-        margin-left: 10px;
-        color: rgb(153, 153, 153);
+      .textspan {
+        display: flex;
+        width: 311px;
+        height: 19px;
+        margin-right: 32px;
+        font-size: 16px;
+        .username {
+          flex: 3;
+          margin: 0 10px 0 28px;
+          color: rgb(153, 153, 153);
+          /* 1.溢出隐藏 */
+          overflow: hidden;
+          /* 2.用省略号来代替超出文本 */
+          text-overflow: ellipsis;
+          /* 3.设置盒子属性为-webkit-box  必须的 */
+          display: -webkit-box;
+          /* 4.-webkit-line-clamp 设置为2，表示超出2行的部分显示省略号，如果设置为3，那么就是超出3行部分显示省略号 */
+          -webkit-line-clamp: 1;
+        }
+        .email {
+          flex: 2;
+          margin-left: 10px;
+          color: rgb(153, 153, 153);
+          /* 1.溢出隐藏 */
+          overflow: hidden;
+          /* 2.用省略号来代替超出文本 */
+          text-overflow: ellipsis;
+          /* 3.设置盒子属性为-webkit-box  必须的 */
+          display: -webkit-box;
+          /* 4.-webkit-line-clamp 设置为2，表示超出2行的部分显示省略号，如果设置为3，那么就是超出3行部分显示省略号 */
+          -webkit-line-clamp: 1;
+        }
       }
     }
     .right {
@@ -349,6 +388,9 @@ export default {
     .el-dialog__header {
       padding: 10px;
     }
+  }
+  ::v-deep.el-tabs__nav-wrap::after {
+    background: #ffffff;
   }
   ::v-deep .tabsContent {
     top: -165px;

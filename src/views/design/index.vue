@@ -330,6 +330,7 @@
                       :isLike="myLikes.includes(item.id)"
                       :isCollected="myCollects.includes(item.id)"
                       @deleteCollection="deleteCollection"
+                      @getLikesList="getLikesList"
                     >
                     </resource-card>
                   </el-col>
