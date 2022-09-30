@@ -627,9 +627,8 @@ export default {
     },
     thirdPartyLogin(from) {
       sessionStorage.setItem("isBinding", 2);
-
       let redirectUrl = window.location.href.split("?")[0];
-      window.location.href = `https://test.leadiffer.com/oauth/thirdParty?from=${from}&redirect_url=${redirectUrl}`;
+      window.location.href = `https://sso.leadiffer.com/oauth/thirdParty?from=${from}&redirect_url=${redirectUrl}`;
     },
     enter(val) {
       this.activeIcon = val;
@@ -645,6 +644,9 @@ export default {
         this.$message.success("send email successfully");
       });
     },
+  },
+  mounted() {
+    console.log("process.env.NODE_ENV", process.env.NODE_ENV);
   },
 };
 </script>
