@@ -19,7 +19,6 @@
                 <h5 class="list-wrapper-title">
                   {{ $t("upload.resourceCover") }}
                 </h5>
-<<<<<<< HEAD
                 <draggable-swiper
                   v-model="resourceForm.images"
                   swiper-name="coverSwiper"
@@ -28,79 +27,6 @@
                   :remove="handleRemoveCover"
                   :currentKeyList.sync="currentEditKeyList"
                 ></draggable-swiper>
-=======
-                <div v-swiper:coverSwiper="swiperOptions">
-                  <draggable
-                    class="swiper-wrapper"
-                    handle=".handle"
-                    v-model="resourceForm.images"
-                  >
-                    <div
-                      class="swiper-slide"
-                      v-for="(coverImage, coverKey) in resourceForm.images"
-                      :key="coverKey"
-                    >
-                      <img :src="coverImage.url" />
-                      <!-- img-toolbar  -->
-                      <div class="img-toolbar">
-                        <i
-                          class="ortur-icon-minus"
-                          @click="handleRemoveCover(coverKey)"
-                        >
-                          <span class="path1"></span>
-                          <span class="path2"></span>
-                        </i>
-                        <i
-                          class="handle ortur-icon-settings-gray swiper-no-swiping"
-                        >
-                        </i>
-                        <el-upload
-                          class="cover-edit"
-                          :action="baseApi + '/library/resource/upload'"
-                          :show-file-list="showFile"
-                          :on-success="handleCoverEditSuccess"
-                          :headers="headers"
-                          accept=".png,.jpg,.svg,.jpeg"
-                          :before-upload="beforeUpload"
-                        >
-                          <i
-                            class="ortur-icon-pen"
-                            @click="currentEditIndex(coverKey)"
-                          ></i>
-                        </el-upload>
-                      </div>
-                      <!-- // tootbar -->
-                    </div>
-                    <div class="swiper-slide">
-                      <el-upload
-                        :action="baseApi + '/library/resource/upload'"
-                        :show-file-list="showFile"
-                        class="cover-add"
-                        :on-success="handleCoverAddSuccess"
-                        :headers="headers"
-                        accept=".png,.jpg,.svg,.jpeg"
-                        :before-upload="beforeUpload"
-                      >
-                        <i class="el-icon-plus"></i>
-                      </el-upload>
-                    </div>
-                  </draggable>
-                  <div
-                    ref="swiperPrev"
-                    class="swiper-button-prev swiper-button-black"
-                    @drop="drop($event)"
-                    @dragover="allowDrop($event, 'swiperPrev')"
-                  ></div>
-                  <!-- 白色 -->
-                  <div
-                    ref="swiperNext"
-                    @drop="drop($event)"
-                    @dragover="allowDrop($event, 'swiperNext')"
-                    class="swiper-button-next swiper-button-black"
-                  ></div>
-                  <!-- 黑色 -->
-                </div>
->>>>>>> 4d82ba514a0d28eeefbc259e94266de7b271ee94
               </div>
             </div>
           </el-form-item>
@@ -213,7 +139,6 @@
                 ></el-input>
               </el-form-item>
               <el-form-item style="margin: 20px auto">
-<<<<<<< HEAD
                 <draggable-swiper
                   v-model="tutorialItem.images"
                   :swiper-name="tutorialSwiper + tutorialKey"
@@ -223,95 +148,6 @@
                   :currentKeyList.sync="currentEditKeyList"
                   :group-key="tutorialKey"
                 ></draggable-swiper>
-=======
-                <div
-                  v-swiper:[tutorialSwiper+tutorialKey]="tutorialSwiperOptions"
-                  @someSwiperEvent="callback"
-                >
-                  <draggable
-                    class="swiper-wrapper"
-                    handle=".handle"
-                    v-model="tutorialItem.images"
-                  >
-                    <div
-                      class="swiper-slide"
-                      v-for="(
-                        tutorialImage, tutorialImgKey
-                      ) in tutorialItem.images"
-                      :key="tutorialImgKey"
-                    >
-                      <img :src="tutorialImage.url" />
-                      <div class="img-toolbar">
-                        <i
-                          class="ortur-icon-minus"
-                          @click="
-                            removeTutorialImg(tutorialKey, tutorialImgKey)
-                          "
-                        >
-                          <span class="path1"></span>
-                          <span class="path2"></span>
-                        </i>
-                        <i
-                          class="handle ortur-icon-settings-gray swiper-no-swiping"
-                        ></i>
-                        <el-upload
-                          class="cover-edit"
-                          :action="baseApi + '/library/resource/upload'"
-                          :show-file-list="showFile"
-                          :on-success="handleTutorialEditSuccess"
-                          :headers="headers"
-                          accept=".png,.jpg,.svg,.jpeg"
-                          :before-upload="beforeUpload"
-                        >
-                          <i
-                            class="ortur-icon-pen"
-                            @click="
-                              currentTutorialEditIndex(
-                                tutorialKey,
-                                tutorialImgKey
-                              )
-                            "
-                          ></i>
-                        </el-upload>
-                      </div>
-                    </div>
-                    <div class="swiper-slide">
-                      <el-upload
-                        :action="baseApi + '/library/resource/upload'"
-                        :show-file-list="showFile"
-                        class="cover-add"
-                        :on-success="handleTutorialAddSuccess"
-                        :headers="headers"
-                        accept=".png,.jpg,.svg,.jpeg"
-                        :before-upload="beforeUpload"
-                      >
-                        <i
-                          class="el-icon-plus"
-                          @click="currentTutorialEditIndex(tutorialKey, -1)"
-                        ></i>
-                      </el-upload>
-                    </div>
-                  </draggable>
-                  <div
-                    class="swiper-button-prev swiper-button-black"
-                    ref="tutorialSwiperPrev"
-                    @drop="drop($event)"
-                    @dragover="
-                      allowDrop($event, 'tutorialSwiperPrev', tutorialKey)
-                    "
-                  ></div>
-                  <!-- 白色 -->
-                  <div
-                    class="swiper-button-next swiper-button-black"
-                    ref="tutorialSwiperNext"
-                    @drop="drop($event)"
-                    @dragover="
-                      allowDrop($event, 'tutorialSwiperNext', tutorialKey)
-                    "
-                  ></div>
-                  <!-- 黑色 -->
-                </div>
->>>>>>> 4d82ba514a0d28eeefbc259e94266de7b271ee94
               </el-form-item>
               <el-form-item label="" prop="description">
                 <el-input
@@ -523,11 +359,11 @@ export default {
         this.resourceForm.images = detail.images;
         this.resourceForm.tags = detail.tags;
         this.resourceForm.license = detail.license;
-
+        this.tutorialForm = detail.tutorials;
         if (Object.keys(detail.ancestor).length > 0) {
           this.isRefSource = true;
           this.refResource = detail.ancestor;
-          for (const item of this.config.licenseSelectList) {
+          for (const item of this.licenseSelectList) {
             if (item.value == this.refResource.license) {
               this.refResource.licenseIcon = item.icon;
               break;
@@ -549,7 +385,7 @@ export default {
           creator: resData.creator,
         };
 
-        for (const item of this.config.licenseSelectList) {
+        for (const item of this.licenseSelectList) {
           if (item.value == this.refResource.license) {
             this.refResource.licenseIcon = item.icon;
             break;
