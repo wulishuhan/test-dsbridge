@@ -5,7 +5,6 @@ const state = {
 const mutations = {
   SET_SEARCH_KEYWORDS: (state, keywords) => {
     state.searchKeywords = keywords;
-    console.log("set keywords successfully!");
   },
 };
 

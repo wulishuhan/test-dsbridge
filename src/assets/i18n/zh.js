@@ -208,4 +208,7 @@ module.exports = {
     acceptFileFormat: "文件只接收png, jpg, jpeg, gif格式",
     acceptFileSize: "上传图片大小不应该超过10M",
   },
+  search: {
+    notResource: "没有资源",
+  },
 };

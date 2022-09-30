@@ -215,4 +215,7 @@ module.exports = {
     acceptFileFormat: "File only accepts png, jpg, jpeg, gif formats",
     acceptFileSize: "Upload image size should not exceed 10M",
   },
+  search: {
+    notResource: "Not resource Yet",
+  },
 };

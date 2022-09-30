@@ -10,7 +10,7 @@
           <el-button v-if="isFollow" @click="handleUnFollow">{{
             $t("design.unFollow")
           }}</el-button>
-          <el-button v-else @click="handleFollow">{{
+          <el-button v-else @click="handleFollow" class="nofollow">{{
             $t("design.follow")
           }}</el-button>
 
@@ -28,7 +28,9 @@
         :key="item.id"
       />
     </div>
-    <div v-if="authorInfo.resources.length <= 0">Not resource Yet</div>
+    <div v-if="authorInfo.resources.length <= 0" class="is-empty-resource">
+      {{ $t("search.notResource") }}
+    </div>
   </div>
 </template>
 <script>
@@ -103,7 +105,7 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 270px;
+    width: 300px;
     height: 84px;
     background: none;
     .avatar {
@@ -117,7 +119,7 @@ export default {
       }
     }
     .follow-wrapper {
-      width: 160px;
+      width: 180px;
       display: flex;
       flex-direction: column;
       justify-content: space-around;
@@ -141,6 +143,11 @@ export default {
           border-radius: 6px;
           padding: unset;
         }
+        .el-button.nofollow {
+          background: unset;
+          color: #000;
+          border: 1px solid #1e78f0;
+        }
         .fans-num {
           color: #000010;
         }
@@ -151,7 +158,7 @@ export default {
     }
   }
   .cover-list-wrapper {
-    width: 1150px;
+    margin-left: 40px;
     display: flex;
     align-items: center;
     img {
@@ -162,6 +169,11 @@ export default {
     img + img {
       margin-left: 30px;
     }
+  }
+  .is-empty-resource {
+    margin-left: 40px;
+    font-size: 20px;
+    color: #999999;
   }
 }
 </style>
