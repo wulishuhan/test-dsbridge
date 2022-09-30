@@ -3,6 +3,8 @@ import store from "./store";
 // import { Message } from "element-ui";
 // import { getToken } from "@/utils/auth"; // get token from cookie
 router.beforeEach(async (to, from, next) => {
+  //切换页面滚动条自动回到顶部
+  window.scrollTo(0, 0);
   // document.title = to.meta.title;
   // const hasToken = getToken();
   if (store.getters.isLogin) {

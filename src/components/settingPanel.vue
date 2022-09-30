@@ -144,6 +144,7 @@
       @handleClose="isChangePasswordVisible = false"
       :visible="isChangePasswordVisible"
       :ChangePasswordOrEmail="ChangePasswordOrEmail"
+      :email="userInfo.email"
     ></ChangeEmailPassword>
     <ChangeName
       @handleClose="isChangeNameVisible = false"
