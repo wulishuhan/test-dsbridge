@@ -10,11 +10,16 @@
                   {{ detail.title }}
                 </div>
                 <div class="flex">
-                  <el-avatar
+                  <!-- <el-avatar
                     :size="40"
                     :src="avatar"
                     @click.native="toUserProfileView"
-                  ></el-avatar>
+                  ></el-avatar> -->
+                  <img
+                    :src="avatar"
+                    class="show-header-avatar"
+                    @click="toUserProfileView"
+                  />
                   <div
                     class="flex flex-column user-name-update-time"
                     @click="toUserProfileView"
@@ -800,14 +805,14 @@ export default {
         width: 100%;
         cursor: pointer;
         object-fit: contain;
-        border: 1px solid #CCCCCC;
+        border: 1px solid #cccccc;
         border-radius: 4px;
       }
     }
   }
-  ::v-deep .swiper-scrollbar{
-      display: none;
-    }
+  ::v-deep .swiper-scrollbar {
+    display: none;
+  }
   .swiper-container-button {
     text-align: center;
     width: 100%;
@@ -919,7 +924,7 @@ a {
 }
 
 .split-line {
-  border: solid #ccc 1px;
+  border-bottom: solid #ccc 1px;
   height: 1px;
   margin-top: 40px;
 }
@@ -1108,7 +1113,7 @@ a {
   padding-left: 0px;
   padding-right: 0px;
 }
-::v-deep .el-image-viewer__canvas{
+::v-deep .el-image-viewer__canvas {
   border-radius: 16px;
 }
 ::v-deep .comment-wrapper {
@@ -1154,6 +1159,12 @@ a {
   flex-direction: column;
   font-size: 18px;
   color: #1a1a1a;
+  .show-header-avatar {
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+  }
 }
 
 .show-header-left-thing-name {

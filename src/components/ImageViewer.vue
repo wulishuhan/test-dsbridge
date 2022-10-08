@@ -489,18 +489,23 @@ export default {
   bottom: 0;
 }
 .make-canvas-img {
-  width: 1440px !important;
-  height: 896px !important;
+  max-width: 1440px !important;
+  max-height: 896px !important;
+  width: 80%;
+  height: 90%;
   /* margin-top: 288px; */
 }
 .canvas-img {
-  width: 1432px !important;
-  height: 896px !important;
+  max-width: 1432px !important;
+  max-height: 896px !important;
+  width: 80%;
+  height: 90%;
   /* margin-top: 96px; */
 }
 .el-image-viewer__img {
   object-fit: contain;
   height: 892px;
+  width: 100%;
 }
 .left-top-scacel-box {
   width: 120px;
