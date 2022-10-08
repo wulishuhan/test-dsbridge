@@ -39,7 +39,7 @@ const getDefaultState = () => {
       sourceAcceptType: ".jpg,.png,.svg,.dxf,.gc,.nc,.jpeg",
       pictureAcceptType: ".jpg,.png,.svg,.jpeg",
       fileLimit: 20,
-      coverLimit: 2,
+      coverLimit: 10,
       licenseSelectList: [
         {
           label: "Creative Commons - Attribution",

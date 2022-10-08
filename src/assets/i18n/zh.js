@@ -51,6 +51,7 @@ module.exports = {
     filenameTooLong: "文件名过长,应该在50个字符以内",
     fileTooLarge: "单个文件体积不超过{0}",
     fileExceed: "最多上传文件数量不超过{0}个",
+    coverExceed: "最多上传封面数量不超过{0}个",
     supportedFilesError: "Supported Files:{0}",
     tagTip: "提示:按回车键保存",
     updateOk: "修改成功",
