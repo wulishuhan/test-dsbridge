@@ -178,7 +178,7 @@ export default {
           },
           {
             min: 5,
-            max: 20,
+            max: 50,
             message: this.$t("setting.emailLengthLimit"),
             trigger: "blur",
           },
@@ -196,7 +196,7 @@ export default {
           },
           {
             min: 5,
-            max: 20,
+            max: 50,
             message: this.$t("setting.usernameLengthLimit"),
             trigger: "blur",
           },

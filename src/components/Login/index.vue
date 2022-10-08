@@ -257,7 +257,7 @@
           <br />
           <br />
           No email in your inbox or spam folder?
-          <a @click="sendEmail">Let's resend it. </a>
+          <a @click="sendEmail(registerForm.email)">Let's resend it. </a>
           <br />
           <br />
           Wrong address?

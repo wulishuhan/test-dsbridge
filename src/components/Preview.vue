@@ -24,30 +24,38 @@
                 </div>
               </div>
               <div class="show-thing">
-                <div class="carouselContainer justify-between">
+                <div
+                  class="carousel-box flex justify-between"
+                  @mouseenter="enterCarousel"
+                  @mouseleave="leaveCarousel"
+                >
                   <div>
                     <div class="carousel">
-                      <button
-                        class="ortur-icon-enlarge"
-                        @click="openImageView()"
-                      ></button>
-                      <button
-                        class="el-icon-arrow-up upCarousel"
-                        @click="arrowClick()"
-                      ></button>
-                      <button
-                        class="el-icon-arrow-down downCarousel"
-                        @click="arrowClick('down')"
-                      ></button>
+                      <transition name="carousel-button-fade">
+                        <div v-show="mouseEnterCarousel">
+                          <button
+                            class="ortur-icon-enlarge"
+                            @click="openImageView()"
+                          ></button>
+                          <button
+                            class="el-icon-arrow-up upCarousel"
+                            @click="arrowClick()"
+                          ></button>
+                          <button
+                            class="el-icon-arrow-down downCarousel"
+                            @click="arrowClick('down')"
+                          ></button>
+                        </div>
+                      </transition>
                       <el-carousel
                         direction="vertical"
                         height="496px"
                         :interval="3000"
-                        arrow="never"
+                        arrow="hover"
                         ref="carousel"
                         indicator-position="none"
+                        :autoplay="false"
                         @change="carouselChange"
-                        :autoplay="true"
                       >
                         <el-carousel-item
                           v-for="(item, index) in previewData.images"
@@ -79,12 +87,16 @@
                       </div>
                     </div>
                     <div class="swiper-scrollbar"></div>
-                    <div class="up swiper-container-button">
-                      <i class="ortur-icon-arrow-up"></i>
-                    </div>
-                    <div class="down swiper-container-button">
-                      <i class="ortur-icon-arrow-down"></i>
-                    </div>
+                    <transition name="carousel-button-fade">
+                      <div v-show="mouseEnterCarousel">
+                        <div class="up swiper-container-button">
+                          <i class="ortur-icon-arrow-up"></i>
+                        </div>
+                        <div class="down swiper-container-button">
+                          <i class="ortur-icon-arrow-bottom"></i>
+                        </div>
+                      </div>
+                    </transition>
                   </div>
                 </div>
               </div>
@@ -181,6 +193,7 @@ export default {
           el: ".swiper-scrollbar",
         },
       },
+      mouseEnterCarousel: false,
     };
   },
   computed: {
@@ -218,9 +231,17 @@ export default {
     setActiveItem(index) {
       this.$refs.carousel.setActiveItem(index);
     },
+    enterCarousel() {
+      this.mouseEnterCarousel = true;
+    },
+    leaveCarousel() {
+      this.mouseEnterCarousel = false;
+    },
   },
   created() {},
-  mounted() {},
+  mounted() {
+    console.log("gg", this.previewData);
+  },
 };
 </script>
 <style lang="scss" scoped>
@@ -251,6 +272,8 @@ export default {
         height: 112px;
         width: 100%;
         cursor: pointer;
+        object-fit: contain;
+        background: #e8ebf4;
       }
     }
   }
@@ -278,20 +301,23 @@ export default {
   }
 }
 ::v-deep .el-dialog {
-  background: #f5f5f5;
+  /* background: #f5f5f5; */
+  background: #f0f3fa;
 }
 .center-container {
   margin: 0 auto;
   width: 1024px;
 }
 .el-tabs--border-card {
-  background: #f5f5f5;
+  /* background: #f5f5f5; */
+  background: #f0f3fa;
   border: none;
   box-shadow: none;
 }
 .description-tutorial-makes {
   width: 100%;
-  background-color: #f5f5f5;
+  /* background-color: #f5f5f5; */
+  background: #f0f3fa;
   margin-top: 0px;
 }
 .bottom-content {
@@ -411,6 +437,8 @@ export default {
   img {
     width: 100%;
     height: 100%;
+    object-fit: contain;
+    background: #e8ebf4;
   }
 }
 .downCarousel {
@@ -528,9 +556,9 @@ export default {
 }
 ::v-deep .el-tabs--border-card > .el-tabs__header .el-tabs__item.is-active {
   color: #fff;
-  background-color: #f5f5f5;
-  border-right-color: #f5f5f5;
-  border-left-color: #f5f5f5;
+  background-color: #f0f3fa;
+  border-right-color: #f0f3fa;
+  border-left-color: #f0f3fa;
   width: 120px;
   height: 40px;
   background: #1e78f0;
@@ -538,13 +566,25 @@ export default {
 }
 ::v-deep .el-tabs--border-card > .el-tabs__header {
   border: none;
-  background-color: #f5f5f5;
+  background-color: #f0f3fa;
 }
 ::v-deep .el-tabs--border-card {
-  background: #f5f5f5;
+  background: #f0f3fa;
   border: none;
 }
 ::v-deep .el-tabs__header .is-top {
   width: 240px;
+}
+.carousel-button-fade-enter,
+.carousel-button-fade-leave-to {
+  opacity: 0;
+}
+.carousel-button-fade-enter-to,
+.carousel-button-fade-leave {
+  opacity: 1;
+}
+.carousel-button-fade-enter-active,
+.carousel-button-fade-leave-active {
+  transition: all 0.3s;
 }
 </style>

@@ -55,6 +55,7 @@ module.exports = {
 
     fileTooLarge: "The size of a single file cannot exceed {0}",
     fileExceed: "A maximum of {0} files can be uploaded",
+    coverExceed: "A maximum of {0} covers can be uploaded",
     supportedFilesError: "Supported Files:{0}",
     tagTip: "Hint: Press Enter to save",
     updateOk: "Update ok",

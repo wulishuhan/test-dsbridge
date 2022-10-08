@@ -25,6 +25,7 @@
             class="cover-edit"
             action=""
             :show-file-list="showFile"
+            :file-list="itemList"
             :on-success="onEditSuccess"
             :headers="headers"
             :accept="config.pictureAcceptType"
@@ -44,11 +45,14 @@
           action=""
           :show-file-list="showFile"
           class="cover-add"
+          :file-list="itemList"
           :on-success="onAddSuccess"
           :headers="headers"
           accept=".png,.jpg,.svg,.jpeg"
           :before-upload="beforeUpload"
           :http-request="handleRequest"
+          :limit="config.coverLimit"
+          :on-exceed="handleExceed"
         >
           <i class="el-icon-plus" @click="setCurrentKeyList([0, groupKey])"></i>
         </el-upload>
@@ -163,6 +167,12 @@ export default {
     }),
   },
   methods: {
+    handleExceed() {
+      this.$message({
+        message: this.$t("upload.fileExceed", [this.config.coverLimit]),
+        type: "warning",
+      });
+    },
     onMoveCallback() {
       //   console.log("移动事件", evt, originalEvent);
     },

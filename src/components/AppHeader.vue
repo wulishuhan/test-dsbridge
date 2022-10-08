@@ -419,7 +419,7 @@ export default {
               height: 40px;
             }
             .el-icon-arrow-down {
-              font-size: 25px;
+              font-size: 12px;
               font-weight: 20px;
               margin-right: 10px;
             }
