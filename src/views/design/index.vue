@@ -166,7 +166,7 @@
             <div
               class="desc"
               @click="editDiy(item, index)"
-              v-if="!item.isEdit"
+              v-show="!item.isEdit"
               :class="[{ NoDesc: !item.text }, { descHover: isYourAccount }]"
             >
               <a
@@ -1243,6 +1243,7 @@ export default {
         for (const item of result.data.data) {
           res.push(item.id);
         }
+        // console.log(result.data.data, 1246);
         this.myFollowList = res;
       });
     },
@@ -1273,11 +1274,14 @@ export default {
     editChange(item, index) {
       console.log("item: ", item);
       // let str = "url" + index;
-      throttle(function () {
-        updateDiy({ ["url" + (index + 1)]: item.text }).then(() => {
-          item.isEdit = false;
-        });
-      }, 1000)();
+      // throttle(function () {
+      //   updateDiy({ ["url" + (index + 1)]: item.text }).then(() => {
+      //     item.isEdit = false;
+      //   });
+      // }, 1000)();
+      updateDiy({ ["url" + (index + 1)]: item.text }).then(() => {
+        item.isEdit = false;
+      });
     },
 
     editDesc() {

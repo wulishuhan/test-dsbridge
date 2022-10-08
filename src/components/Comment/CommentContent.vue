@@ -137,6 +137,7 @@ export default {
 }
 
 .reply-ref-detail {
+  display: flex;
   margin-left: 54px;
   font-size: 16px;
   color: #1a1a1a;
