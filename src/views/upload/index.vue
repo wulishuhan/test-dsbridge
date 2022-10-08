@@ -39,7 +39,9 @@
           <div class="resource-info-intro">
             <img :src="refResource.image" />
             <div class="resource-info">
-              <span class="ref-title" :title="refResource.title">{{ refResource.title }}</span>
+              <span class="ref-title" :title="refResource.title">{{
+                refResource.title
+              }}</span>
               <span class="ref-author">By {{ refResource.creator.name }}</span>
             </div>
           </div>
@@ -418,7 +420,7 @@ export default {
     },
     resetForm() {
       this.$refs["resourceForm"].resetFields();
-      console.log(this.$refs["tutorialForm"]);
+      this.resourceForm.images = [];
       this.tutorialForm = [];
     },
     handleCloseTag(tag) {
