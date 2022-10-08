@@ -363,7 +363,7 @@ export default {
         if (Object.keys(detail.ancestor).length > 0) {
           this.isRefSource = true;
           this.refResource = detail.ancestor;
-          for (const item of this.licenseSelectList) {
+          for (const item of this.config.licenseSelectList) {
             if (item.value == this.refResource.license) {
               this.refResource.licenseIcon = item.icon;
               break;
@@ -384,13 +384,13 @@ export default {
           id: resData.id,
           creator: resData.creator,
         };
-
-        for (const item of this.licenseSelectList) {
+        for (const item of this.config.licenseSelectList) {
           if (item.value == this.refResource.license) {
             this.refResource.licenseIcon = item.icon;
             break;
           }
         }
+        console.log(222);
       });
     }
     this._throttle = throttle((swiperArrow) => {
