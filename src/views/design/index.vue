@@ -10,7 +10,11 @@
         @moveFolder="moveCollectedOption"
         @addFolder="addFolder"
       ></CollectedOption>
-      <el-dialog :visible.sync="dialogFollowersVisible" class="followDialog">
+      <el-dialog
+        :visible.sync="dialogFollowersVisible"
+        class="followDialog"
+        @closed="closeFollowDialog"
+      >
         <el-tabs
           v-model="activeTab"
           @tab-click="handleFollowTapClick"
@@ -738,6 +742,12 @@ export default {
     },
   },
   methods: {
+    closeFollowDialog() {
+      getProfile(this.userId).then((params) => {
+        let res = params.data.data;
+        Object.assign(this.user, res);
+      });
+    },
     closeAllDialog() {
       this.isShowDownPanel = false;
       this.openCollectedOption = false;
