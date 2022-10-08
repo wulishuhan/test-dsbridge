@@ -71,6 +71,7 @@ export default {
       zip.generateAsync({ type: "blob" }).then((content) => {
         // see FileSaver.js
         saveAs(content, this.resourceName + ".zip");
+        this.count += this.fileList.length;
       });
     },
     closeDownPanel() {
