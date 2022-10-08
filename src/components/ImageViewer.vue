@@ -236,7 +236,7 @@ export default {
       return this.index === this.urlList.length - 1;
     },
     currentImg() {
-      return this.urlList[this.index].url;
+      return this.urlList[this.index]?.url;
     },
     imgStyle() {
       const { scale, deg, offsetX, offsetY, enableTransition } = this.transform;
