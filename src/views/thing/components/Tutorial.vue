@@ -78,8 +78,8 @@ h2 {
   flex-direction: column;
 }
 img {
-  width: 237px;
-  height: 144px;
+  max-width: 637px;
+  // height: 144px;
   margin-top: 10px;
 }
 </style>
