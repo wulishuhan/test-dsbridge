@@ -163,7 +163,8 @@ module.exports = {
     emailErrorInput: "Please input the correct email address",
     username: "Please enter the user name",
     usernameLengthLimit: "Username length is limited to 5 to 20 characters",
-    changeEmailSuccess: "change email Successfully",
+    changeEmailSuccess:
+      "Please check your email and click the link to change your email address",
     changeNickNameSucess: "change nickname Sucessfully",
   },
   error: {

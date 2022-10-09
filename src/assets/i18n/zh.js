@@ -159,7 +159,7 @@ module.exports = {
     emailErrorInput: "请输入正确的邮箱地址",
     username: "请输入用户名",
     usernameLengthLimit: "长度在 5 到 20 个字符",
-    changeEmailSuccess: "修改邮箱成功",
+    changeEmailSuccess: "请检测你的邮箱，点击链接完成修改邮箱地址",
     changeNickNameSucess: "修改昵称成功",
   },
   error: {
