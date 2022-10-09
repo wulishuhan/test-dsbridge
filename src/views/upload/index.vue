@@ -392,7 +392,6 @@ export default {
             break;
           }
         }
-        console.log(222);
       });
     }
     this._throttle = throttle((swiperArrow) => {
