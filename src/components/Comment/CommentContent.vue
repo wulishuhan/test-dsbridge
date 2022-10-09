@@ -146,14 +146,21 @@ export default {
   padding: 10px 20px;
   .reply-label {
     color: #999;
+    white-space: nowrap;
   }
   .reply-nickname {
     display: inline-block;
     max-width: 180px;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
     color: #1e78f0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .reply-comment {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 300px;
   }
 }
 </style>
