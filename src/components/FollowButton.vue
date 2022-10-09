@@ -62,6 +62,7 @@ export default {
           });
         });
       }
+      this.$emit("listenFollowButtonEvent");
     },
     enterFollowing() {
       if (this.isFollow) this.isEnterFollowingBox = true;

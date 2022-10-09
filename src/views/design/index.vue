@@ -134,6 +134,7 @@
             v-if="!isYourAccount"
             :user-id="userId"
             :follow="myFollowingList.includes(userId - 0)"
+            @listenFollowButtonEvent="FollowButton"
           ></FollowButton>
           <div
             class="desc"
@@ -742,6 +743,12 @@ export default {
     },
   },
   methods: {
+    FollowButton() {
+      getProfile(this.userId).then((params) => {
+        let res = params.data.data;
+        Object.assign(this.user, res);
+      });
+    },
     closeFollowDialog() {
       getProfile(this.userId).then((params) => {
         let res = params.data.data;
