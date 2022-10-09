@@ -520,7 +520,7 @@ export default {
             .catch((error) => {
               // this.$message.error(error.msg);
               // console.log("err", error);
-              if (error.data.code === 1023) {
+              if (error.data?.code === 1023) {
                 this.sendEmail(this.loginForm.email);
                 this.verifyEmailDialogVisible = true;
               }

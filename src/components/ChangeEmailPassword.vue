@@ -48,13 +48,13 @@
       </div>
       <div v-show="isLogin && !forgetPasswordVisible">
         <el-form :model="changeEmailForm" ref="changeEmailForm" :rules="rules">
-          <!-- <el-form-item>
+          <el-form-item>
             <span style="color: #999">
               We'll send an email to your new address with
               <br />
               instructions on completing the change
             </span>
-          </el-form-item> -->
+          </el-form-item>
           <el-form-item prop="email">
             <el-input
               v-model="changeEmailForm.email"
@@ -292,6 +292,9 @@ export default {
   }
   .el-dialog__body {
     font-size: 16px;
+  }
+  .el-dialog__title {
+    margin-left: 20px;
   }
 }
 .submit {
