@@ -182,10 +182,7 @@
               <div class="login-text-nav">
                 <span class="login-text">
                   Forget password?
-                  <a
-                    href="https://sso.ortur.cn/oauth/forget_password"
-                    target="_blank"
-                  >
+                  <a :href="resetPasswordUrl" target="_blank">
                     &nbsp; Reset it
                   </a>
                 </span>
@@ -292,6 +289,14 @@ export default {
     openLoginInfo: { type: Number, default: 0 },
   },
   computed: {
+    resetPasswordUrl: function () {
+      if (process.env.NODE_ENV == "production") {
+        return "https://sso.leadiffer.com/oauth/forget_password";
+      }
+      if (process.env.NODE_ENV == "development") {
+        return "https://sso.leadiffer.cn/oauth/forget_password";
+      }
+    },
     dialogVisible: function () {
       return this.visible;
     },
@@ -545,8 +550,8 @@ export default {
           this.$store
             .dispatch("user/register", {
               auto_login: false,
-              client_subtype: "Windows",
-              client_type: "pc",
+              client_subtype: broserInfo(),
+              client_type: "web",
               ...this.registerForm,
             })
             .then((res) => {
@@ -619,7 +624,7 @@ export default {
         }
         this.thirdPartyInfo.userId = code;
         this.thirdPartyInfo.catalog = from;
-        this.registerForm.nickname = name;
+        this.registerForm.nickname = "";
         this.thirdPartyInfo.email = email;
         this.registerForm.email = email;
         this.registerForm.username = email;
