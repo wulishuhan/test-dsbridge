@@ -453,6 +453,7 @@ export default {
         url: response.url,
         name: response.name,
         size: response.size,
+        thumbnail: response.thumbnail,
       };
       this.resourceForm.images.push(imgInfo);
     },
@@ -462,6 +463,7 @@ export default {
         url: response.url,
         name: response.name,
         size: response.size,
+        thumbnail: response.thumbnail,
       };
       this.resourceForm.images.splice(this.currentEditKeyList[0], 1, imgInfo);
     },
