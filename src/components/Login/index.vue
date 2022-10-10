@@ -290,12 +290,7 @@ export default {
   },
   computed: {
     resetPasswordUrl: function () {
-      if (process.env.NODE_ENV == "production") {
-        return "https://sso.leadiffer.com/oauth/forget_password";
-      }
-      if (process.env.NODE_ENV == "development") {
-        return "https://sso.leadiffer.cn/oauth/forget_password";
-      }
+      return process.env.VUE_APP_SSO_URL + "/forget_password";
     },
     dialogVisible: function () {
       return this.visible;
