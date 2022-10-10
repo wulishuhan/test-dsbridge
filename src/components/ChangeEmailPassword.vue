@@ -87,8 +87,8 @@
         <h2 class="change-password-title">Change Password</h2>
         <div>
           <p>
-            Change Password We' II sent an email to {{ email }} with
-            instructions to reset your password!
+            We' II sent an email to {{ email }} with instructions to reset your
+            password!
           </p>
           <button
             class="change-password-button"
