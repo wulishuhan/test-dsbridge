@@ -161,6 +161,7 @@ module.exports = {
     usernameLengthLimit: "长度在 5 到 20 个字符",
     changeEmailSuccess: "请检测你的邮箱，点击链接完成修改邮箱地址",
     changeNickNameSucess: "修改昵称成功",
+    sendEmail: "发送邮件成功",
   },
   error: {
     serverDatabaseError: "服务数据库错误",

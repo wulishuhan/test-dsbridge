@@ -308,6 +308,18 @@ export default {
     },
   },
   data() {
+    var validateNickName = (rule, value, callback) => {
+      if (this.registerForm.nickname.length === 0) {
+        callback();
+      }
+      if (
+        this.registerForm.nickname.length < 2 ||
+        this.registerForm.nickname.length > 32
+      ) {
+        callback(new Error("Nickname length should be 2-32 characters"));
+      }
+      callback();
+    };
     var validatePassword = (rule, value, callback) => {
       let pattern =
         // eslint-disable-next-line
@@ -405,13 +417,7 @@ export default {
       loading: true,
       show: true,
       rules: {
-        name: [
-          {
-            min: 2,
-            max: 31,
-            trigger: "blur",
-          },
-        ],
+        name: [{ validator: validateNickName, trigger: "blur" }],
         email: [
           { required: true, message: this.$t("login.email"), trigger: "blur" },
           {

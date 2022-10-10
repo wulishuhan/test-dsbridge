@@ -166,6 +166,7 @@ module.exports = {
     changeEmailSuccess:
       "Please check your email and click the link to change your email address",
     changeNickNameSucess: "change nickname Sucessfully",
+    sendEmail: "Send email successfully",
   },
   error: {
     serverDatabaseError: "server database error",
