@@ -350,6 +350,7 @@
                 :onFolderAdd="onFolderAdd"
                 @clickFolder="handleClickFolder"
                 @delFolder="handleDelFolder"
+                @getCollectList="getCollectList"
               ></RowFolder>
               <div class="draft" v-show="!dialogCollectionVisible">Draft</div>
               <div

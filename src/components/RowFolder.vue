@@ -50,10 +50,10 @@
               {{ item.name }}
             </div>
             <!-- <el-tooltip class="item" effect="dark" placement="bottom"> -->
-            <div class="title" v-if="!item.isEdit" @click="handleEdit(item)">
+            <div class="title" @click="handleEdit(item)">
               {{ item.name }}
             </div>
-            <input
+            <!-- <input
               ref="folderInputs"
               @click.stop="return false;"
               @keyup.enter="
@@ -65,7 +65,7 @@
               type="text"
               v-model="item.name"
               v-else
-            />
+            /> -->
           </el-tooltip>
         </div>
       </div>
@@ -73,11 +73,29 @@
         <div class="plus-icon">+</div>
       </div>
     </div>
+    <el-dialog
+      title="Create a new collection"
+      :visible.sync="renameVisible"
+      width="410px"
+      center
+    >
+      <el-input v-model="collectionMessage.name" maxlength="31"></el-input>
+      <el-button @click="rename">submit</el-button>
+    </el-dialog>
+    <el-dialog
+      title="Create a new collection"
+      :visible.sync="addnameVisible"
+      width="410px"
+      center
+    >
+      <el-input v-model="addFolderMessage.name" maxlength="31"></el-input>
+      <el-button @click="addname">submit</el-button>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { renameCollection } from "@/api/design";
+import { renameCollection, addCollection } from "@/api/design";
 export default {
   props: {
     imgArr: {
@@ -135,6 +153,14 @@ export default {
     return {
       isEdit: false,
       isRename: false,
+      renameVisible: false,
+      collectionMessage: {
+        name: "",
+      },
+      addnameVisible: false,
+      addFolderMessage: {
+        name: "",
+      },
     };
   },
   mounted() {},
@@ -164,22 +190,41 @@ export default {
         item.showMoreMenu = false;
       }
     },
+    rename() {
+      renameCollection(this.collectionMessage)
+        .then(() => {
+          this.collectionMessage.isEdit = false;
+          this.renameVisible = false;
+        })
+        .then(() => {
+          this.$message({
+            type: "success",
+            message: "Name changed successfully",
+          });
+        });
+    },
     handleRenameClick(item) {
       this.$emit("Rename", item);
       item.isEdit = true;
       item.showMoreMenu = false;
       this.isRename = true;
-      this.$nextTick(() => {
-        console.log(this.$refs.folderInputs[0].focus());
-        this.$refs.folderInputs[0].focus();
-        // [this.folders.length - 1].focus();
-      });
+      // this.$nextTick(() => {
+      //   console.log(this.$refs.folderInputs[0].focus());
+      //   this.$refs.folderInputs[0].focus();
+      //   // [this.folders.length - 1].focus();
+      // });
+      this.renameVisible = true;
+      this.collectionMessage = item;
     },
     handleDelClick(item) {
       this.$emit("delFolder", item);
       item.showMoreMenu = false;
     },
     handleClickFolder(item) {
+      console.log("isItem", item.isEdit, item);
+      // if (this.collectionMessage.isEdit) {
+      //   return;
+      // }
       this.$emit("clickFolder", item);
     },
 
@@ -188,72 +233,42 @@ export default {
       // return;
       // item.isEdit = true;
     },
-    handleEdited(item) {
-      if (item.name == "") {
-        this.$message({
-          message: this.$t("design.folderNameRequire"),
-          type: "fail",
+    addname() {
+      addCollection(this.addFolderMessage)
+        .then(() => {
+          this.addFolderMessage.isEdit = false;
+          this.addnameVisible = false;
+        })
+        .then(() => {
+          this.$message({
+            message: this.$t("design.addSuccess"),
+            type: "success",
+          });
+          this.folders.push({
+            name: this.folders.length + 1,
+            id: this.folders.length + 1,
+            isEdit: false,
+            showMoreMenu: false,
+          });
+          this.isEdit = false;
+          this.$emit("getCollectList");
         });
-        item.isEdit = true;
-        this.isEdit = true;
-
-        return;
-      }
-      if (item.name.length > 31) {
-        this.$message({
-          message: "The name cannot exceed 32 characters",
-          type: "error",
-        });
-        item.isEdit = true;
-        this.isEdit = true;
-
-        return;
-      }
-      this.onFolderAdd(item).then(() => {
-        item.isEdit = false;
-        this.isEdit = false;
-      });
-      // this.$emit("input", [...this.folders]);
-    },
-    handleRenamed(item) {
-      if (item.name == "") {
-        this.$message({
-          message: this.$t("design.folderNameRequire"),
-          type: "warning",
-        });
-        item.isEdit = true;
-        this.isEdit = true;
-        return;
-      }
-      if (item.name.length > 31) {
-        this.$message({
-          message: "The name cannot exceed 32 characters",
-          type: "error",
-        });
-        item.isEdit = true;
-        this.isEdit = true;
-
-        return;
-      }
-      renameCollection(item).then(() => {
-        item.isEdit = false;
-      });
     },
     addFolder() {
-      this.isEdit = true;
+      // this.isEdit = true;
       this.isRename = false;
-
-      this.folders.push({
-        name: this.folders.length + 1,
-        id: this.folders.length + 1,
-        isEdit: true,
-        showMoreMenu: false,
-      });
-      this.$nextTick(() => {
-        console.log(this.$refs.folderInputs[0].focus());
-        this.$refs.folderInputs[0].focus();
-        // [this.folders.length - 1].focus();
-      });
+      this.addnameVisible = true;
+      // this.folders.push({
+      //   name: this.folders.length + 1,
+      //   id: this.folders.length + 1,
+      //   isEdit: true,
+      //   showMoreMenu: false,
+      // });
+      // this.$nextTick(() => {
+      //   console.log(this.$refs.folderInputs[0].focus());
+      //   this.$refs.folderInputs[0].focus();
+      //   // [this.folders.length - 1].focus();
+      // });
     },
   },
 };
@@ -261,6 +276,21 @@ export default {
 
 <style></style>
 <style lang="scss" scoped>
+::v-deep ::v-deep .el-dialog {
+  border-right: 10px;
+}
+::v-deep .el-dialog__header {
+  text-align: left;
+}
+::v-deep .el-input {
+  margin-bottom: 15px;
+}
+::v-deep .el-button {
+  margin-left: 278px;
+  background: #1a77e3;
+  color: #fff;
+}
+
 .container::-webkit-scrollbar {
   /*滚动条整体样式*/
   width: 3px; /*高宽分别对应横竖滚动条的尺寸*/
