@@ -323,6 +323,16 @@ export default {
     },
     handleClose() {
       this.forgetPasswordVisible = false;
+      this.changeEmailForm.email = "";
+      this.changeEmailForm.password = "";
+      this.registerForm = {
+        username: "",
+        password2: "",
+        password1: "",
+        currentPassword: "",
+      };
+      this.$refs["registerForm"].resetFields();
+      this.$refs["changeEmailForm"].resetFields();
       this.$emit("handleClose");
     },
   },
