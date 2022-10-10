@@ -80,6 +80,13 @@ export default {
     closeMake() {
       this.showMake = false;
       document.documentElement.style.overflowY = "scroll";
+      getMakeList({ resId: this.$route.params.thingId }).then((res) => {
+        console.log("makes", res);
+        this.makes = res.data.rows;
+        this.makes.map((item) => {
+          item.url = item.image;
+        });
+      });
     },
     addMake() {
       //   this.makes.push(make);

@@ -771,6 +771,7 @@ export default {
     closeMake() {
       this.showMake = false;
       document.documentElement.style.overflowY = "scroll";
+      this.getMakeList();
     },
     handleDelMakeClick(item) {
       if (!this.$store.getters.isLogin) {

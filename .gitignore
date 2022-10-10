@@ -3,6 +3,7 @@ node_modules
 /dist
 sz.pem
 hk.pem
+/deploy
 
 
 # local env files

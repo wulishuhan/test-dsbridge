@@ -48,13 +48,13 @@
       </div>
       <div v-show="isLogin && !forgetPasswordVisible">
         <el-form :model="changeEmailForm" ref="changeEmailForm" :rules="rules">
-          <!-- <el-form-item>
+          <el-form-item>
             <span style="color: #999">
               We'll send an email to your new address with
               <br />
               instructions on completing the change
             </span>
-          </el-form-item> -->
+          </el-form-item>
           <el-form-item prop="email">
             <el-input
               v-model="changeEmailForm.email"
@@ -84,11 +84,19 @@
         </el-form>
       </div>
       <div v-if="forgetPasswordVisible">
-        <h2 style="text-align: center">Change Password</h2>
-        <span>
-          Change Password We' II sent an email to {{ email }} with instructions
-          to reset your password!
-        </span>
+        <h2 class="change-password-title">Change Password</h2>
+        <div>
+          <p>
+            We' II sent an email to {{ email }} with instructions to reset your
+            password!
+          </p>
+          <button
+            class="change-password-button"
+            @click="handleForgetPasswordSendEmail"
+          >
+            Send email
+          </button>
+        </div>
       </div>
       <el-dialog width="396px" :visible.sync="innerVisible" append-to-body>
         <div class="loading-box" v-loading="loading"></div>
@@ -132,6 +140,22 @@ export default {
     },
   },
   data() {
+    var validatePassword = (rule, value, callback) => {
+      if (this.errorCode == 1009) {
+        callback(new Error(this.$t("error.1009")));
+      } else if (this.errorCode === 1012) {
+        callback(new Error(this.$t("error.1012")));
+      } else {
+        callback();
+      }
+    };
+    var validateEmail = (rule, value, callback) => {
+      if (this.errorCode == 1012) {
+        callback(new Error(this.$t("error.1012")));
+      } else {
+        callback();
+      }
+    };
     var validatePass1 = (rule, value, callback) => {
       if (value.length == 0) {
         callback(new Error(this.$t("setting.inputPassword")));
@@ -187,6 +211,7 @@ export default {
             message: this.$t("setting.emailErrorInput"),
             trigger: ["blur", "change"],
           },
+          { validator: validateEmail, trigger: "blur" },
         ],
         username: [
           {
@@ -216,8 +241,10 @@ export default {
         ],
         password1: [{ validator: validatePass1, trigger: "blur" }],
         password2: [{ validator: validatePass2, trigger: "blur" }],
+        password: [{ validator: validatePassword, trigger: "blur" }],
       },
       activeIcon: "",
+      errorCode: 0,
     };
   },
   methods: {
@@ -225,8 +252,16 @@ export default {
       this.forgetPasswordVisible = true;
       // 此处发送邮件的请求
       // this.$emit("handleClickForget");
-      resetPasswordSendEmail({ email: this.email });
-      console.log("email send ");
+      // resetPasswordSendEmail({ email: this.email });
+      // console.log("email send ");
+    },
+    handleForgetPasswordSendEmail() {
+      resetPasswordSendEmail({ email: this.email }).then((res) => {
+        console.log("res", res);
+        if (res.data.code === 0) {
+          this.$message.success(this.$t("setting.sendEmail"));
+        }
+      });
     },
     handleEnter() {
       this.login("changeEmailForm");
@@ -238,14 +273,25 @@ export default {
           changeEmail({
             newEmail: this.changeEmailForm.email,
             oldPassword: this.changeEmailForm.password,
-          }).then((res) => {
-            console.log("--------------------------------", res);
-            this.$message({
-              message: this.$t("setting.changeEmailSuccess"),
-              type: "success",
+          })
+            .then((res) => {
+              console.log("--------------------------------", res);
+              this.$message({
+                message: this.$t("setting.changeEmailSuccess"),
+                type: "success",
+              });
+              this.handleClose();
+            })
+            .catch((err) => {
+              if (err.code == 1009) {
+                this.errorCode = err.code;
+                this.$refs.changeEmailForm.validateField("password");
+              } else if (err.code == 1012) {
+                this.errorCode = err.code;
+                this.$refs.changeEmailForm.validateField("email");
+              }
+              this.errorCode = 0;
             });
-            this.handleClose();
-          });
         }
       });
     },
@@ -277,6 +323,16 @@ export default {
     },
     handleClose() {
       this.forgetPasswordVisible = false;
+      this.changeEmailForm.email = "";
+      this.changeEmailForm.password = "";
+      this.registerForm = {
+        username: "",
+        password2: "",
+        password1: "",
+        currentPassword: "",
+      };
+      this.$refs["registerForm"].resetFields();
+      this.$refs["changeEmailForm"].resetFields();
       this.$emit("handleClose");
     },
   },
@@ -292,6 +348,9 @@ export default {
   }
   .el-dialog__body {
     font-size: 16px;
+  }
+  .el-dialog__title {
+    margin-left: 20px;
   }
 }
 .submit {
@@ -369,5 +428,20 @@ a {
 ::v-deep .el-form-item__error {
   margin-top: 5px;
   position: relative;
+}
+.change-password-title {
+  text-align: center;
+  position: relative;
+  top: -25px;
+}
+.change-password-button {
+  margin: 0 auto;
+  display: block;
+  background-color: black;
+  color: white;
+  padding: 10px;
+  margin-top: 15px;
+  border-radius: 5px;
+  cursor: pointer;
 }
 </style>

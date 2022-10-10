@@ -182,10 +182,7 @@
               <div class="login-text-nav">
                 <span class="login-text">
                   Forget password?
-                  <a
-                    href="https://sso.ortur.cn/oauth/forget_password"
-                    target="_blank"
-                  >
+                  <a :href="resetPasswordUrl" target="_blank">
                     &nbsp; Reset it
                   </a>
                 </span>
@@ -292,6 +289,9 @@ export default {
     openLoginInfo: { type: Number, default: 0 },
   },
   computed: {
+    resetPasswordUrl: function () {
+      return process.env.VUE_APP_SSO_URL + "/forget_password";
+    },
     dialogVisible: function () {
       return this.visible;
     },
@@ -303,6 +303,18 @@ export default {
     },
   },
   data() {
+    var validateNickName = (rule, value, callback) => {
+      if (this.registerForm.nickname.length === 0) {
+        callback();
+      }
+      if (
+        this.registerForm.nickname.length < 2 ||
+        this.registerForm.nickname.length > 32
+      ) {
+        callback(new Error("Nickname length should be 2-32 characters"));
+      }
+      callback();
+    };
     var validatePassword = (rule, value, callback) => {
       let pattern =
         // eslint-disable-next-line
@@ -400,13 +412,7 @@ export default {
       loading: true,
       show: true,
       rules: {
-        name: [
-          {
-            min: 2,
-            max: 31,
-            trigger: "blur",
-          },
-        ],
+        name: [{ validator: validateNickName, trigger: "blur" }],
         email: [
           { required: true, message: this.$t("login.email"), trigger: "blur" },
           {
@@ -515,7 +521,7 @@ export default {
             .catch((error) => {
               // this.$message.error(error.msg);
               // console.log("err", error);
-              if (error.data.code === 1023) {
+              if (error.data?.code === 1023) {
                 this.sendEmail(this.loginForm.email);
                 this.verifyEmailDialogVisible = true;
               }
@@ -545,8 +551,8 @@ export default {
           this.$store
             .dispatch("user/register", {
               auto_login: false,
-              client_subtype: "Windows",
-              client_type: "pc",
+              client_subtype: broserInfo(),
+              client_type: "web",
               ...this.registerForm,
             })
             .then((res) => {
@@ -619,7 +625,7 @@ export default {
         }
         this.thirdPartyInfo.userId = code;
         this.thirdPartyInfo.catalog = from;
-        this.registerForm.nickname = name;
+        this.registerForm.nickname = "";
         this.thirdPartyInfo.email = email;
         this.registerForm.email = email;
         this.registerForm.username = email;

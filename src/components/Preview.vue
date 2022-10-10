@@ -11,7 +11,12 @@
                     {{ previewData.title }}
                   </div>
                   <div class="flex align-center" style="margin-top: 5px">
-                    <el-avatar :size="30" :src="userInfo.avatar"></el-avatar>
+                    <!-- <el-avatar :size="30" :src="userInfo.avatar"></el-avatar> -->
+                    <img
+                      :src="userInfo.avatar"
+                      class="show-header-avatar"
+                      alt=""
+                    />
                     <div class="user-profile">
                       <span class="username">
                         {{ userInfo.nick_name }}
@@ -416,6 +421,12 @@ export default {
   flex-direction: column;
   font-size: 18px;
   color: #1a1a1a;
+  .show-header-avatar {
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+  }
 }
 
 .show-header-left-thing-name {
