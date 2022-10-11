@@ -9,8 +9,8 @@ import { baseURL } from "@/utils/request";
 import VEmojiPicker from "v-emoji-picker";
 import "@/icons/index";
 import moment from "moment";
-import "element-ui/lib/theme-chalk/index.css";
-import "element-ui/lib/theme-chalk/display.css";
+// import "element-ui/lib/theme-chalk/index.css";
+// import "element-ui/lib/theme-chalk/display.css";
 // import mock from "mockjs";
 // import style
 import "swiper/css/swiper.css";
