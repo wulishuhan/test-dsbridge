@@ -233,7 +233,6 @@ export default {
         })
         .then(() => {
           //生成缩略图
-          console.log("开始生成缩略图", file, this.genThumb(file));
           return this.genThumb(file);
         })
         .then((thumbFile) => {
