@@ -45,7 +45,7 @@
                   <div class="verify" @click="test">
                     <el-button
                       type="text"
-                      v-show="userInfo.email_active !== 1"
+                      v-show="1 !== 1"
                       @click="verifyVisible = true"
                       >Activate now</el-button
                     >
