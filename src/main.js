@@ -3,7 +3,7 @@ import Vue from "vue";
 import App from "./App.vue";
 import router from "./router";
 import store from "./store";
-import ElementUI from "element-ui";
+// import ElementUI from "element-ui";
 import { baseURL } from "@/utils/request";
 import VEmojiPicker from "v-emoji-picker";
 import "@/icons/index";
@@ -29,7 +29,7 @@ Vue.use(Ads.InFeedAdsense);
 Vue.prototype.baseURL = baseURL;
 Vue.use(VueContextMenu);
 Vue.config.productionTip = false;
-Vue.use(ElementUI);
+// Vue.use(ElementUI);
 const VueAwesomeSwiper = require("vue-awesome-swiper/dist/ssr");
 Vue.use(VueAwesomeSwiper);
 // if (process.env.NODE_ENV === "development") {

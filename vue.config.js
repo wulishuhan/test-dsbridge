@@ -24,6 +24,10 @@ module.exports = defineConfig({
     },
   },
   chainWebpack: (config) => {
+    config.externals({
+      vue: "Vue",
+      "element-ui": "ELEMENT",
+    });
     // 移除 prefetch 插件
     config.plugins.delete("prefetch");
     config.module.rule("svg").exclude.add(resolve("src/icons")).end();
