@@ -53,7 +53,7 @@
         :class="[isMake ? 'make-canvas-img' : 'canvas-img']"
       >
         <!-- eslint-disable-next-line -->
-        <div v-for="(item, i) in urlList" style="width: 100%; height: 100%">
+        <div v-for="(item, i) in urlList">
           <img
             v-if="i === index"
             ref="img"
