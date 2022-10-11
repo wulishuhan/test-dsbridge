@@ -1,15 +1,16 @@
+/* eslint-disable */
 import i18n from "@/utils/i18n";
-import Vue from "vue";
+// import Vue from "vue";
 import App from "./App.vue";
 import router from "./router";
 import store from "./store";
-import ElementUI from "element-ui";
+// import ElementUI from "element-ui";
 import { baseURL } from "@/utils/request";
 import VEmojiPicker from "v-emoji-picker";
 import "@/icons/index";
 import moment from "moment";
-import "element-ui/lib/theme-chalk/index.css";
-import "element-ui/lib/theme-chalk/display.css";
+// import "element-ui/lib/theme-chalk/index.css";
+// import "element-ui/lib/theme-chalk/display.css";
 // import mock from "mockjs";
 // import style
 import "swiper/css/swiper.css";
@@ -29,7 +30,7 @@ Vue.use(Ads.InFeedAdsense);
 Vue.prototype.baseURL = baseURL;
 Vue.use(VueContextMenu);
 Vue.config.productionTip = false;
-Vue.use(ElementUI);
+// Vue.use(ElementUI);
 const VueAwesomeSwiper = require("vue-awesome-swiper/dist/ssr");
 Vue.use(VueAwesomeSwiper);
 // if (process.env.NODE_ENV === "development") {

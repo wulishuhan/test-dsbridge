@@ -40,7 +40,17 @@
               </div>
               <div class="center">
                 <div class="title">{{ $t("design.email") }}</div>
-                <div class="name">{{ userInfo.email }}</div>
+                <div class="email">
+                  <div class="name">{{ userInfo.email }}</div>
+                  <div class="verify" @click="test">
+                    <el-button
+                      type="text"
+                      v-show="1 !== 1"
+                      @click="verifyVisible = true"
+                      >Activate now</el-button
+                    >
+                  </div>
+                </div>
                 <div class="action" @click="handleChangeEmailClick">
                   {{ $t("setting.changeEmail") }}
                 </div>
@@ -147,6 +157,50 @@
           222
         </el-tab-pane>
       </el-tabs>
+      <!-- 發送郵箱提醒 -->
+      <!-- <el-dialog
+        width="30%"
+        title="Verify your email"
+        :visible.sync="verifyVisible"
+        append-to-body
+      >
+        <span>We'll sent an email to {{ userInfo.email }} </span>
+        <br />
+        <span>with veerify your email.</span>
+        <br />
+        <el-button>Send email</el-button>
+      </el-dialog> -->
+      <el-dialog
+        width="400px"
+        title="Verify your email"
+        :visible.sync="verifyVisible"
+        append-to-body
+      >
+        <span style="font-size: 17px"
+          >Click the verifcation link in the email we sent to
+          {{ userInfo.email }}. This helps keep your account secure.
+        </span>
+        <br />
+        <span style="font-size: 17px"
+          >No email in your inbox or spam folder?</span
+        >
+        <br />
+        <br />
+        <a style="color: rgb(4, 136, 251)" @click="sendEmail(userInfo.email)"
+          >Let's resend it.
+        </a>
+      </el-dialog>
+      <!-- 驗證郵箱已過期 -->
+      <!-- <el-dialog
+        width="30%"
+        title="Verify your email"
+        :visible.sync="verifyVisible"
+        append-to-body
+      >
+        <span>Your verifcation email has expried, please reaend the verifcation email</span>
+        <br />
+        <el-button>Resend verifcation email</el-button>
+      </el-dialog> -->
     </el-dialog>
     <ChangeEmailPassword
       @handleClose="isChangePasswordVisible = false"
@@ -167,7 +221,7 @@ const { mapState } = createNamespacedHelpers("user");
 import { getToken } from "@/utils/auth";
 import ChangeEmailPassword from "@/components/ChangeEmailPassword.vue";
 import ChangeName from "@/components/ChangeName.vue";
-import { unbindThird, getUserInfo } from "@/api/user";
+import { unbindThird, getUserInfo, activeUserSendEmail } from "@/api/user";
 
 export default {
   components: {
@@ -176,6 +230,7 @@ export default {
   },
   data() {
     return {
+      verifyVisible: false,
       third_user: [],
       isChangeNameVisible: false,
       ChangePasswordOrEmail: false,
@@ -254,6 +309,21 @@ export default {
     ...mapState(["userInfo"]),
   },
   methods: {
+    test() {
+      getUserInfo().then((res) => {
+        getUserInfo.email_active = res.data.data.email_active;
+        console.log(getUserInfo.email_active, 315);
+      });
+    },
+    sendEmail(email) {
+      // console.log(email);
+      activeUserSendEmail({
+        email: email,
+      }).then((res) => {
+        console.log(res);
+        this.$message.success("send email successfully");
+      });
+    },
     thirdPartyLogin(from) {
       let redirectUrl = window.location.href.split("?")[0];
       window.location.href = `https://sso.leadiffer.com/oauth/thirdParty?from=${from}&redirect_url=${redirectUrl}`;
@@ -289,10 +359,16 @@ export default {
       this.ChangePasswordOrEmail = false;
       this.isChangePasswordVisible = true;
     },
-    handleFollowTapClick() {},
+    handleFollowTapClick() {
+      getUserInfo().then((res) => {
+        getUserInfo.email_active = res.data.data.email_active;
+        console.log(res.data.data.email_active);
+      });
+    },
     showPanel() {
       getUserInfo().then((res) => {
         this.third_user = res.data.data.third_user;
+        getUserInfo.email_active = res.data.data.email_active;
         for (const item of this.third_user) {
           if (item.catalog) {
             this.bindingInfo[item.catalog].switch1 = true;
@@ -333,6 +409,24 @@ export default {
 </script>
 
 <style scoped lang="scss">
+::v-deep .el-dialog__header {
+  text-align: center;
+}
+::v-deep .el-dialog__title {
+  font-size: 24px;
+}
+::v-deep .el-dialog__header {
+  padding-top: 40px;
+}
+::v-deep .el-dialog__body {
+  padding: 0 35px 50px;
+}
+::v-deep .el-button--text {
+  color: #fff;
+}
+::v-deep .el-button {
+  padding: 4px 10px;
+}
 .binding {
   border-top: 1px solid #ccc;
   margin-top: 20px;
@@ -458,7 +552,6 @@ export default {
     font-family: Source Han Sans CN;
     font-weight: 400;
     color: #1a1a1a;
-    margin-top: 15px;
   }
   .action {
     font-size: 16px;
@@ -467,6 +560,18 @@ export default {
     color: #1e78f0;
     margin-top: 15px;
     cursor: pointer;
+  }
+  .email {
+    display: flex;
+    margin-top: 15px;
+  }
+  .verify {
+    font-size: 12px;
+    font-family: Source Han Sans CN;
+    background-color: red;
+    color: #ccc;
+    margin-left: 20px;
+    border-radius: 2px;
   }
 }
 </style>

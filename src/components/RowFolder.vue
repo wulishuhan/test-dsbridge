@@ -88,7 +88,11 @@
       width="410px"
       center
     >
-      <el-input v-model="addFolderMessage.name" maxlength="31"></el-input>
+      <el-input
+        v-model="addFolderMessage.name"
+        id="input1"
+        maxlength="31"
+      ></el-input>
       <el-button @click="addname">submit</el-button>
     </el-dialog>
   </div>
@@ -253,6 +257,7 @@ export default {
           this.isEdit = false;
           this.$emit("getCollectList");
         });
+      document.getElementById("input1").value = "";
     },
     addFolder() {
       // this.isEdit = true;
