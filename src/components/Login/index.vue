@@ -332,8 +332,8 @@ export default {
       // eslint-disable-next-line
       let pattern =
         // eslint-disable-next-line
-        /^(?![0-9]+$)(?![a-z]+$)(?![A-Z]+$)(?![,\.#%'\+\*\-:;^_`]+$)[,\.#%'\+\*\-:;^_`0-9A-Za-z]{8,16}$/;
-
+        // /^(?![0-9]+$)(?![a-z]+$)(?![A-Z]+$)(?![,\.#%'\+\*\-:;^_`]+$)[,\.#%'\+\*\-:;^_`0-9A-Za-z]{8,16}$/;
+        /^(?![0-9]+$)(?![a-z]+$)(?![A-Z]+$)(?![ !"#$%&'()*+,-./:;<=>?@[\\\]\^_`{|}~]+$)[ !"#$%&'()*+,-./:;<=>?@[\\\]\^_`{|}~0-9A-Za-z]{8,16}$/;
       if (value === "") {
         callback(new Error(this.$t("login.password")));
       } else if (!pattern.test(this.registerForm.password)) {
@@ -589,7 +589,7 @@ export default {
             client_subtype: broserInfo(),
             client_type: "web",
             email: this.registerForm.email,
-            nickname: this.thirdPartyInfo.name,
+            nickname: this.registerForm.nickname,
             openUserId: this.thirdPartyInfo.userId,
             password: this.registerForm.password,
             username: this.registerForm.email,
@@ -625,8 +625,8 @@ export default {
         }
         this.thirdPartyInfo.userId = code;
         this.thirdPartyInfo.catalog = from;
-        this.registerForm.nickname = "";
         this.thirdPartyInfo.email = email;
+        this.registerForm.nickname = "";
         this.registerForm.email = email;
         this.registerForm.username = email;
       }

@@ -65,15 +65,32 @@ export function generatorDefaultAvator(text, serNum = 0, size = 255, bgcolor) {
 }
 
 /*
- *生成缩略图, 返回base64url
+ *生成缩略图, callback(blob)
  * @param {html tag object} image： html tag
  * @param {number} width： width of the thumbnail
  * @param {number} height： height of the thumbnail
- * @return {string}  base64: url of the thumbnail
+ * @return {file}  file: file of the thumbnail
  */
-export function generatorThumbnail(image, width, height) {
-  let canvas = document.createElement("canvas");
-  let context = canvas.getContext("2d");
-  context.drawImage(image, 0, 0, width, height);
-  return context.toDataURL();
+export async function generatorThumbnail(file, width, height) {
+  return new Promise(function (resolve) {
+    let reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = (e) => {
+      let img = new Image();
+      img.src = e.target.result;
+      let canvas = document.createElement("canvas");
+      canvas.width = width;
+      canvas.height = height;
+      let context = canvas.getContext("2d");
+      img.onload = () => {
+        context.drawImage(img, 0, 0, width, height);
+        canvas.toBlob((blob) => {
+          var thumbFile = new File([blob], file.name, {
+            type: file.type,
+          });
+          resolve(thumbFile);
+        }, file.type);
+      };
+    };
+  });
 }
