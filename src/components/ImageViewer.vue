@@ -53,7 +53,7 @@
         :class="[isMake ? 'make-canvas-img' : 'canvas-img']"
       >
         <!-- eslint-disable-next-line -->
-        <div v-for="(item, i) in urlList">
+        <div v-for="(item, i) in urlList" style="width: 100%; height: 100%">
           <img
             v-if="i === index"
             ref="img"
@@ -504,8 +504,9 @@ export default {
 }
 .el-image-viewer__img {
   object-fit: contain;
-  height: 892px;
+  /* height: 892px; */
   width: 100%;
+  height: 100%;
 }
 .left-top-scacel-box {
   width: 120px;
