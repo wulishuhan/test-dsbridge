@@ -169,7 +169,7 @@
         <span>with veerify your email.</span>
         <br />
         <br />
-        <el-button>Send email</el-button>
+        <el-button class="Send">Send email</el-button>
       </el-dialog>
       <!-- 驗證郵箱未過期 -->
       <el-dialog
@@ -205,7 +205,7 @@
         >
         <br />
         <br />
-        <el-button>Resend verifcation email</el-button>
+        <el-button class="Resend">Resend verifcation email</el-button>
       </el-dialog>
     </el-dialog>
     <ChangeEmailPassword
@@ -445,6 +445,22 @@ export default {
 }
 ::v-deep .el-button {
   padding: 4px 10px;
+}
+::v-deep .Send {
+  font-size: 35px;
+  text-align: center;
+  background: #000;
+  color: #fff;
+  padding: 5px 50px;
+  margin: 10px 25px;
+}
+::v-deep .Resend {
+  font-size: 23px;
+  text-align: center;
+  background: #000;
+  color: #fff;
+  padding: 5px 20px;
+  margin: 1px 20px;
 }
 .binding {
   border-top: 1px solid #ccc;
