@@ -106,7 +106,7 @@
                     </transition>
                     <el-carousel
                       direction="vertical"
-                      height="496px"
+                      height="605px"
                       :interval="3000"
                       arrow="hover"
                       ref="carousel"
@@ -792,16 +792,16 @@ export default {
 <style lang="scss" scoped>
 .swiper-container {
   width: 184px;
-  height: 496px;
+  height: 605px;
   margin: 0;
   .swiper-wrapper {
-    height: 496px;
+    height: 605px;
     width: 184px;
     .swiper-slide {
       width: 184px;
       background: #e8ebf4;
       img {
-        height: 112px;
+        height: 138px;
         width: 100%;
         cursor: pointer;
         object-fit: contain;
@@ -1063,7 +1063,7 @@ a {
   position: relative;
   /* width: 805px; */
   width: 807px;
-  height: 496px;
+  height: 605px;
   border-radius: 10px;
   background: #e8ebf4;
   img {
