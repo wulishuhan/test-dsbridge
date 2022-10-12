@@ -147,7 +147,7 @@ export default {
 <style lang="scss" scoped>
 .user-card {
   width: 384px;
-  height: 168px;
+  height: 180px;
   background: #ffffff;
   box-shadow: 0px 2px 10px 0px rgba(18, 18, 18, 0.07);
   border-radius: 10px;
@@ -193,7 +193,7 @@ export default {
     margin-top: 17px;
     .el-image {
       width: 98px;
-      height: 59px;
+      height: 74px;
       border-radius: 5px;
       cursor: pointer;
       background-color: #e8ebf4;

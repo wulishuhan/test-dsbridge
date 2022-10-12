@@ -316,9 +316,10 @@ export default {
       callback();
     };
     var validatePassword = (rule, value, callback) => {
+      // let pattern =
+      // /^(?![0-9]+$)(?![a-z]+$)(?![A-Z]+$)(?![,\.#%'\+\*\-:;^_`]+$)[,\.#%'\+\*\-:;^_`0-9A-Za-z]{8,16}$/;
       let pattern =
-        // eslint-disable-next-line
-        /^(?![0-9]+$)(?![a-z]+$)(?![A-Z]+$)(?![,\.#%'\+\*\-:;^_`]+$)[,\.#%'\+\*\-:;^_`0-9A-Za-z]{8,16}$/;
+        /^(?![0-9]+$)(?![a-z]+$)(?![A-Z]+$)(?![ !"#$%&'()*+,-./:;<=>?@[\\\]\^_`{|}~]+$)[ !"#$%&'()*+,-./:;<=>?@[\\\]\^_`{|}~0-9A-Za-z]{8,16}$/;
       if (!pattern.test(this.loginForm.password)) {
         callback(
           new Error(

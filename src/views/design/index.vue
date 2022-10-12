@@ -1385,7 +1385,7 @@ export default {
   $width: 228px;
   ::v-deep .more-image {
     width: $width;
-    height: 139px;
+    height: 171px;
   }
   ::v-deep .makes-mask {
     width: $width;

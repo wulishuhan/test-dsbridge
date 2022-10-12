@@ -516,13 +516,13 @@ export default {
 }
 .resource-show-image-box {
   width: 100%;
-  height: 200px;
+  height: 248px;
   border-radius: 8px;
   border: solid 1px #c2c4cc;
 }
 .resource-show-image-box:hover {
   width: 100%;
-  height: 200px;
+  height: 248px;
   border-radius: 8px;
   border: solid 1px #c2c4cc;
 }

@@ -162,7 +162,7 @@ export default {
 
 .more-image {
   width: 184px;
-  height: 112px;
+  height: 138px;
   margin-top: 5px;
   background: #e8ebf4;
 }
