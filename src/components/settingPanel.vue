@@ -64,7 +64,7 @@
               </div>
               <div class="border"></div>
 
-              <div class="binding">
+              <div class="binding" v-show="this.email_active == '1'">
                 <div
                   style="
                     font-size: 16px;
@@ -163,6 +163,7 @@
         title="Verify your email"
         :visible.sync="SendVisible"
         append-to-body
+        @closed="close"
       >
         <span>We'll sent an email to {{ userInfo.email }} </span>
         <br />
@@ -177,6 +178,7 @@
         title="Verify your email"
         :visible.sync="verifyVisible"
         append-to-body
+        @closed="close"
       >
         <span style="font-size: 17px"
           >Click the verifcation link in the email we sent to
@@ -198,6 +200,7 @@
         title="Verify your email"
         :visible.sync="ResendVisible"
         append-to-body
+        @closed="close"
       >
         <span
           >Your verifcation email has expried, please reaend the verifcation
@@ -318,8 +321,13 @@ export default {
     ...mapState(["userInfo"]),
   },
   methods: {
+    // 關閉彈窗，刷新頁面數據
+    close() {
+      this.showPanel();
+      this.verifyVisible = false;
+    },
+    // 判定狀態，打開對應的彈窗
     test(email_active) {
-      console.log(322);
       if (email_active == "0") {
         this.verifyVisible = true;
       } else {
@@ -330,8 +338,9 @@ export default {
         }
       }
     },
+    //驗證郵箱未過期時發送驗證
     sendEmail(email) {
-      // console.log(email);
+      // this.close();
       activeUserSendEmail({
         email: email,
       }).then((res) => {
@@ -384,7 +393,7 @@ export default {
       getUserInfo().then((res) => {
         this.third_user = res.data.data.third_user;
         this.email_active = res.data.data.email_active;
-        console.log(this.email_active);
+        // console.log(this.email_active, 407);
         for (const item of this.third_user) {
           if (item.catalog) {
             this.bindingInfo[item.catalog].switch1 = true;
