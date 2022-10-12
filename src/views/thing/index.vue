@@ -138,7 +138,7 @@
                         :class="
                           index === imgActiveIndex ? 'img-activeBorder' : ''
                         "
-                        :src="item.url"
+                        :src="item.thumbnail ? item.thumbnail : item.url"
                         alt=""
                       />
                     </div>

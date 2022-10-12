@@ -65,7 +65,7 @@ export function generatorDefaultAvator(text, serNum = 0, size = 255, bgcolor) {
 }
 
 /*
- *生成缩略图, callback(blob)
+ *生成缩略图
  * @param {html tag object} image： html tag
  * @param {number} width： width of the thumbnail
  * @param {number} height： height of the thumbnail
