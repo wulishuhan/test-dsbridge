@@ -149,13 +149,13 @@
             </div>
           </div>
         </el-tab-pane>
-        <el-tab-pane
+        <!-- <el-tab-pane
           :label="$t('design.private')"
           name="second"
           class="followTapPanel"
         >
           222
-        </el-tab-pane>
+        </el-tab-pane> -->
       </el-tabs>
       <!-- 發送郵箱提醒 -->
       <el-dialog
@@ -190,8 +190,11 @@
         >
         <br />
         <br />
-        <a style="color: rgb(4, 136, 251)" @click="sendEmail(userInfo.email)"
-          >Let's resend it.
+        <a
+          style="color: rgb(4, 136, 251); cursor: pointer"
+          @click="sendEmail(userInfo.email)"
+        >
+          Let's resend it.
         </a>
       </el-dialog>
       <!-- 驗證郵箱已過期 -->
