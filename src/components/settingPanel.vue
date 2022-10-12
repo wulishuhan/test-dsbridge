@@ -42,10 +42,10 @@
                 <div class="title">{{ $t("design.email") }}</div>
                 <div class="email">
                   <div class="name">{{ userInfo.email }}</div>
-                  <div class="verify" @click="test">
+                  <div class="verify">
                     <el-button
                       type="text"
-                      v-show="1 !== 1"
+                      v-show="this.email_active !== '1'"
                       @click="verifyVisible = true"
                       >Activate now</el-button
                     >
@@ -231,6 +231,7 @@ export default {
   data() {
     return {
       verifyVisible: false,
+      email_active: "",
       third_user: [],
       isChangeNameVisible: false,
       ChangePasswordOrEmail: false,
@@ -309,12 +310,12 @@ export default {
     ...mapState(["userInfo"]),
   },
   methods: {
-    test() {
-      getUserInfo().then((res) => {
-        getUserInfo.email_active = res.data.data.email_active;
-        console.log(getUserInfo.email_active, 315);
-      });
-    },
+    // test() {
+    //   getUserInfo().then((res) => {
+    //     getUserInfo.email_active = res.data.data.email_active;
+    //     console.log(getUserInfo.email_active, 315);
+    //   });
+    // },
     sendEmail(email) {
       // console.log(email);
       activeUserSendEmail({
@@ -368,7 +369,8 @@ export default {
     showPanel() {
       getUserInfo().then((res) => {
         this.third_user = res.data.data.third_user;
-        getUserInfo.email_active = res.data.data.email_active;
+        this.email_active = res.data.data.email_active;
+        console.log(this.email_active);
         for (const item of this.third_user) {
           if (item.catalog) {
             this.bindingInfo[item.catalog].switch1 = true;
@@ -411,6 +413,9 @@ export default {
 <style scoped lang="scss">
 ::v-deep .el-dialog__header {
   text-align: center;
+}
+::v-deep .el-dialog {
+  border-radius: 15px;
 }
 ::v-deep .el-dialog__title {
   font-size: 24px;
