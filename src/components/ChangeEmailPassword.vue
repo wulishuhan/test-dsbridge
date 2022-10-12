@@ -370,6 +370,7 @@ export default {
   font-family: Source Han Sans CN;
   font-weight: 400;
   color: #1e78f0;
+  cursor: pointer;
 }
 
 .loading-box {
