@@ -137,6 +137,7 @@
 import { mapState } from "vuex";
 import { getResouceUploadS3Url } from "@/api/resource";
 import axios from "axios";
+import { generatorThumbnail } from "@/utils/generateImage";
 export default {
   model: {
     prop: "data",
@@ -247,6 +248,7 @@ export default {
     },
     handleRequest({ file, onProgress, onSuccess }) {
       var data;
+      var tmpFile;
       getResouceUploadS3Url({
         name: file.name,
         size: file.size,
@@ -265,6 +267,32 @@ export default {
                 onProgress(progressEvent);
               },
             });
+          }
+        })
+        .then(() => {
+          return generatorThumbnail(file, 400, 300);
+        })
+        .then((thumbFile) => {
+          console.log("捕获文件", thumbFile);
+          tmpFile = thumbFile;
+          //上传缩略图
+          return getResouceUploadS3Url({
+            name: thumbFile.name,
+            size: thumbFile.size,
+            type: thumbFile.type,
+          });
+        })
+        .then((res) => {
+          if (res.data.code == 0) {
+            let presignUrl = res.data.data.presignUrl;
+            data.thumbnail = res.data.data.url;
+            return axios.put(presignUrl, tmpFile, {
+              headers: {
+                "Content-Type": tmpFile.type,
+              },
+            });
+          } else {
+            return Promise.reject("error");
           }
         })
         .then(() => {
