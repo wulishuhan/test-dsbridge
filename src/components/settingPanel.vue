@@ -46,7 +46,7 @@
                     <el-button
                       type="text"
                       v-show="this.email_active !== '1'"
-                      @click="verifyVisible = true"
+                      @click="test(email_active)"
                       >Activate now</el-button
                     >
                   </div>
@@ -158,18 +158,20 @@
         </el-tab-pane>
       </el-tabs>
       <!-- 發送郵箱提醒 -->
-      <!-- <el-dialog
-        width="30%"
+      <el-dialog
+        width="400px"
         title="Verify your email"
-        :visible.sync="verifyVisible"
+        :visible.sync="SendVisible"
         append-to-body
       >
         <span>We'll sent an email to {{ userInfo.email }} </span>
         <br />
         <span>with veerify your email.</span>
         <br />
+        <br />
         <el-button>Send email</el-button>
-      </el-dialog> -->
+      </el-dialog>
+      <!-- 驗證郵箱未過期 -->
       <el-dialog
         width="400px"
         title="Verify your email"
@@ -191,16 +193,20 @@
         </a>
       </el-dialog>
       <!-- 驗證郵箱已過期 -->
-      <!-- <el-dialog
-        width="30%"
+      <el-dialog
+        width="400px"
         title="Verify your email"
-        :visible.sync="verifyVisible"
+        :visible.sync="ResendVisible"
         append-to-body
       >
-        <span>Your verifcation email has expried, please reaend the verifcation email</span>
+        <span
+          >Your verifcation email has expried, please reaend the verifcation
+          email</span
+        >
+        <br />
         <br />
         <el-button>Resend verifcation email</el-button>
-      </el-dialog> -->
+      </el-dialog>
     </el-dialog>
     <ChangeEmailPassword
       @handleClose="isChangePasswordVisible = false"
@@ -230,7 +236,9 @@ export default {
   },
   data() {
     return {
+      SendVisible: false,
       verifyVisible: false,
+      ResendVisible: false,
       email_active: "",
       third_user: [],
       isChangeNameVisible: false,
@@ -310,12 +318,18 @@ export default {
     ...mapState(["userInfo"]),
   },
   methods: {
-    // test() {
-    //   getUserInfo().then((res) => {
-    //     getUserInfo.email_active = res.data.data.email_active;
-    //     console.log(getUserInfo.email_active, 315);
-    //   });
-    // },
+    test(email_active) {
+      console.log(322);
+      if (email_active == "0") {
+        this.verifyVisible = true;
+      } else {
+        if (email_active == "2") {
+          this.SendVisible = true;
+        } else {
+          this.ResendVisible = true;
+        }
+      }
+    },
     sendEmail(email) {
       // console.log(email);
       activeUserSendEmail({
