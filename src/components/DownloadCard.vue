@@ -69,10 +69,10 @@ export default {
   computed: {
     fileSize() {
       let sizeText = "";
-      if (this.file.size > 1000) {
-        sizeText = Math.floor(this.file.size / 1000) + "kb";
+      if (this.file.size > 1024 * 1024) {
+        sizeText = Math.floor(this.file.size / 1024 / 1024) + "M";
       } else {
-        sizeText = this.file.size + "b";
+        sizeText = Math.floor(this.file.size / 1024) + "KB";
       }
       return sizeText;
     },
@@ -194,7 +194,7 @@ export default {
   }
   img {
     width: 88px;
-    height: 56px;
+    height: 66px;
     object-fit: contain;
     margin-right: 10px;
     background: #e8ebf4;

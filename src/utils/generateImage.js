@@ -71,26 +71,54 @@ export function generatorDefaultAvator(text, serNum = 0, size = 255, bgcolor) {
  * @param {number} height： height of the thumbnail
  * @return {file}  file: file of the thumbnail
  */
-export async function generatorThumbnail(file, width, height) {
-  return new Promise(function (resolve) {
-    let reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = (e) => {
-      let img = new Image();
-      img.src = e.target.result;
-      let canvas = document.createElement("canvas");
-      canvas.width = width;
-      canvas.height = height;
-      let context = canvas.getContext("2d");
-      img.onload = () => {
-        context.drawImage(img, 0, 0, width, height);
+export async function generatorThumbnail(srcFile, width, height) {
+  return new Promise((resolve, reject) => {
+    //判断文件类型，如果是图片，则生成截图
+    if (srcFile.type.indexOf("image") < 0) {
+      reject("error");
+      return;
+    }
+    const image = new Image();
+    image.src = URL.createObjectURL(srcFile);
+    image.setAttribute("crossOrigin", "Anonymous");
+
+    image.onload = () => {
+      var canvas = document.createElement("canvas");
+      var ctx = canvas.getContext("2d");
+      var maxw = width;
+      var maxh = height;
+
+      var cw = image.width;
+      var ch = image.height;
+      var w = image.width;
+      var h = image.height;
+      canvas.width = w;
+      canvas.height = h;
+      if (cw > maxw && cw > ch) {
+        w = maxw;
+        h = (maxw * ch) / cw;
+        canvas.width = w;
+        canvas.height = h;
+      }
+      if (ch > maxh && ch > cw) {
+        h = maxh;
+        w = (maxh * cw) / ch;
+        canvas.width = w;
+        canvas.height = h;
+      }
+      ctx.drawImage(image, 0, 0, w, h);
+      try {
         canvas.toBlob((blob) => {
-          var thumbFile = new File([blob], file.name, {
-            type: file.type,
+          var thumbFile = new File([blob], srcFile.name, {
+            type: srcFile.type,
           });
+
           resolve(thumbFile);
-        }, file.type);
-      };
+          //上传缩略图
+        }, srcFile.type);
+      } catch (e) {
+        reject(e);
+      }
     };
   });
 }
