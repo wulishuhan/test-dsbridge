@@ -16,7 +16,7 @@ module.exports = defineConfig({
   configureWebpack: {
     // provide the app's title in webpack's name field, so that
     // it can be accessed in index.html to inject the correct title.
-    name: "Ortur Library",
+    name: "App Help",
     resolve: {
       alias: {
         "@": resolve("src"),
