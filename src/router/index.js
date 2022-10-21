@@ -1,23 +1,84 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import HomeView from "../views/HomeView.vue";
-
+import Layout from "../views/layout/index.vue";
 Vue.use(VueRouter);
 
 const routes = [
   {
     path: "/",
     name: "home",
-    component: HomeView,
+    component: Layout,
+    redirect: "/index",
+    children: [
+      {
+        path: "index",
+        component: () => import("@/views/home/index"),
+        name: "index",
+        meta: {
+          title: "home",
+        },
+      },
+    ],
   },
   {
-    path: "/about",
-    name: "about",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../views/AboutView.vue"),
+    path: "/test",
+    name: "test",
+    component: Layout,
+    children: [
+      {
+        path: "/test",
+        component: () => import("@/views/test/index"),
+        name: "test",
+        meta: {
+          title: "test",
+        },
+      },
+    ],
+  },
+  {
+    path: "/result",
+    name: "result",
+    component: Layout,
+    children: [
+      {
+        path: "/result",
+        component: () => import("@/views/result/index"),
+        name: "result",
+        meta: {
+          title: "result",
+        },
+      },
+    ],
+  },
+  {
+    path: "/catelog/:catelogId",
+    name: "catelog",
+    component: Layout,
+    children: [
+      {
+        path: "/catelog/:catelogId",
+        component: () => import("@/views/catelog/index"),
+        name: "catelog",
+        meta: {
+          title: "catelog",
+        },
+      },
+    ],
+  },
+  {
+    path: "/detail/:questionId",
+    name: "detail",
+    component: Layout,
+    children: [
+      {
+        path: "/detail/:questionId",
+        component: () => import("@/views/detail/index"),
+        name: "detail",
+        meta: {
+          title: "detail",
+        },
+      },
+    ],
   },
 ];
 

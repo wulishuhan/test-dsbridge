@@ -14,5 +14,13 @@ module.exports = {
   rules: {
     "no-console": process.env.NODE_ENV === "production" ? "warn" : "off",
     "no-debugger": process.env.NODE_ENV === "production" ? "warn" : "off",
+    "prettier/prettier": [
+      "error",
+      {
+        endOfLine: "auto",
+      },
+    ],
+    "vue/multi-word-component-names": 0, // 取消组件名称校验
+    // "no-unused-vars": 0, // 取消定义未使用报错
   },
 };
