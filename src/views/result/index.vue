@@ -152,6 +152,9 @@ export default {
 .content {
   padding: 0 30px;
 }
+.search {
+  margin-top: 24px;
+}
 
 .no-search-results {
   margin-top: 332px;

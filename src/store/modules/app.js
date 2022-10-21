@@ -1,5 +1,6 @@
 const state = {
   title: "home",
+  navHidden: false,
   tabbarList: [
     {
       iconPath:
@@ -44,6 +45,9 @@ const mutations = {
   },
   SET_TITLE: (state, title) => {
     state.title = title;
+  },
+  SET_NAVHIDDEN: (state, hidden) => {
+    state.navHidden = hidden;
   },
 };
 

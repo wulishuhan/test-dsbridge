@@ -26,24 +26,7 @@ export default {
   },
   data() {
     return {
-      faqs: [
-        {
-          title: "xxxxxxxxxxxxx",
-          id: 124,
-        },
-        {
-          title: "xxxxxxxxxxxxx",
-          id: 125,
-        },
-        {
-          title: "xxxxxxxxxxxxx",
-          id: 126,
-        },
-        {
-          title: "xxxxxxxxxxxxx",
-          id: 127,
-        },
-      ],
+      faqs: [],
     };
   },
 };

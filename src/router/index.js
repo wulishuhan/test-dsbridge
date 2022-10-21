@@ -15,7 +15,8 @@ const routes = [
         component: () => import("@/views/home/index"),
         name: "index",
         meta: {
-          title: "home",
+          title: "帮助与反馈",
+          hidden: false,
         },
       },
     ],
@@ -31,6 +32,7 @@ const routes = [
         name: "test",
         meta: {
           title: "test",
+          hidden: true,
         },
       },
     ],
@@ -46,6 +48,7 @@ const routes = [
         name: "result",
         meta: {
           title: "result",
+          hidden: true,
         },
       },
     ],
@@ -61,6 +64,7 @@ const routes = [
         name: "catelog",
         meta: {
           title: "catelog",
+          hidden: false,
         },
       },
     ],
@@ -75,7 +79,8 @@ const routes = [
         component: () => import("@/views/detail/index"),
         name: "detail",
         meta: {
-          title: "detail",
+          title: "问题详情",
+          hidden: false,
         },
       },
     ],

@@ -27,33 +27,7 @@ export default {
   },
   data() {
     return {
-      categorizes: [
-        {
-          title: "新手入门",
-          url: require("@/assets/beginner.png"),
-          id: 12410,
-        },
-        {
-          title: "设备相关",
-          url: require("@/assets/device.png"),
-          id: 12412,
-        },
-        {
-          title: "雕刻资源",
-          url: require("@/assets/resource.png"),
-          id: 12478,
-        },
-        {
-          title: "账号安全",
-          url: require("@/assets/security.png"),
-          id: 1245654,
-        },
-        {
-          title: "其他问题",
-          url: require("@/assets/question.png"),
-          id: 12456,
-        },
-      ],
+      categorizes: [],
     };
   },
 };

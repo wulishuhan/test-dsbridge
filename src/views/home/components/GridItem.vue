@@ -25,7 +25,12 @@ export default {
   },
   methods: {
     routeTo() {
-      this.$router.push(`/catelog/${this.categorizes.id}`);
+      this.$router.push({
+        path: `/catelog/${this.categorizes.id}`,
+        query: {
+          title: this.categorizes.name,
+        },
+      });
     },
   },
 };
