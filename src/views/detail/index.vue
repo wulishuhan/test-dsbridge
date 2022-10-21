@@ -27,7 +27,11 @@
       </div>
       <div v-show="showFadebackTip" class="fadeback-after">
         <div class="fadeback-after-inner" v-show="showUnsatisfiedTip">
-          <span>对问题仍有疑问? &nbsp;<a href="">对问题仍有疑问?</a></span>
+          <span
+            >对问题仍有疑问? &nbsp;<a @click="hasProblem"
+              >对问题仍有疑问?</a
+            ></span
+          >
           <img src="@/assets/unsatisfied.png" alt="" />
         </div>
 
@@ -60,10 +64,8 @@ export default {
       showSatisfactoryTip: false,
       showFadebackTip: false,
       detail: {
-        title: "为什么雕刻出来的图像是歪的",
-        content:
-          "这是触发了机器的固件升级模式，请将机器关机，再重启机器即可。如果按住开关机键无法关机。那么请点击RESET 按钮关机，这是触发了机器的固件升级模式，请将机器这 是触发了机器的固件升级模式，请将机器关 机，再重启机器即可。如果按住开关机键无法 关机。那么请点击RESET 按钮关机。这是触发了机器的固件升级模式，请将机器关机，再 重启机器即可。如果按住开 关机键无法关机。 那么请点击RESET 按钮关机。",
-        image: require("@/assets/no-search-result.png"),
+        title: "",
+        content: "",
       },
     };
   },
@@ -85,6 +87,9 @@ export default {
         this.showFadebackTip = true;
         this.showUnsatisfiedTip = true;
       });
+    },
+    hasProblem() {
+      this.$dsbridge.call("routeTo", "suggest");
     },
   },
 };
