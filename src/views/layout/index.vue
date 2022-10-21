@@ -27,7 +27,10 @@ export default {
   methods: {
     goBack() {
       if (this.title == "帮助与反馈") {
-        this.$dsbridge.call("modifyNavBarName", "home");
+        alert(
+          "调用native函数接口routeTo(String name)，传递参数name='backUrl'，功能是web调用native路由跳转到用户进入帮助页面之前的native页面"
+        );
+        this.$dsbridge.call("modifyNavBarName", "backUrl");
       }
       this.$router.go(-1);
     },
