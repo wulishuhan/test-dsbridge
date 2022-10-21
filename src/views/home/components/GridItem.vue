@@ -2,22 +2,32 @@
   <div class="item-container" @click="routeTo">
     <div class="item-content">
       <div class="item-content-img">
-        <img :src="categorizes.icon" alt="" />
+        <!-- <img :src="categorizes.icon" alt="" /> -->
+        <van-icon
+          class="icon"
+          :name="categorizes.icon"
+          color="#000"
+          size="56"
+        />
       </div>
       <div class="item-content-text">{{ categorizes.name }}</div>
     </div>
   </div>
 </template>
 <script>
+import { Icon } from "vant";
 export default {
   name: "MyGridItem",
+  components: {
+    [Icon.name]: Icon,
+  },
   props: {
     categorizes: {
       type: Object,
       default: () => {
         return {
           title: "新手入门",
-          url: "https://orturbucket.s3.amazonaws.com/assets/2022/09/29/06_20220929162950A179.jpg",
+          icon: "https://orturbucket.s3.amazonaws.com/assets/2022/09/29/06_20220929162950A179.jpg",
           id: 124,
         };
       },
@@ -56,6 +66,7 @@ export default {
 .item-content-img {
   width: 56px;
   height: 56px;
+  border: dashed 1px #999;
 }
 .item-content-text {
   width: 104px;
@@ -63,9 +74,5 @@ export default {
   font-family: Source Han Sans CN;
   font-weight: 500;
   color: #121212;
-}
-img {
-  width: 100%;
-  height: 100%;
 }
 </style>
