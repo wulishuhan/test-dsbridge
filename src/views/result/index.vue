@@ -26,7 +26,7 @@
           <img
             src="@/assets/icon-search-history-delete.png"
             alt=""
-            @click="clearSearchHistory"
+            @click="showDialog"
           />
         </div>
         <search-history-button
@@ -50,10 +50,37 @@
         </div>
       </div>
     </div>
+    <van-dialog
+      v-model="show"
+      :show-cancel-button="false"
+      :show-confirm-button="false"
+    >
+      <div class="dialog-container">
+        <div class="dialog-title">提示</div>
+        <div class="dialog-content">是否确认清除历史记录</div>
+        <div class="dialog-footer">
+          <van-button
+            color="#1E78F0"
+            class="dialog-button"
+            @click="comfirmClearHistory"
+          >
+            确认
+          </van-button>
+          <van-button
+            color="#1E78F0"
+            plain
+            class="dialog-button"
+            @click="cancelClearHistory"
+          >
+            取消
+          </van-button>
+        </div>
+      </div>
+    </van-dialog>
   </div>
 </template>
 <script>
-import { Search, Dialog } from "vant";
+import { Search, Dialog, Button } from "vant";
 import { search } from "@/api/question.js";
 import SearchHistoryButton from "./components/SearchHistoryButton.vue";
 import SearchResultCell from "./components/SearchResultCell.vue";
@@ -61,7 +88,9 @@ export default {
   name: "result",
   components: {
     [Search.name]: Search,
-    [Dialog.name]: Dialog,
+    // [Dialog.name]: Dialog,
+    [Button.name]: Button,
+    [Dialog.Component.name]: Dialog.Component,
     SearchHistoryButton,
     SearchResultCell,
   },
@@ -71,6 +100,7 @@ export default {
       searchHistory: [],
       searchResults: [],
       showHistory: true,
+      show: false,
     };
   },
   mounted() {
@@ -82,6 +112,14 @@ export default {
     this.searchHistory = faqSearchHistory;
   },
   methods: {
+    comfirmClearHistory() {
+      this.searchHistory = [];
+      localStorage.setItem("faqSearchHistory", JSON.stringify([]));
+      this.show = false;
+    },
+    cancelClearHistory() {
+      this.show = false;
+    },
     clear() {
       console.log("clear");
     },
@@ -89,23 +127,8 @@ export default {
       this.$router.push("/");
     },
     input() {},
-    clearSearchHistory() {
-      Dialog.confirm({
-        message: "是否清除历史记录",
-        cancelButtonText: "否",
-        cancelButtonColor: "#999",
-        confirmButtonText: "是",
-        confirmButtonColor: "#1E78F0",
-        beforeClose: (action, done) => {
-          if (action === "confirm") {
-            localStorage.setItem("faqSearchHistory", JSON.stringify([]));
-            this.searchHistory = [];
-            done();
-          } else {
-            done();
-          }
-        },
-      });
+    showDialog() {
+      this.show = true;
     },
     focus() {
       this.showHistory = true;
@@ -152,6 +175,7 @@ export default {
 <style scoped lang="less">
 .container {
   background: #fff;
+  height: 1000px;
 }
 .content {
   padding: 0 30px;
@@ -159,6 +183,41 @@ export default {
 }
 .search {
   margin-top: 24px;
+}
+.dialog-container {
+  width: 560px;
+  height: 304px;
+  .dialog-title {
+    font-size: 36px;
+    font-family: Source Han Sans CN;
+    font-weight: bold;
+    color: #121212;
+    margin-top: 30px;
+  }
+  .dialog-content {
+    margin-top: 61px;
+    font-size: 30px;
+    font-family: Source Han Sans CN;
+    font-weight: 400;
+    color: #141414;
+  }
+  .dialog-footer {
+    display: flex;
+    justify-content: space-between;
+    margin: 61px auto 32px;
+    width: 440px;
+    ::v-deep .van-button {
+      height: 56px;
+    }
+    .dialog-button {
+      padding: 14px 69px;
+      font-size: 30px;
+      font-family: Source Han Sans CN;
+      font-weight: 400;
+      color: #ffffff;
+      border-radius: 10px;
+    }
+  }
 }
 
 .no-search-results {

@@ -37,6 +37,7 @@ export default {
 <style lang="scss" scoped>
 .content {
   background: #f1f5fe;
+  min-height: 1000px;
 }
 ::v-deep .van-nav-bar__content {
   height: 88px;
