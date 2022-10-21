@@ -93,6 +93,7 @@ export default {
   display: flex;
   justify-content: space-between;
   margin-top: 56px;
+  padding-bottom: 46px;
 }
 .fadeback-button {
   padding: 30px 98px;

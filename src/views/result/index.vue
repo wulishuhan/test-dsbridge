@@ -11,6 +11,7 @@
         @blur="blur"
         @input="input"
         @search="search"
+        @cancel="cancel"
       >
         <template #left-icon>
           <img src="@/assets/icon-search.png" alt="" class="search-img" />
@@ -84,6 +85,9 @@ export default {
     clear() {
       console.log("clear");
     },
+    cancel() {
+      this.$router.push("/");
+    },
     input() {},
     clearSearchHistory() {
       Dialog.confirm({
@@ -151,6 +155,7 @@ export default {
 }
 .content {
   padding: 0 30px;
+  margin-bottom: 294px;
 }
 .search {
   margin-top: 24px;
