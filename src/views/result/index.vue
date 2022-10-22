@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container" ref="container">
     <div class="content">
       <van-search
         v-model="value"
@@ -110,6 +110,7 @@ export default {
       faqSearchHistory = [];
     }
     this.searchHistory = faqSearchHistory;
+    this.$refs.container.style.minHeight = window.screen.height + "px";
   },
   methods: {
     comfirmClearHistory() {
@@ -175,7 +176,6 @@ export default {
 <style scoped lang="less">
 .container {
   background: #fff;
-  height: 1000px;
 }
 .content {
   padding: 0 30px;

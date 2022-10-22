@@ -73,6 +73,7 @@ export default {
 }
 .search {
   margin-top: 32px;
+  border-radius: 12px;
 }
 ::v-deep .van-field__control {
   font-size: 24px;
@@ -83,6 +84,9 @@ export default {
 ::v-deep .van-icon-search {
   font-size: 30px;
 }
+::v-deep .van-search__content {
+  border-radius: 12px;
+}
 .search-img {
   width: 30px;
   height: 30px;
@@ -92,11 +96,17 @@ export default {
 .fadeback-container {
   display: flex;
   justify-content: space-between;
-  margin-top: 56px;
+  position: fixed;
+  bottom: 0px;
   padding-bottom: 46px;
+  padding-top: 56px;
+  width: 690px;
+  background: #f1f5fe;
+  /* margin-top: 56px; */
+  /* padding-bottom: 46px; */
 }
 .fadeback-button {
-  padding: 30px 98px;
+  padding: 29px 92px;
   font-size: 30px;
   font-family: Source Han Sans CN;
   font-weight: 500;

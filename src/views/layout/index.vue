@@ -1,5 +1,5 @@
 <template>
-  <div class="content">
+  <div class="content" ref="content">
     <!-- <app-Tabbar :title="title" hasBack></app-Tabbar> -->
     <van-nav-bar
       v-if="!navHidden"
@@ -24,6 +24,9 @@ export default {
   data() {
     return {};
   },
+  mounted() {
+    this.$refs.content.style.minHeight = window.screen.height + "px";
+  },
   methods: {
     goBack() {
       if (this.title == "帮助与反馈") {
@@ -37,7 +40,7 @@ export default {
 <style lang="scss" scoped>
 .content {
   background: #f1f5fe;
-  min-height: 1000px;
+  /* height: 1206px; */
 }
 ::v-deep .van-nav-bar__content {
   height: 88px;

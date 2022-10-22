@@ -45,6 +45,9 @@ export default {
     font-weight: 400;
     color: #121212;
     margin-left: 18px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 }
 </style>

@@ -3,7 +3,7 @@
     <div class="question-title">常见问题</div>
     <div class="question-body">
       <question-cell
-        v-for="item in faqs"
+        v-for="item in faqs.slice(0, 4)"
         :key="item.id"
         :question="item"
       ></question-cell>
@@ -45,6 +45,7 @@ export default {
 }
 .question-body {
   margin-top: 21px;
+  border-radius: 12px;
 }
 .question {
   text-overflow: ellipsis;

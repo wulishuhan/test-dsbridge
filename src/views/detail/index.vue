@@ -1,9 +1,15 @@
 <template>
   <div>
     <div class="content">
-      <div class="title">{{ detail.title }}</div>
+      <div class="title">
+        <span>
+          {{ detail.title }}
+        </span>
+      </div>
       <div class="description">
-        {{ detail.content }}
+        <span>
+          {{ detail.content }}
+        </span>
       </div>
       <div class="img-canvas">
         <img src="@/assets/no-search-result.png" alt="" />
@@ -112,6 +118,9 @@ export default {
     color: #666666;
     margin-top: 33px;
     text-align: start;
+    span {
+      white-space: pre-line;
+    }
   }
   .img-canvas {
     width: 690px;

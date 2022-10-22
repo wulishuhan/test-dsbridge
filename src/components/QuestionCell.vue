@@ -3,7 +3,7 @@
     <van-cell is-link title-class="title" @click="routeTo">
       <!-- 使用 title 插槽来自定义标题 -->
       <template #title>
-        <span class="custom-title">{{ question.title }}</span>
+        <div class="custom-title">{{ question.title }}</div>
       </template>
       <template #right-icon>
         <span class="custom-icon">
@@ -43,12 +43,15 @@ export default {
 }
 .custom-title {
   width: 310px;
-  height: 24px;
+  /* height: 24px; */
   font-size: 24px;
   font-family: Source Han Sans CN;
   font-weight: 500;
   color: #121212;
   padding-left: 32px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .custom-icon {
   width: 12px;
