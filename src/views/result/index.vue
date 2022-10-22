@@ -230,7 +230,7 @@ export default {
   img {
     width: 320px;
     height: 335px;
-    border: dashed 1px #999;
+    /* border: dashed 1px #999; */
   }
 
   span {
@@ -262,7 +262,7 @@ export default {
     img {
       width: 30px;
       height: 30px;
-      border: dashed 1px #999;
+      /* border: dashed 1px #999; */
     }
   }
 }
@@ -270,8 +270,8 @@ export default {
   width: 30px;
   height: 30px;
   position: relative;
-  top: 11px;
-  border: dashed 1px #999;
+  top: 8px;
+  /* border: dashed 1px #999; */
 }
 ::v-deep .van-field__control {
   font-size: 24px;
@@ -304,7 +304,7 @@ export default {
 ::v-deep .van-field__clear {
   font-size: 30px;
   color: #999;
-  border: dashed 1px #999;
+  /* border: dashed 1px #999; */
   line-height: 30px;
   padding: 0px;
   margin-right: 22px;

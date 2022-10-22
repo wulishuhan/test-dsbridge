@@ -1,10 +1,10 @@
 <template>
   <div class="item-container" @click="routeTo">
     <div class="item-content">
-      <div class="item-content-img">
-        <!-- <img :src="categorizes.icon" alt="" /> -->
-        <van-icon class="icon" :name="categorizes.icon" color="#000" />
-      </div>
+      <!-- <div class="item-content-img"> -->
+      <!-- <img :src="categorizes.icon" alt="" /> -->
+      <van-icon class="icon" :name="categorizes.icon" color="#000" />
+      <!-- </div> -->
       <div class="item-content-text">{{ categorizes.name }}</div>
     </div>
   </div>
@@ -41,6 +41,9 @@ export default {
 };
 </script>
 <style scoped>
+::v-deep .van-icon {
+  font-size: 56px;
+}
 .item-container {
   width: 216px;
   height: 184px;
@@ -51,7 +54,7 @@ export default {
   align-items: center;
 }
 .item-content {
-  width: 104px;
+  /* width: 104px; */
   height: 122px;
   display: flex;
   flex-direction: column;
@@ -62,11 +65,11 @@ export default {
   width: 56px;
   height: 56px;
   font-size: 56px;
-  border: dashed 1px #999;
+  /* border: dashed 1px #999; */
   line-height: 56px;
 }
 .item-content-text {
-  width: 104px;
+  /* width: 104px; */
   font-size: 26px;
   font-family: Source Han Sans CN;
   font-weight: 500;

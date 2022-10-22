@@ -56,7 +56,6 @@ export default {
       console.log("getFaqDetail", res);
       this.detail = res.data.data;
     });
-    this.$dsbridge.call("modifyNavBarName", "问题详情");
   },
   data() {
     return {
@@ -168,7 +167,7 @@ export default {
           img {
             width: 40px;
             height: 40px;
-            border: 1px dashed #999;
+            /* border: 1px dashed #999; */
           }
           span {
             font-size: 24px;
@@ -191,7 +190,7 @@ export default {
       img {
         width: 40px;
         height: 40px;
-        border: 1px dashed #000;
+        /* border: 1px dashed #000; */
       }
       span {
         font-size: 24px;

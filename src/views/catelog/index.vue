@@ -22,7 +22,6 @@ export default {
       console.log("getFaqList", res);
       this.faqs = res.data.data;
     });
-    this.$dsbridge.call("modifyNavBarName", this.$route.params.catelogId);
   },
   data() {
     return {

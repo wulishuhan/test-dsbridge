@@ -56,14 +56,8 @@ export default {
       if (page == "search") {
         this.$router.push(`/result`);
       } else if (page == "history") {
-        alert(
-          "调用native函数接口routeTo(String name)，传递参数name='history'，功能是web调用native路由跳转到历史反馈页面"
-        );
         this.$dsbridge.call("routeTo", "history");
       } else if (page == "suggest") {
-        alert(
-          "调用native函数接口routeTo(String name)，传递参数name='suggest'，功能是web调用native路由跳转到意见反馈页面"
-        );
         this.$dsbridge.call("routeTo", "suggest");
       }
     },
